@@ -1,6 +1,5 @@
 package com.mechjacktv.mechjackbot.chatbot.command;
 
-import com.mechjacktv.mechjackbot.BotConfiguration;
 import com.mechjacktv.mechjackbot.ChatUser;
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.MessageEvent;
@@ -17,12 +16,12 @@ public class ShoutOutCommand implements Command {
     private static final String CASTERS_LOCATION = System.getProperty("user.home") + "/.mechjackbot_casters.config";
     private static final long TWENTY_FOUR_HOURS = 1000 * 60 * 60 * 24;
 
-    private final String botOwner;
+    private final CommandUtils commandUtils;
     private final Properties casters;
 
     @Inject
-    public ShoutOutCommand(final BotConfiguration botConfiguration) throws IOException {
-        this.botOwner = botConfiguration.getChannel().toLowerCase();
+    public ShoutOutCommand(final CommandUtils commandUtils) throws IOException {
+        this.commandUtils = commandUtils;
         this.casters = new Properties();
         if(!createCastersFile()) {
             try (final FileInputStream castersFile = new FileInputStream(CASTERS_LOCATION)) {
@@ -40,40 +39,42 @@ public class ShoutOutCommand implements Command {
         final String message = messageEvent.getMessage();
 
 
-        if (message.startsWith("!addcaster") && privilegedUser(messageEvent)) {
+        if (message.startsWith("!addcaster") && commandUtils.privilegedUser(messageEvent)) {
             final String[] messageParts = message.split(" ");
 
             if (messageParts.length > 1) {
-                setCaster(sanitizeUserName(messageParts[1]), 0);
+                setCaster(commandUtils.sanitizeUsername(messageParts[1]), 0);
                 messageEvent.respond(String.format("Added %s to casters list", messageParts[1]));
             }
             return true;
-        } else if (message.startsWith("!delcaster") && privilegedUser(messageEvent)) {
+        } else if (message.startsWith("!delcaster") && commandUtils.privilegedUser(messageEvent)) {
             final String[] messageParts = message.split(" ");
 
             if (messageParts.length > 1) {
-                casters.remove(sanitizeUserName(messageParts[1]));
+                casters.remove(commandUtils.sanitizeUsername(messageParts[1]));
                 saveCasters();
                 messageEvent.respond(String.format("Removed %s from casters list", messageParts[1]));
             }
             return true;
-        } else if (message.startsWith("!caster") && privilegedUser(messageEvent)) {
+        } else if (message.startsWith("!caster") && commandUtils.privilegedUser(messageEvent)) {
             final String[] messageParts = message.split(" ");
 
             if (messageParts.length > 1) {
-                setCaster(sanitizeUserName(messageParts[1]), System.currentTimeMillis());
-                shoutOutCaster(messageEvent, messageParts[1]);
+                final String sanitizedUsername = commandUtils.sanitizeUsername(messageParts[1]);
+
+                setCaster(sanitizedUsername, System.currentTimeMillis());
+                shoutOutCaster(messageEvent, sanitizedUsername);
             }
         } else {
             final ChatUser chatUser = messageEvent.getChatUser();
-            final String chatUsername = sanitizeUserName(chatUser.getUsername());
+            final String chatUsername = commandUtils.sanitizeUsername(chatUser.getUsername());
 
             if (casters.containsKey(chatUsername)) {
                 final long now = System.currentTimeMillis();
                 final long lastShoutout = Long.parseLong(casters.getProperty(chatUsername));
 
                 if (now - lastShoutout > TWENTY_FOUR_HOURS) {
-                    setCaster(sanitizeUserName(messageParts[1]), System.currentTimeMillis());
+                    setCaster(chatUsername, System.currentTimeMillis());
                     shoutOutCaster(messageEvent, chatUsername);
                 }
             }
@@ -81,24 +82,8 @@ public class ShoutOutCommand implements Command {
         return false;
     }
 
-    private boolean privilegedUser(final MessageEvent messageEvent) {
-        final ChatUser chatUser = messageEvent.getChatUser();
-        final String chatUsername = chatUser.getUsername().toLowerCase();
-
-        return botOwner.equals(chatUsername);
-    }
-
-    private String sanitizeUserName(final String username) {
-        String sanitizedUsername = username.trim().toLowerCase();
-
-        if(sanitizedUsername.startsWith("@")) {
-            sanitizedUsername = sanitizedUsername.substring(1);
-        }
-        return sanitizedUsername;
-    }
-
     private void setCaster(final String username, final long lastShoutout) {
-        casters.setProperty(sanitizeUserName(messageParts[1]), Long.toString(lastShoutout));
+        casters.setProperty(username, Long.toString(lastShoutout));
         saveCasters();
     }
 
