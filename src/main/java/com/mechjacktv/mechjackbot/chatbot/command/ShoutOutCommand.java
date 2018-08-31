@@ -2,7 +2,6 @@ package com.mechjacktv.mechjackbot.chatbot.command;
 
 import com.mechjacktv.mechjackbot.ChatUser;
 import com.mechjacktv.mechjackbot.Command;
-import com.mechjacktv.mechjackbot.Cooldown;
 import com.mechjacktv.mechjackbot.MessageEvent;
 
 import javax.inject.Inject;
@@ -36,12 +35,11 @@ public class ShoutOutCommand implements Command {
     }
 
     @Override
-    @Cooldown
     public boolean handleMessage(final MessageEvent messageEvent) {
         final String message = messageEvent.getMessage();
 
 
-        if (message.startsWith("!addcaster") && commandUtils.privilegedUser(messageEvent)) {
+        if (message.startsWith("!addcaster") && commandUtils.isCooleddown("!addcaster") && commandUtils.privilegedUser(messageEvent)) {
             final String[] messageParts = message.split(" ");
 
             if (messageParts.length > 1) {
@@ -49,7 +47,7 @@ public class ShoutOutCommand implements Command {
                 messageEvent.respond(String.format("Added %s to casters list", messageParts[1]));
             }
             return true;
-        } else if (message.startsWith("!delcaster") && commandUtils.privilegedUser(messageEvent)) {
+        } else if (message.startsWith("!delcaster") && commandUtils.isCooleddown("!delcaster") && commandUtils.privilegedUser(messageEvent)) {
             final String[] messageParts = message.split(" ");
 
             if (messageParts.length > 1) {
@@ -58,7 +56,7 @@ public class ShoutOutCommand implements Command {
                 messageEvent.respond(String.format("Removed %s from casters list", messageParts[1]));
             }
             return true;
-        } else if (message.startsWith("!caster") && commandUtils.privilegedUser(messageEvent)) {
+        } else if (message.startsWith("!caster") && commandUtils.isCooleddown("!caster") && commandUtils.privilegedUser(messageEvent)) {
             final String[] messageParts = message.split(" ");
 
             if (messageParts.length > 1) {
