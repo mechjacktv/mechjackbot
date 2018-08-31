@@ -6,7 +6,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.google.guava:guava:20.+'
+    compile 'com.google.guava:guava:23.+'
     compile group: 'com.google.inject', name: 'guice', version: '4.2.+'
     compile group: 'org.pircbotx', name: 'pircbotx', version: '2.+'
     testCompile 'junit:junit:4.12'

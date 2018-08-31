@@ -5,7 +5,7 @@ import com.mechjacktv.mechjackbot.MessageEvent;
 
 import javax.inject.Inject;
 
-public class PingCommand implements Command {
+public final class PingCommand implements Command {
 
     private final CommandUtils commandUtils;
 
@@ -15,9 +15,11 @@ public class PingCommand implements Command {
     }
 
     @Override
-    public boolean handleMessage(MessageEvent messageEvent) {
-        if(messageEvent.getMessage().startsWith("!ping") && commandUtils.isCooleddown("!ping") && commandUtils.privilegedUser(messageEvent)) {
-            messageEvent.respond("I'm alive! :P");
+    public final boolean handleMessage(MessageEvent messageEvent) {
+        if(messageEvent.getMessage().startsWith("!ping") && commandUtils.privilegedUser(messageEvent)) {
+            if(commandUtils.isCooleddown("!ping")) {
+                messageEvent.respond("I'm alive! :P");
+            }
             return true;
         }
         return false;

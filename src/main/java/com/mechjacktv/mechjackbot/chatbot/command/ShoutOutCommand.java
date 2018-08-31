@@ -11,7 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-public class ShoutOutCommand implements Command {
+public final class ShoutOutCommand implements Command {
 
     private static final String CASTERS_LOCATION = System.getProperty("user.home") + "/.mechjackbot_casters.config";
     private static final long TWENTY_FOUR_HOURS = 1000 * 60 * 60 * 24;
@@ -23,48 +23,55 @@ public class ShoutOutCommand implements Command {
     public ShoutOutCommand(final CommandUtils commandUtils) throws IOException {
         this.commandUtils = commandUtils;
         this.casters = new Properties();
-        if(!createCastersFile()) {
+        if (!createCastersFile()) {
             try (final FileInputStream castersFile = new FileInputStream(CASTERS_LOCATION)) {
                 this.casters.load(castersFile);
             }
         }
     }
 
-    private boolean createCastersFile() throws IOException {
+    private final boolean createCastersFile() throws IOException {
         return new File(CASTERS_LOCATION).createNewFile();
     }
 
     @Override
-    public boolean handleMessage(final MessageEvent messageEvent) {
+    public final boolean handleMessage(final MessageEvent messageEvent) {
         final String message = messageEvent.getMessage();
 
 
-        if (message.startsWith("!addcaster") && commandUtils.isCooleddown("!addcaster") && commandUtils.privilegedUser(messageEvent)) {
-            final String[] messageParts = message.split(" ");
+        if (message.startsWith("!addcaster") && commandUtils.privilegedUser(messageEvent)) {
+            if (commandUtils.isCooleddown("!addcaster")) {
+                final String[] messageParts = message.split(" ");
 
-            if (messageParts.length > 1) {
-                setCaster(commandUtils.sanitizeUsername(messageParts[1]), 0);
-                messageEvent.respond(String.format("Added %s to casters list", messageParts[1]));
+                if (messageParts.length > 1) {
+                    setCaster(commandUtils.sanitizeUsername(messageParts[1]), 0);
+                    messageEvent.respond(String.format("Added %s to casters list", messageParts[1]));
+                }
             }
             return true;
-        } else if (message.startsWith("!delcaster") && commandUtils.isCooleddown("!delcaster") && commandUtils.privilegedUser(messageEvent)) {
-            final String[] messageParts = message.split(" ");
+        } else if (message.startsWith("!delcaster") && commandUtils.privilegedUser(messageEvent)) {
+            if (commandUtils.isCooleddown("!delcaster")) {
+                final String[] messageParts = message.split(" ");
 
-            if (messageParts.length > 1) {
-                casters.remove(commandUtils.sanitizeUsername(messageParts[1]));
-                saveCasters();
-                messageEvent.respond(String.format("Removed %s from casters list", messageParts[1]));
+                if (messageParts.length > 1 && casters.containsKey(commandUtils.sanitizeUsername(messageParts[1]))) {
+                    casters.remove(commandUtils.sanitizeUsername(messageParts[1]));
+                    saveCasters();
+                    messageEvent.respond(String.format("Removed %s from casters list", messageParts[1]));
+                }
             }
             return true;
-        } else if (message.startsWith("!caster") && commandUtils.isCooleddown("!caster") && commandUtils.privilegedUser(messageEvent)) {
-            final String[] messageParts = message.split(" ");
+        } else if (message.startsWith("!caster") && commandUtils.privilegedUser(messageEvent)) {
+            if (commandUtils.isCooleddown("!delcaster")) {
+                final String[] messageParts = message.split(" ");
 
-            if (messageParts.length > 1) {
-                final String sanitizedUsername = commandUtils.sanitizeUsername(messageParts[1]);
+                if (messageParts.length > 1) {
+                    final String sanitizedUsername = commandUtils.sanitizeUsername(messageParts[1]);
 
-                setCaster(sanitizedUsername, System.currentTimeMillis());
-                shoutOutCaster(messageEvent, sanitizedUsername);
+                    setCaster(sanitizedUsername, System.currentTimeMillis());
+                    shoutOutCaster(messageEvent, sanitizedUsername);
+                }
             }
+            return true;
         } else {
             final ChatUser chatUser = messageEvent.getChatUser();
             final String chatUsername = commandUtils.sanitizeUsername(chatUser.getUsername());
@@ -82,12 +89,12 @@ public class ShoutOutCommand implements Command {
         return false;
     }
 
-    private void setCaster(final String username, final long lastShoutout) {
+    private final void setCaster(final String username, final long lastShoutout) {
         casters.setProperty(username, Long.toString(lastShoutout));
         saveCasters();
     }
 
-    private void saveCasters() {
+    private final void saveCasters() {
         try (final FileOutputStream castersFile = new FileOutputStream(CASTERS_LOCATION)) {
             casters.store(castersFile, "");
         } catch (final IOException e) {
@@ -95,7 +102,7 @@ public class ShoutOutCommand implements Command {
         }
     }
 
-    private void shoutOutCaster(final MessageEvent messageEvent, final String casterName) {
+    private final void shoutOutCaster(final MessageEvent messageEvent, final String casterName) {
         messageEvent.respond(String.format(
                 "<3 <3 Caster in the house! Everyone please give %s a follow and check them out. https://twitch.tv/%s <3 <3",
                 casterName, casterName));

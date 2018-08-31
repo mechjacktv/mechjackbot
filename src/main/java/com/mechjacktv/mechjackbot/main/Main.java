@@ -6,13 +6,10 @@ import com.google.inject.Injector;
 import com.google.inject.multibindings.Multibinder;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.chatbot.PircBotXChatBot;
-import com.mechjacktv.mechjackbot.chatbot.command.CommandUtils;
-import com.mechjacktv.mechjackbot.chatbot.command.PingCommand;
-import com.mechjacktv.mechjackbot.chatbot.command.QuitCommand;
+import com.mechjacktv.mechjackbot.chatbot.command.*;
 import com.mechjacktv.mechjackbot.chatbot.DefaultBotConfiguration;
 import com.mechjacktv.mechjackbot.chatbot.PropertiesAppConfiguration;
 import com.mechjacktv.mechjackbot.chatbot.PircBotXMessageEventHandler;
-import com.mechjacktv.mechjackbot.chatbot.command.ShoutOutCommand;
 import org.pircbotx.hooks.Listener;
 
 public class Main {
@@ -36,9 +33,10 @@ public class Main {
             bind(BotConfiguration.class).to(DefaultBotConfiguration.class).asEagerSingleton();
 
             bind(CommandUtils.class).asEagerSingleton();
+            Multibinder.newSetBinder(binder(), Command.class).addBinding().to(QuitCommand.class).asEagerSingleton();
             Multibinder.newSetBinder(binder(), Command.class).addBinding().to(PingCommand.class).asEagerSingleton();
             Multibinder.newSetBinder(binder(), Command.class).addBinding().to(ShoutOutCommand.class).asEagerSingleton();
-            Multibinder.newSetBinder(binder(), Command.class).addBinding().to(QuitCommand.class).asEagerSingleton();
+            Multibinder.newSetBinder(binder(), Command.class).addBinding().to(SimpleCommand.class).asEagerSingleton();
         }
 
     }
