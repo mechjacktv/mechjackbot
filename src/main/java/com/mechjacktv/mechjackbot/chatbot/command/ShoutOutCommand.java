@@ -2,6 +2,7 @@ package com.mechjacktv.mechjackbot.chatbot.command;
 
 import com.mechjacktv.mechjackbot.ChatUser;
 import com.mechjacktv.mechjackbot.Command;
+import com.mechjacktv.mechjackbot.Cooldown;
 import com.mechjacktv.mechjackbot.MessageEvent;
 
 import javax.inject.Inject;
@@ -35,7 +36,8 @@ public class ShoutOutCommand implements Command {
     }
 
     @Override
-    public final boolean handleMessage(final MessageEvent messageEvent) {
+    @Cooldown
+    public boolean handleMessage(final MessageEvent messageEvent) {
         final String message = messageEvent.getMessage();
 
 

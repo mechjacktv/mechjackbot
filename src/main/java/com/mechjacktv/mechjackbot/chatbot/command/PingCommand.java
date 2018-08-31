@@ -1,12 +1,12 @@
 package com.mechjacktv.mechjackbot.chatbot.command;
 
-import com.mechjacktv.mechjackbot.ChatBot;
 import com.mechjacktv.mechjackbot.Command;
+import com.mechjacktv.mechjackbot.Cooldown;
 import com.mechjacktv.mechjackbot.MessageEvent;
 
 import javax.inject.Inject;
 
-public final class PingCommand implements Command {
+public class PingCommand implements Command {
 
     private final CommandUtils commandUtils;
 
@@ -16,7 +16,8 @@ public final class PingCommand implements Command {
     }
 
     @Override
-    public final boolean handleMessage(MessageEvent messageEvent) {
+    @Cooldown
+    public boolean handleMessage(MessageEvent messageEvent) {
         if(messageEvent.getMessage().startsWith("!ping") && commandUtils.privilegedUser(messageEvent)) {
             messageEvent.respond("I'm alive! :P");
             return true;
