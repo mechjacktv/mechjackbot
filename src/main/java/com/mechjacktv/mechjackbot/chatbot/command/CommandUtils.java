@@ -69,7 +69,13 @@ public final class CommandUtils {
     }
 
     public final boolean isPrivilegedUser(final MessageEvent messageEvent) {
+        // TODO implement mod check
         return isChannelOwner(messageEvent);
+    }
+
+    public final boolean isRegularUser(final MessageEvent messageEvent) {
+        // TODO implement regular check
+        return isPrivilegedUser(messageEvent);
     }
 
 

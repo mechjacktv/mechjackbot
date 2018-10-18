@@ -13,10 +13,7 @@ import com.mechjacktv.mechjackbot.chatbot.PropertiesAppConfiguration;
 import com.mechjacktv.mechjackbot.chatbot.command.*;
 import com.mechjacktv.mechjackbot.chatbot.command.cooldown.GlobalCoolDown;
 import com.mechjacktv.mechjackbot.chatbot.command.cooldown.GlobalCoolDownMethodInterceptor;
-import com.mechjacktv.mechjackbot.chatbot.command.restrict.RestrictToOwner;
-import com.mechjacktv.mechjackbot.chatbot.command.restrict.RestrictToOwnerMethodInterceptor;
-import com.mechjacktv.mechjackbot.chatbot.command.restrict.RestrictToPrivileged;
-import com.mechjacktv.mechjackbot.chatbot.command.restrict.RestrictToPrivilegedMethodInterceptor;
+import com.mechjacktv.mechjackbot.chatbot.command.restrict.*;
 import org.pircbotx.hooks.Listener;
 
 import java.io.IOException;
@@ -51,6 +48,9 @@ public class Main {
                         Matchers.annotatedWith(RestrictToPrivileged.class),
                         new RestrictToPrivilegedMethodInterceptor(commandUtils));
                 bindInterceptor(Matchers.subclassesOf(Command.class),
+                        Matchers.annotatedWith(RestrictToRegular.class),
+                        new RestrictToRegularMethodInterceptor(commandUtils));
+                bindInterceptor(Matchers.subclassesOf(Command.class),
                         Matchers.annotatedWith(GlobalCoolDown.class),
                         new GlobalCoolDownMethodInterceptor(commandUtils));
 
@@ -66,7 +66,7 @@ public class Main {
             } catch (final RuntimeException e) {
                 throw e;
             } catch (final Exception e) {
-                // FIXME need a better exception
+                // TODO need a better exception
                 throw new RuntimeException(e);
             }
         }
