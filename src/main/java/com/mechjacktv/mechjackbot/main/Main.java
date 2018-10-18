@@ -15,6 +15,8 @@ import com.mechjacktv.mechjackbot.chatbot.command.cooldown.GlobalCoolDown;
 import com.mechjacktv.mechjackbot.chatbot.command.cooldown.GlobalCoolDownMethodInterceptor;
 import com.mechjacktv.mechjackbot.chatbot.command.restrict.RestrictToOwner;
 import com.mechjacktv.mechjackbot.chatbot.command.restrict.RestrictToOwnerMethodInterceptor;
+import com.mechjacktv.mechjackbot.chatbot.command.restrict.RestrictToPrivileged;
+import com.mechjacktv.mechjackbot.chatbot.command.restrict.RestrictToPrivilegedMethodInterceptor;
 import org.pircbotx.hooks.Listener;
 
 import java.io.IOException;
@@ -45,6 +47,9 @@ public class Main {
                 bindInterceptor(Matchers.subclassesOf(Command.class),
                         Matchers.annotatedWith(RestrictToOwner.class),
                         new RestrictToOwnerMethodInterceptor(commandUtils));
+                bindInterceptor(Matchers.subclassesOf(Command.class),
+                        Matchers.annotatedWith(RestrictToPrivileged.class),
+                        new RestrictToPrivilegedMethodInterceptor(commandUtils));
                 bindInterceptor(Matchers.subclassesOf(Command.class),
                         Matchers.annotatedWith(GlobalCoolDown.class),
                         new GlobalCoolDownMethodInterceptor(commandUtils));
