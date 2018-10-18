@@ -7,15 +7,19 @@ import javax.inject.Inject;
 
 public final class DefaultBotConfiguration implements BotConfiguration {
 
+    private static final String BOT_USERNAME = "bot.username";
+    private static final String BOT_PASSWORD = "bot.password";
+    private static final String BOT_CHANNEL = "bot.channel";
+
     private final String username;
     private final String password;
     private final String channel;
 
     @Inject
     public DefaultBotConfiguration(final AppConfiguration appConfiguration) {
-        this.username = appConfiguration.getProperty("bot.username");
-        this.password = appConfiguration.getProperty("bot.password");
-        this.channel = appConfiguration.getProperty("bot.channel");
+        this.username = appConfiguration.getProperty(BOT_USERNAME);
+        this.password = appConfiguration.getProperty(BOT_PASSWORD);
+        this.channel = appConfiguration.getProperty(BOT_CHANNEL);
     }
 
     @Override

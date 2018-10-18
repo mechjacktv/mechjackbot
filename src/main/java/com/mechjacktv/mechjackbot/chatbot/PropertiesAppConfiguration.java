@@ -1,9 +1,11 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
+import com.google.common.base.Strings;
 import com.mechjacktv.mechjackbot.AppConfiguration;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Properties;
 
 public class PropertiesAppConfiguration implements AppConfiguration {
@@ -20,7 +22,14 @@ public class PropertiesAppConfiguration implements AppConfiguration {
     }
 
     @Override
-    public String getProperty(String key) {
+    public String getProperty(final String key) {
         return this.properties.getProperty(key);
+    }
+
+    @Override
+    public String getProperty(final String key, final String defaultValue) {
+        final String value = this.properties.getProperty(key);
+
+        return Strings.isNullOrEmpty(value) ? defaultValue : value;
     }
 }
