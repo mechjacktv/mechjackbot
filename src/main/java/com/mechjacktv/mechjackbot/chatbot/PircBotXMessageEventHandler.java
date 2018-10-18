@@ -26,7 +26,8 @@ public final class PircBotXMessageEventHandler extends ListenerAdapter implement
     @Override
     public final void handleMessage(final MessageEvent messageEvent) {
         for(final Command command : commands) {
-            if(command.handleMessage(messageEvent)) {
+            if(command.isHandledMessage(messageEvent)) {
+                command.handleMessage(messageEvent);
                 break;
             }
         }

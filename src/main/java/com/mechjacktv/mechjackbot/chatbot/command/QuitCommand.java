@@ -19,14 +19,15 @@ public final class QuitCommand implements Command {
     }
 
     @Override
-    public final boolean handleMessage(final MessageEvent messageEvent) {
-        if(messageEvent.getMessage().startsWith(this.commandTrigger) && this.commandUtils.channelOwner(messageEvent)) {
-            final ChatBot chatBot = messageEvent.getChatBot();
+    public boolean isHandledMessage(MessageEvent messageEvent) {
+        return messageEvent.getMessage().startsWith(this.commandTrigger) && this.commandUtils.channelOwner(messageEvent);
+    }
 
-            messageEvent.respond("MrDestructoid MrDestructoid ##### Calling it quits. #####  MrDestructoid MrDestructoid");
-            chatBot.stop();
-            return true;
-        }
-        return false;
+    @Override
+    public final void handleMessage(final MessageEvent messageEvent) {
+        final ChatBot chatBot = messageEvent.getChatBot();
+
+        messageEvent.respond("MrDestructoid MrDestructoid ##### Calling it quits. #####  MrDestructoid MrDestructoid");
+        chatBot.stop();
     }
 }

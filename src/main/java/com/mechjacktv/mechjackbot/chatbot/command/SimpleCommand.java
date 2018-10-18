@@ -26,19 +26,27 @@ public final class SimpleCommand implements Command {
         this.commandUtils = commandUtils;
         this.newCommandPattern = Pattern.compile(NEW_COMMAND_PATTERN);
         this.commands = new Properties();
-        if (!createCastersFile()) {
+        if (!createCommandsFile()) {
             try (final FileInputStream castersFile = new FileInputStream(COMMANDS_LOCATION)) {
                 this.commands.load(castersFile);
             }
         }
     }
 
-    private final boolean createCastersFile() throws IOException {
+    private final boolean createCommandsFile() throws IOException {
         return new File(COMMANDS_LOCATION).createNewFile();
     }
 
     @Override
-    public final boolean handleMessage(MessageEvent messageEvent) {
+    public boolean isHandledMessage(MessageEvent messageEvent) {
+        final String message = messageEvent.getMessage();
+        final Matcher messageMatcher = this.newCommandPattern.matcher(message);
+
+        return messageMatcher.matches() && commandUtils.privilegedUser(messageEvent);
+    }
+
+    @Override
+    public final void handleMessage(MessageEvent messageEvent) {
         final String message = messageEvent.getMessage();
         final Matcher messageMatcher = this.newCommandPattern.matcher(message);
 
@@ -55,7 +63,6 @@ public final class SimpleCommand implements Command {
                     e.printStackTrace();
                 }
             }
-            return true;
         } else if (message.startsWith("!delcommand") && commandUtils.privilegedUser(messageEvent)) {
             if (commandUtils.isCooleddown("!delcommand")) {
                 final String[] messageParts = message.split(" ");
@@ -66,15 +73,13 @@ public final class SimpleCommand implements Command {
                     messageEvent.respond(String.format("Removed %s command", messageParts[1]));
                 }
             }
-            return true;
         } else if (message.startsWith("!comtest") && commandUtils.privilegedUser(messageEvent)) {
             final StringBuilder messageBuilder = new StringBuilder(String.format("Commands (%d): ", commands.size()));
 
-            for(final Object key : commands.keySet()) {
+            for (final Object key : commands.keySet()) {
                 messageBuilder.append(key.toString()).append(" ");
             }
             messageEvent.respond(messageBuilder.toString());
-            return true;
         } else {
             final String commandTrigger = parseCommandTrigger(message);
 
@@ -82,10 +87,8 @@ public final class SimpleCommand implements Command {
                 if (commandUtils.isCooleddown(commandTrigger)) {
                     messageEvent.respond(commands.getProperty(commandTrigger));
                 }
-                return true;
             }
         }
-        return false;
     }
 
     private final void setCommand(final String commandTrigger, final String commandBody) {

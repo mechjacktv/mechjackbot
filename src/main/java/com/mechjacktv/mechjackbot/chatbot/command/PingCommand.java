@@ -15,13 +15,14 @@ public final class PingCommand implements Command {
     }
 
     @Override
-    public final boolean handleMessage(MessageEvent messageEvent) {
-        if(messageEvent.getMessage().startsWith("!ping") && commandUtils.privilegedUser(messageEvent)) {
-            if(commandUtils.isCooleddown("!ping")) {
-                messageEvent.respond("I'm alive! :P");
-            }
-            return true;
+    public final boolean isHandledMessage(MessageEvent messageEvent) {
+        return messageEvent.getMessage().startsWith("!ping") && commandUtils.privilegedUser(messageEvent);
+    }
+
+    @Override
+    public final void handleMessage(MessageEvent messageEvent) {
+        if(commandUtils.isCooleddown("!ping")) {
+            messageEvent.respond("I'm alive! :P");
         }
-        return false;
     }
 }

@@ -2,6 +2,8 @@ package com.mechjacktv.mechjackbot;
 
 public interface Command {
 
-    boolean handleMessage(MessageEvent messageEvent);
+    boolean isHandledMessage(MessageEvent messageEvent);
+
+    void handleMessage(MessageEvent messageEvent);
 
 }

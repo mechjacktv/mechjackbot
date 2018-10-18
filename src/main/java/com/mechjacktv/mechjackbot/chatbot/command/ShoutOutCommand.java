@@ -35,7 +35,12 @@ public final class ShoutOutCommand implements Command {
     }
 
     @Override
-    public final boolean handleMessage(final MessageEvent messageEvent) {
+    public boolean isHandledMessage(MessageEvent messageEvent) {
+        return false;
+    }
+
+    @Override
+    public final void handleMessage(final MessageEvent messageEvent) {
         final String message = messageEvent.getMessage();
 
 
@@ -48,7 +53,6 @@ public final class ShoutOutCommand implements Command {
                     messageEvent.respond(String.format("Added %s to casters list", messageParts[1]));
                 }
             }
-            return true;
         } else if (message.startsWith("!delcaster") && commandUtils.privilegedUser(messageEvent)) {
             if (commandUtils.isCooleddown("!delcaster")) {
                 final String[] messageParts = message.split(" ");
@@ -59,7 +63,6 @@ public final class ShoutOutCommand implements Command {
                     messageEvent.respond(String.format("Removed %s from casters list", messageParts[1]));
                 }
             }
-            return true;
         } else if (message.startsWith("!caster") && commandUtils.privilegedUser(messageEvent)) {
             if (commandUtils.isCooleddown("!delcaster")) {
                 final String[] messageParts = message.split(" ");
@@ -71,7 +74,6 @@ public final class ShoutOutCommand implements Command {
                     shoutOutCaster(messageEvent, sanitizedUsername);
                 }
             }
-            return true;
         } else {
             final ChatUser chatUser = messageEvent.getChatUser();
             final String chatUsername = commandUtils.sanitizeUsername(chatUser.getUsername());
@@ -86,7 +88,6 @@ public final class ShoutOutCommand implements Command {
                 }
             }
         }
-        return false;
     }
 
     private final void setCaster(final String username, final long lastShoutout) {
