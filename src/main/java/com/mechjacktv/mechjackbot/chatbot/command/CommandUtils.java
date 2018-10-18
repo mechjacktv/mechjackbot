@@ -1,8 +1,6 @@
 package com.mechjacktv.mechjackbot.chatbot.command;
 
-import com.mechjacktv.mechjackbot.BotConfiguration;
-import com.mechjacktv.mechjackbot.ChatUser;
-import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.*;
 
 import javax.inject.Inject;
 import java.util.Collections;
@@ -13,15 +11,19 @@ import java.util.regex.Pattern;
 
 public final class CommandUtils {
 
-    private static final long COOLDOWN_PERIOD = 5000;
+    private static final String COMMAND_COOL_DOWN_PERIOD_MS = "command.coolDownPeriod.ms";
+    private static final String COMMAND_COOL_DOWN_PERIOD_MS_DEFAULT = "5000";
 
     private final String botOwner;
+    private final long commandCoolDownPeriodMs;
     private final Map<String, Long> commandLastCalled;
     private final Map<String, Pattern> commandTriggerPatterns;
 
     @Inject
-    public CommandUtils(final BotConfiguration botConfiguration) {
+    public CommandUtils(final AppConfiguration appConfiguration, final BotConfiguration botConfiguration) {
         this.botOwner = botConfiguration.getChannel().toLowerCase();
+        this.commandCoolDownPeriodMs = Long.parseLong(appConfiguration.getProperty(COMMAND_COOL_DOWN_PERIOD_MS,
+                COMMAND_COOL_DOWN_PERIOD_MS_DEFAULT));
         this.commandLastCalled = Collections.synchronizedMap(new HashMap<>());
         this.commandTriggerPatterns = Collections.synchronizedMap(new HashMap<>());
     }
@@ -42,7 +44,7 @@ public final class CommandUtils {
     }
 
     private final Pattern getCommandTriggerPattern(final String commandTrigger) {
-        if(this.commandTriggerPatterns.containsKey(commandTrigger)) {
+        if (this.commandTriggerPatterns.containsKey(commandTrigger)) {
             return this.commandTriggerPatterns.get(commandTrigger);
         }
 
@@ -53,36 +55,36 @@ public final class CommandUtils {
         return commandTriggerPattern;
     }
 
-    public final boolean isCooledDownGlobally(final Class<?> commandClass) {
-        return isCooledDownGlobally(commandClass.getCanonicalName());
+    public final boolean isGloballyCooledDown(final Command command) {
+        return isGloballyCooledDown(command.getCommandTrigger());
     }
 
-    public final boolean isCooledDownGlobally(final String commandTrigger) {
+    public final boolean isGloballyCooledDown(final String commandTrigger) {
         final Long now = System.currentTimeMillis();
         final Long lastCalled = commandLastCalled.get(commandTrigger);
 
-        if(lastCalled == null || now - lastCalled > COOLDOWN_PERIOD) {
+        if (lastCalled == null || now - lastCalled > this.commandCoolDownPeriodMs) {
             commandLastCalled.put(commandTrigger, now);
             return true;
         }
         return false;
     }
 
-    public final boolean isPrivilegedUser(final MessageEvent messageEvent) {
+    public final boolean isPrivilegedViewer(final MessageEvent messageEvent) {
         // TODO implement mod check
         return isChannelOwner(messageEvent);
     }
 
-    public final boolean isRegularUser(final MessageEvent messageEvent) {
+    public final boolean isRegularUserViewer(final MessageEvent messageEvent) {
         // TODO implement regular check
-        return isPrivilegedUser(messageEvent);
+        return isPrivilegedViewer(messageEvent);
     }
 
 
     public final String sanitizeUsername(final String username) {
         String sanitizedUsername = username.trim().toLowerCase();
 
-        if(sanitizedUsername.startsWith("@")) {
+        if (sanitizedUsername.startsWith("@")) {
             sanitizedUsername = sanitizedUsername.substring(1);
         }
         return sanitizedUsername;

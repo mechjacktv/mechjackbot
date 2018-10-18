@@ -38,11 +38,16 @@ public final class SimpleCommand implements Command {
     }
 
     @Override
-    public boolean isHandledMessage(MessageEvent messageEvent) {
+    public final String getCommandTrigger() {
+        return "!simple";
+    }
+
+    @Override
+    public final boolean isHandledMessage(MessageEvent messageEvent) {
         final String message = messageEvent.getMessage();
         final Matcher messageMatcher = this.newCommandPattern.matcher(message);
 
-        return messageMatcher.matches() && commandUtils.isPrivilegedUser(messageEvent);
+        return messageMatcher.matches() && commandUtils.isPrivilegedViewer(messageEvent);
     }
 
     @Override
@@ -50,11 +55,11 @@ public final class SimpleCommand implements Command {
         final String message = messageEvent.getMessage();
         final Matcher messageMatcher = this.newCommandPattern.matcher(message);
 
-        if (messageMatcher.matches() && commandUtils.isPrivilegedUser(messageEvent)) {
+        if (messageMatcher.matches() && commandUtils.isPrivilegedViewer(messageEvent)) {
             final String commandTrigger = messageMatcher.group(1);
             final String commandBody = messageMatcher.group(2);
 
-            if (commandUtils.isCooledDownGlobally("!addcommand")) {
+            if (commandUtils.isGloballyCooledDown("!addcommand")) {
                 setCommand(commandTrigger, commandBody);
                 messageEvent.respond(String.format("Added %s command", commandTrigger));
                 try {
@@ -63,8 +68,8 @@ public final class SimpleCommand implements Command {
                     e.printStackTrace();
                 }
             }
-        } else if (message.startsWith("!delcommand") && commandUtils.isPrivilegedUser(messageEvent)) {
-            if (commandUtils.isCooledDownGlobally("!delcommand")) {
+        } else if (message.startsWith("!delcommand") && commandUtils.isPrivilegedViewer(messageEvent)) {
+            if (commandUtils.isGloballyCooledDown("!delcommand")) {
                 final String[] messageParts = message.split(" ");
 
                 if (messageParts.length > 1 && commands.containsKey(messageParts[1])) {
@@ -73,7 +78,7 @@ public final class SimpleCommand implements Command {
                     messageEvent.respond(String.format("Removed %s command", messageParts[1]));
                 }
             }
-        } else if (message.startsWith("!comtest") && commandUtils.isPrivilegedUser(messageEvent)) {
+        } else if (message.startsWith("!comtest") && commandUtils.isPrivilegedViewer(messageEvent)) {
             final StringBuilder messageBuilder = new StringBuilder(String.format("Commands (%d): ", commands.size()));
 
             for (final Object key : commands.keySet()) {
@@ -84,7 +89,7 @@ public final class SimpleCommand implements Command {
             final String commandTrigger = parseCommandTrigger(message);
 
             if (commands.containsKey(commandTrigger)) {
-                if (commandUtils.isCooledDownGlobally(commandTrigger)) {
+                if (commandUtils.isGloballyCooledDown(commandTrigger)) {
                     messageEvent.respond(commands.getProperty(commandTrigger));
                 }
             }

@@ -21,7 +21,7 @@ public class RestrictToPrivilegedMethodInterceptor implements MethodInterceptor 
         if(Command.class.isAssignableFrom(thisInstance.getClass())) {
             final MessageEvent messageEvent = (MessageEvent) invocation.getArguments()[0];
 
-            if(this.commandUtils.isPrivilegedUser(messageEvent)) {
+            if(this.commandUtils.isPrivilegedViewer(messageEvent)) {
                 return invocation.proceed();
             }
         }

@@ -20,7 +20,7 @@ public class RestrictToRegularMethodInterceptor implements MethodInterceptor {
         if(Command.class.isAssignableFrom(thisInstance.getClass())) {
             final MessageEvent messageEvent = (MessageEvent) invocation.getArguments()[0];
 
-            if(this.commandUtils.isRegularUser(messageEvent)) {
+            if(this.commandUtils.isRegularUserViewer(messageEvent)) {
                 return invocation.proceed();
             }
         }

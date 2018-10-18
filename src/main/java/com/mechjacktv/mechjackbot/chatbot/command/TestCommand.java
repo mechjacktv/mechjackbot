@@ -17,14 +17,20 @@ public class TestCommand implements Command {
     }
 
     @Override
-    public boolean isHandledMessage(MessageEvent messageEvent) {
-        return commandUtils.isCommandTrigger("!test", messageEvent);
+    public final String getCommandTrigger() {
+        return "!test";
+    }
+
+    @Override
+    public final boolean isHandledMessage(MessageEvent messageEvent) {
+        return this.commandUtils.isCommandTrigger(getCommandTrigger(), messageEvent);
     }
 
     @Override
     @RestrictToOwner
     @GlobalCoolDown
     public void handleMessage(final MessageEvent messageEvent) {
-        messageEvent.respond("No cool down active");
+        messageEvent.respond(String.format("%s, your test command completed successfully.",
+                messageEvent.getChatUser().getUsername()));
     }
 }

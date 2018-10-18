@@ -35,7 +35,12 @@ public final class ShoutOutCommand implements Command {
     }
 
     @Override
-    public boolean isHandledMessage(MessageEvent messageEvent) {
+    public final String getCommandTrigger() {
+        return "!shoutout";
+    }
+
+    @Override
+    public final boolean isHandledMessage(MessageEvent messageEvent) {
         return false;
     }
 
@@ -44,8 +49,8 @@ public final class ShoutOutCommand implements Command {
         final String message = messageEvent.getMessage();
 
 
-        if (message.startsWith("!addcaster") && commandUtils.isPrivilegedUser(messageEvent)) {
-            if (commandUtils.isCooledDownGlobally("!addcaster")) {
+        if (message.startsWith("!addcaster") && commandUtils.isPrivilegedViewer(messageEvent)) {
+            if (commandUtils.isGloballyCooledDown("!addcaster")) {
                 final String[] messageParts = message.split(" ");
 
                 if (messageParts.length > 1) {
@@ -53,8 +58,8 @@ public final class ShoutOutCommand implements Command {
                     messageEvent.respond(String.format("Added %s to casters list", messageParts[1]));
                 }
             }
-        } else if (message.startsWith("!delcaster") && commandUtils.isPrivilegedUser(messageEvent)) {
-            if (commandUtils.isCooledDownGlobally("!delcaster")) {
+        } else if (message.startsWith("!delcaster") && commandUtils.isPrivilegedViewer(messageEvent)) {
+            if (commandUtils.isGloballyCooledDown("!delcaster")) {
                 final String[] messageParts = message.split(" ");
 
                 if (messageParts.length > 1 && casters.containsKey(commandUtils.sanitizeUsername(messageParts[1]))) {
@@ -63,8 +68,8 @@ public final class ShoutOutCommand implements Command {
                     messageEvent.respond(String.format("Removed %s from casters list", messageParts[1]));
                 }
             }
-        } else if (message.startsWith("!caster") && commandUtils.isPrivilegedUser(messageEvent)) {
-            if (commandUtils.isCooledDownGlobally("!delcaster")) {
+        } else if (message.startsWith("!caster") && commandUtils.isPrivilegedViewer(messageEvent)) {
+            if (commandUtils.isGloballyCooledDown("!caster")) {
                 final String[] messageParts = message.split(" ");
 
                 if (messageParts.length > 1) {

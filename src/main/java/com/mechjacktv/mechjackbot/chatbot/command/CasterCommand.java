@@ -7,22 +7,22 @@ import com.mechjacktv.mechjackbot.chatbot.command.restrict.RestrictToPrivileged;
 
 import javax.inject.Inject;
 
-public class PingCommand implements Command {
+public class CasterCommand implements Command {
 
     private final CommandUtils commandUtils;
 
     @Inject
-    public PingCommand(final CommandUtils commandUtils) {
+    public CasterCommand(final CommandUtils commandUtils) {
         this.commandUtils = commandUtils;
     }
 
     @Override
     public final String getCommandTrigger() {
-        return "!ping";
+        return "!caster";
     }
 
     @Override
-    public final boolean isHandledMessage(MessageEvent messageEvent) {
+    public final boolean isHandledMessage(final MessageEvent messageEvent) {
         return this.commandUtils.isCommandTrigger(getCommandTrigger(), messageEvent);
     }
 
@@ -30,7 +30,6 @@ public class PingCommand implements Command {
     @RestrictToPrivileged
     @GlobalCoolDown
     public void handleMessage(MessageEvent messageEvent) {
-        messageEvent.respond(String.format("Don't worry, %s. I'm here.",
-                messageEvent.getChatUser().getUsername()));
+
     }
 }

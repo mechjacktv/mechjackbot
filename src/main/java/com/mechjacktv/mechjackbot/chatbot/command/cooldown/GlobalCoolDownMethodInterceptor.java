@@ -1,6 +1,7 @@
 package com.mechjacktv.mechjackbot.chatbot.command.cooldown;
 
 import com.mechjacktv.mechjackbot.Command;
+import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.mechjackbot.chatbot.command.CommandUtils;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -20,7 +21,7 @@ public class GlobalCoolDownMethodInterceptor implements MethodInterceptor {
         if (Command.class.isAssignableFrom(thisInstance.getClass())) {
             final Command thisCommand = (Command) thisInstance;
 
-            if (this.commandUtils.isCooledDownGlobally(thisCommand.getClass())) {
+            if (this.commandUtils.isGloballyCooledDown(thisCommand)) {
                 return invocation.proceed();
             }
         }

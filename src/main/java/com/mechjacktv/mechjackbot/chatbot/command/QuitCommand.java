@@ -1,10 +1,11 @@
 package com.mechjacktv.mechjackbot.chatbot.command;
 
 import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.chatbot.command.restrict.RestrictToOwner;
 
 import javax.inject.Inject;
 
-public final class QuitCommand implements Command {
+public class QuitCommand implements Command {
 
     private static final String COMMAND_TRIGGER = "command.quit.trigger";
     private static final String COMMAND_TRIGGER_DEFAULT = "quit";
@@ -19,15 +20,21 @@ public final class QuitCommand implements Command {
     }
 
     @Override
-    public boolean isHandledMessage(MessageEvent messageEvent) {
-        return messageEvent.getMessage().startsWith(this.commandTrigger) && this.commandUtils.isChannelOwner(messageEvent);
+    public final String getCommandTrigger() {
+        return this.commandTrigger;
     }
 
     @Override
-    public final void handleMessage(final MessageEvent messageEvent) {
+    public final boolean isHandledMessage(MessageEvent messageEvent) {
+        return this.commandUtils.isCommandTrigger(getCommandTrigger(), messageEvent);
+    }
+
+    @Override
+    @RestrictToOwner
+    public void handleMessage(final MessageEvent messageEvent) {
         final ChatBot chatBot = messageEvent.getChatBot();
 
-        messageEvent.respond("MrDestructoid MrDestructoid ##### Calling it quits. #####  MrDestructoid MrDestructoid");
+        messageEvent.respond("That's all for me, folks");
         chatBot.stop();
     }
 }
