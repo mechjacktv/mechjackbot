@@ -16,12 +16,12 @@ public final class PingCommand implements Command {
 
     @Override
     public final boolean isHandledMessage(MessageEvent messageEvent) {
-        return messageEvent.getMessage().startsWith("!ping") && commandUtils.privilegedUser(messageEvent);
+        return messageEvent.getMessage().startsWith("!ping") && commandUtils.isPrivilegedUser(messageEvent);
     }
 
     @Override
     public final void handleMessage(MessageEvent messageEvent) {
-        if(commandUtils.isCooledDown("!ping")) {
+        if(commandUtils.isCooledDownGlobally("!ping")) {
             messageEvent.respond("I'm alive! :P");
         }
     }

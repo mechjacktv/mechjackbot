@@ -42,7 +42,7 @@ public final class SimpleCommand implements Command {
         final String message = messageEvent.getMessage();
         final Matcher messageMatcher = this.newCommandPattern.matcher(message);
 
-        return messageMatcher.matches() && commandUtils.privilegedUser(messageEvent);
+        return messageMatcher.matches() && commandUtils.isPrivilegedUser(messageEvent);
     }
 
     @Override
@@ -50,11 +50,11 @@ public final class SimpleCommand implements Command {
         final String message = messageEvent.getMessage();
         final Matcher messageMatcher = this.newCommandPattern.matcher(message);
 
-        if (messageMatcher.matches() && commandUtils.privilegedUser(messageEvent)) {
+        if (messageMatcher.matches() && commandUtils.isPrivilegedUser(messageEvent)) {
             final String commandTrigger = messageMatcher.group(1);
             final String commandBody = messageMatcher.group(2);
 
-            if (commandUtils.isCooledDown("!addcommand")) {
+            if (commandUtils.isCooledDownGlobally("!addcommand")) {
                 setCommand(commandTrigger, commandBody);
                 messageEvent.respond(String.format("Added %s command", commandTrigger));
                 try {
@@ -63,8 +63,8 @@ public final class SimpleCommand implements Command {
                     e.printStackTrace();
                 }
             }
-        } else if (message.startsWith("!delcommand") && commandUtils.privilegedUser(messageEvent)) {
-            if (commandUtils.isCooledDown("!delcommand")) {
+        } else if (message.startsWith("!delcommand") && commandUtils.isPrivilegedUser(messageEvent)) {
+            if (commandUtils.isCooledDownGlobally("!delcommand")) {
                 final String[] messageParts = message.split(" ");
 
                 if (messageParts.length > 1 && commands.containsKey(messageParts[1])) {
@@ -73,7 +73,7 @@ public final class SimpleCommand implements Command {
                     messageEvent.respond(String.format("Removed %s command", messageParts[1]));
                 }
             }
-        } else if (message.startsWith("!comtest") && commandUtils.privilegedUser(messageEvent)) {
+        } else if (message.startsWith("!comtest") && commandUtils.isPrivilegedUser(messageEvent)) {
             final StringBuilder messageBuilder = new StringBuilder(String.format("Commands (%d): ", commands.size()));
 
             for (final Object key : commands.keySet()) {
@@ -84,7 +84,7 @@ public final class SimpleCommand implements Command {
             final String commandTrigger = parseCommandTrigger(message);
 
             if (commands.containsKey(commandTrigger)) {
-                if (commandUtils.isCooledDown(commandTrigger)) {
+                if (commandUtils.isCooledDownGlobally(commandTrigger)) {
                     messageEvent.respond(commands.getProperty(commandTrigger));
                 }
             }

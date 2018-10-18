@@ -44,8 +44,8 @@ public final class ShoutOutCommand implements Command {
         final String message = messageEvent.getMessage();
 
 
-        if (message.startsWith("!addcaster") && commandUtils.privilegedUser(messageEvent)) {
-            if (commandUtils.isCooledDown("!addcaster")) {
+        if (message.startsWith("!addcaster") && commandUtils.isPrivilegedUser(messageEvent)) {
+            if (commandUtils.isCooledDownGlobally("!addcaster")) {
                 final String[] messageParts = message.split(" ");
 
                 if (messageParts.length > 1) {
@@ -53,8 +53,8 @@ public final class ShoutOutCommand implements Command {
                     messageEvent.respond(String.format("Added %s to casters list", messageParts[1]));
                 }
             }
-        } else if (message.startsWith("!delcaster") && commandUtils.privilegedUser(messageEvent)) {
-            if (commandUtils.isCooledDown("!delcaster")) {
+        } else if (message.startsWith("!delcaster") && commandUtils.isPrivilegedUser(messageEvent)) {
+            if (commandUtils.isCooledDownGlobally("!delcaster")) {
                 final String[] messageParts = message.split(" ");
 
                 if (messageParts.length > 1 && casters.containsKey(commandUtils.sanitizeUsername(messageParts[1]))) {
@@ -63,8 +63,8 @@ public final class ShoutOutCommand implements Command {
                     messageEvent.respond(String.format("Removed %s from casters list", messageParts[1]));
                 }
             }
-        } else if (message.startsWith("!caster") && commandUtils.privilegedUser(messageEvent)) {
-            if (commandUtils.isCooledDown("!delcaster")) {
+        } else if (message.startsWith("!caster") && commandUtils.isPrivilegedUser(messageEvent)) {
+            if (commandUtils.isCooledDownGlobally("!delcaster")) {
                 final String[] messageParts = message.split(" ");
 
                 if (messageParts.length > 1) {

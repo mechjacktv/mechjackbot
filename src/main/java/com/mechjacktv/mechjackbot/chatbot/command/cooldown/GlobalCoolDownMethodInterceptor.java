@@ -1,53 +1,30 @@
 package com.mechjacktv.mechjackbot.chatbot.command.cooldown;
 
 import com.mechjacktv.mechjackbot.Command;
-import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.chatbot.command.CommandUtils;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 public class GlobalCoolDownMethodInterceptor implements MethodInterceptor {
 
-    private static final long COOLDOWN_PERIOD = 5000;
+    private final CommandUtils commandUtils;
 
-    private final Map<String, Long> commandLastCalled;
-
-    public GlobalCoolDownMethodInterceptor() {
-        this.commandLastCalled = Collections.synchronizedMap(new HashMap<>());
+    public GlobalCoolDownMethodInterceptor(final CommandUtils commandUtils) {
+        this.commandUtils = commandUtils;
     }
 
     @Override
     public Object invoke(final MethodInvocation invocation) throws Throwable {
         final Object thisInstance = invocation.getThis();
 
-        if(Command.class.isAssignableFrom(thisInstance.getClass())) {
+        if (Command.class.isAssignableFrom(thisInstance.getClass())) {
             final Command thisCommand = (Command) thisInstance;
 
-            if(thisCommand.isHandledMessage((MessageEvent) invocation.getArguments()[0])) {
-                if(this.isCooledDown(thisCommand.getClass())) {
-                    return invocation.proceed();
-                }
+            if (this.commandUtils.isCooledDownGlobally(thisCommand.getClass())) {
+                return invocation.proceed();
             }
         }
         throw new IllegalStateException("`@GlobalCoolDown` MUST only be placed on implementors of `Command`");
-    }
-
-    private final boolean isCooledDown(final Class<?> commandClass) {
-        return isCooledDown(commandClass.getCanonicalName());
-    }
-
-    private final boolean isCooledDown(final String commandClassName) {
-        final Long now = System.currentTimeMillis();
-        final Long lastCalled = commandLastCalled.get(commandClassName);
-
-        if(lastCalled == null || now - lastCalled > COOLDOWN_PERIOD) {
-            commandLastCalled.put(commandClassName, now);
-            return true;
-        }
-        return false;
     }
 
 }

@@ -20,7 +20,7 @@ public final class QuitCommand implements Command {
 
     @Override
     public boolean isHandledMessage(MessageEvent messageEvent) {
-        return messageEvent.getMessage().startsWith(this.commandTrigger) && this.commandUtils.channelOwner(messageEvent);
+        return messageEvent.getMessage().startsWith(this.commandTrigger) && this.commandUtils.isChannelOwner(messageEvent);
     }
 
     @Override

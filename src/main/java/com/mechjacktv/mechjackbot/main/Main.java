@@ -13,7 +13,11 @@ import com.mechjacktv.mechjackbot.chatbot.PropertiesAppConfiguration;
 import com.mechjacktv.mechjackbot.chatbot.command.*;
 import com.mechjacktv.mechjackbot.chatbot.command.cooldown.GlobalCoolDown;
 import com.mechjacktv.mechjackbot.chatbot.command.cooldown.GlobalCoolDownMethodInterceptor;
+import com.mechjacktv.mechjackbot.chatbot.command.restrict.RestrictToOwner;
+import com.mechjacktv.mechjackbot.chatbot.command.restrict.RestrictToOwnerMethodInterceptor;
 import org.pircbotx.hooks.Listener;
+
+import java.io.IOException;
 
 public class Main {
 
@@ -29,21 +33,37 @@ public class Main {
 
         @Override
         protected final void configure() {
-            bindInterceptor(Matchers.any(), Matchers.annotatedWith(GlobalCoolDown.class),
-                    new GlobalCoolDownMethodInterceptor());
+            try {
+                final AppConfiguration appConfiguration = new PropertiesAppConfiguration();
+                final BotConfiguration botConfiguration = new DefaultBotConfiguration(appConfiguration);
+                final CommandUtils commandUtils = new CommandUtils(botConfiguration);
 
-            bind(ChatBot.class).to(PircBotXChatBot.class).asEagerSingleton();
-            bind(Listener.class).to(PircBotXMessageEventHandler.class).asEagerSingleton();
-            bind(MessageEventHandler.class).to(PircBotXMessageEventHandler.class).asEagerSingleton();
-            bind(AppConfiguration.class).to(PropertiesAppConfiguration.class).asEagerSingleton();
-            bind(BotConfiguration.class).to(DefaultBotConfiguration.class).asEagerSingleton();
+                bind(AppConfiguration.class).toInstance(appConfiguration);
+                bind(BotConfiguration.class).toInstance(botConfiguration);
+                bind(CommandUtils.class).toInstance(commandUtils);
 
-            bind(CommandUtils.class).asEagerSingleton();
-            Multibinder.newSetBinder(binder(), Command.class).addBinding().to(TestCommand.class).asEagerSingleton();
-            Multibinder.newSetBinder(binder(), Command.class).addBinding().to(QuitCommand.class).asEagerSingleton();
-            Multibinder.newSetBinder(binder(), Command.class).addBinding().to(PingCommand.class).asEagerSingleton();
-            Multibinder.newSetBinder(binder(), Command.class).addBinding().to(ShoutOutCommand.class).asEagerSingleton();
-            Multibinder.newSetBinder(binder(), Command.class).addBinding().to(SimpleCommand.class).asEagerSingleton();
+                bindInterceptor(Matchers.subclassesOf(Command.class),
+                        Matchers.annotatedWith(RestrictToOwner.class),
+                        new RestrictToOwnerMethodInterceptor(commandUtils));
+                bindInterceptor(Matchers.subclassesOf(Command.class),
+                        Matchers.annotatedWith(GlobalCoolDown.class),
+                        new GlobalCoolDownMethodInterceptor(commandUtils));
+
+                bind(ChatBot.class).to(PircBotXChatBot.class).asEagerSingleton();
+                bind(Listener.class).to(PircBotXMessageEventHandler.class).asEagerSingleton();
+                bind(MessageEventHandler.class).to(PircBotXMessageEventHandler.class).asEagerSingleton();
+
+                Multibinder.newSetBinder(binder(), Command.class).addBinding().to(TestCommand.class).asEagerSingleton();
+                Multibinder.newSetBinder(binder(), Command.class).addBinding().to(QuitCommand.class).asEagerSingleton();
+                Multibinder.newSetBinder(binder(), Command.class).addBinding().to(PingCommand.class).asEagerSingleton();
+                Multibinder.newSetBinder(binder(), Command.class).addBinding().to(ShoutOutCommand.class).asEagerSingleton();
+                Multibinder.newSetBinder(binder(), Command.class).addBinding().to(SimpleCommand.class).asEagerSingleton();
+            } catch (final RuntimeException e) {
+                throw e;
+            } catch (final Exception e) {
+                // FIXME need a better exception
+                throw new RuntimeException(e);
+            }
         }
 
     }

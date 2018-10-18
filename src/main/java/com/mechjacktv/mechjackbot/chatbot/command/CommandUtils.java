@@ -26,7 +26,7 @@ public final class CommandUtils {
         this.commandTriggerPatterns = Collections.synchronizedMap(new HashMap<>());
     }
 
-    public final boolean channelOwner(final MessageEvent messageEvent) {
+    public final boolean isChannelOwner(final MessageEvent messageEvent) {
         final ChatUser chatUser = messageEvent.getChatUser();
         final String chatUsername = chatUser.getUsername().toLowerCase();
 
@@ -46,14 +46,18 @@ public final class CommandUtils {
             return this.commandTriggerPatterns.get(commandTrigger);
         }
 
-        final String commandTriggerRegex = commandTrigger + "\\s+.*";
+        final String commandTriggerRegex = commandTrigger + "(\\s+.+)?";
         final Pattern commandTriggerPattern = Pattern.compile(commandTriggerRegex);
 
         this.commandTriggerPatterns.put(commandTrigger, commandTriggerPattern);
         return commandTriggerPattern;
     }
 
-    public final boolean isCooledDown(final String commandTrigger) {
+    public final boolean isCooledDownGlobally(final Class<?> commandClass) {
+        return isCooledDownGlobally(commandClass.getCanonicalName());
+    }
+
+    public final boolean isCooledDownGlobally(final String commandTrigger) {
         final Long now = System.currentTimeMillis();
         final Long lastCalled = commandLastCalled.get(commandTrigger);
 
@@ -64,8 +68,8 @@ public final class CommandUtils {
         return false;
     }
 
-    public final boolean privilegedUser(final MessageEvent messageEvent) {
-        return channelOwner(messageEvent);
+    public final boolean isPrivilegedUser(final MessageEvent messageEvent) {
+        return isChannelOwner(messageEvent);
     }
 
 
