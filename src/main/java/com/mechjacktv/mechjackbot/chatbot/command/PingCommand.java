@@ -21,7 +21,7 @@ public final class PingCommand implements Command {
 
     @Override
     public final void handleMessage(MessageEvent messageEvent) {
-        if(commandUtils.isCooleddown("!ping")) {
+        if(commandUtils.isCooledDown("!ping")) {
             messageEvent.respond("I'm alive! :P");
         }
     }

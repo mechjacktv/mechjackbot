@@ -54,7 +54,7 @@ public final class SimpleCommand implements Command {
             final String commandTrigger = messageMatcher.group(1);
             final String commandBody = messageMatcher.group(2);
 
-            if (commandUtils.isCooleddown("!addcommand")) {
+            if (commandUtils.isCooledDown("!addcommand")) {
                 setCommand(commandTrigger, commandBody);
                 messageEvent.respond(String.format("Added %s command", commandTrigger));
                 try {
@@ -64,7 +64,7 @@ public final class SimpleCommand implements Command {
                 }
             }
         } else if (message.startsWith("!delcommand") && commandUtils.privilegedUser(messageEvent)) {
-            if (commandUtils.isCooleddown("!delcommand")) {
+            if (commandUtils.isCooledDown("!delcommand")) {
                 final String[] messageParts = message.split(" ");
 
                 if (messageParts.length > 1 && commands.containsKey(messageParts[1])) {
@@ -84,7 +84,7 @@ public final class SimpleCommand implements Command {
             final String commandTrigger = parseCommandTrigger(message);
 
             if (commands.containsKey(commandTrigger)) {
-                if (commandUtils.isCooleddown(commandTrigger)) {
+                if (commandUtils.isCooledDown(commandTrigger)) {
                     messageEvent.respond(commands.getProperty(commandTrigger));
                 }
             }

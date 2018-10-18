@@ -8,6 +8,8 @@ import javax.inject.Inject;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class CommandUtils {
 
@@ -15,11 +17,13 @@ public final class CommandUtils {
 
     private final String botOwner;
     private final Map<String, Long> commandLastCalled;
+    private final Map<String, Pattern> commandTriggerPatterns;
 
     @Inject
     public CommandUtils(final BotConfiguration botConfiguration) {
         this.botOwner = botConfiguration.getChannel().toLowerCase();
         this.commandLastCalled = Collections.synchronizedMap(new HashMap<>());
+        this.commandTriggerPatterns = Collections.synchronizedMap(new HashMap<>());
     }
 
     public final boolean channelOwner(final MessageEvent messageEvent) {
@@ -29,7 +33,27 @@ public final class CommandUtils {
         return botOwner.equals(chatUsername);
     }
 
-    public final boolean isCooleddown(final String commandTrigger) {
+    public final boolean isCommandTrigger(final String commandTrigger, final MessageEvent messageEvent) {
+        final String message = messageEvent.getMessage();
+        final Pattern commandTriggerPattern = getCommandTriggerPattern(commandTrigger);
+        final Matcher commandTriggerMatcher = commandTriggerPattern.matcher(message);
+
+        return commandTriggerMatcher.matches();
+    }
+
+    private final Pattern getCommandTriggerPattern(final String commandTrigger) {
+        if(this.commandTriggerPatterns.containsKey(commandTrigger)) {
+            return this.commandTriggerPatterns.get(commandTrigger);
+        }
+
+        final String commandTriggerRegex = commandTrigger + "\\s+.*";
+        final Pattern commandTriggerPattern = Pattern.compile(commandTriggerRegex);
+
+        this.commandTriggerPatterns.put(commandTrigger, commandTriggerPattern);
+        return commandTriggerPattern;
+    }
+
+    public final boolean isCooledDown(final String commandTrigger) {
         final Long now = System.currentTimeMillis();
         final Long lastCalled = commandLastCalled.get(commandTrigger);
 

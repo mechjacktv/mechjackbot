@@ -17,7 +17,7 @@ public class TestCommand implements Command {
 
     @Override
     public boolean isHandledMessage(MessageEvent messageEvent) {
-        return messageEvent.getMessage().startsWith("!test") && this.commandUtils.channelOwner(messageEvent);
+        return commandUtils.isCommandTrigger("!test") && this.commandUtils.channelOwner(messageEvent);
     }
 
     @Override

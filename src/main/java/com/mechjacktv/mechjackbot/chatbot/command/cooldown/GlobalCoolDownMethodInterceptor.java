@@ -27,7 +27,7 @@ public class GlobalCoolDownMethodInterceptor implements MethodInterceptor {
             final Command thisCommand = (Command) thisInstance;
 
             if(thisCommand.isHandledMessage((MessageEvent) invocation.getArguments()[0])) {
-                if(this.isCooledDown(invocation.getThis().getClass().getCanonicalName())) {
+                if(this.isCooledDown(thisCommand.getClass())) {
                     return invocation.proceed();
                 }
             }
@@ -35,12 +35,16 @@ public class GlobalCoolDownMethodInterceptor implements MethodInterceptor {
         throw new IllegalStateException("`@GlobalCoolDown` MUST only be placed on implementors of `Command`");
     }
 
-    private final boolean isCooledDown(final String commandTrigger) {
+    private final boolean isCooledDown(final Class<?> commandClass) {
+        return isCooledDown(commandClass.getCanonicalName());
+    }
+
+    private final boolean isCooledDown(final String commandClassName) {
         final Long now = System.currentTimeMillis();
-        final Long lastCalled = commandLastCalled.get(commandTrigger);
+        final Long lastCalled = commandLastCalled.get(commandClassName);
 
         if(lastCalled == null || now - lastCalled > COOLDOWN_PERIOD) {
-            commandLastCalled.put(commandTrigger, now);
+            commandLastCalled.put(commandClassName, now);
             return true;
         }
         return false;

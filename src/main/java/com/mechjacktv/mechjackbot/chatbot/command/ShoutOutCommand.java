@@ -45,7 +45,7 @@ public final class ShoutOutCommand implements Command {
 
 
         if (message.startsWith("!addcaster") && commandUtils.privilegedUser(messageEvent)) {
-            if (commandUtils.isCooleddown("!addcaster")) {
+            if (commandUtils.isCooledDown("!addcaster")) {
                 final String[] messageParts = message.split(" ");
 
                 if (messageParts.length > 1) {
@@ -54,7 +54,7 @@ public final class ShoutOutCommand implements Command {
                 }
             }
         } else if (message.startsWith("!delcaster") && commandUtils.privilegedUser(messageEvent)) {
-            if (commandUtils.isCooleddown("!delcaster")) {
+            if (commandUtils.isCooledDown("!delcaster")) {
                 final String[] messageParts = message.split(" ");
 
                 if (messageParts.length > 1 && casters.containsKey(commandUtils.sanitizeUsername(messageParts[1]))) {
@@ -64,7 +64,7 @@ public final class ShoutOutCommand implements Command {
                 }
             }
         } else if (message.startsWith("!caster") && commandUtils.privilegedUser(messageEvent)) {
-            if (commandUtils.isCooleddown("!delcaster")) {
+            if (commandUtils.isCooledDown("!delcaster")) {
                 final String[] messageParts = message.split(" ");
 
                 if (messageParts.length > 1) {
