@@ -23,7 +23,7 @@ public final class QuitCommand implements Command {
         if(messageEvent.getMessage().startsWith(this.commandTrigger) && this.commandUtils.channelOwner(messageEvent)) {
             final ChatBot chatBot = messageEvent.getChatBot();
 
-            messageEvent.respond("<3 Calling it quits <3");
+            messageEvent.respond("MrDestructoid MrDestructoid ##### Calling it quits. #####  MrDestructoid MrDestructoid");
             chatBot.stop();
             return true;
         }
