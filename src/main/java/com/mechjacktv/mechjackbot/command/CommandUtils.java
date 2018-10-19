@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public final class CommandUtils {
 
-    private static final String COMMAND_COOL_DOWN_PERIOD_SECONDS = "command.coolDownPeriod.ms";
+    private static final String COMMAND_COOL_DOWN_PERIOD_SECONDS = "command.coolDownPeriod.seconds";
     private static final String COMMAND_COOL_DOWN_PERIOD_SECONDS_DEFAULT = "5";
 
     private final String botOwner;
