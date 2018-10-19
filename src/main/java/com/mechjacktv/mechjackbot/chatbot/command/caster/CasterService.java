@@ -59,10 +59,10 @@ public class CasterService {
     public final void sendCasterShoutOut(final MessageEvent messageEvent, final String casterName) {
         final StringBuilder builder = new StringBuilder();
 
-        builder.append("Caster in the house! ");
-        builder.append("Everyone, please give a warm welcome to %s. ");
+        builder.append("Fellow caster in the stream! ");
+        builder.append("Everyone, please give a warm welcome to @%s. ");
         builder.append("It would be great if you checked them out ");
-        builder.append("and gave them a follow. https://twitch.tv/%s");
+        builder.append("and gave them a follow too. https://twitch.tv/%s");
         messageEvent.sendResponse(String.format(builder.toString(), casterName, casterName));
         setCaster(casterName, System.currentTimeMillis());
     }

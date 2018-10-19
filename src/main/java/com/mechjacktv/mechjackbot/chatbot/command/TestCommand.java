@@ -5,30 +5,27 @@ import com.mechjacktv.mechjackbot.MessageEvent;
 
 import javax.inject.Inject;
 
-public class TestCommand implements Command {
+public class TestCommand  extends AbstractCommand {
 
     private final CommandUtils commandUtils;
 
     @Inject
     public TestCommand(final CommandUtils commandUtils) {
+        super("!test", commandUtils);
         this.commandUtils = commandUtils;
     }
 
     @Override
-    public final String getCommandTrigger() {
-        return "!test";
-    }
-
-    @Override
-    public final boolean isHandledMessage(MessageEvent messageEvent) {
-        return this.commandUtils.isCommandTrigger(getCommandTrigger(), messageEvent);
+    public String getDecription() {
+        return "A command I change freely to test development.";
     }
 
     @Override
     @RestrictToOwner
     @GlobalCoolDown
     public void handleMessage(final MessageEvent messageEvent) {
-        messageEvent.sendResponse(String.format("%s, your test command completed successfully.",
+        messageEvent.sendResponse(String.format("@%s, your test completed successfully.",
                 this.commandUtils.getSanitizedViewerName(messageEvent)));
     }
+
 }

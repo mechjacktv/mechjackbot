@@ -4,28 +4,22 @@ import com.mechjacktv.mechjackbot.*;
 
 import javax.inject.Inject;
 
-public class QuitCommand implements Command {
+public class QuitCommand extends AbstractCommand {
 
     private static final String COMMAND_TRIGGER = "command.quit.trigger";
-    private static final String COMMAND_TRIGGER_DEFAULT = "quit";
+    private static final String COMMAND_TRIGGER_DEFAULT = "!quit";
 
-    private final String commandTrigger;
     private final CommandUtils commandUtils;
 
     @Inject
     public QuitCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils) {
-        this.commandTrigger = "!" + appConfiguration.getProperty(COMMAND_TRIGGER, COMMAND_TRIGGER_DEFAULT);
+        super(appConfiguration.getProperty(COMMAND_TRIGGER, COMMAND_TRIGGER_DEFAULT), commandUtils);
         this.commandUtils = commandUtils;
     }
 
     @Override
-    public final String getCommandTrigger() {
-        return this.commandTrigger;
-    }
-
-    @Override
-    public final boolean isHandledMessage(MessageEvent messageEvent) {
-        return this.commandUtils.isCommandTrigger(getCommandTrigger(), messageEvent);
+    public String getDecription() {
+        return "Shuts the chatbot down.";
     }
 
     @Override
@@ -36,4 +30,5 @@ public class QuitCommand implements Command {
         messageEvent.sendResponse("That's all for me, folks");
         chatBot.stop();
     }
+
 }

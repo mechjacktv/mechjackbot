@@ -4,22 +4,24 @@ import javax.inject.Inject;
 
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.chatbot.command.AbstractCommand;
 import com.mechjacktv.mechjackbot.chatbot.command.CommandUtils;
 
-public class CasterListenerCommand implements Command {
+public class CasterListenerCommand extends AbstractCommand {
 
     private final CasterService casterService;
     private final CommandUtils commandUtils;
 
     @Inject
     public CasterListenerCommand(final CasterService casterService, final CommandUtils commandUtils) {
+        super("!casterListener", commandUtils);
         this.casterService = casterService;
         this.commandUtils = commandUtils;
     }
 
     @Override
-    public final String getCommandTrigger() {
-        return "!casterListener";
+    public String getDecription() {
+        return "Monitors chat looking for casters who are participating.";
     }
 
     @Override

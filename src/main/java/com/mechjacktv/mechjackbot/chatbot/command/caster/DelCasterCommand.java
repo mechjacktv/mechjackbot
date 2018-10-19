@@ -2,31 +2,28 @@ package com.mechjacktv.mechjackbot.chatbot.command.caster;
 
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.chatbot.command.AbstractCommand;
 import com.mechjacktv.mechjackbot.chatbot.command.CommandUtils;
 import com.mechjacktv.mechjackbot.chatbot.command.GlobalCoolDown;
 import com.mechjacktv.mechjackbot.chatbot.command.RestrictToPrivileged;
 
 import javax.inject.Inject;
 
-public class DelCasterCommand implements Command {
+public class DelCasterCommand extends AbstractCommand {
 
     private final CommandUtils commandUtils;
     private final CasterService casterService;
 
     @Inject
     public DelCasterCommand(final CasterService casterService, final CommandUtils commandUtils) {
+        super("!delcaster", commandUtils);
         this.casterService = casterService;
         this.commandUtils = commandUtils;
     }
 
     @Override
-    public final String getCommandTrigger() {
-        return "!delcaster";
-    }
-
-    @Override
-    public final boolean isHandledMessage(MessageEvent messageEvent) {
-        return this.commandUtils.isCommandTrigger(getCommandTrigger(), messageEvent);
+    public String getDecription() {
+        return "Removes a caster from the caster list.";
     }
 
     @Override
@@ -40,7 +37,7 @@ public class DelCasterCommand implements Command {
             final String casterName = this.commandUtils.sanitizeViewerName(messageParts[1]);
 
             this.casterService.removeCaster(casterName);
-            messageEvent.sendResponse(String.format("Removed %s from casters list", casterName));
+            messageEvent.sendResponse(String.format("Removed @%s from casters list", casterName));
         } else {
             this.commandUtils.sendUsage(messageEvent, String.format("%s <casterName>", getCommandTrigger()));
         }

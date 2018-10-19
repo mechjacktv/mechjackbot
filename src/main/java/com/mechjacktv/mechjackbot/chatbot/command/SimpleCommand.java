@@ -12,7 +12,7 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class SimpleCommand implements Command {
+public abstract class SimpleCommand implements Command {
 
     private static final String COMMANDS_LOCATION = System.getProperty("user.home") + "/.mechjackbot_commands.config";
     private static final String NEW_COMMAND_PATTERN = "\\!addcommand\\s+(\\S+)\\s+(.+)";

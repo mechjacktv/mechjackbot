@@ -1,43 +1,43 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
-import java.util.Set;
-
-import javax.inject.Inject;
-
-import org.pircbotx.hooks.ListenerAdapter;
-import org.pircbotx.hooks.events.PingEvent;
-import org.pircbotx.hooks.types.GenericMessageEvent;
-
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.mechjackbot.MessageEventHandler;
 
-public final class PircBotXMessageEventHandler extends ListenerAdapter implements MessageEventHandler {
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
-    private final Set<Command> commands;
+public final class PircBotXMessageEventHandler implements MessageEventHandler {
 
-    @Inject
-    public PircBotXMessageEventHandler(final Set<Command> commands) {
-        this.commands = commands;
+    private final Map<String, Command> commands;
+
+    public PircBotXMessageEventHandler() {
+        this.commands = Collections.emptyMap();
+    }
+
+    @Override
+    public final Collection<Command> getCommands() {
+        return Collections.unmodifiableCollection(this.commands.values());
+    }
+
+    @Override
+    public final Command getCommand(final String commandTrigger) {
+        return this.commands.get(commandTrigger);
+    }
+
+    @Override
+    public final void addCommand(Command command) {
+        this.commands.put(command.getCommandTrigger(), command);
     }
 
     @Override
     public final void handleMessage(final MessageEvent messageEvent) {
-        for(final Command command : commands) {
+        for(final Command command : getCommands()) {
             if(command.isHandledMessage(messageEvent)) {
                 command.handleMessage(messageEvent);
             }
         }
-    }
-
-    @Override
-    public final void onPing(final PingEvent event) {
-        event.respond(String.format("PONG %s", event.getPingValue()));
-    }
-
-    @Override
-    public final void onGenericMessage(final GenericMessageEvent event) {
-        handleMessage(new PircBotXMessageEvent(event));
     }
 
 }

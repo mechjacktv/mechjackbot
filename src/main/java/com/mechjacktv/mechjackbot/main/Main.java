@@ -6,10 +6,7 @@ import com.google.inject.Injector;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.multibindings.Multibinder;
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.chatbot.DefaultBotConfiguration;
-import com.mechjacktv.mechjackbot.chatbot.PircBotXChatBot;
-import com.mechjacktv.mechjackbot.chatbot.PircBotXMessageEventHandler;
-import com.mechjacktv.mechjackbot.chatbot.PropertiesAppConfiguration;
+import com.mechjacktv.mechjackbot.chatbot.*;
 import com.mechjacktv.mechjackbot.chatbot.command.*;
 import com.mechjacktv.mechjackbot.chatbot.command.caster.*;
 import com.mechjacktv.mechjackbot.chatbot.command.GlobalCoolDown;
@@ -33,6 +30,7 @@ public class Main {
         @Override
         protected final void configure() {
             try {
+                // Bind interceptor dependencies
                 final AppConfiguration appConfiguration = new PropertiesAppConfiguration();
                 final BotConfiguration botConfiguration = new DefaultBotConfiguration(appConfiguration);
                 final CommandUtils commandUtils = new CommandUtils(appConfiguration, botConfiguration);
@@ -41,6 +39,7 @@ public class Main {
                 bind(BotConfiguration.class).toInstance(botConfiguration);
                 bind(CommandUtils.class).toInstance(commandUtils);
 
+                // Bind interceptors
                 bindInterceptor(Matchers.subclassesOf(Command.class),
                         Matchers.annotatedWith(RestrictToOwner.class),
                         new RestrictToOwnerMethodInterceptor(commandUtils));
@@ -57,11 +56,14 @@ public class Main {
                         new CommandHandleMessageMethodMatcher(),
                         new LogCommandHandleMessageMethodInterceptor());
 
+                // Bind ChatBot
                 bind(ChatBot.class).to(PircBotXChatBot.class).asEagerSingleton();
-                bind(Listener.class).to(PircBotXMessageEventHandler.class).asEagerSingleton();
+                bind(Listener.class).to(PircBotXListener.class).asEagerSingleton();
                 bind(MessageEventHandler.class).to(PircBotXMessageEventHandler.class).asEagerSingleton();
 
+                // Bind Commands
                 bind(CasterService.class).asEagerSingleton();
+                // TODO use Reflections to add bind commands
                 Multibinder.newSetBinder(binder(), Command.class).addBinding().to(AddCasterCommand.class).asEagerSingleton();
                 Multibinder.newSetBinder(binder(), Command.class).addBinding().to(CasterCommand.class).asEagerSingleton();
                 Multibinder.newSetBinder(binder(), Command.class).addBinding().to(CasterListenerCommand.class).asEagerSingleton();
