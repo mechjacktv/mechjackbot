@@ -1,10 +1,10 @@
 package com.mechjacktv.mechjackbot.chatbot.command.cooldown;
 
-import com.mechjacktv.mechjackbot.Command;
-import com.mechjacktv.mechjackbot.MessageEvent;
-import com.mechjacktv.mechjackbot.chatbot.command.CommandUtils;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+
+import com.mechjacktv.mechjackbot.Command;
+import com.mechjacktv.mechjackbot.chatbot.command.CommandUtils;
 
 public class GlobalCoolDownMethodInterceptor implements MethodInterceptor {
 

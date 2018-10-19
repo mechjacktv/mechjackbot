@@ -28,6 +28,10 @@ public final class CommandUtils {
         this.commandTriggerPatterns = Collections.synchronizedMap(new HashMap<>());
     }
 
+    public final String getSanitizedViewerName(final MessageEvent messageEvent) {
+        return sanitizeViewerName(messageEvent.getChatUser().getUsername());
+    }
+
     public final boolean isChannelOwner(final MessageEvent messageEvent) {
         final ChatUser chatUser = messageEvent.getChatUser();
         final String chatUsername = chatUser.getUsername().toLowerCase();
@@ -81,13 +85,17 @@ public final class CommandUtils {
     }
 
 
-    public final String sanitizeUsername(final String username) {
+    public final String sanitizeViewerName(final String username) {
         String sanitizedUsername = username.trim().toLowerCase();
 
         if (sanitizedUsername.startsWith("@")) {
             sanitizedUsername = sanitizedUsername.substring(1);
         }
         return sanitizedUsername;
+    }
+
+    public final void sendUsage(final MessageEvent messageEvent, final String usage) {
+        messageEvent.sendResponse(String.format("%s, usage: %s", getSanitizedViewerName(messageEvent), usage));
     }
 
 }

@@ -30,7 +30,7 @@ public class PingCommand implements Command {
     @RestrictToPrivileged
     @GlobalCoolDown
     public void handleMessage(MessageEvent messageEvent) {
-        messageEvent.respond(String.format("Don't worry, %s. I'm here.",
-                messageEvent.getChatUser().getUsername()));
+        messageEvent.sendResponse(String.format("Don't worry, %s. I'm here.",
+                this.commandUtils.getSanitizedViewerName(messageEvent)));
     }
 }

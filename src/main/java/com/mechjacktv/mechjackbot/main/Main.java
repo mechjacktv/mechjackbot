@@ -11,16 +11,13 @@ import com.mechjacktv.mechjackbot.chatbot.PircBotXChatBot;
 import com.mechjacktv.mechjackbot.chatbot.PircBotXMessageEventHandler;
 import com.mechjacktv.mechjackbot.chatbot.PropertiesAppConfiguration;
 import com.mechjacktv.mechjackbot.chatbot.command.*;
+import com.mechjacktv.mechjackbot.chatbot.command.caster.*;
 import com.mechjacktv.mechjackbot.chatbot.command.cooldown.GlobalCoolDown;
 import com.mechjacktv.mechjackbot.chatbot.command.cooldown.GlobalCoolDownMethodInterceptor;
 import com.mechjacktv.mechjackbot.chatbot.command.log.LogCommandHandleMessageMethodInterceptor;
 import com.mechjacktv.mechjackbot.chatbot.command.log.LogCommandHandleMessageMethodMatcher;
 import com.mechjacktv.mechjackbot.chatbot.command.restrict.*;
 import org.pircbotx.hooks.Listener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
 
 public class Main {
 
@@ -68,7 +65,11 @@ public class Main {
                 bind(Listener.class).to(PircBotXMessageEventHandler.class).asEagerSingleton();
                 bind(MessageEventHandler.class).to(PircBotXMessageEventHandler.class).asEagerSingleton();
 
+                bind(CasterService.class).asEagerSingleton();
+                Multibinder.newSetBinder(binder(), Command.class).addBinding().to(AddCasterCommand.class).asEagerSingleton();
                 Multibinder.newSetBinder(binder(), Command.class).addBinding().to(CasterCommand.class).asEagerSingleton();
+                Multibinder.newSetBinder(binder(), Command.class).addBinding().to(CasterListenerCommand.class).asEagerSingleton();
+                Multibinder.newSetBinder(binder(), Command.class).addBinding().to(DelCasterCommand.class).asEagerSingleton();
                 Multibinder.newSetBinder(binder(), Command.class).addBinding().to(PingCommand.class).asEagerSingleton();
                 Multibinder.newSetBinder(binder(), Command.class).addBinding().to(TestCommand.class).asEagerSingleton();
                 Multibinder.newSetBinder(binder(), Command.class).addBinding().to(QuitCommand.class).asEagerSingleton();

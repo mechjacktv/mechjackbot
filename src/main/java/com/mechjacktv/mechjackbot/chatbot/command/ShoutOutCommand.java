@@ -54,18 +54,18 @@ public final class ShoutOutCommand implements Command {
                 final String[] messageParts = message.split(" ");
 
                 if (messageParts.length > 1) {
-                    setCaster(commandUtils.sanitizeUsername(messageParts[1]), 0);
-                    messageEvent.respond(String.format("Added %s to casters list", messageParts[1]));
+                    setCaster(commandUtils.sanitizeViewerName(messageParts[1]), 0);
+                    messageEvent.sendResponse(String.format("Added %s to casters list", messageParts[1]));
                 }
             }
         } else if (message.startsWith("!delcaster") && commandUtils.isPrivilegedViewer(messageEvent)) {
             if (commandUtils.isGloballyCooledDown("!delcaster")) {
                 final String[] messageParts = message.split(" ");
 
-                if (messageParts.length > 1 && casters.containsKey(commandUtils.sanitizeUsername(messageParts[1]))) {
-                    casters.remove(commandUtils.sanitizeUsername(messageParts[1]));
+                if (messageParts.length > 1 && casters.containsKey(commandUtils.sanitizeViewerName(messageParts[1]))) {
+                    casters.remove(commandUtils.sanitizeViewerName(messageParts[1]));
                     saveCasters();
-                    messageEvent.respond(String.format("Removed %s from casters list", messageParts[1]));
+                    messageEvent.sendResponse(String.format("Removed %s from casters list", messageParts[1]));
                 }
             }
         } else if (message.startsWith("!caster") && commandUtils.isPrivilegedViewer(messageEvent)) {
@@ -73,7 +73,7 @@ public final class ShoutOutCommand implements Command {
                 final String[] messageParts = message.split(" ");
 
                 if (messageParts.length > 1) {
-                    final String sanitizedUsername = commandUtils.sanitizeUsername(messageParts[1]);
+                    final String sanitizedUsername = commandUtils.sanitizeViewerName(messageParts[1]);
 
                     setCaster(sanitizedUsername, System.currentTimeMillis());
                     shoutOutCaster(messageEvent, sanitizedUsername);
@@ -81,7 +81,7 @@ public final class ShoutOutCommand implements Command {
             }
         } else {
             final ChatUser chatUser = messageEvent.getChatUser();
-            final String chatUsername = commandUtils.sanitizeUsername(chatUser.getUsername());
+            final String chatUsername = commandUtils.sanitizeViewerName(chatUser.getUsername());
 
             if (casters.containsKey(chatUsername)) {
                 final long now = System.currentTimeMillis();
@@ -109,7 +109,7 @@ public final class ShoutOutCommand implements Command {
     }
 
     private final void shoutOutCaster(final MessageEvent messageEvent, final String casterName) {
-        messageEvent.respond(String.format(
+        messageEvent.sendResponse(String.format(
                 "<3 <3 Caster in the house! Everyone please give %s a follow and check them out. https://twitch.tv/%s <3 <3",
                 casterName, casterName));
     }

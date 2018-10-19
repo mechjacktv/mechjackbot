@@ -8,6 +8,6 @@ public interface MessageEvent {
 
     String getMessage();
 
-    void respond(String message);
+    void sendResponse(String message);
 
 }

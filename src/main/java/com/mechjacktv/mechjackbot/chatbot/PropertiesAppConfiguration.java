@@ -1,12 +1,11 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
-import com.google.common.base.Strings;
-import com.mechjacktv.mechjackbot.AppConfiguration;
-
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Objects;
 import java.util.Properties;
+
+import com.google.common.base.Strings;
+import com.mechjacktv.mechjackbot.AppConfiguration;
 
 public class PropertiesAppConfiguration implements AppConfiguration {
 

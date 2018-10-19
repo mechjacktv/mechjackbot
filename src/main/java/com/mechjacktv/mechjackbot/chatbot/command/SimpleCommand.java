@@ -61,7 +61,7 @@ public final class SimpleCommand implements Command {
 
             if (commandUtils.isGloballyCooledDown("!addcommand")) {
                 setCommand(commandTrigger, commandBody);
-                messageEvent.respond(String.format("Added %s command", commandTrigger));
+                messageEvent.sendResponse(String.format("Added %s command", commandTrigger));
                 try {
                     commands.store(System.out, "");
                 } catch (final IOException e) {
@@ -75,7 +75,7 @@ public final class SimpleCommand implements Command {
                 if (messageParts.length > 1 && commands.containsKey(messageParts[1])) {
                     commands.remove(messageParts[1]);
                     saveCommands();
-                    messageEvent.respond(String.format("Removed %s command", messageParts[1]));
+                    messageEvent.sendResponse(String.format("Removed %s command", messageParts[1]));
                 }
             }
         } else if (message.startsWith("!comtest") && commandUtils.isPrivilegedViewer(messageEvent)) {
@@ -84,13 +84,13 @@ public final class SimpleCommand implements Command {
             for (final Object key : commands.keySet()) {
                 messageBuilder.append(key.toString()).append(" ");
             }
-            messageEvent.respond(messageBuilder.toString());
+            messageEvent.sendResponse(messageBuilder.toString());
         } else {
             final String commandTrigger = parseCommandTrigger(message);
 
             if (commands.containsKey(commandTrigger)) {
                 if (commandUtils.isGloballyCooledDown(commandTrigger)) {
-                    messageEvent.respond(commands.getProperty(commandTrigger));
+                    messageEvent.sendResponse(commands.getProperty(commandTrigger));
                 }
             }
         }

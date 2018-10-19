@@ -34,7 +34,7 @@ public class QuitCommand implements Command {
     public void handleMessage(final MessageEvent messageEvent) {
         final ChatBot chatBot = messageEvent.getChatBot();
 
-        messageEvent.respond("That's all for me, folks");
+        messageEvent.sendResponse("That's all for me, folks");
         chatBot.stop();
     }
 }

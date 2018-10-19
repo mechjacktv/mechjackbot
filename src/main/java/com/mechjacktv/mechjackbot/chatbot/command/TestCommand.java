@@ -30,7 +30,7 @@ public class TestCommand implements Command {
     @RestrictToOwner
     @GlobalCoolDown
     public void handleMessage(final MessageEvent messageEvent) {
-        messageEvent.respond(String.format("%s, your test command completed successfully.",
-                messageEvent.getChatUser().getUsername()));
+        messageEvent.sendResponse(String.format("%s, your test command completed successfully.",
+                this.commandUtils.getSanitizedViewerName(messageEvent)));
     }
 }

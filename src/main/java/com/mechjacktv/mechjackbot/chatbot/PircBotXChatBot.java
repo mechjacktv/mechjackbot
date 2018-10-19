@@ -18,7 +18,7 @@ public final class PircBotXChatBot implements ChatBot {
     public PircBotXChatBot(final BotConfiguration botConfiguration, final Listener listener) {
         final Configuration configuration = new Configuration.Builder()
                 .setName(botConfiguration.getUsername())
-                .setServer("irc.chat.twitch.tv", 6667)
+                .addServer("irc.chat.twitch.tv", 6667)
                 .setServerPassword(botConfiguration.getPassword())
                 .addListener(listener)
                 .addAutoJoinChannel("#" + botConfiguration.getChannel())

@@ -1,25 +1,23 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
-import com.mechjacktv.mechjackbot.BotConfiguration;
-import com.mechjacktv.mechjackbot.Command;
-import com.mechjacktv.mechjackbot.MessageEvent;
-import com.mechjacktv.mechjackbot.MessageEventHandler;
+import java.util.Set;
+
+import javax.inject.Inject;
+
 import org.pircbotx.hooks.ListenerAdapter;
-import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.PingEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
-import javax.inject.Inject;
-import java.util.Set;
+import com.mechjacktv.mechjackbot.Command;
+import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.MessageEventHandler;
 
 public final class PircBotXMessageEventHandler extends ListenerAdapter implements MessageEventHandler {
 
-    private final BotConfiguration botConfiguration;
     private final Set<Command> commands;
 
     @Inject
-    public PircBotXMessageEventHandler(final BotConfiguration botConfiguration, final Set<Command> commands) {
-        this.botConfiguration = botConfiguration;
+    public PircBotXMessageEventHandler(final Set<Command> commands) {
         this.commands = commands;
     }
 
@@ -28,7 +26,6 @@ public final class PircBotXMessageEventHandler extends ListenerAdapter implement
         for(final Command command : commands) {
             if(command.isHandledMessage(messageEvent)) {
                 command.handleMessage(messageEvent);
-                break;
             }
         }
     }
