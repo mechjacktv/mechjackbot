@@ -4,7 +4,7 @@ public interface Command {
 
     String getCommandTrigger();
 
-    String getDecription();
+    String getDescription();
 
     boolean isHandledMessage(MessageEvent messageEvent);
 

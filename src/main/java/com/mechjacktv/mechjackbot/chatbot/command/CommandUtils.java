@@ -4,6 +4,7 @@ import com.mechjacktv.mechjackbot.*;
 
 import javax.inject.Inject;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,8 +24,8 @@ public final class CommandUtils {
         this.botOwner = sanitizeViewerName(botConfiguration.getChannel());
         this.commandCoolDownPeriodMs = Long.parseLong(appConfiguration.getProperty(COMMAND_COOL_DOWN_PERIOD_MS,
                 COMMAND_COOL_DOWN_PERIOD_MS_DEFAULT));
-        this.commandLastCalled = Collections.emptyMap();
-        this.commandTriggerPatterns = Collections.emptyMap();
+        this.commandLastCalled = new HashMap<>();
+        this.commandTriggerPatterns = new HashMap<>();
     }
 
     public final String getSanitizedViewerName(final MessageEvent messageEvent) {

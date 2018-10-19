@@ -18,7 +18,7 @@ public class QuitCommand extends AbstractCommand {
     }
 
     @Override
-    public String getDecription() {
+    public String getDescription() {
         return "Shuts the chatbot down.";
     }
 

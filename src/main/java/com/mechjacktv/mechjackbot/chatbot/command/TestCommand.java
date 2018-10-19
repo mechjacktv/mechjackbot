@@ -16,7 +16,7 @@ public class TestCommand  extends AbstractCommand {
     }
 
     @Override
-    public String getDecription() {
+    public String getDescription() {
         return "A command I change freely to test development.";
     }
 

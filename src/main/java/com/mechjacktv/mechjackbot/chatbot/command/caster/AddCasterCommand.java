@@ -22,7 +22,7 @@ public class AddCasterCommand extends AbstractCommand {
     }
 
     @Override
-    public String getDecription() {
+    public String getDescription() {
         return "Adds a caster to the caster list.";
     }
 

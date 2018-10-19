@@ -6,6 +6,7 @@ import com.mechjacktv.mechjackbot.MessageEventHandler;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public final class PircBotXMessageEventHandler implements MessageEventHandler {
@@ -13,7 +14,7 @@ public final class PircBotXMessageEventHandler implements MessageEventHandler {
     private final Map<String, Command> commands;
 
     public PircBotXMessageEventHandler() {
-        this.commands = Collections.emptyMap();
+        this.commands = new HashMap<>();
     }
 
     @Override

@@ -22,7 +22,7 @@ public class DelCasterCommand extends AbstractCommand {
     }
 
     @Override
-    public String getDecription() {
+    public String getDescription() {
         return "Removes a caster from the caster list.";
     }
 

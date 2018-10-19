@@ -16,7 +16,7 @@ public class PingCommand extends AbstractCommand {
     }
 
     @Override
-    public String getDecription() {
+    public String getDescription() {
         return "A simple check to see if the chatbot is running.";
     }
 

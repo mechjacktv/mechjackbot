@@ -20,13 +20,18 @@ public class CasterListenerCommand extends AbstractCommand {
     }
 
     @Override
-    public String getDecription() {
+    public String getDescription() {
         return "Monitors chat looking for casters who are participating.";
     }
 
     @Override
     public final boolean isHandledMessage(MessageEvent messageEvent) {
         return true; // take a peek at all incoming messages to see if they are from a caster
+    }
+
+    @Override
+    public boolean isListed() {
+        return false; // this is a passive command and can't be called
     }
 
     @Override
