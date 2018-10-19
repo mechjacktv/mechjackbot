@@ -38,7 +38,7 @@ public class DelCasterCommand extends AbstractCommand {
             this.casterService.removeCaster(casterName);
             messageEvent.sendResponse(String.format("Removed @%s from casters list", casterName));
         } else {
-            this.commandUtils.sendUsage(messageEvent, String.format("%s <casterName>", getCommandTrigger()));
+            this.commandUtils.sendUsage(messageEvent, String.format("%s <casterName>", getTrigger()));
         }
     }
 }

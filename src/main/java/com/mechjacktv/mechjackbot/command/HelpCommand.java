@@ -38,13 +38,13 @@ public class HelpCommand extends AbstractCommand {
             if(command.isPresent() && command.get().isListed()) {
                 messageEvent.sendResponse(String.format("@%s, %s -> %s",
                         this.commandUtils.getSanitizedViewerName(messageEvent),
-                        command.get().getCommandTrigger(), command.get().getDescription()));
+                        command.get().getTrigger(), command.get().getDescription()));
             } else {
                 messageEvent.sendResponse(String.format("@%s, I don't see a command triggered by %s.",
                         this.commandUtils.getSanitizedViewerName(messageEvent), commandTrigger));
             }
         } else {
-            this.commandUtils.sendUsage(messageEvent, String.format("%s <commandTrigger>", getCommandTrigger()));
+            this.commandUtils.sendUsage(messageEvent, String.format("%s <commandTrigger>", getTrigger()));
         }
     }
 

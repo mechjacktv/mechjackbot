@@ -34,7 +34,7 @@ public class CommandsCommand extends AbstractCommand {
 
         for(final Command command : getSortedCommands()) {
             if(command.isListed()) {
-                builder.append(String.format("%s ", command.getCommandTrigger()));
+                builder.append(String.format("%s ", command.getTrigger()));
             }
         }
         messageEvent.sendResponse(builder.toString());
@@ -50,6 +50,6 @@ public class CommandsCommand extends AbstractCommand {
     }
 
     private int compareCommands(final Command command1, final Command command2) {
-        return command1.getCommandTrigger().compareTo(command2.getCommandTrigger());
+        return command1.getTrigger().compareTo(command2.getTrigger());
     }
 }

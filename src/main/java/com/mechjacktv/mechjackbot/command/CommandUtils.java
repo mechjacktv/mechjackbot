@@ -59,7 +59,7 @@ public final class CommandUtils {
     }
 
     public final boolean isGloballyCooledDown(final Command command) {
-        return isGloballyCooledDown(command.getCommandTrigger());
+        return isGloballyCooledDown(command.getTrigger());
     }
 
     public final boolean isGloballyCooledDown(final String commandTrigger) {

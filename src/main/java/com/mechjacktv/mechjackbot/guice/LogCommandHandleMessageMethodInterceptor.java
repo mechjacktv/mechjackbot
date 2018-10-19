@@ -7,9 +7,16 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public final class LogCommandHandleMessageMethodInterceptor implements MethodInterceptor {
 
-    private static final Logger log = LoggerFactory.getLogger(LogCommandHandleMessageMethodInterceptor.class);
+    private final Map<String, Logger> loggers;
+
+    public LogCommandHandleMessageMethodInterceptor() {
+        this.loggers = new HashMap<>();
+    }
 
     @Override
     public final Object invoke(final MethodInvocation invocation) throws Throwable {
@@ -19,21 +26,35 @@ public final class LogCommandHandleMessageMethodInterceptor implements MethodInt
             final Command thisCommand = (Command) thisInstance;
             final MessageEvent messageEvent = (MessageEvent) invocation.getArguments()[0];
 
-            log.info(String.format("Command Triggered: user=%s, commandTrigger=%s, message=%s",
-                    messageEvent.getChatUser().getUsername(),
-                    thisCommand.getCommandTrigger(),
-                    messageEvent.getMessage()));
+            getLogger(thisCommand.getName()).info(
+                    String.format("Command Triggered: user=%s, commandTrigger=%s, message=%s",
+                            messageEvent.getChatUser().getUsername(),
+                            thisCommand.getTrigger(),
+                            messageEvent.getMessage()));
             try {
                 return invocation.proceed();
             } catch (final Throwable t) {
-                log.error(String.format("Command Failed: user=%s, commandTrigger=%s, message=%s, errorMessage=%s",
-                        messageEvent.getChatUser().getUsername(),
-                        thisCommand.getCommandTrigger(),
-                        messageEvent.getMessage(),
-                        t.getLocalizedMessage()));
+                getLogger(thisCommand.getName()).error(
+                        String.format("Command Failed: user=%s, commandTrigger=%s, message=%s, errorMessage=%s",
+                                messageEvent.getChatUser().getUsername(),
+                                thisCommand.getTrigger(),
+                                messageEvent.getMessage(),
+                                t.getLocalizedMessage()));
                 throw t;
             }
         }
         throw new IllegalStateException("This should only be called when executing `Command#handleMessage`");
     }
+
+    private Logger getLogger(final String name) {
+        if (this.loggers.containsKey(name)) {
+            return this.loggers.get(name);
+        }
+
+        final Logger logger = LoggerFactory.getLogger(name);
+
+        this.loggers.put(name, logger);
+        return logger;
+    }
+
 }

@@ -38,7 +38,7 @@ public class AddCasterCommand extends AbstractCommand {
             this.casterService.setCaster(casterName, 0);
             messageEvent.sendResponse(String.format("Added @%s to casters list", casterName));
         } else {
-            this.commandUtils.sendUsage(messageEvent, String.format("%s <casterName>", getCommandTrigger()));
+            this.commandUtils.sendUsage(messageEvent, String.format("%s <casterName>", getTrigger()));
         }
     }
 }

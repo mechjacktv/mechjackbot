@@ -26,7 +26,7 @@ public final class PircBotXMessageEventHandler implements MessageEventHandler {
 
     @Override
     public final void addCommand(Command command) {
-        this.commands.put(command.getCommandTrigger(), command);
+        this.commands.put(command.getTrigger(), command);
     }
 
     @Override

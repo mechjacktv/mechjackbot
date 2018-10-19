@@ -14,13 +14,18 @@ public abstract class AbstractCommand implements Command {
     }
 
     @Override
-    public String getCommandTrigger() {
+    public String getName() {
+        return this.getClass().getCanonicalName();
+    }
+
+    @Override
+    public String getTrigger() {
         return this.commandTrigger;
     }
 
     @Override
     public boolean isHandledMessage(MessageEvent messageEvent) {
-        return this.commandUtils.isCommandTrigger(getCommandTrigger(), messageEvent);
+        return this.commandUtils.isCommandTrigger(getTrigger(), messageEvent);
     }
 
     @Override

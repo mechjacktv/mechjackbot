@@ -38,7 +38,7 @@ public abstract class SimpleCommand implements Command {
     }
 
     @Override
-    public final String getCommandTrigger() {
+    public final String getTrigger() {
         return "!simple";
     }
 
