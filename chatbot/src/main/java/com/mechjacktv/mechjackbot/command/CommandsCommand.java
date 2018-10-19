@@ -30,11 +30,11 @@ public class CommandsCommand extends AbstractCommand {
     @Override
     @GlobalCoolDown
     public void handleMessage(final MessageEvent messageEvent) {
-        final StringBuilder builder = new StringBuilder("Channel Commands: ");
+        final StringBuilder builder = new StringBuilder("Channel Commands:");
 
         for(final Command command : getSortedCommands()) {
             if(command.isListed()) {
-                builder.append(String.format("%s ", command.getTrigger()));
+                builder.append(String.format(" %s", command.getTrigger()));
             }
         }
         messageEvent.sendResponse(builder.toString());

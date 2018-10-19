@@ -25,8 +25,7 @@ public class TestCommand  extends AbstractCommand {
     @RestrictToOwner
     @GlobalCoolDown
     public void handleMessage(final MessageEvent messageEvent) {
-        messageEvent.sendResponse(String.format("@%s, your test completed successfully.",
-                this.commandUtils.getSanitizedViewerName(messageEvent)));
+        messageEvent.sendResponse("Does nothing");
     }
 
 }

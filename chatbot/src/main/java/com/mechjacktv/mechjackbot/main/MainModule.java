@@ -25,7 +25,7 @@ class MainModule extends AbstractModule {
         install(new UtilsModule());
 
         // Bind MapDB
-        bind(DB.class).toInstance(DBMaker.fileDB(MAP_DB_LOCATION).make());
+        bind(DB.class).toInstance(DBMaker.fileDB(MAP_DB_LOCATION).closeOnJvmShutdown().make());
 
         // Bind ChatBot
         bind(AppConfiguration.class).to(PropertiesAppConfiguration.class).asEagerSingleton();
