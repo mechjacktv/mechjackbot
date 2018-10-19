@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package com.mechjacktv.mechjackbot.command.caster;
+
+message Caster {
+    string name = 1;
+    int64 last_shout_out = 2;
+}

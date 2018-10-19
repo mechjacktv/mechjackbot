@@ -151,7 +151,7 @@ fabric.properties
 .idea/sonarlint
 
 ### Intellij Custom ###
-# I don't want anything in the .idea folder
+# I don't want anything Idea related
 .idea
 *.iml
 
