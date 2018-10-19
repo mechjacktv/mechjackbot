@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.chatbot;
+package com.mechjacktv.mechjackbot.zero;
 
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -1,7 +1,8 @@
-package com.mechjacktv.mechjackbot.chatbot;
+package com.mechjacktv.mechjackbot.pircbotx;
 
 import com.mechjacktv.mechjackbot.ChatBot;
 import com.mechjacktv.mechjackbot.BotConfiguration;
+import com.mechjacktv.mechjackbot.ChatBotStartupException;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;

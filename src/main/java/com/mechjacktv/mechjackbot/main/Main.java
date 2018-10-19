@@ -6,11 +6,13 @@ import com.google.inject.Injector;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.multibindings.Multibinder;
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.chatbot.*;
+import com.mechjacktv.mechjackbot.pircbotx.*;
 import com.mechjacktv.mechjackbot.command.*;
 import com.mechjacktv.mechjackbot.command.caster.*;
 import com.mechjacktv.mechjackbot.GlobalCoolDown;
 import com.mechjacktv.mechjackbot.guice.*;
+import com.mechjacktv.mechjackbot.zero.DefaultBotConfiguration;
+import com.mechjacktv.mechjackbot.zero.PropertiesAppConfiguration;
 import org.pircbotx.hooks.Listener;
 
 public class Main {

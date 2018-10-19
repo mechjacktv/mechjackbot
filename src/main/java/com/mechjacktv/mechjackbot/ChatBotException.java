@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.chatbot;
+package com.mechjacktv.mechjackbot;
 
 
 public class ChatBotException extends RuntimeException {

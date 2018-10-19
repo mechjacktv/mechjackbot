@@ -1,10 +1,9 @@
-package com.mechjacktv.mechjackbot.chatbot;
+package com.mechjacktv.mechjackbot.pircbotx;
 
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.mechjackbot.MessageEventHandler;
 
-import javax.swing.text.html.Option;
 import java.util.*;
 
 public final class PircBotXMessageEventHandler implements MessageEventHandler {
