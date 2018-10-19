@@ -13,6 +13,8 @@ import com.mechjacktv.mechjackbot.GlobalCoolDown;
 import com.mechjacktv.mechjackbot.guice.*;
 import com.mechjacktv.mechjackbot.zero.DefaultBotConfiguration;
 import com.mechjacktv.mechjackbot.zero.PropertiesAppConfiguration;
+import org.mapdb.DB;
+import org.mapdb.DBMaker;
 import org.pircbotx.hooks.Listener;
 
 public class Main {
@@ -57,6 +59,9 @@ public class Main {
                 bindInterceptor(Matchers.subclassesOf(Command.class),
                         new CommandHandleMessageMethodMatcher(),
                         new LogCommandHandleMessageMethodInterceptor());
+
+                // Bind MapDB
+                bind(DB.class).toInstance(DBMaker.memoryDB().make());
 
                 // Bind ChatBot
                 bind(ChatBot.class).to(PircBotXChatBot.class).asEagerSingleton();
