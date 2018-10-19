@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.pircbotx;
+package com.mechjacktv.mechjackbot.chatbot;
 
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.MessageEvent;

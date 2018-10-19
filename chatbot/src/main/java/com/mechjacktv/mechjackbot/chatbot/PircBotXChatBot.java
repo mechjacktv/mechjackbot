@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.pircbotx;
+package com.mechjacktv.mechjackbot.chatbot;
 
 import com.mechjacktv.mechjackbot.ChatBot;
 import com.mechjacktv.mechjackbot.BotConfiguration;

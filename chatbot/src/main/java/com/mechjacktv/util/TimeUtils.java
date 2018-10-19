@@ -1,6 +1,6 @@
 package com.mechjacktv.util;
 
-public class Time {
+public class TimeUtils {
 
     public static final Integer SECOND = 1000;
 

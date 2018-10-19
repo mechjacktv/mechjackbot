@@ -1,59 +1,59 @@
 package com.mechjacktv.mechjackbot.command.caster;
 
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.util.ProtobufUtils;
+import org.mapdb.DB;
+import org.mapdb.Serializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Properties;
+import javax.inject.Inject;
+import java.util.concurrent.ConcurrentMap;
 
 public class CasterService {
 
-    private static final String CASTERS_LOCATION = System.getProperty("user.home") + "/.mechjackbot_casters.config";
+    private static final Logger log = LoggerFactory.getLogger(CasterService.class);
+
     private static final long TWELVE_HOURS = 1000 * 60 * 60 * 12;
 
-    private final Properties casters;
+    private final ConcurrentMap<String, byte[]> casters;
+    private final ProtobufUtils protobufUtils;
 
-    public CasterService() throws IOException {
-        this.casters = new Properties();
-        if (!createCastersFile()) {
-            try (final FileInputStream castersFile = new FileInputStream(CASTERS_LOCATION)) {
-                this.casters.load(castersFile);
-            }
-        }
-    }
-
-    private final boolean createCastersFile() throws IOException {
-        return new File(CASTERS_LOCATION).createNewFile();
+    @Inject
+    public CasterService(final DB mapDb, final ProtobufUtils protobufUtils) {
+        this.casters = mapDb.hashMap("casters", Serializer.STRING, Serializer.BYTE_ARRAY).createOrOpen();
+        this.protobufUtils = protobufUtils;
     }
 
     public boolean isCasterDue(final String casterName) {
-        if (casters.containsKey(casterName)) {
+        if (isExistingCaster(casterName)) {
             final long now = System.currentTimeMillis();
-            final long lastShoutOut = Long.parseLong(casters.getProperty(casterName));
+            final CasterMessages.Caster caster = protobufUtils.parseMessage(CasterMessages.Caster.class, this.casters.get(casterName));
 
-            return now - lastShoutOut > TWELVE_HOURS;
+            return now - caster.getLastShoutOut() > TWELVE_HOURS;
         }
         return false;
     }
 
     public final void removeCaster(final String casterName) {
-        casters.remove(casterName);
-        saveCasters();
+        this.casters.remove(casterName);
     }
 
     public final void setCaster(final String casterName, final long lastShoutOut) {
-        casters.setProperty(casterName, Long.toString(lastShoutOut));
-        saveCasters();
+        final CasterMessages.Caster caster = CasterMessages.Caster.newBuilder()
+                .setName(casterName)
+                .setLastShoutOut(lastShoutOut)
+                .build();
+        if (isExistingCaster(casterName)) {
+            this.casters.replace(casterName, caster.toByteArray());
+        } else {
+            this.casters.put(casterName, caster.toByteArray());
+        }
     }
 
-    private final void saveCasters() {
-        try (final FileOutputStream castersFile = new FileOutputStream(CASTERS_LOCATION)) {
-            casters.store(castersFile, "");
-        } catch (final IOException e) {
-            e.printStackTrace();
-        }
+    private final boolean isExistingCaster(final String casterName) {
+        return this.casters.containsKey(casterName);
     }
 
     public final void sendCasterShoutOut(final MessageEvent messageEvent, final String casterName) {

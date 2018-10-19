@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.guice;
+package com.mechjacktv.mechjackbot.command.interceptor;
 
 import com.google.inject.matcher.AbstractMatcher;
 

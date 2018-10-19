@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.zero;
+package com.mechjacktv.mechjackbot.configuration;
 
 import com.mechjacktv.mechjackbot.AppConfiguration;
 import com.mechjacktv.mechjackbot.BotConfiguration;

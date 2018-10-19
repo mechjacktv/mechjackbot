@@ -1,7 +1,7 @@
 package com.mechjacktv.mechjackbot.command;
 
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.util.Time;
+import com.mechjacktv.util.TimeUtils;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public final class CommandUtils {
     public CommandUtils(final AppConfiguration appConfiguration, final BotConfiguration botConfiguration) {
         this.botOwner = sanitizeViewerName(botConfiguration.getChannel());
         this.commandCoolDownPeriodMs = Integer.parseInt(appConfiguration.getProperty(COMMAND_COOL_DOWN_PERIOD_SECONDS,
-                COMMAND_COOL_DOWN_PERIOD_SECONDS_DEFAULT)) * Time.SECOND;
+                COMMAND_COOL_DOWN_PERIOD_SECONDS_DEFAULT)) * TimeUtils.SECOND;
         this.commandLastCalled = new HashMap<>();
         this.commandTriggerPatterns = new HashMap<>();
     }

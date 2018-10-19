@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.zero;
+package com.mechjacktv.mechjackbot.configuration;
 
 import java.io.FileInputStream;
 import java.io.IOException;
