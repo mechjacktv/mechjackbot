@@ -153,6 +153,7 @@ fabric.properties
 ### Intellij Custom ###
 # I don't want anything in the .idea folder
 .idea
+*.iml
 
 ### Java ###
 # Compiled class file
