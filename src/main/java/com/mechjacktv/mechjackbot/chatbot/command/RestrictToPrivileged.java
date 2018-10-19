@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.chatbot.command.restrict;
+package com.mechjacktv.mechjackbot.chatbot.command;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface RestrictToRegular {
+public @interface RestrictToPrivileged {
     // empty
 }

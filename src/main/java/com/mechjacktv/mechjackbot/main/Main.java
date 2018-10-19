@@ -12,11 +12,8 @@ import com.mechjacktv.mechjackbot.chatbot.PircBotXMessageEventHandler;
 import com.mechjacktv.mechjackbot.chatbot.PropertiesAppConfiguration;
 import com.mechjacktv.mechjackbot.chatbot.command.*;
 import com.mechjacktv.mechjackbot.chatbot.command.caster.*;
-import com.mechjacktv.mechjackbot.chatbot.command.cooldown.GlobalCoolDown;
-import com.mechjacktv.mechjackbot.chatbot.command.cooldown.GlobalCoolDownMethodInterceptor;
-import com.mechjacktv.mechjackbot.chatbot.command.log.LogCommandHandleMessageMethodInterceptor;
-import com.mechjacktv.mechjackbot.chatbot.command.log.LogCommandHandleMessageMethodMatcher;
-import com.mechjacktv.mechjackbot.chatbot.command.restrict.*;
+import com.mechjacktv.mechjackbot.chatbot.command.GlobalCoolDown;
+import com.mechjacktv.mechjackbot.chatbot.command.guice.*;
 import org.pircbotx.hooks.Listener;
 
 public class Main {
@@ -24,7 +21,6 @@ public class Main {
     public static void main(final String[] args) {
         System.setProperty("org.slf4j.simpleLogger.log.org.pircbotx", "warn");
         System.setProperty("org.slf4j.simpleLogger.log.org.pircbotx.PircBotX", "info");
-//        System.setProperty("org.slf4j.simpleLogger.log.com.mechjacktv.mechjackbot", "info");
 
         final Injector injector = Guice.createInjector(new MainModule());
         final ChatBot chatBot = injector.getInstance(ChatBot.class);
@@ -58,7 +54,7 @@ public class Main {
                         Matchers.annotatedWith(GlobalCoolDown.class),
                         new GlobalCoolDownMethodInterceptor(commandUtils));
                 bindInterceptor(Matchers.subclassesOf(Command.class),
-                        new LogCommandHandleMessageMethodMatcher(),
+                        new CommandHandleMessageMethodMatcher(),
                         new LogCommandHandleMessageMethodInterceptor());
 
                 bind(ChatBot.class).to(PircBotXChatBot.class).asEagerSingleton();
@@ -73,8 +69,6 @@ public class Main {
                 Multibinder.newSetBinder(binder(), Command.class).addBinding().to(PingCommand.class).asEagerSingleton();
                 Multibinder.newSetBinder(binder(), Command.class).addBinding().to(TestCommand.class).asEagerSingleton();
                 Multibinder.newSetBinder(binder(), Command.class).addBinding().to(QuitCommand.class).asEagerSingleton();
-//                Multibinder.newSetBinder(binder(), Command.class).addBinding().to(ShoutOutCommand.class).asEagerSingleton();
-//                Multibinder.newSetBinder(binder(), Command.class).addBinding().to(SimpleCommand.class).asEagerSingleton();
             } catch (final RuntimeException e) {
                 throw e;
             } catch (final Exception e) {

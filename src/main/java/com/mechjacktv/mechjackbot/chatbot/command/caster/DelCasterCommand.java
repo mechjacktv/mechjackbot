@@ -3,8 +3,8 @@ package com.mechjacktv.mechjackbot.chatbot.command.caster;
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.mechjackbot.chatbot.command.CommandUtils;
-import com.mechjacktv.mechjackbot.chatbot.command.cooldown.GlobalCoolDown;
-import com.mechjacktv.mechjackbot.chatbot.command.restrict.RestrictToPrivileged;
+import com.mechjacktv.mechjackbot.chatbot.command.GlobalCoolDown;
+import com.mechjacktv.mechjackbot.chatbot.command.RestrictToPrivileged;
 
 import javax.inject.Inject;
 

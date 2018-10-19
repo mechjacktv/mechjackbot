@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.chatbot.command.cooldown;
+package com.mechjacktv.mechjackbot.chatbot.command.guice;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;

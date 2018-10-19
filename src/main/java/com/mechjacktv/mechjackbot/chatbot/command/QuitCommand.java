@@ -1,7 +1,6 @@
 package com.mechjacktv.mechjackbot.chatbot.command;
 
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.chatbot.command.restrict.RestrictToOwner;
 
 import javax.inject.Inject;
 

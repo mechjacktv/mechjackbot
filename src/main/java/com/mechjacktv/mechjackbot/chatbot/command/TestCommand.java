@@ -2,8 +2,6 @@ package com.mechjacktv.mechjackbot.chatbot.command;
 
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.MessageEvent;
-import com.mechjacktv.mechjackbot.chatbot.command.cooldown.GlobalCoolDown;
-import com.mechjacktv.mechjackbot.chatbot.command.restrict.RestrictToOwner;
 
 import javax.inject.Inject;
 

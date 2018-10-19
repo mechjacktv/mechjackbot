@@ -1,10 +1,10 @@
-package com.mechjacktv.mechjackbot.chatbot.command.log;
+package com.mechjacktv.mechjackbot.chatbot.command.guice;
 
 import com.google.inject.matcher.AbstractMatcher;
 
 import java.lang.reflect.Method;
 
-public final class LogCommandHandleMessageMethodMatcher extends AbstractMatcher<Method> {
+public final class CommandHandleMessageMethodMatcher extends AbstractMatcher<Method> {
 
     @Override
     public final boolean matches(final Method method) {
