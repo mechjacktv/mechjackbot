@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.chatbot.command.guice;
+package com.mechjacktv.mechjackbot.guice;
 
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.MessageEvent;

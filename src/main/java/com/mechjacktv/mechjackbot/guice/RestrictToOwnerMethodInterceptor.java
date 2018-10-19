@@ -1,16 +1,17 @@
-package com.mechjacktv.mechjackbot.chatbot.command.guice;
+package com.mechjacktv.mechjackbot.guice;
 
-import com.mechjacktv.mechjackbot.Command;
-import com.mechjacktv.mechjackbot.MessageEvent;
-import com.mechjacktv.mechjackbot.chatbot.command.CommandUtils;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
-public class RestrictToPrivilegedMethodInterceptor implements MethodInterceptor {
+import com.mechjacktv.mechjackbot.Command;
+import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.command.CommandUtils;
+
+public class RestrictToOwnerMethodInterceptor implements MethodInterceptor {
 
     private final CommandUtils commandUtils;
 
-    public RestrictToPrivilegedMethodInterceptor(final CommandUtils commandUtils) {
+    public RestrictToOwnerMethodInterceptor(final CommandUtils commandUtils) {
         this.commandUtils = commandUtils;
     }
 
@@ -21,7 +22,7 @@ public class RestrictToPrivilegedMethodInterceptor implements MethodInterceptor 
         if(Command.class.isAssignableFrom(thisInstance.getClass())) {
             final MessageEvent messageEvent = (MessageEvent) invocation.getArguments()[0];
 
-            if(this.commandUtils.isPrivilegedViewer(messageEvent)) {
+            if(this.commandUtils.isChannelOwner(messageEvent)) {
                 return invocation.proceed();
             }
         }

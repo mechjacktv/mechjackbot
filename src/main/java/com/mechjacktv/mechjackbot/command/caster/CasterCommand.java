@@ -1,11 +1,10 @@
-package com.mechjacktv.mechjackbot.chatbot.command.caster;
+package com.mechjacktv.mechjackbot.command.caster;
 
-import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.MessageEvent;
-import com.mechjacktv.mechjackbot.chatbot.command.AbstractCommand;
-import com.mechjacktv.mechjackbot.chatbot.command.CommandUtils;
-import com.mechjacktv.mechjackbot.chatbot.command.GlobalCoolDown;
-import com.mechjacktv.mechjackbot.chatbot.command.RestrictToPrivileged;
+import com.mechjacktv.mechjackbot.command.AbstractCommand;
+import com.mechjacktv.mechjackbot.command.CommandUtils;
+import com.mechjacktv.mechjackbot.GlobalCoolDown;
+import com.mechjacktv.mechjackbot.RestrictToPrivileged;
 
 import javax.inject.Inject;
 
@@ -22,7 +21,7 @@ public class CasterCommand extends AbstractCommand {
     }
 
     @Override
-    public String getDescription() {
+    public final String getDescription() {
         return "Shout out a caster! Add the caster to the caster list.";
     }
 

@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.chatbot.command;
+package com.mechjacktv.mechjackbot.command;
 
 import com.mechjacktv.mechjackbot.*;
 
@@ -18,7 +18,7 @@ public class QuitCommand extends AbstractCommand {
     }
 
     @Override
-    public String getDescription() {
+    public final String getDescription() {
         return "Shuts the chatbot down.";
     }
 

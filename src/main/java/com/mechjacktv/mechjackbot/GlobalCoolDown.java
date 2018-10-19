@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.chatbot.command;
+package com.mechjacktv.mechjackbot;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

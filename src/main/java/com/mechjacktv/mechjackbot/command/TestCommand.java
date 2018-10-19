@@ -1,7 +1,8 @@
-package com.mechjacktv.mechjackbot.chatbot.command;
+package com.mechjacktv.mechjackbot.command;
 
-import com.mechjacktv.mechjackbot.Command;
+import com.mechjacktv.mechjackbot.GlobalCoolDown;
 import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.RestrictToOwner;
 
 import javax.inject.Inject;
 
@@ -16,7 +17,7 @@ public class TestCommand  extends AbstractCommand {
     }
 
     @Override
-    public String getDescription() {
+    public final String getDescription() {
         return "A command I change freely to test development.";
     }
 

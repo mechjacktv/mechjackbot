@@ -1,11 +1,10 @@
-package com.mechjacktv.mechjackbot.chatbot.command.caster;
+package com.mechjacktv.mechjackbot.command.caster;
 
 import javax.inject.Inject;
 
-import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.MessageEvent;
-import com.mechjacktv.mechjackbot.chatbot.command.AbstractCommand;
-import com.mechjacktv.mechjackbot.chatbot.command.CommandUtils;
+import com.mechjacktv.mechjackbot.command.AbstractCommand;
+import com.mechjacktv.mechjackbot.command.CommandUtils;
 
 public class CasterListenerCommand extends AbstractCommand {
 
@@ -20,7 +19,7 @@ public class CasterListenerCommand extends AbstractCommand {
     }
 
     @Override
-    public String getDescription() {
+    public final String getDescription() {
         return "Monitors chat looking for casters who are participating.";
     }
 

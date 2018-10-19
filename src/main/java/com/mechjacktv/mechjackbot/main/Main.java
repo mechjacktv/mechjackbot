@@ -7,10 +7,10 @@ import com.google.inject.matcher.Matchers;
 import com.google.inject.multibindings.Multibinder;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.chatbot.*;
-import com.mechjacktv.mechjackbot.chatbot.command.*;
-import com.mechjacktv.mechjackbot.chatbot.command.caster.*;
-import com.mechjacktv.mechjackbot.chatbot.command.GlobalCoolDown;
-import com.mechjacktv.mechjackbot.chatbot.command.guice.*;
+import com.mechjacktv.mechjackbot.command.*;
+import com.mechjacktv.mechjackbot.command.caster.*;
+import com.mechjacktv.mechjackbot.GlobalCoolDown;
+import com.mechjacktv.mechjackbot.guice.*;
 import org.pircbotx.hooks.Listener;
 
 public class Main {

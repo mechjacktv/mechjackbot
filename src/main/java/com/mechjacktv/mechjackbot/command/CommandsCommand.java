@@ -1,11 +1,10 @@
-package com.mechjacktv.mechjackbot.chatbot.command;
+package com.mechjacktv.mechjackbot.command;
 
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.mechjackbot.MessageEventHandler;
 
 import javax.inject.Inject;
-import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;

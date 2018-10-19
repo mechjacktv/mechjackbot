@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.chatbot.command.caster;
+package com.mechjacktv.mechjackbot.command.caster;
 
 import com.mechjacktv.mechjackbot.MessageEvent;
 
@@ -11,7 +11,7 @@ import java.util.Properties;
 public class CasterService {
 
     private static final String CASTERS_LOCATION = System.getProperty("user.home") + "/.mechjackbot_casters.config";
-    private static final long TWENTY_FOUR_HOURS = 1000 * 60 * 60 * 24;
+    private static final long TWELVE_HOURS = 1000 * 60 * 60 * 12;
 
     private final Properties casters;
 
@@ -33,7 +33,7 @@ public class CasterService {
             final long now = System.currentTimeMillis();
             final long lastShoutOut = Long.parseLong(casters.getProperty(casterName));
 
-            return now - lastShoutOut > TWENTY_FOUR_HOURS;
+            return now - lastShoutOut > TWELVE_HOURS;
         }
         return false;
     }
