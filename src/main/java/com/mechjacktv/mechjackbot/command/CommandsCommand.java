@@ -1,6 +1,7 @@
 package com.mechjacktv.mechjackbot.command;
 
 import com.mechjacktv.mechjackbot.Command;
+import com.mechjacktv.mechjackbot.GlobalCoolDown;
 import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.mechjackbot.MessageEventHandler;
 
@@ -27,16 +28,16 @@ public class CommandsCommand extends AbstractCommand {
     }
 
     @Override
+    @GlobalCoolDown
     public void handleMessage(final MessageEvent messageEvent) {
-        final StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder("Channel Commands: ");
 
         for(final Command command : getSortedCommands()) {
             if(command.isListed()) {
                 builder.append(String.format("%s ", command.getCommandTrigger()));
             }
         }
-        messageEvent.sendResponse(String.format("@%s Channel Commands: %s",
-                this.commandUtils.getSanitizedViewerName(messageEvent), builder.toString()));
+        messageEvent.sendResponse(builder.toString());
     }
 
     private Set<Command> getSortedCommands() {

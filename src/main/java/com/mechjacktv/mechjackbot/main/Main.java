@@ -69,6 +69,7 @@ public class Main {
                 Multibinder.newSetBinder(binder(), Command.class).addBinding().to(CasterListenerCommand.class).asEagerSingleton();
                 Multibinder.newSetBinder(binder(), Command.class).addBinding().to(CommandsCommand.class).asEagerSingleton();
                 Multibinder.newSetBinder(binder(), Command.class).addBinding().to(DelCasterCommand.class).asEagerSingleton();
+                Multibinder.newSetBinder(binder(), Command.class).addBinding().to(HelpCommand.class).asEagerSingleton();
                 Multibinder.newSetBinder(binder(), Command.class).addBinding().to(PingCommand.class).asEagerSingleton();
                 Multibinder.newSetBinder(binder(), Command.class).addBinding().to(TestCommand.class).asEagerSingleton();
                 Multibinder.newSetBinder(binder(), Command.class).addBinding().to(QuitCommand.class).asEagerSingleton();

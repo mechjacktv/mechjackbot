@@ -4,10 +4,8 @@ import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.mechjackbot.MessageEventHandler;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import javax.swing.text.html.Option;
+import java.util.*;
 
 public final class PircBotXMessageEventHandler implements MessageEventHandler {
 
@@ -23,8 +21,8 @@ public final class PircBotXMessageEventHandler implements MessageEventHandler {
     }
 
     @Override
-    public final Command getCommand(final String commandTrigger) {
-        return this.commands.get(commandTrigger);
+    public final Optional<Command> getCommand(final String commandTrigger) {
+        return Optional.ofNullable(this.commands.get(commandTrigger));
     }
 
     @Override

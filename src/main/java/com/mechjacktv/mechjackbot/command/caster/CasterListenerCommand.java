@@ -20,12 +20,14 @@ public class CasterListenerCommand extends AbstractCommand {
 
     @Override
     public final String getDescription() {
-        return "Monitors chat looking for casters who are participating.";
+        return "Monitors chat looking for casters who are due for a shout out.";
     }
 
     @Override
     public final boolean isHandledMessage(MessageEvent messageEvent) {
-        return true; // take a peek at all incoming messages to see if they are from a caster
+        final String viewerName = this.commandUtils.getSanitizedViewerName(messageEvent);
+
+        return this.casterService.isCasterDue(viewerName);
     }
 
     @Override
@@ -35,11 +37,9 @@ public class CasterListenerCommand extends AbstractCommand {
 
     @Override
     public void handleMessage(MessageEvent messageEvent) {
-        final String viewerName = this.commandUtils.getSanitizedViewerName(messageEvent);
+        final String casterName = this.commandUtils.getSanitizedViewerName(messageEvent);
 
-        if(this.casterService.isCasterDue(viewerName)) {
-            this.casterService.sendCasterShoutOut(messageEvent, viewerName);
-        }
+        this.casterService.sendCasterShoutOut(messageEvent, casterName);
     }
 
 }
