@@ -2,6 +2,8 @@ package com.mechjacktv.mechjackbot.keyvaluestore;
 
 import com.mechjacktv.mechjackbot.KeyValueStore;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentMap;
@@ -20,6 +22,11 @@ final class MapDbKeyValueStore implements KeyValueStore {
         Objects.requireNonNull(key, "`key` MUST NOT be null");
 
         return Optional.ofNullable(this.concurrentMap.get(key));
+    }
+
+    @Override
+    public Collection<byte[]> getKeys() {
+        return Collections.unmodifiableSet(this.concurrentMap.keySet());
     }
 
     @Override

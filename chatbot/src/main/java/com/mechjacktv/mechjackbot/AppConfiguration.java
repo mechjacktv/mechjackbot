@@ -1,9 +1,18 @@
 package com.mechjacktv.mechjackbot;
 
+import java.util.Collection;
+import java.util.Optional;
+
 public interface AppConfiguration {
 
-    String getProperty(String key, String defaultValue);
+    Optional<String> get(String key);
 
-    void setProperty(String key, String value);
+    String get(String key, String defaultValue);
+
+    Collection<String> getKeys();
+
+    void remove(String key);
+
+    void set(String key, String value);
 
 }

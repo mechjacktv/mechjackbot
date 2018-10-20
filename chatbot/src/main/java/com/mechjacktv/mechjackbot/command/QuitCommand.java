@@ -1,18 +1,17 @@
 package com.mechjacktv.mechjackbot.command;
 
-import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.ChatBot;
+import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.RestrictToOwner;
 
 import javax.inject.Inject;
 
 @SuppressWarnings("CanBeFinal")
 public class QuitCommand extends AbstractCommand {
 
-    private static final String COMMAND_TRIGGER = "command.quit.trigger";
-    private static final String COMMAND_TRIGGER_DEFAULT = "!quit";
-
     @Inject
-    public QuitCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils) {
-        super(appConfiguration.getProperty(COMMAND_TRIGGER, COMMAND_TRIGGER_DEFAULT), commandUtils);
+    public QuitCommand(final CommandUtils commandUtils) {
+        super("!quit", commandUtils);
     }
 
     @Override

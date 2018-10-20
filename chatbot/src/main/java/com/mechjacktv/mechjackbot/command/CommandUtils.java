@@ -11,19 +11,18 @@ import java.util.regex.Pattern;
 
 public final class CommandUtils {
 
-    private static final String COMMAND_COOL_DOWN_PERIOD_SECONDS = "command.coolDownPeriod.seconds";
-    private static final String COMMAND_COOL_DOWN_PERIOD_SECONDS_DEFAULT = "5";
+    private static final String COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS = "command.default_cool_down_period.seconds";
+    private static final String COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS_DEFAULT = "5";
 
+    private final AppConfiguration appConfiguration;
     private final String botOwner;
-    private final Integer commandCoolDownPeriodMs;
     private final Map<String, Long> commandLastCalled;
     private final Map<String, Pattern> commandTriggerPatterns;
 
     @Inject
     public CommandUtils(final AppConfiguration appConfiguration, final ChatBotConfiguration botConfiguration) {
+        this.appConfiguration = appConfiguration;
         this.botOwner = sanitizeViewerName(botConfiguration.getTwitchChannel());
-        this.commandCoolDownPeriodMs = Integer.parseInt(appConfiguration.getProperty(COMMAND_COOL_DOWN_PERIOD_SECONDS,
-                COMMAND_COOL_DOWN_PERIOD_SECONDS_DEFAULT)) * TimeUtils.SECOND;
         this.commandLastCalled = new HashMap<>();
         this.commandTriggerPatterns = new HashMap<>();
     }
@@ -64,14 +63,20 @@ public final class CommandUtils {
     }
 
     final boolean isGloballyCooledDown(final String commandTrigger) {
-        final Long now = System.currentTimeMillis();
-        final Long lastCalled = commandLastCalled.get(commandTrigger);
+        final Long lastCalled = this.commandLastCalled.get(commandTrigger);
+        final int commandCoolDownPeriodMs = getCommandCoolDownPeriodMs();
+        final long now = System.currentTimeMillis();
 
-        if (lastCalled == null || now - lastCalled > this.commandCoolDownPeriodMs) {
+        if (lastCalled == null || now - lastCalled > commandCoolDownPeriodMs) {
             commandLastCalled.put(commandTrigger, now);
             return true;
         }
         return false;
+    }
+
+    private int getCommandCoolDownPeriodMs() {
+        return Integer.parseInt(this.appConfiguration.get(COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS,
+                COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS_DEFAULT)) * TimeUtils.SECOND;
     }
 
     public final boolean isPrivilegedViewer(final MessageEvent messageEvent) {
@@ -95,7 +100,7 @@ public final class CommandUtils {
     }
 
     public final void sendUsage(final MessageEvent messageEvent, final String usage) {
-        messageEvent.sendResponse(String.format("%s, usage: %s", getSanitizedViewerName(messageEvent), usage));
+        messageEvent.sendResponse(String.format("@%s, usage: %s", getSanitizedViewerName(messageEvent), usage));
     }
 
 }
