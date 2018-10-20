@@ -7,10 +7,7 @@
 * The pull request must update the test suite to reflect the changed functionality.
 * The pull request must update any documentation to reflect the changed functionality.
 
-
 ### Bug Fix Template
-
-The repository owner adapted this pull request template from the [Atom Requirements for Contributing a Bug Fix](https://bit.ly/atom-bugfix) pull request template.
 
 #### Identify the Bug
 
@@ -41,9 +38,6 @@ What process did you follow to verify that the change has not introduced any reg
 
 ### Feature Change Template
 
-The repository owner adapted this pull request template from the [Atom Requirements for Adding, Changing, or Removing a Feature](https://bit.ly/atom-behavior) pull request template.
-
-
 #### Identify the Issue
 
 Link to the issue that your change relates to. If there is not yet an issue for your feature change, please open a new issue and then link to that issue in your pull request.
@@ -71,11 +65,9 @@ What process did you follow to verify that the change has the desired effects? D
 ## Requirements for Contributing Documentation
 
 * Fill out the template below. The repository owner may close any documentation pull request that does not follow this template.
-* The pull request must only contribute documentation. To contribute other changes, use a different template. You can see all templates at [PULL_REQUEST_TEMPLATE](../PULL_REQUEST_TEMPLATE).
+* The pull request must contribute documentation. To contribute other changes, use a different template. You can see all templates at [PULL_REQUEST_TEMPLATE](../PULL_REQUEST_TEMPLATE).
 
 ### Documentation Template
-
-The repository owner adapted this pull request template from the [Atom Requirements for Contributing Documentation](https://bit.ly/atom-docs) pull request template.
 
 #### Description of the Change
 
@@ -87,8 +79,6 @@ The repository owner must be able to understand the purpose of your change and m
 * The pull request must affect performance of existing functionality. To contribute other changes, use a different template. You can see all templates at [PULL_REQUEST_TEMPLATE](../PULL_REQUEST_TEMPLATE).
 
 ### Performance Improvement Template
-
-The repository owner adapted this pull request template from the [Atom Requirements for Contributing a Performance Improvement](https://bit.ly/atom-perf) pull request template.
 
 #### Description of the Change
 
@@ -109,3 +99,7 @@ What process did you follow to verify that the change has not introduced any reg
 #### Applicable Issues
 
 Enter any applicable Issues here.
+
+## Attribution
+
+The repository owner adapted these pull request templates from the [Atom](https://atom.io/) pull request templates.
