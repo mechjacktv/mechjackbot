@@ -8,6 +8,7 @@ import com.mechjacktv.mechjackbot.RestrictToPrivileged;
 
 import javax.inject.Inject;
 
+@SuppressWarnings("CanBeFinal")
 public class AddCasterCommand extends AbstractCommand {
 
     private final CommandUtils commandUtils;
@@ -41,4 +42,5 @@ public class AddCasterCommand extends AbstractCommand {
             this.commandUtils.sendUsage(messageEvent, String.format("%s <casterName>", getTrigger()));
         }
     }
+
 }

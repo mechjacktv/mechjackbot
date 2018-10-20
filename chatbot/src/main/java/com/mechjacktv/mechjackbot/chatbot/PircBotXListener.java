@@ -9,7 +9,7 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 import javax.inject.Inject;
 import java.util.Set;
 
-public class PircBotXListener extends ListenerAdapter {
+final class PircBotXListener extends ListenerAdapter {
 
     private final MessageEventHandler messageEventHandler;
 
@@ -30,4 +30,5 @@ public class PircBotXListener extends ListenerAdapter {
     public final void onGenericMessage(final GenericMessageEvent event) {
         this.messageEventHandler.handleMessage(new PircBotXMessageEvent(event));
     }
+
 }

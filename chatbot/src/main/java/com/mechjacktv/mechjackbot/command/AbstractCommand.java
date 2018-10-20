@@ -8,7 +8,7 @@ public abstract class AbstractCommand implements Command {
     private final String commandTrigger;
     private final CommandUtils commandUtils;
 
-    public AbstractCommand(final String commandTrigger, final CommandUtils commandUtils) {
+    protected AbstractCommand(final String commandTrigger, final CommandUtils commandUtils) {
         this.commandTrigger = commandTrigger;
         this.commandUtils = commandUtils;
     }
@@ -19,7 +19,7 @@ public abstract class AbstractCommand implements Command {
     }
 
     @Override
-    public String getTrigger() {
+    public final String getTrigger() {
         return this.commandTrigger;
     }
 

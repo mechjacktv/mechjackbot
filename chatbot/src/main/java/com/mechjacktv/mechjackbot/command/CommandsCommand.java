@@ -10,15 +10,14 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+@SuppressWarnings("CanBeFinal")
 public class CommandsCommand extends AbstractCommand {
 
-    private final CommandUtils commandUtils;
     private final MessageEventHandler messageEventHandler;
 
     @Inject
     public CommandsCommand(final CommandUtils commandUtils, final MessageEventHandler messageEventHandler) {
         super("!commands", commandUtils);
-        this.commandUtils = commandUtils;
         this.messageEventHandler = messageEventHandler;
     }
 
@@ -43,13 +42,12 @@ public class CommandsCommand extends AbstractCommand {
     private Set<Command> getSortedCommands() {
         final SortedSet<Command> sortedCommands = new TreeSet<>(this::compareCommands);
 
-        for(final Command command : messageEventHandler.getCommands()) {
-            sortedCommands.add(command);
-        }
+        sortedCommands.addAll(messageEventHandler.getCommands());
         return sortedCommands;
     }
 
     private int compareCommands(final Command command1, final Command command2) {
         return command1.getTrigger().compareTo(command2.getTrigger());
     }
+
 }

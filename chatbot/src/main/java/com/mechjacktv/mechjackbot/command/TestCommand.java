@@ -6,14 +6,12 @@ import com.mechjacktv.mechjackbot.RestrictToOwner;
 
 import javax.inject.Inject;
 
+@SuppressWarnings("CanBeFinal")
 public class TestCommand  extends AbstractCommand {
-
-    private final CommandUtils commandUtils;
 
     @Inject
     public TestCommand(final CommandUtils commandUtils) {
         super("!test", commandUtils);
-        this.commandUtils = commandUtils;
     }
 
     @Override

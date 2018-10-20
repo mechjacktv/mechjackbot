@@ -8,16 +8,16 @@ import com.mechjacktv.mechjackbot.command.CommandUtils;
 
 import javax.inject.Provider;
 
-public class GlobalCoolDownMethodInterceptor implements MethodInterceptor {
+final class GlobalCoolDownMethodInterceptor implements MethodInterceptor {
 
     private final Provider<CommandUtils> commandUtils;
 
-    public GlobalCoolDownMethodInterceptor(final Provider<CommandUtils> commandUtils) {
+    GlobalCoolDownMethodInterceptor(final Provider<CommandUtils> commandUtils) {
         this.commandUtils = commandUtils;
     }
 
     @Override
-    public Object invoke(final MethodInvocation invocation) throws Throwable {
+    public final Object invoke(final MethodInvocation invocation) throws Throwable {
         final Command thisCommand = (Command) invocation.getThis();
 
         if (this.commandUtils.get().isGloballyCooledDown(thisCommand)) {

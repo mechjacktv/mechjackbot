@@ -20,8 +20,8 @@ public final class CommandUtils {
     private final Map<String, Pattern> commandTriggerPatterns;
 
     @Inject
-    public CommandUtils(final AppConfiguration appConfiguration, final BotConfiguration botConfiguration) {
-        this.botOwner = sanitizeViewerName(botConfiguration.getChannel());
+    public CommandUtils(final AppConfiguration appConfiguration, final ChatBotConfiguration botConfiguration) {
+        this.botOwner = sanitizeViewerName(botConfiguration.getTwitchChannel());
         this.commandCoolDownPeriodMs = Integer.parseInt(appConfiguration.getProperty(COMMAND_COOL_DOWN_PERIOD_SECONDS,
                 COMMAND_COOL_DOWN_PERIOD_SECONDS_DEFAULT)) * TimeUtils.SECOND;
         this.commandLastCalled = new HashMap<>();
@@ -39,7 +39,7 @@ public final class CommandUtils {
         return botOwner.equals(chatUsername);
     }
 
-    public final boolean isCommandTrigger(final String commandTrigger, final MessageEvent messageEvent) {
+    final boolean isCommandTrigger(final String commandTrigger, final MessageEvent messageEvent) {
         final String message = messageEvent.getMessage();
         final Pattern commandTriggerPattern = getCommandTriggerPattern(commandTrigger);
         final Matcher commandTriggerMatcher = commandTriggerPattern.matcher(message);
@@ -47,7 +47,7 @@ public final class CommandUtils {
         return commandTriggerMatcher.matches();
     }
 
-    private final Pattern getCommandTriggerPattern(final String commandTrigger) {
+    private Pattern getCommandTriggerPattern(final String commandTrigger) {
         if (this.commandTriggerPatterns.containsKey(commandTrigger)) {
             return this.commandTriggerPatterns.get(commandTrigger);
         }
@@ -63,7 +63,7 @@ public final class CommandUtils {
         return isGloballyCooledDown(command.getTrigger());
     }
 
-    public final boolean isGloballyCooledDown(final String commandTrigger) {
+    final boolean isGloballyCooledDown(final String commandTrigger) {
         final Long now = System.currentTimeMillis();
         final Long lastCalled = commandLastCalled.get(commandTrigger);
 

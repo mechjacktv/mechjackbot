@@ -4,11 +4,14 @@ import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.command.caster.*;
+import com.mechjacktv.mechjackbot.command.interceptor.DefaultCommandInterceptorsModule;
 
-public class CommandsModule extends AbstractModule {
+public final class DefaultCommandsModule extends AbstractModule {
 
     @Override
-    protected void configure() {
+    protected final void configure() {
+        install(new DefaultCommandInterceptorsModule());
+
         bind(CommandUtils.class).asEagerSingleton();
         bind(CasterService.class).asEagerSingleton();
         // TODO automate

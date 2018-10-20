@@ -8,6 +8,7 @@ import com.mechjacktv.mechjackbot.RestrictToPrivileged;
 
 import javax.inject.Inject;
 
+@SuppressWarnings("CanBeFinal")
 public class CasterCommand extends AbstractCommand {
 
     private final CasterService casterService;
@@ -41,4 +42,5 @@ public class CasterCommand extends AbstractCommand {
         }
 
     }
+
 }

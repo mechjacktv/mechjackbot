@@ -5,11 +5,11 @@ import com.mechjacktv.mechjackbot.ChatUser;
 import com.mechjacktv.mechjackbot.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
-public class PircBotXMessageEvent implements MessageEvent {
+public final class PircBotXMessageEvent implements MessageEvent {
 
     private final GenericMessageEvent genericMessageEvent;
 
-    public PircBotXMessageEvent(final GenericMessageEvent genericMessageEvent) {
+    PircBotXMessageEvent(final GenericMessageEvent genericMessageEvent) {
         this.genericMessageEvent = genericMessageEvent;
     }
 
@@ -32,4 +32,5 @@ public class PircBotXMessageEvent implements MessageEvent {
     public void sendResponse(String message) {
         this.genericMessageEvent.respondWith(String.format("/me MrDestructoid <( %s )", message));
     }
+
 }

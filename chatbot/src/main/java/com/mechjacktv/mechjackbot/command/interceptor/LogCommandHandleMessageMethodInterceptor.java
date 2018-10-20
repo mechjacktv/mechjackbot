@@ -10,11 +10,11 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class LogCommandHandleMessageMethodInterceptor implements MethodInterceptor {
+final class LogCommandHandleMessageMethodInterceptor implements MethodInterceptor {
 
     private final Map<String, Logger> loggers;
 
-    public LogCommandHandleMessageMethodInterceptor() {
+    LogCommandHandleMessageMethodInterceptor() {
         this.loggers = new HashMap<>();
     }
 
@@ -35,8 +35,7 @@ public final class LogCommandHandleMessageMethodInterceptor implements MethodInt
                     String.format("Failed: trigger=%s, user=%s, message=%s",
                             thisCommand.getTrigger(),
                             messageEvent.getChatUser().getUsername(),
-                            messageEvent.getMessage(),
-                            t));
+                            messageEvent.getMessage()), t);
         }
         return null;
     }

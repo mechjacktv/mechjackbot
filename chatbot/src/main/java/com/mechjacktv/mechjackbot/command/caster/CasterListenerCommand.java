@@ -6,6 +6,7 @@ import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.mechjackbot.command.AbstractCommand;
 import com.mechjacktv.mechjackbot.command.CommandUtils;
 
+@SuppressWarnings("CanBeFinal")
 public class CasterListenerCommand extends AbstractCommand {
 
     private final CasterService casterService;

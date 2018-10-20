@@ -5,10 +5,10 @@ import com.google.inject.matcher.Matchers;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.command.CommandUtils;
 
-public class CommandInterceptorsModule extends AbstractModule {
+public final class DefaultCommandInterceptorsModule extends AbstractModule {
 
     @Override
-    protected void configure() {
+    protected final void configure() {
         bindInterceptor(Matchers.subclassesOf(Command.class),
                 new CommandHandleMessageMethodMatcher().and(Matchers.annotatedWith(RestrictToOwner.class)),
                 new RestrictToOwnerMethodInterceptor(getProvider(CommandUtils.class)));
@@ -25,4 +25,5 @@ public class CommandInterceptorsModule extends AbstractModule {
                 new CommandHandleMessageMethodMatcher(),
                 new LogCommandHandleMessageMethodInterceptor());
     }
+
 }

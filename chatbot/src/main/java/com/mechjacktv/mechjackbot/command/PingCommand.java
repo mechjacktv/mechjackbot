@@ -6,6 +6,7 @@ import com.mechjacktv.mechjackbot.RestrictToPrivileged;
 
 import javax.inject.Inject;
 
+@SuppressWarnings("CanBeFinal")
 public class PingCommand extends AbstractCommand {
 
     private final CommandUtils commandUtils;
@@ -18,7 +19,7 @@ public class PingCommand extends AbstractCommand {
 
     @Override
     public final String getDescription() {
-        return "A simple check to see if the chatbot is running.";
+        return "A simple check to see if the chat bot is running.";
     }
 
     @Override

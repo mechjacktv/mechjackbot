@@ -1,8 +1,7 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
 import com.mechjacktv.mechjackbot.ChatBot;
-import com.mechjacktv.mechjackbot.BotConfiguration;
-import com.mechjacktv.mechjackbot.ChatBotStartupException;
+import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
@@ -16,19 +15,20 @@ public final class PircBotXChatBot implements ChatBot {
     private final PircBotX pircBotX;
 
     @Inject
-    public PircBotXChatBot(final BotConfiguration botConfiguration, final Listener listener) {
+    @SuppressWarnings("unused")
+    public PircBotXChatBot(final ChatBotConfiguration chatBotConfiguration, final Listener listener) {
         final Configuration configuration = new Configuration.Builder()
-                .setName(botConfiguration.getUsername())
+                .setName(chatBotConfiguration.getTwitchUsername())
                 .addServer("irc.chat.twitch.tv", 6667)
-                .setServerPassword(botConfiguration.getPassword())
+                .setServerPassword(chatBotConfiguration.getTwitchPassword())
                 .addListener(listener)
-                .addAutoJoinChannel("#" + botConfiguration.getChannel())
+                .addAutoJoinChannel("#" + chatBotConfiguration.getTwitchChannel())
                 .buildConfiguration();
 
         this.pircBotX = new PircBotX(configuration);
     }
 
-    public PircBotXChatBot(final PircBotX pircBotX) {
+    PircBotXChatBot(final PircBotX pircBotX) {
         this.pircBotX = pircBotX;
     }
 
@@ -37,7 +37,7 @@ public final class PircBotXChatBot implements ChatBot {
         try {
             this.pircBotX.startBot();
         } catch (final IOException | IrcException e) {
-            throw new ChatBotStartupException(e);
+            throw new PircBotXStartupException(e);
         }
     }
 
@@ -46,4 +46,5 @@ public final class PircBotXChatBot implements ChatBot {
         this.pircBotX.stopBotReconnect();
         this.pircBotX.sendIRC().quitServer("Shutdown");
     }
+
 }

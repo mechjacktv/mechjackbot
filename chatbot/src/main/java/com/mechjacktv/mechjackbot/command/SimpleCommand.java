@@ -33,7 +33,7 @@ public abstract class SimpleCommand implements Command {
         }
     }
 
-    private final boolean createCommandsFile() throws IOException {
+    private boolean createCommandsFile() throws IOException {
         return new File(COMMANDS_LOCATION).createNewFile();
     }
 
@@ -96,13 +96,13 @@ public abstract class SimpleCommand implements Command {
         }
     }
 
-    private final void setCommand(final String commandTrigger, final String commandBody) {
+    private void setCommand(final String commandTrigger, final String commandBody) {
         commands.setProperty(commandTrigger, commandBody);
         saveCommands();
     }
 
 
-    private final void saveCommands() {
+    private void saveCommands() {
         try (final FileOutputStream castersFile = new FileOutputStream(COMMANDS_LOCATION)) {
             commands.store(castersFile, "");
         } catch (final IOException e) {
@@ -110,8 +110,8 @@ public abstract class SimpleCommand implements Command {
         }
     }
 
-    private final String parseCommandTrigger(final String message) {
-        if (message.indexOf(" ") == -1) {
+    private String parseCommandTrigger(final String message) {
+        if (!message.contains(" ")) {
             return message;
         }
         return message.substring(0, message.indexOf(" "));

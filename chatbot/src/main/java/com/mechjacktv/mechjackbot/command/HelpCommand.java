@@ -8,6 +8,7 @@ import com.mechjacktv.mechjackbot.MessageEventHandler;
 import javax.inject.Inject;
 import java.util.Optional;
 
+@SuppressWarnings("CanBeFinal")
 public class HelpCommand extends AbstractCommand {
 
     private final CommandUtils commandUtils;

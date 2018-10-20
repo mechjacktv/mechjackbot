@@ -7,16 +7,16 @@ import org.aopalliance.intercept.MethodInvocation;
 
 import javax.inject.Provider;
 
-public class RestrictToRegularMethodInterceptor implements MethodInterceptor {
+final class RestrictToRegularMethodInterceptor implements MethodInterceptor {
 
     private final Provider<CommandUtils> commandUtils;
 
-    public RestrictToRegularMethodInterceptor(final Provider<CommandUtils> commandUtils) {
+    RestrictToRegularMethodInterceptor(final Provider<CommandUtils> commandUtils) {
         this.commandUtils = commandUtils;
     }
 
     @Override
-    public Object invoke(final MethodInvocation invocation) throws Throwable {
+    public final Object invoke(final MethodInvocation invocation) throws Throwable {
         final MessageEvent messageEvent = (MessageEvent) invocation.getArguments()[0];
 
         if (this.commandUtils.get().isRegularUserViewer(messageEvent)) {
@@ -24,4 +24,5 @@ public class RestrictToRegularMethodInterceptor implements MethodInterceptor {
         }
         return null;
     }
+
 }
