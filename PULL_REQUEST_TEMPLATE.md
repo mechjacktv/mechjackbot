@@ -3,7 +3,7 @@
 ## Requirements for Contributing a Bug Fix
 
 * Fill out the template below. The repository owner may close any bug fix pull request that does not follow this template.
-* The pull request must fix an existing bug. To contribute other changes, use a different template. You can see all templates at [PULL_REQUEST_TEMPLATE](../PULL_REQUEST_TEMPLATE).
+* The pull request must fix an existing bug. To contribute other changes, use a different template.
 * The pull request must update the test suite to reflect the changed functionality.
 * The pull request must update any documentation to reflect the changed functionality.
 
@@ -32,7 +32,7 @@ What process did you follow to verify that the change has not introduced any reg
 ## Requirements for Adding, Changing, or Removing a Feature
 
 * Fill out the template below. The repository owner may close any feature change pull request that does not follow this template.
-* The pull request must contribute a feature change. To contribute other changes, use a different template. You can see all templates at [PULL_REQUEST_TEMPLATE](../PULL_REQUEST_TEMPLATE).
+* The pull request must contribute a feature change. To contribute other changes, use a different template.
 * The pull request must update the test suite to exercise the updated functionality.
 * The pull request must update any documentation to reflect the changed functionality.
 
@@ -65,7 +65,7 @@ What process did you follow to verify that the change has the desired effects? D
 ## Requirements for Contributing Documentation
 
 * Fill out the template below. The repository owner may close any documentation pull request that does not follow this template.
-* The pull request must contribute documentation. To contribute other changes, use a different template. You can see all templates at [PULL_REQUEST_TEMPLATE](../PULL_REQUEST_TEMPLATE).
+* The pull request must contribute documentation. To contribute other changes, use a different template.
 
 ### Documentation Template
 
@@ -76,7 +76,7 @@ The repository owner must be able to understand the purpose of your change and m
 ## Requirements for Contributing a Performance Improvement
 
 * Fill out the template below. The repository owner may close any performance improvement pull request that does not follow this template.
-* The pull request must affect performance of existing functionality. To contribute other changes, use a different template. You can see all templates at [PULL_REQUEST_TEMPLATE](../PULL_REQUEST_TEMPLATE).
+* The pull request must affect performance of existing functionality. To contribute other changes, use a different template.
 
 ### Performance Improvement Template
 
