@@ -5,6 +5,8 @@
 * Fill out the template below. The repository owner may close any bug fix pull request that does not follow this template.
 * The pull request must fix an existing bug. To contribute other changes, use a different template. You can see all templates at [PULL_REQUEST_TEMPLATE](../PULL_REQUEST_TEMPLATE).
 * The pull request must update the test suite to reflect the changed functionality.
+* The pull request must update any documentation to reflect the changed functionality.
+
 
 ### Bug Fix Template
 
@@ -35,6 +37,7 @@ What process did you follow to verify that the change has not introduced any reg
 * Fill out the template below. The repository owner may close any feature change pull request that does not follow this template.
 * The pull request must contribute a feature change. To contribute other changes, use a different template. You can see all templates at [PULL_REQUEST_TEMPLATE](../PULL_REQUEST_TEMPLATE).
 * The pull request must update the test suite to exercise the updated functionality.
+* The pull request must update any documentation to reflect the changed functionality.
 
 ### Feature Change Template
 
