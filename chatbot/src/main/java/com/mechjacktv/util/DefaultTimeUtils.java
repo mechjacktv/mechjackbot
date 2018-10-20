@@ -2,6 +2,9 @@ package com.mechjacktv.util;
 
 final class DefaultTimeUtils implements TimeUtils {
 
-    // empty
+    @Override
+    public final Integer secondsAsMs(final int seconds) {
+        return seconds * SECOND;
+    }
 
 }

@@ -18,13 +18,16 @@ public final class CommandUtils {
     private final String botOwner;
     private final Map<String, Long> commandLastCalled;
     private final Map<String, Pattern> commandTriggerPatterns;
+    private final TimeUtils timeUtils;
 
     @Inject
-    public CommandUtils(final AppConfiguration appConfiguration, final ChatBotConfiguration botConfiguration) {
+    public CommandUtils(final AppConfiguration appConfiguration, final ChatBotConfiguration botConfiguration,
+                        final TimeUtils timeUtils) {
         this.appConfiguration = appConfiguration;
         this.botOwner = sanitizeViewerName(botConfiguration.getTwitchChannel());
         this.commandLastCalled = new HashMap<>();
         this.commandTriggerPatterns = new HashMap<>();
+        this.timeUtils = timeUtils;
     }
 
     public final String getSanitizedViewerName(final MessageEvent messageEvent) {
@@ -64,8 +67,8 @@ public final class CommandUtils {
 
     final boolean isGloballyCooledDown(final String commandTrigger) {
         final Long lastCalled = this.commandLastCalled.get(commandTrigger);
-        final int commandCoolDownPeriodMs = getCommandCoolDownPeriodMs();
-        final long now = System.currentTimeMillis();
+        final Integer commandCoolDownPeriodMs = getCommandCoolDownPeriodMs();
+        final Long now = System.currentTimeMillis();
 
         if (lastCalled == null || now - lastCalled > commandCoolDownPeriodMs) {
             commandLastCalled.put(commandTrigger, now);
@@ -74,9 +77,10 @@ public final class CommandUtils {
         return false;
     }
 
-    private int getCommandCoolDownPeriodMs() {
-        return Integer.parseInt(this.appConfiguration.get(COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS,
-                COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS_DEFAULT)) * TimeUtils.SECOND;
+    private Integer getCommandCoolDownPeriodMs() {
+        return timeUtils.secondsAsMs(Integer.parseInt(
+                this.appConfiguration.get(COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS,
+                        COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS_DEFAULT)));
     }
 
     public final boolean isPrivilegedViewer(final MessageEvent messageEvent) {
