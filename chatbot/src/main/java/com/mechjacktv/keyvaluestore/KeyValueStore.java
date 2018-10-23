@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot;
+package com.mechjacktv.keyvaluestore;
 
 import java.util.Collection;
 import java.util.Optional;

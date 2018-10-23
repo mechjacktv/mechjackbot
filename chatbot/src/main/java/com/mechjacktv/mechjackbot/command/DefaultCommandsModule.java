@@ -11,16 +11,11 @@ public final class DefaultCommandsModule extends AbstractModule {
   @Override
   protected final void configure() {
     this.install(new DefaultCommandInterceptorsModule());
+    this.install(new ShoutOutModule());
 
     this.bind(CommandUtils.class).asEagerSingleton();
-    this.bind(ShoutOutService.class).asEagerSingleton();
 
-    // TODO automate
-    Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(AddCasterCommand.class).asEagerSingleton();
-    Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(CasterCommand.class).asEagerSingleton();
-    Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(CasterListenerCommand.class).asEagerSingleton();
     Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(CommandsCommand.class).asEagerSingleton();
-    Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(DelCasterCommand.class).asEagerSingleton();
     Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(DelConfigCommand.class).asEagerSingleton();
     Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(HelpCommand.class).asEagerSingleton();
     Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(InspectConfigCommand.class).asEagerSingleton();

@@ -1,7 +1,6 @@
-package com.mechjacktv.mechjackbot.keyvaluestore;
+package com.mechjacktv.keyvaluestore;
 
 import com.google.inject.AbstractModule;
-import com.mechjacktv.mechjackbot.KeyValueStoreFactory;
 
 public final class MapDbKeyValueStoreModule extends AbstractModule {
 

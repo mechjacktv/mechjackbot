@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot;
+package com.mechjacktv.keyvaluestore;
 
 public interface KeyValueStoreFactory {
 

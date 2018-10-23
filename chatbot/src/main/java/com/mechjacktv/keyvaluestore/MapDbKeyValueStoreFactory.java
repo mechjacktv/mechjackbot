@@ -1,8 +1,6 @@
-package com.mechjacktv.mechjackbot.keyvaluestore;
+package com.mechjacktv.keyvaluestore;
 
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
-import com.mechjacktv.mechjackbot.KeyValueStore;
-import com.mechjacktv.mechjackbot.KeyValueStoreFactory;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
 import org.mapdb.Serializer;

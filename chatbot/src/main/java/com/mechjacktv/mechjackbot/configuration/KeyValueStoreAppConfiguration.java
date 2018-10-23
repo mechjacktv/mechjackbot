@@ -1,8 +1,8 @@
 package com.mechjacktv.mechjackbot.configuration;
 
 import com.mechjacktv.mechjackbot.AppConfiguration;
-import com.mechjacktv.mechjackbot.KeyValueStore;
-import com.mechjacktv.mechjackbot.KeyValueStoreFactory;
+import com.mechjacktv.keyvaluestore.KeyValueStore;
+import com.mechjacktv.keyvaluestore.KeyValueStoreFactory;
 
 import javax.inject.Inject;
 import java.util.Collection;
