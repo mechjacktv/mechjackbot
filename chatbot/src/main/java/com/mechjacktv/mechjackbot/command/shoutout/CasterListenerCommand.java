@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.command.caster;
+package com.mechjacktv.mechjackbot.command.shoutout;
 
 import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.mechjackbot.command.AbstractCommand;
@@ -9,11 +9,11 @@ import javax.inject.Inject;
 @SuppressWarnings("CanBeFinal")
 public class CasterListenerCommand extends AbstractCommand {
 
-  private final CasterService casterService;
+  private final ShoutOutService casterService;
   private final CommandUtils commandUtils;
 
   @Inject
-  public CasterListenerCommand(final CasterService casterService, final CommandUtils commandUtils) {
+  public CasterListenerCommand(final ShoutOutService casterService, final CommandUtils commandUtils) {
     super("!casterListener", commandUtils);
     this.casterService = casterService;
     this.commandUtils = commandUtils;

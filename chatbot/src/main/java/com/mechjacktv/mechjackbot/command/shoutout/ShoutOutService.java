@@ -1,9 +1,10 @@
-package com.mechjacktv.mechjackbot.command.caster;
+package com.mechjacktv.mechjackbot.command.shoutout;
 
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.KeyValueStore;
 import com.mechjacktv.mechjackbot.KeyValueStoreFactory;
 import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.command.caster.ShoutOutServiceMessage;
 import com.mechjacktv.twitchclient.TwitchClient;
 import com.mechjacktv.twitchclient.TwitchClientMessage;
 import com.mechjacktv.util.ProtobufUtils;
@@ -16,19 +17,19 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-public final class CasterService {
+public final class ShoutOutService {
 
-  private static final Logger log = LoggerFactory.getLogger(CasterService.class);
+  private static final Logger log = LoggerFactory.getLogger(ShoutOutService.class);
   private static final long TWELVE_HOURS = 1000 * 60 * 60 * 12;
 
   private final KeyValueStore casters;
   private final ProtobufUtils protobufUtils;
 
   @Inject
-  public CasterService(final ChatBotConfiguration chatBotConfiguration,
-                       final KeyValueStoreFactory keyValueStoreFactory,
-                       final ProtobufUtils protobufUtils,
-                       final TwitchClient twitchClient) {
+  public ShoutOutService(final ChatBotConfiguration chatBotConfiguration,
+                         final KeyValueStoreFactory keyValueStoreFactory,
+                         final ProtobufUtils protobufUtils,
+                         final TwitchClient twitchClient) {
     final KeyValueStore casters = keyValueStoreFactory.createOrOpenKeyValueStore("casters");
     this.protobufUtils = protobufUtils;
     this.casters = this.updatedCasters(chatBotConfiguration, twitchClient, casters);
@@ -41,14 +42,14 @@ public final class CasterService {
     final Optional<String> casterId = twitchClient.getUserId(channel);
 
     if (casterId.isPresent()) {
-      final Collection<CasterServiceMessage.CasterKey> exitingCasterKey =
-          this.protobufUtils.parseAllMessages(CasterServiceMessage.CasterKey.class, casters.getKeys());
+      final Collection<ShoutOutServiceMessage.CasterKey> exitingCasterKey =
+          this.protobufUtils.parseAllMessages(ShoutOutServiceMessage.CasterKey.class, casters.getKeys());
       final Set<TwitchClientMessage.UserFollow> userFollows = this.getUserFollows(casterId.get(), twitchClient);
       int addCount = 0;
       int removeCount = 0;
 
       for (final TwitchClientMessage.UserFollow userFollow : userFollows) {
-        final CasterServiceMessage.CasterKey casterKey = this.createCasterKey(userFollow.getToName());
+        final ShoutOutServiceMessage.CasterKey casterKey = this.createCasterKey(userFollow.getToName());
         final byte[] casterKeyBytes = casterKey.toByteArray();
 
         if (casters.containsKey(casterKeyBytes)) {
@@ -58,7 +59,7 @@ public final class CasterService {
           addCount++;
         }
       }
-      for (final CasterServiceMessage.CasterKey casterKey : exitingCasterKey) {
+      for (final ShoutOutServiceMessage.CasterKey casterKey : exitingCasterKey) {
         casters.remove(casterKey.toByteArray());
         removeCount++;
       }
@@ -83,15 +84,15 @@ public final class CasterService {
     return userFollowsList;
   }
 
-  private CasterServiceMessage.CasterKey createCasterKey(final String casterName) {
-    final CasterServiceMessage.CasterKey.Builder builder = CasterServiceMessage.CasterKey.newBuilder();
+  private ShoutOutServiceMessage.CasterKey createCasterKey(final String casterName) {
+    final ShoutOutServiceMessage.CasterKey.Builder builder = ShoutOutServiceMessage.CasterKey.newBuilder();
 
     return builder.setName(casterName)
         .build();
   }
 
-  private CasterServiceMessage.Caster createCaster(final String casterName, final Long lastShoutOut) {
-    final CasterServiceMessage.Caster.Builder builder = CasterServiceMessage.Caster.newBuilder();
+  private ShoutOutServiceMessage.Caster createCaster(final String casterName, final Long lastShoutOut) {
+    final ShoutOutServiceMessage.Caster.Builder builder = ShoutOutServiceMessage.Caster.newBuilder();
 
     return builder.setName(casterName)
         .setLastShoutOut(lastShoutOut)
@@ -99,13 +100,13 @@ public final class CasterService {
   }
 
   final boolean isCasterDue(final String casterName) {
-    final CasterServiceMessage.CasterKey casterKey = this.createCasterKey(casterName);
+    final ShoutOutServiceMessage.CasterKey casterKey = this.createCasterKey(casterName);
     final Optional<byte[]> casterBytes = this.casters.get(casterKey.toByteArray());
 
     if (casterBytes.isPresent()) {
       final long now = System.currentTimeMillis();
-      final CasterServiceMessage.Caster caster =
-          this.protobufUtils.parseMessage(CasterServiceMessage.Caster.class, casterBytes.get());
+      final ShoutOutServiceMessage.Caster caster =
+          this.protobufUtils.parseMessage(ShoutOutServiceMessage.Caster.class, casterBytes.get());
 
       return now - caster.getLastShoutOut() > TWELVE_HOURS;
     }
@@ -113,7 +114,7 @@ public final class CasterService {
   }
 
   final void removeCaster(final String casterName) {
-    final CasterServiceMessage.CasterKey casterKey = this.createCasterKey(casterName);
+    final ShoutOutServiceMessage.CasterKey casterKey = this.createCasterKey(casterName);
 
     this.casters.remove(casterKey.toByteArray());
   }
@@ -128,8 +129,8 @@ public final class CasterService {
   }
 
   final void setCaster(final String casterName, final long lastShoutOut) {
-    final CasterServiceMessage.CasterKey casterKey = this.createCasterKey(casterName);
-    final CasterServiceMessage.Caster caster = this.createCaster(casterName, lastShoutOut);
+    final ShoutOutServiceMessage.CasterKey casterKey = this.createCasterKey(casterName);
+    final ShoutOutServiceMessage.Caster caster = this.createCaster(casterName, lastShoutOut);
 
     this.casters.put(casterKey.toByteArray(), caster.toByteArray());
   }

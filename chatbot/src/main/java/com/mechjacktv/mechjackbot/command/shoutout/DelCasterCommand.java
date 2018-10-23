@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.command.caster;
+package com.mechjacktv.mechjackbot.command.shoutout;
 
 import com.mechjacktv.mechjackbot.GlobalCoolDown;
 import com.mechjacktv.mechjackbot.MessageEvent;
@@ -12,10 +12,10 @@ import javax.inject.Inject;
 public class DelCasterCommand extends AbstractCommand {
 
   private final CommandUtils commandUtils;
-  private final CasterService casterService;
+  private final ShoutOutService casterService;
 
   @Inject
-  public DelCasterCommand(final CasterService casterService, final CommandUtils commandUtils) {
+  public DelCasterCommand(final ShoutOutService casterService, final CommandUtils commandUtils) {
     super("!delcaster", commandUtils);
     this.casterService = casterService;
     this.commandUtils = commandUtils;

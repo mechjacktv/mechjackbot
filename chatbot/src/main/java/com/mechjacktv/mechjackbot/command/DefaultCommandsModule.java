@@ -3,7 +3,7 @@ package com.mechjacktv.mechjackbot.command;
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
 import com.mechjacktv.mechjackbot.Command;
-import com.mechjacktv.mechjackbot.command.caster.*;
+import com.mechjacktv.mechjackbot.command.shoutout.*;
 import com.mechjacktv.mechjackbot.command.interceptor.DefaultCommandInterceptorsModule;
 
 public final class DefaultCommandsModule extends AbstractModule {
@@ -13,7 +13,7 @@ public final class DefaultCommandsModule extends AbstractModule {
     this.install(new DefaultCommandInterceptorsModule());
 
     this.bind(CommandUtils.class).asEagerSingleton();
-    this.bind(CasterService.class).asEagerSingleton();
+    this.bind(ShoutOutService.class).asEagerSingleton();
 
     // TODO automate
     Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(AddCasterCommand.class).asEagerSingleton();

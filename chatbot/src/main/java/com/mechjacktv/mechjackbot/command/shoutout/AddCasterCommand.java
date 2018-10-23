@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.command.caster;
+package com.mechjacktv.mechjackbot.command.shoutout;
 
 import com.mechjacktv.mechjackbot.GlobalCoolDown;
 import com.mechjacktv.mechjackbot.MessageEvent;
@@ -9,21 +9,21 @@ import com.mechjacktv.mechjackbot.command.CommandUtils;
 import javax.inject.Inject;
 
 @SuppressWarnings("CanBeFinal")
-public class CasterCommand extends AbstractCommand {
+public class AddCasterCommand extends AbstractCommand {
 
-  private final CasterService casterService;
   private final CommandUtils commandUtils;
+  private final ShoutOutService casterService;
 
   @Inject
-  public CasterCommand(final CasterService casterService, final CommandUtils commandUtils) {
-    super("!caster", commandUtils);
+  public AddCasterCommand(final ShoutOutService casterService, final CommandUtils commandUtils) {
+    super("!addcaster", commandUtils);
     this.casterService = casterService;
     this.commandUtils = commandUtils;
   }
 
   @Override
   public final String getDescription() {
-    return "Shout out a caster! Add the caster to the caster list.";
+    return "Adds a caster to the caster list.";
   }
 
   @Override
@@ -36,11 +36,11 @@ public class CasterCommand extends AbstractCommand {
     if (messageParts.length == 2) {
       final String casterName = this.commandUtils.sanitizeViewerName(messageParts[1]);
 
-      this.casterService.sendCasterShoutOut(messageEvent, casterName);
+      this.casterService.setCaster(casterName, 0);
+      messageEvent.sendResponse(String.format("Added @%s to casters list", casterName));
     } else {
       this.commandUtils.sendUsage(messageEvent, String.format("%s <casterName>", this.getTrigger()));
     }
-
   }
 
 }
