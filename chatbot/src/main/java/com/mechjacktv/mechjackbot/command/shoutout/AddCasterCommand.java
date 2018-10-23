@@ -12,12 +12,12 @@ import javax.inject.Inject;
 public class AddCasterCommand extends AbstractCommand {
 
   private final CommandUtils commandUtils;
-  private final ShoutOutService casterService;
+  private final ShoutOutService shoutOutService;
 
   @Inject
-  public AddCasterCommand(final ShoutOutService casterService, final CommandUtils commandUtils) {
+  public AddCasterCommand(final ShoutOutService shoutOutService, final CommandUtils commandUtils) {
     super("!addcaster", commandUtils);
-    this.casterService = casterService;
+    this.shoutOutService = shoutOutService;
     this.commandUtils = commandUtils;
   }
 
@@ -36,7 +36,7 @@ public class AddCasterCommand extends AbstractCommand {
     if (messageParts.length == 2) {
       final String casterName = this.commandUtils.sanitizeViewerName(messageParts[1]);
 
-      this.casterService.setCaster(casterName, 0);
+      this.shoutOutService.setCaster(casterName, 0);
       messageEvent.sendResponse(String.format("Added @%s to casters list", casterName));
     } else {
       this.commandUtils.sendUsage(messageEvent, String.format("%s <casterName>", this.getTrigger()));

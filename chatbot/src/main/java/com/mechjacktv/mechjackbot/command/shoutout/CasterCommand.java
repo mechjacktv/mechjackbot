@@ -11,13 +11,13 @@ import javax.inject.Inject;
 @SuppressWarnings("CanBeFinal")
 public class CasterCommand extends AbstractCommand {
 
-  private final ShoutOutService casterService;
+  private final ShoutOutService shoutOutService;
   private final CommandUtils commandUtils;
 
   @Inject
-  public CasterCommand(final ShoutOutService casterService, final CommandUtils commandUtils) {
+  public CasterCommand(final ShoutOutService shoutOutService, final CommandUtils commandUtils) {
     super("!caster", commandUtils);
-    this.casterService = casterService;
+    this.shoutOutService = shoutOutService;
     this.commandUtils = commandUtils;
   }
 
@@ -36,7 +36,7 @@ public class CasterCommand extends AbstractCommand {
     if (messageParts.length == 2) {
       final String casterName = this.commandUtils.sanitizeViewerName(messageParts[1]);
 
-      this.casterService.sendCasterShoutOut(messageEvent, casterName);
+      this.shoutOutService.sendCasterShoutOut(messageEvent, casterName);
     } else {
       this.commandUtils.sendUsage(messageEvent, String.format("%s <casterName>", this.getTrigger()));
     }

@@ -9,13 +9,13 @@ import javax.inject.Inject;
 @SuppressWarnings("CanBeFinal")
 public class CasterListenerCommand extends AbstractCommand {
 
-  private final ShoutOutService casterService;
+  private final ShoutOutService shoutOutService;
   private final CommandUtils commandUtils;
 
   @Inject
-  public CasterListenerCommand(final ShoutOutService casterService, final CommandUtils commandUtils) {
+  public CasterListenerCommand(final ShoutOutService shoutOutService, final CommandUtils commandUtils) {
     super("!casterListener", commandUtils);
-    this.casterService = casterService;
+    this.shoutOutService = shoutOutService;
     this.commandUtils = commandUtils;
   }
 
@@ -28,14 +28,14 @@ public class CasterListenerCommand extends AbstractCommand {
   public void handleMessage(MessageEvent messageEvent) {
     final String casterName = this.commandUtils.getSanitizedViewerName(messageEvent);
 
-    this.casterService.sendCasterShoutOut(messageEvent, casterName);
+    this.shoutOutService.sendCasterShoutOut(messageEvent, casterName);
   }
 
   @Override
   public final boolean isHandledMessage(MessageEvent messageEvent) {
     final String viewerName = this.commandUtils.getSanitizedViewerName(messageEvent);
 
-    return this.casterService.isCasterDue(viewerName);
+    return this.shoutOutService.isCasterDue(viewerName);
   }
 
   @Override

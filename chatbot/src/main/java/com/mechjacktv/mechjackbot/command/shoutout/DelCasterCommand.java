@@ -12,12 +12,12 @@ import javax.inject.Inject;
 public class DelCasterCommand extends AbstractCommand {
 
   private final CommandUtils commandUtils;
-  private final ShoutOutService casterService;
+  private final ShoutOutService shoutOutService;
 
   @Inject
-  public DelCasterCommand(final ShoutOutService casterService, final CommandUtils commandUtils) {
+  public DelCasterCommand(final ShoutOutService shoutOutService, final CommandUtils commandUtils) {
     super("!delcaster", commandUtils);
-    this.casterService = casterService;
+    this.shoutOutService = shoutOutService;
     this.commandUtils = commandUtils;
   }
 
@@ -36,7 +36,7 @@ public class DelCasterCommand extends AbstractCommand {
     if (messageParts.length == 2) {
       final String casterName = this.commandUtils.sanitizeViewerName(messageParts[1]);
 
-      this.casterService.removeCaster(casterName);
+      this.shoutOutService.removeCaster(casterName);
       messageEvent.sendResponse(String.format("Removed @%s from casters list", casterName));
     } else {
       this.commandUtils.sendUsage(messageEvent, String.format("%s <casterName>", this.getTrigger()));
