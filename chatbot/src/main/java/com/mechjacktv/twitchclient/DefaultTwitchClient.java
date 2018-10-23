@@ -50,18 +50,4 @@ final class DefaultTwitchClient implements TwitchClient {
     return this.usersFollowsEndpoint.getUserFollowsFromId(fromId, cursor);
   }
 
-  @Override
-  public TwitchClientMessage.UserFollows getUserFollowsToId(final String toId) {
-    return this.usersFollowsEndpoint.getUserFollowsToId(toId);
-  }
-
-  @Override
-  public TwitchClientMessage.UserFollows getUserFollowsToId(final String toId, final String cursor) {
-    return this.usersFollowsEndpoint.getUserFollowsToId(toId, cursor);
-  }
-
-  @Override
-  public boolean isUserFollowing(final String fromId, final String toId) {
-    return this.usersFollowsEndpoint.isUserFollowing(fromId, toId);
-  }
 }

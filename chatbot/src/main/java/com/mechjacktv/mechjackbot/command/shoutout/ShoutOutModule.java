@@ -4,10 +4,10 @@ import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
 import com.mechjacktv.mechjackbot.Command;
 
-public class ShoutOutModule extends AbstractModule {
+public final class ShoutOutModule extends AbstractModule {
 
   @Override
-  protected void configure() {
+  protected final void configure() {
     this.bind(ShoutOutDataStore.class).asEagerSingleton();
     this.bind(ShoutOutService.class).asEagerSingleton();
 

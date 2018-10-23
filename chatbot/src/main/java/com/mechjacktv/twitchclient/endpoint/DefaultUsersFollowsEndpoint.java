@@ -39,30 +39,6 @@ public final class DefaultUsersFollowsEndpoint implements UsersFollowsEndpoint {
     return this.getUsersFollows(String.format("from_id=%s&after=%s", fromId, cursor));
   }
 
-  @Override
-  public final UserFollows getUserFollowsToId(final String toId) {
-    Objects.requireNonNull(toId, "toId **MUST** not be `null.");
-    return this.getUsersFollows(String.format("to_id=%s", toId));
-  }
-
-  @Override
-  public final UserFollows getUserFollowsToId(final String toId, final String cursor) {
-    Objects.requireNonNull(toId, "toId **MUST** not be `null.");
-    Objects.requireNonNull(cursor, "cursor **MUST** not be `null.");
-    return this.getUsersFollows(String.format("to_id=%s&after=%s", toId, cursor));
-  }
-
-  @Override
-  public final boolean isUserFollowing(final String fromId, final String toId) {
-    Objects.requireNonNull(fromId, "fromId **MUST** not be `null.");
-    Objects.requireNonNull(toId, "toId **MUST** not be `null.");
-
-    final UserFollows userFollows =
-        this.getUsersFollows(String.format("from_id=%s&to_id=%s", fromId, toId));
-
-    return userFollows.getUserFollowList().size() > 0;
-  }
-
   private UserFollows getUsersFollows(final String queryString) {
     final String url = String.format("users/follows/?first=100&%s", queryString);
     final Builder userFollowsBuilder = TwitchClientMessage.UserFollows.newBuilder();

@@ -6,14 +6,6 @@ class TwitchClientException extends RuntimeException {
     super(null, null);
   }
 
-  public TwitchClientException(final String message) {
-    super(message, null);
-  }
-
-  public TwitchClientException(final Throwable cause) {
-    super(cause.getMessage(), cause);
-  }
-
   TwitchClientException(final String message, final Throwable cause) {
     super(message, cause);
   }

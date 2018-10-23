@@ -11,15 +11,6 @@ public final class DefaultExecutionUtils implements ExecutionUtils {
 
   private static final Logger log = LoggerFactory.getLogger(DefaultExecutionUtils.class);
 
-  /**
-   * @deprecated Not deprecated, but discouraged. Use alternative.
-   */
-  @Override
-  @Deprecated
-  public void softenException(RunnableWithException runnable) {
-    this.softenException(runnable, SoftenedException.class);
-  }
-
   @Override
   public final void softenException(RunnableWithException runnable, Class<? extends RuntimeException> exceptionClass) {
     this.softenException(() -> {

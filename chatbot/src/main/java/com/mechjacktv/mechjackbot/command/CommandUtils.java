@@ -30,7 +30,7 @@ public final class CommandUtils {
     this.timeUtils = timeUtils;
   }
 
-  public final String sanitizeViewerName(final String username) {
+  private String sanitizeViewerName(final String username) {
     String sanitizedUsername = username.trim().toLowerCase();
 
     if (sanitizedUsername.startsWith("@")) {

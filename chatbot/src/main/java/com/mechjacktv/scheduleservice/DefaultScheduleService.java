@@ -4,7 +4,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class DefaultScheduleService implements ScheduleService {
+public final class DefaultScheduleService implements ScheduleService {
 
   private final ScheduledExecutorService scheduledExecutorService;
 

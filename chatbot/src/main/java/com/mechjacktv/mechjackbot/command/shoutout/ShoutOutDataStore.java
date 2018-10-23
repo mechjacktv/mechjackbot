@@ -21,7 +21,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-public class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Caster> {
+public final class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Caster> {
 
   private static final Logger log = LoggerFactory.getLogger(ShoutOutDataStore.class);
   private static final String KEY_VALUE_STORE_NAME = ShoutOutDataStore.class.getCanonicalName();
@@ -95,14 +95,14 @@ public class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Caster> {
     return userFollowsList;
   }
 
-  ShoutOutServiceMessage.CasterKey createCasterKey(final String casterName) {
+  final ShoutOutServiceMessage.CasterKey createCasterKey(final String casterName) {
     final ShoutOutServiceMessage.CasterKey.Builder builder = ShoutOutServiceMessage.CasterKey.newBuilder();
 
     return builder.setName(casterName)
         .build();
   }
 
-  ShoutOutServiceMessage.Caster createCaster(final String casterName, final Long lastShoutOut) {
+  final ShoutOutServiceMessage.Caster createCaster(final String casterName, final Long lastShoutOut) {
     final ShoutOutServiceMessage.Caster.Builder builder = ShoutOutServiceMessage.Caster.newBuilder();
 
     return builder.setName(casterName)
