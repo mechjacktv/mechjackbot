@@ -6,6 +6,7 @@ import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.command.caster.ShoutOutServiceMessage;
 import com.mechjacktv.mechjackbot.command.caster.ShoutOutServiceMessage.Caster;
 import com.mechjacktv.mechjackbot.command.caster.ShoutOutServiceMessage.CasterKey;
+import com.mechjacktv.scheduleservice.ScheduleService;
 import com.mechjacktv.twitchclient.TwitchClient;
 import com.mechjacktv.twitchclient.TwitchClientMessage;
 import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollow;
@@ -18,6 +19,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Caster> {
 
@@ -28,9 +30,10 @@ public class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Caster> {
   ShoutOutDataStore(final ChatBotConfiguration chatBotConfiguration,
                     final KeyValueStoreFactory keyValueStoreFactory,
                     final ProtobufUtils protobufUtils,
+                    final ScheduleService scheduleService,
                     final TwitchClient twitchClient) {
     super(keyValueStoreFactory.createOrOpenKeyValueStore(KEY_VALUE_STORE_NAME), protobufUtils);
-    this.updateCasters(chatBotConfiguration, twitchClient);
+    scheduleService.schedule(() -> this.updateCasters(chatBotConfiguration, twitchClient), 10, TimeUnit.MINUTES);
   }
 
   private void updateCasters(final ChatBotConfiguration chatBotConfiguration,
