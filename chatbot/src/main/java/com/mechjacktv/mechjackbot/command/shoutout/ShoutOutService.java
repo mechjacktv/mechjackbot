@@ -30,7 +30,7 @@ public final class ShoutOutService {
                          final KeyValueStoreFactory keyValueStoreFactory,
                          final ProtobufUtils protobufUtils,
                          final TwitchClient twitchClient) {
-    final KeyValueStore casters = keyValueStoreFactory.createOrOpenKeyValueStore("casters");
+    final KeyValueStore casters = keyValueStoreFactory.createOrOpenKeyValueStore("shout_out_service");
     this.protobufUtils = protobufUtils;
     this.casters = this.updatedCasters(chatBotConfiguration, twitchClient, casters);
   }
