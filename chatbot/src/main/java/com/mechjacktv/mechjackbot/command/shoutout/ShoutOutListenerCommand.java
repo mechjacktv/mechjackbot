@@ -7,13 +7,13 @@ import com.mechjacktv.mechjackbot.command.CommandUtils;
 import javax.inject.Inject;
 
 @SuppressWarnings("CanBeFinal")
-public class CasterListenerCommand extends AbstractCommand {
+public class ShoutOutListenerCommand extends AbstractCommand {
 
   private final ShoutOutService shoutOutService;
   private final CommandUtils commandUtils;
 
   @Inject
-  public CasterListenerCommand(final ShoutOutService shoutOutService, final CommandUtils commandUtils) {
+  public ShoutOutListenerCommand(final ShoutOutService shoutOutService, final CommandUtils commandUtils) {
     super("!casterListener", commandUtils);
     this.shoutOutService = shoutOutService;
     this.commandUtils = commandUtils;
@@ -26,21 +26,15 @@ public class CasterListenerCommand extends AbstractCommand {
 
   @Override
   public void handleMessage(MessageEvent messageEvent) {
-    final String casterName = this.commandUtils.getSanitizedViewerName(messageEvent);
-
-    this.shoutOutService.sendCasterShoutOut(messageEvent, casterName);
+    this.shoutOutService.sendCasterShoutOut(messageEvent, this.commandUtils.getSanitizedViewerName(messageEvent));
   }
 
   @Override
   public final boolean isHandledMessage(MessageEvent messageEvent) {
-    final String viewerName = this.commandUtils.getSanitizedViewerName(messageEvent);
-
-    return this.shoutOutService.isCasterDue(viewerName);
+    return this.shoutOutService.isCasterDue(this.commandUtils.getSanitizedViewerName(messageEvent));
   }
 
   @Override
-  public boolean isTriggerable() {
-    return false; // this is a passive command and can't be called
-  }
+  public boolean isTriggerable() { return false; }
 
 }
