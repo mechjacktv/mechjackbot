@@ -7,10 +7,10 @@ import org.pircbotx.hooks.Listener;
 
 public final class PircBotXChatBotModule extends AbstractModule {
 
-    @Override
-    protected void configure() {
-        bind(ChatBot.class).to(PircBotXChatBot.class).asEagerSingleton();
-        bind(Listener.class).to(PircBotXListener.class).asEagerSingleton();
-        bind(MessageEventHandler.class).to(PircBotXMessageEventHandler.class).asEagerSingleton();
-    }
+  @Override
+  protected void configure() {
+    bind(ChatBot.class).to(PircBotXChatBot.class).asEagerSingleton();
+    bind(Listener.class).to(PircBotXListener.class).asEagerSingleton();
+    bind(MessageEventHandler.class).to(PircBotXMessageEventHandler.class).asEagerSingleton();
+  }
 }

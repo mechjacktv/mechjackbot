@@ -2,6 +2,6 @@ package com.mechjacktv.mechjackbot;
 
 public interface KeyValueStoreFactory {
 
-    KeyValueStore createOrOpenKeyValueStore(String name);
+  KeyValueStore createOrOpenKeyValueStore(String name);
 
 }

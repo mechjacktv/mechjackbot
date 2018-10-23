@@ -5,14 +5,14 @@ import java.util.Optional;
 
 public interface AppConfiguration {
 
-    Optional<String> get(String key);
+  Optional<String> get(String key);
 
-    String get(String key, String defaultValue);
+  String get(String key, String defaultValue);
 
-    Collection<String> getKeys();
+  Collection<String> getKeys();
 
-    void remove(String key);
+  void remove(String key);
 
-    void set(String key, String value);
+  void set(String key, String value);
 
 }

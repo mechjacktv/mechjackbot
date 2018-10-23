@@ -8,26 +8,26 @@ import com.mechjacktv.mechjackbot.command.interceptor.DefaultCommandInterceptors
 
 public final class DefaultCommandsModule extends AbstractModule {
 
-    @Override
-    protected final void configure() {
-        install(new DefaultCommandInterceptorsModule());
+  @Override
+  protected final void configure() {
+    install(new DefaultCommandInterceptorsModule());
 
-        bind(CommandUtils.class).asEagerSingleton();
-        bind(CasterService.class).asEagerSingleton();
+    bind(CommandUtils.class).asEagerSingleton();
+    bind(CasterService.class).asEagerSingleton();
 
-        // TODO automate
-        Multibinder.newSetBinder(binder(), Command.class).addBinding().to(AddCasterCommand.class).asEagerSingleton();
-        Multibinder.newSetBinder(binder(), Command.class).addBinding().to(CasterCommand.class).asEagerSingleton();
-        Multibinder.newSetBinder(binder(), Command.class).addBinding().to(CasterListenerCommand.class).asEagerSingleton();
-        Multibinder.newSetBinder(binder(), Command.class).addBinding().to(CommandsCommand.class).asEagerSingleton();
-        Multibinder.newSetBinder(binder(), Command.class).addBinding().to(DelCasterCommand.class).asEagerSingleton();
-        Multibinder.newSetBinder(binder(), Command.class).addBinding().to(DelConfigCommand.class).asEagerSingleton();
-        Multibinder.newSetBinder(binder(), Command.class).addBinding().to(HelpCommand.class).asEagerSingleton();
-        Multibinder.newSetBinder(binder(), Command.class).addBinding().to(InspectConfigCommand.class).asEagerSingleton();
-        Multibinder.newSetBinder(binder(), Command.class).addBinding().to(PingCommand.class).asEagerSingleton();
-        Multibinder.newSetBinder(binder(), Command.class).addBinding().to(SetConfigCommand.class).asEagerSingleton();
-        Multibinder.newSetBinder(binder(), Command.class).addBinding().to(TestCommand.class).asEagerSingleton();
-        Multibinder.newSetBinder(binder(), Command.class).addBinding().to(QuitCommand.class).asEagerSingleton();
-    }
+    // TODO automate
+    Multibinder.newSetBinder(binder(), Command.class).addBinding().to(AddCasterCommand.class).asEagerSingleton();
+    Multibinder.newSetBinder(binder(), Command.class).addBinding().to(CasterCommand.class).asEagerSingleton();
+    Multibinder.newSetBinder(binder(), Command.class).addBinding().to(CasterListenerCommand.class).asEagerSingleton();
+    Multibinder.newSetBinder(binder(), Command.class).addBinding().to(CommandsCommand.class).asEagerSingleton();
+    Multibinder.newSetBinder(binder(), Command.class).addBinding().to(DelCasterCommand.class).asEagerSingleton();
+    Multibinder.newSetBinder(binder(), Command.class).addBinding().to(DelConfigCommand.class).asEagerSingleton();
+    Multibinder.newSetBinder(binder(), Command.class).addBinding().to(HelpCommand.class).asEagerSingleton();
+    Multibinder.newSetBinder(binder(), Command.class).addBinding().to(InspectConfigCommand.class).asEagerSingleton();
+    Multibinder.newSetBinder(binder(), Command.class).addBinding().to(PingCommand.class).asEagerSingleton();
+    Multibinder.newSetBinder(binder(), Command.class).addBinding().to(SetConfigCommand.class).asEagerSingleton();
+    Multibinder.newSetBinder(binder(), Command.class).addBinding().to(TestCommand.class).asEagerSingleton();
+    Multibinder.newSetBinder(binder(), Command.class).addBinding().to(QuitCommand.class).asEagerSingleton();
+  }
 
 }

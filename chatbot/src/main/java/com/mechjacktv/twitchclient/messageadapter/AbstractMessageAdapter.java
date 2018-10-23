@@ -11,21 +11,21 @@ import java.io.IOException;
 
 abstract class AbstractMessageAdapter<M extends Message> extends TypeAdapter<M> {
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public  M read(final JsonReader jsonReader) throws IOException {
-        final Message.Builder builder = getBuilder();
-        final JsonParser jsonParser = new JsonParser();
+  @Override
+  public final void write(final JsonWriter jsonWriter, final Message message) throws IOException {
+    jsonWriter.jsonValue(JsonFormat.printer().print(message));
+  }
 
-        JsonFormat.parser().merge(jsonParser.parse(jsonReader).toString(), builder);
-        return (M) builder.build();
-    }
+  @Override
+  @SuppressWarnings("unchecked")
+  public final M read(final JsonReader jsonReader) throws IOException {
+    final Message.Builder builder = getBuilder();
+    final JsonParser jsonParser = new JsonParser();
 
-    abstract Message.Builder getBuilder();
+    JsonFormat.parser().merge(jsonParser.parse(jsonReader).toString(), builder);
+    return (M) builder.build();
+  }
 
-    @Override
-    public final void write(final JsonWriter jsonWriter, final Message message) throws IOException {
-        jsonWriter.jsonValue(JsonFormat.printer().print(message));
-    }
+  abstract Message.Builder getBuilder();
 
 }

@@ -8,32 +8,32 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 
 public final class PircBotXMessageEvent implements MessageEvent {
 
-    private final ExecutionUtils executionUtils;
-    private final GenericMessageEvent genericMessageEvent;
+  private final ExecutionUtils executionUtils;
+  private final GenericMessageEvent genericMessageEvent;
 
-    PircBotXMessageEvent(final ExecutionUtils executionUtils, final GenericMessageEvent genericMessageEvent) {
-        this.executionUtils = executionUtils;
-        this.genericMessageEvent = genericMessageEvent;
-    }
+  PircBotXMessageEvent(final ExecutionUtils executionUtils, final GenericMessageEvent genericMessageEvent) {
+    this.executionUtils = executionUtils;
+    this.genericMessageEvent = genericMessageEvent;
+  }
 
-    @Override
-    public ChatBot getChatBot() {
-        return new PircBotXChatBot(executionUtils, genericMessageEvent.getBot());
-    }
+  @Override
+  public ChatBot getChatBot() {
+    return new PircBotXChatBot(executionUtils, genericMessageEvent.getBot());
+  }
 
-    @Override
-    public ChatUser getChatUser() {
-        return new PircBotXChatUser(genericMessageEvent.getUser());
-    }
+  @Override
+  public ChatUser getChatUser() {
+    return new PircBotXChatUser(genericMessageEvent.getUser());
+  }
 
-    @Override
-    public String getMessage() {
-        return this.genericMessageEvent.getMessage();
-    }
+  @Override
+  public String getMessage() {
+    return this.genericMessageEvent.getMessage();
+  }
 
-    @Override
-    public void sendResponse(String message) {
-        this.genericMessageEvent.respondWith(String.format("/me MrDestructoid <( %s )", message));
-    }
+  @Override
+  public void sendResponse(String message) {
+    this.genericMessageEvent.respondWith(String.format("/me MrDestructoid <( %s )", message));
+  }
 
 }

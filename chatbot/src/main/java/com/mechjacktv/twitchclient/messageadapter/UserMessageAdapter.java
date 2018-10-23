@@ -5,9 +5,9 @@ import com.mechjacktv.twitchclient.TwitchClientMessage;
 
 final class UserMessageAdapter extends AbstractMessageAdapter<TwitchClientMessage.User> {
 
-    @Override
-    Message.Builder getBuilder() {
-        return TwitchClientMessage.User.newBuilder();
-    }
+  @Override
+  Message.Builder getBuilder() {
+    return TwitchClientMessage.User.newBuilder();
+  }
 
 }

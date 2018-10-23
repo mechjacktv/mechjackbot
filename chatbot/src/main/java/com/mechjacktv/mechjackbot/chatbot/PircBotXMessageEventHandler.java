@@ -8,34 +8,34 @@ import java.util.*;
 
 public final class PircBotXMessageEventHandler implements MessageEventHandler {
 
-    private final Map<String, Command> commands;
+  private final Map<String, Command> commands;
 
-    public PircBotXMessageEventHandler() {
-        this.commands = new HashMap<>();
-    }
+  public PircBotXMessageEventHandler() {
+    this.commands = new HashMap<>();
+  }
 
-    @Override
-    public final Collection<Command> getCommands() {
-        return Collections.unmodifiableCollection(this.commands.values());
-    }
+  @Override
+  public final Collection<Command> getCommands() {
+    return Collections.unmodifiableCollection(this.commands.values());
+  }
 
-    @Override
-    public final Optional<Command> getCommand(final String commandTrigger) {
-        return Optional.ofNullable(this.commands.get(commandTrigger));
-    }
+  @Override
+  public final Optional<Command> getCommand(final String commandTrigger) {
+    return Optional.ofNullable(this.commands.get(commandTrigger));
+  }
 
-    @Override
-    public final void addCommand(Command command) {
-        this.commands.put(command.getTrigger(), command);
-    }
+  @Override
+  public final void addCommand(Command command) {
+    this.commands.put(command.getTrigger(), command);
+  }
 
-    @Override
-    public final void handleMessage(final MessageEvent messageEvent) {
-        for(final Command command : getCommands()) {
-            if(command.isHandledMessage(messageEvent)) {
-                command.handleMessage(messageEvent);
-            }
-        }
+  @Override
+  public final void handleMessage(final MessageEvent messageEvent) {
+    for (final Command command : getCommands()) {
+      if (command.isHandledMessage(messageEvent)) {
+        command.handleMessage(messageEvent);
+      }
     }
+  }
 
 }

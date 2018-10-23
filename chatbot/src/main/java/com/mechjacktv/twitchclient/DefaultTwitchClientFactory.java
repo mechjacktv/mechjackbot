@@ -7,20 +7,20 @@ import javax.inject.Inject;
 
 final class DefaultTwitchClientFactory implements TwitchClientFactory {
 
-    private final ExecutionUtils executionUtils;
-    private final Gson gson;
+  private final ExecutionUtils executionUtils;
+  private final Gson gson;
 
-    @Inject
-    DefaultTwitchClientFactory(final ExecutionUtils executionUtils, final Gson gson) {
-        this.executionUtils = executionUtils;
-        this.gson = gson;
-    }
+  @Inject
+  DefaultTwitchClientFactory(final ExecutionUtils executionUtils, final Gson gson) {
+    this.executionUtils = executionUtils;
+    this.gson = gson;
+  }
 
-    @Override
-    public TwitchClient createTwitchClient(String clientId) {
-        final TwitchClientUtils twitchClientUtils = new TwitchClientUtils(clientId, this.executionUtils);
+  @Override
+  public TwitchClient createTwitchClient(String clientId) {
+    final TwitchClientUtils twitchClientUtils = new TwitchClientUtils(clientId, this.executionUtils);
 
-        return new DefaultTwitchClient(this.gson, twitchClientUtils);
-    }
+    return new DefaultTwitchClient(this.gson, twitchClientUtils);
+  }
 
 }

@@ -4,6 +4,6 @@ import com.google.gson.GsonBuilder;
 
 public interface TypeAdapterRegistrar {
 
-    GsonBuilder registerTypeAdapters(GsonBuilder gsonBuilder);
+  void registerTypeAdapters(GsonBuilder gsonBuilder);
 
 }

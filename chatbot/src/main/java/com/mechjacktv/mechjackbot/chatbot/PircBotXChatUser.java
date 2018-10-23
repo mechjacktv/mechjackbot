@@ -5,15 +5,15 @@ import org.pircbotx.User;
 
 final class PircBotXChatUser implements ChatUser {
 
-    private final User user;
+  private final User user;
 
-    PircBotXChatUser(final User user) {
-        this.user = user;
-    }
+  PircBotXChatUser(final User user) {
+    this.user = user;
+  }
 
-    @Override
-    public String getUsername() {
-        return this.user.getNick();
-    }
+  @Override
+  public String getUsername() {
+    return this.user.getNick();
+  }
 
 }

@@ -5,9 +5,9 @@ import com.mechjacktv.mechjackbot.KeyValueStoreFactory;
 
 public final class MapDbKeyValueStoreModule extends AbstractModule {
 
-    @Override
-    protected void configure() {
-        bind(KeyValueStoreFactory.class).to(MapDbKeyValueStoreFactory.class).asEagerSingleton();
-    }
+  @Override
+  protected void configure() {
+    bind(KeyValueStoreFactory.class).to(MapDbKeyValueStoreFactory.class).asEagerSingleton();
+  }
 
 }

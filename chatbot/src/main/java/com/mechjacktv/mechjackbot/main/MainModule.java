@@ -17,22 +17,22 @@ import javax.inject.Singleton;
 
 final class MainModule extends AbstractModule {
 
-    @Override
-    protected final void configure() {
-        install(new DefaultCommandsModule());
-        install(new DefaultConfigurationModule());
-        install(new DefaultTwitchClientModule());
-        install(new DefaultUtilsModule());
-        install(new GsonModule());
-        install(new MapDbKeyValueStoreModule());
-        install(new PircBotXChatBotModule());
-    }
+  @Override
+  protected final void configure() {
+    install(new DefaultCommandsModule());
+    install(new DefaultConfigurationModule());
+    install(new DefaultTwitchClientModule());
+    install(new DefaultUtilsModule());
+    install(new GsonModule());
+    install(new MapDbKeyValueStoreModule());
+    install(new PircBotXChatBotModule());
+  }
 
-    @Provides
-    @Singleton
-    TwitchClient provideTwitchClient(final ChatBotConfiguration chatBotConfiguration,
-            final TwitchClientFactory twitchClientFactory) {
-        return twitchClientFactory.createTwitchClient(chatBotConfiguration.getTwitchClientId());
-    }
+  @Provides
+  @Singleton
+  TwitchClient provideTwitchClient(final ChatBotConfiguration chatBotConfiguration,
+                                   final TwitchClientFactory twitchClientFactory) {
+    return twitchClientFactory.createTwitchClient(chatBotConfiguration.getTwitchClientId());
+  }
 
 }

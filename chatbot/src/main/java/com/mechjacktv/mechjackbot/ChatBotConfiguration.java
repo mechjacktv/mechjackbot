@@ -2,14 +2,14 @@ package com.mechjacktv.mechjackbot;
 
 public interface ChatBotConfiguration {
 
-    String getDataLocation();
+  String getDataLocation();
 
-    String getTwitchChannel();
+  String getTwitchChannel();
 
-    String getTwitchClientId();
+  String getTwitchClientId();
 
-    String getTwitchPassword();
+  String getTwitchPassword();
 
-    String getTwitchUsername();
+  String getTwitchUsername();
 
 }

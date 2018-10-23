@@ -2,12 +2,12 @@ package com.mechjacktv.mechjackbot;
 
 public interface MessageEvent {
 
-    ChatBot getChatBot();
+  ChatBot getChatBot();
 
-    ChatUser getChatUser();
+  ChatUser getChatUser();
 
-    String getMessage();
+  String getMessage();
 
-    void sendResponse(String message);
+  void sendResponse(String message);
 
 }
