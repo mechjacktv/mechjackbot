@@ -23,7 +23,7 @@ final class TwitchClientUtils {
     }
 
     final void handleInvalidName(final String name) {
-        throw new InvalidResponseException(String.format("Name '%s' was found but not expected", name));
+        log.warn(String.format("Name '%s' was found but not expected", name));
     }
 
     final void handleResponse(final String serviceUrl, final ConsumerWithException<Reader> consumer) {

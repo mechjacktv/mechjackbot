@@ -5,18 +5,16 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-final class DefaultGetUsersEndpoint implements GetUsersEndpoint {
+final class DefaultUsersEndpoint implements UsersEndpoint {
 
     private final Gson gson;
     private final TwitchClientUtils twitchClientUtils;
     private final TypeAdapter<TwitchClientMessage.User> userTypeAdapter;
 
-    DefaultGetUsersEndpoint(final Gson gson, final TwitchClientUtils twitchClientUtils) {
+    DefaultUsersEndpoint(final Gson gson, final TwitchClientUtils twitchClientUtils) {
         this.gson = gson;
         this.twitchClientUtils = twitchClientUtils;
         this.userTypeAdapter = this.gson.getAdapter(TwitchClientMessage.User.class);

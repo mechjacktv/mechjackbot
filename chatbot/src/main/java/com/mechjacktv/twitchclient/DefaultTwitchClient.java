@@ -10,10 +10,12 @@ import java.util.Set;
 
 final class DefaultTwitchClient implements TwitchClient {
 
-    private final GetUsersEndpoint getUsersEndpoint;
+    private final UsersEndpoint usersEndpoint;
+    private final UsersFollowsEndpoint usersFollowsEndpoint;
 
     DefaultTwitchClient(final Gson gson, final TwitchClientUtils twitchClientUtils) {
-        this.getUsersEndpoint = new DefaultGetUsersEndpoint(gson, twitchClientUtils);
+        this.usersEndpoint = new DefaultUsersEndpoint(gson, twitchClientUtils);
+        this.usersFollowsEndpoint = new DefaultUsersFollowsEndpoint(gson, twitchClientUtils);
     }
 
 
@@ -32,8 +34,32 @@ final class DefaultTwitchClient implements TwitchClient {
     }
 
     @Override
-    public TwitchClientMessage.Users getUsers(Set<String> logins, Set<String> ids) {
-        return this.getUsersEndpoint.getUsers(logins, ids);
+    public TwitchClientMessage.Users getUsers(final Set<String> logins, final Set<String> ids) {
+        return this.usersEndpoint.getUsers(logins, ids);
     }
 
+    @Override
+    public TwitchClientMessage.UserFollows getUserFollowsFromId(final String fromId) {
+        return this.usersFollowsEndpoint.getUserFollowsFromId(fromId);
+    }
+
+    @Override
+    public TwitchClientMessage.UserFollows getUserFollowsFromId(final String fromId, final String cursor) {
+        return this.usersFollowsEndpoint.getUserFollowsFromId(fromId, cursor);
+    }
+
+    @Override
+    public TwitchClientMessage.UserFollows getUserFollowsToId(final String toId) {
+        return this.usersFollowsEndpoint.getUserFollowsToId(toId);
+    }
+
+    @Override
+    public TwitchClientMessage.UserFollows getUserFollowsToId(final String toId, final String cursor) {
+        return this.usersFollowsEndpoint.getUserFollowsToId(toId, cursor);
+    }
+
+    @Override
+    public boolean isUserFollowing(final String fromId, final String toId) {
+        return this.usersFollowsEndpoint.isUserFollowing(fromId, toId);
+    }
 }

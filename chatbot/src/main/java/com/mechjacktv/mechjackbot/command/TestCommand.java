@@ -4,7 +4,6 @@ import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.GlobalCoolDown;
 import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.mechjackbot.RestrictToOwner;
-import com.mechjacktv.twitchclient.GetUsersEndpoint;
 import com.mechjacktv.twitchclient.TwitchClient;
 import com.mechjacktv.twitchclient.TwitchClientMessage;
 
@@ -40,7 +39,19 @@ public class TestCommand extends AbstractCommand {
     public void handleMessage(final MessageEvent messageEvent) {
         final Optional<String> login = this.twitchClient.getUserId(this.channelName);
 
-        messageEvent.sendResponse(String.format("@%s's id is %s", this.channelName, login.orElse("missing")));
+        if(login.isPresent()) {
+            final String fromId = login.get();
+            final TwitchClientMessage.UserFollows userFollows = this.twitchClient.getUserFollowsFromId(fromId);
+            final StringBuilder builder = new StringBuilder("@%s is following: ");
+
+            for(final TwitchClientMessage.UserFollow userFollow: userFollows.getUserFollowList()) {
+                builder.append(userFollow.getToName());
+                builder.append(" ");
+            }
+            messageEvent.sendResponse(String.format(builder.toString(), this.channelName));
+        } else {
+            messageEvent.sendResponse(String.format("@%s's id is missing", this.channelName));
+        }
         messageEvent.getChatBot().stop();
     }
 
