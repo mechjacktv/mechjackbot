@@ -3,7 +3,6 @@ package com.mechjacktv.twitchclient.endpoint;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
-import com.mechjacktv.twitchclient.TwitchClientMessage;
 import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollow;
 import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollows;
 import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollows.Builder;

@@ -1,8 +1,8 @@
 package com.mechjacktv.mechjackbot.command.shoutout;
 
 import com.mechjacktv.mechjackbot.MessageEvent;
-import com.mechjacktv.mechjackbot.command.caster.ShoutOutServiceMessage.Caster;
-import com.mechjacktv.mechjackbot.command.caster.ShoutOutServiceMessage.CasterKey;
+import com.mechjacktv.mechjackbot.command.shoutout.ShoutOutServiceMessage.Caster;
+import com.mechjacktv.mechjackbot.command.shoutout.ShoutOutServiceMessage.CasterKey;
 
 import javax.inject.Inject;
 import java.util.Optional;

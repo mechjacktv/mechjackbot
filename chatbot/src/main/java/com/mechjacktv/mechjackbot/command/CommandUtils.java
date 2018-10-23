@@ -63,7 +63,7 @@ public final class CommandUtils {
     return this.isGloballyCooledDown(command.getTrigger());
   }
 
-  final boolean isGloballyCooledDown(final String commandTrigger) {
+  private boolean isGloballyCooledDown(final String commandTrigger) {
     final Long lastCalled = this.commandLastCalled.get(commandTrigger);
     final Integer commandCoolDownPeriodMs = this.getCommandCoolDownPeriodMs();
     final Long now = System.currentTimeMillis();

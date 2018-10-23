@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
-import com.mechjacktv.twitchclient.TwitchClientMessage;
 import com.mechjacktv.twitchclient.TwitchClientMessage.User;
 import com.mechjacktv.twitchclient.TwitchClientMessage.Users;
 import com.mechjacktv.twitchclient.TwitchClientUtils;

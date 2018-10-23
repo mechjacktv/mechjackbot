@@ -5,7 +5,6 @@ import com.mechjacktv.mechjackbot.GlobalCoolDown;
 import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.mechjackbot.RestrictToOwner;
 import com.mechjacktv.twitchclient.TwitchClient;
-import com.mechjacktv.twitchclient.TwitchClientMessage;
 import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollow;
 import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollows;
 
