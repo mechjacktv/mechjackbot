@@ -32,7 +32,7 @@ public class CasterListenerCommand extends AbstractCommand {
     }
 
     @Override
-    public boolean isListed() {
+    public boolean isTriggerable() {
         return false; // this is a passive command and can't be called
     }
 

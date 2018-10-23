@@ -1,41 +1,39 @@
 package com.mechjacktv.twitchclient;
 
-import com.mechjacktv.util.ExecutionUtils;
+import com.google.common.collect.Sets;
+import com.google.gson.Gson;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 final class DefaultTwitchClient implements TwitchClient {
 
-    private static final String TWITCH_API_URL = "https://api.twitch.tv/helix";
+    private final GetUsersEndpoint getUsersEndpoint;
 
-    private final String clientId;
-    private final ExecutionUtils executionUtils;
-
-    DefaultTwitchClient(final String clientId, final ExecutionUtils executionUtils) {
-        this.clientId = clientId;
-        this.executionUtils = executionUtils;
+    DefaultTwitchClient(final Gson gson, final TwitchClientUtils twitchClientUtils) {
+        this.getUsersEndpoint = new DefaultGetUsersEndpoint(gson, twitchClientUtils);
     }
 
-    private URLConnection createUrlConnection(final String serviceUrl) {
-        return executionUtils.softenException(() -> {
-            final URL url = new URL(String.format("%s/%s", TWITCH_API_URL, serviceUrl));
-            final URLConnection urlConnection = url.openConnection();
 
-            urlConnection.setRequestProperty("Client-ID", this.clientId);
-            return urlConnection;
-        }, TwitchClientConnectException.class);
+    @Override
+    public Optional<String> getUserId(final String login) {
+        Objects.requireNonNull(login, "Twitch login **MUST** not be `null`.");
+
+        final TwitchClientMessage.Users users = this.getUsers(Sets.newHashSet(login), Sets.newHashSet());
+        final List<TwitchClientMessage.User> userList = users.getUserList();
+
+        if (userList.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(userList.get(0).getId());
+        }
     }
 
     @Override
-    public String getUserId(final String userLogin) {
-        final InputStream inputStream = executionUtils.softenException(() -> {
-            final URLConnection urlConnection = createUrlConnection(String.format("users?login=%s", userLogin));
-            return urlConnection.getInputStream();
-        }, TwitchClientConnectException.class);
-
-        return null;
+    public TwitchClientMessage.Users getUsers(Set<String> logins, Set<String> ids) {
+        return this.getUsersEndpoint.getUsers(logins, ids);
     }
 
 }

@@ -1,8 +1,9 @@
 package com.mechjacktv.twitchclient;
 
-public interface TwitchClient {
+import java.util.Optional;
 
+public interface TwitchClient extends GetUsersEndpoint {
 
-    String getUserId(String mechjack);
+    Optional<String> getUserId(String login);
 
 }

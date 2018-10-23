@@ -1,5 +1,8 @@
 package com.mechjacktv.util;
 
+import com.mechjacktv.util.function.RunnableWithException;
+import com.mechjacktv.util.function.SupplierWithException;
+
 public interface ExecutionUtils {
 
     void softenException(RunnableWithException runnalble);

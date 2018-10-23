@@ -36,7 +36,7 @@ public class HelpCommand extends AbstractCommand {
             final String commandTrigger = messageParts[1];
             final Optional<Command> command = this.messageEventHandler.getCommand(commandTrigger);
 
-            if(command.isPresent() && command.get().isListed()) {
+            if(command.isPresent() && command.get().isTriggerable()) {
                 messageEvent.sendResponse(String.format("@%s, %s -> %s",
                         this.commandUtils.getSanitizedViewerName(messageEvent),
                         command.get().getTrigger(), command.get().getDescription()));

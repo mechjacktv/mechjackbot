@@ -14,6 +14,7 @@ public final class DefaultCommandsModule extends AbstractModule {
 
         bind(CommandUtils.class).asEagerSingleton();
         bind(CasterService.class).asEagerSingleton();
+
         // TODO automate
         Multibinder.newSetBinder(binder(), Command.class).addBinding().to(AddCasterCommand.class).asEagerSingleton();
         Multibinder.newSetBinder(binder(), Command.class).addBinding().to(CasterCommand.class).asEagerSingleton();

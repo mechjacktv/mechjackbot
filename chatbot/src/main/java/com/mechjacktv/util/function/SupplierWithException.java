@@ -1,4 +1,4 @@
-package com.mechjacktv.util;
+package com.mechjacktv.util.function;
 
 @FunctionalInterface
 public interface SupplierWithException<T> {

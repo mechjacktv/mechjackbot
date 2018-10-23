@@ -32,7 +32,7 @@ public class CommandsCommand extends AbstractCommand {
         final StringBuilder builder = new StringBuilder("Channel Commands:");
 
         for(final Command command : getSortedCommands()) {
-            if(command.isListed()) {
+            if(command.isTriggerable()) {
                 builder.append(String.format(" %s", command.getTrigger()));
             }
         }

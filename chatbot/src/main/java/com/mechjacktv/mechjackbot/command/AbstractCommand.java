@@ -29,7 +29,7 @@ public abstract class AbstractCommand implements Command {
     }
 
     @Override
-    public boolean isListed() {
+    public boolean isTriggerable() {
         return true; // List a command by default
     }
 

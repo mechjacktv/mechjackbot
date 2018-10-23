@@ -10,7 +10,7 @@ public interface Command {
 
     boolean isHandledMessage(MessageEvent messageEvent);
 
-    boolean isListed();
+    boolean isTriggerable();
 
     void handleMessage(MessageEvent messageEvent);
 
