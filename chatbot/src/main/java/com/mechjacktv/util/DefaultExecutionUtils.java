@@ -47,12 +47,12 @@ public class DefaultExecutionUtils implements ExecutionUtils {
             try {
                 try {
                     final Constructor<? extends RuntimeException> constructor = exceptionClass
-                            .getConstructor(String.class, Exception.class);
+                            .getConstructor(String.class, Throwable.class);
 
                     throw constructor.newInstance(e1.getMessage(), e1);
                 } catch (final NoSuchMethodException e2) {
                     final Constructor<? extends RuntimeException> constructor = exceptionClass
-                            .getConstructor(Exception.class);
+                            .getConstructor(Throwable.class);
 
                     throw constructor.newInstance(e1);
                 }

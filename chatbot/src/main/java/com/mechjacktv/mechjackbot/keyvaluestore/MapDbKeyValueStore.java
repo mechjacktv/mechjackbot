@@ -18,6 +18,11 @@ final class MapDbKeyValueStore implements KeyValueStore {
     }
 
     @Override
+    public boolean containsKey(final byte[] key) {
+        return concurrentMap.containsKey(key);
+    }
+
+    @Override
     public Optional<byte[]> get(byte[] key) {
         Objects.requireNonNull(key, "`key` MUST NOT be null");
 

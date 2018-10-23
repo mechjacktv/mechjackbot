@@ -30,7 +30,7 @@ final class DefaultUsersFollowsEndpoint implements UsersFollowsEndpoint {
     public final TwitchClientMessage.UserFollows getUserFollowsFromId(final String fromId, final String cursor) {
         Objects.requireNonNull(fromId, "fromId **MUST** not be `null.");
         Objects.requireNonNull(cursor, "cursor **MUST** not be `null.");
-        return getUsersFollows(String.format("from_id=%s&cursor=%s", fromId, cursor));
+        return getUsersFollows(String.format("from_id=%s&after=%s", fromId, cursor));
     }
 
     @Override
@@ -43,7 +43,7 @@ final class DefaultUsersFollowsEndpoint implements UsersFollowsEndpoint {
     public final TwitchClientMessage.UserFollows getUserFollowsToId(final String toId, final String cursor) {
         Objects.requireNonNull(toId, "toId **MUST** not be `null.");
         Objects.requireNonNull(cursor, "cursor **MUST** not be `null.");
-        return getUsersFollows(String.format("to_id=%s&cursor=%s", toId, cursor));
+        return getUsersFollows(String.format("to_id=%s&after=%s", toId, cursor));
     }
 
     @Override
@@ -58,7 +58,7 @@ final class DefaultUsersFollowsEndpoint implements UsersFollowsEndpoint {
     }
 
     private TwitchClientMessage.UserFollows getUsersFollows(final String queryString) {
-        final String url = String.format("users/follows/?%s", queryString);
+        final String url = String.format("users/follows/?first=100&%s", queryString);
         final TwitchClientMessage.UserFollows.Builder userFollowsBuilder = TwitchClientMessage.UserFollows.newBuilder();
 
         this.twitchClientUtils.handleResponse(url, (responseReader) -> {
