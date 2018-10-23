@@ -30,6 +30,7 @@ subprojects {
         testImplementation group: 'junit', name: 'junit', version: '4.+'
         testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
         testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.+'
+        testImplementation group: 'pl.pragmatists', name: 'JUnitParams', version: '1.+'
     }
 
 }
