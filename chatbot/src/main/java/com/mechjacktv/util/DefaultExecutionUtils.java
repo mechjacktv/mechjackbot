@@ -1,0 +1,67 @@
+package com.mechjacktv.util;
+
+import com.mechjacktv.util.function.RunnableWithException;
+import com.mechjacktv.util.function.SupplierWithException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Constructor;
+
+public final class DefaultExecutionUtils implements ExecutionUtils {
+
+  private static final Logger log = LoggerFactory.getLogger(DefaultExecutionUtils.class);
+
+  /**
+   * @deprecated Not deprecated, but discouraged. Use alternative.
+   */
+  @Override
+  @Deprecated
+  public void softenException(RunnableWithException runnable) {
+    this.softenException(runnable, SoftenedException.class);
+  }
+
+  @Override
+  public final void softenException(RunnableWithException runnable, Class<? extends RuntimeException> exceptionClass) {
+    this.softenException(() -> {
+      runnable.run();
+      return null;
+    }, exceptionClass);
+  }
+
+  /**
+   * @deprecated Not deprecated, but discouraged. Use alternative.
+   */
+  @Override
+  @Deprecated
+  public <T> T softenException(SupplierWithException<T> supplier) {
+    return this.softenException(supplier, SoftenedException.class);
+  }
+
+  @Override
+  public final <T> T softenException(SupplierWithException<T> supplier, Class<? extends RuntimeException> exceptionClass) {
+    try {
+      return supplier.get();
+    } catch (final RuntimeException e) {
+      throw e;
+    } catch (final Exception e1) {
+      try {
+        try {
+          final Constructor<? extends RuntimeException> constructor = exceptionClass
+              .getConstructor(String.class, Throwable.class);
+
+          throw constructor.newInstance(e1.getMessage(), e1);
+        } catch (final NoSuchMethodException e2) {
+          final Constructor<? extends RuntimeException> constructor = exceptionClass
+              .getConstructor(Throwable.class);
+
+          throw constructor.newInstance(e1);
+        }
+      } catch (final Exception e2) {
+        log.error(String.format("Failed to instantiate RuntimeException. exceptionClass=%s, ",
+            exceptionClass.getCanonicalName()), e2);
+        throw new SoftenedException(e1.getMessage(), e1);
+      }
+    }
+  }
+
+}

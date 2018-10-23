@@ -1,0 +1,113 @@
+package com.mechjacktv.twitchclient.endpoint;
+
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.mechjacktv.twitchclient.TwitchClientMessage;
+import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollow;
+import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollows;
+import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollows.Builder;
+import com.mechjacktv.twitchclient.TwitchClientUtils;
+import com.mechjacktv.twitchclient.UsersFollowsEndpoint;
+
+import java.util.Objects;
+
+public final class DefaultUsersFollowsEndpoint implements UsersFollowsEndpoint {
+
+  private final Gson gson;
+  private final TwitchClientUtils twitchClientUtils;
+  private final TypeAdapter<UserFollow> userTypeAdapter;
+
+  public DefaultUsersFollowsEndpoint(final Gson gson, final TwitchClientUtils twitchClientUtils) {
+    this.gson = gson;
+    this.twitchClientUtils = twitchClientUtils;
+    this.userTypeAdapter = this.gson.getAdapter(UserFollow.class);
+    Objects.requireNonNull(this.twitchClientUtils,
+        "TwitchClientMessage.UserFollow adapter **MUST** be registered.");
+  }
+
+  @Override
+  public final UserFollows getUserFollowsFromId(final String fromId) {
+    Objects.requireNonNull(fromId, "fromId **MUST** not be `null.");
+    return this.getUsersFollows(String.format("from_id=%s", fromId));
+  }
+
+  @Override
+  public final UserFollows getUserFollowsFromId(final String fromId, final String cursor) {
+    Objects.requireNonNull(fromId, "fromId **MUST** not be `null.");
+    Objects.requireNonNull(cursor, "cursor **MUST** not be `null.");
+    return this.getUsersFollows(String.format("from_id=%s&after=%s", fromId, cursor));
+  }
+
+  @Override
+  public final UserFollows getUserFollowsToId(final String toId) {
+    Objects.requireNonNull(toId, "toId **MUST** not be `null.");
+    return this.getUsersFollows(String.format("to_id=%s", toId));
+  }
+
+  @Override
+  public final UserFollows getUserFollowsToId(final String toId, final String cursor) {
+    Objects.requireNonNull(toId, "toId **MUST** not be `null.");
+    Objects.requireNonNull(cursor, "cursor **MUST** not be `null.");
+    return this.getUsersFollows(String.format("to_id=%s&after=%s", toId, cursor));
+  }
+
+  @Override
+  public final boolean isUserFollowing(final String fromId, final String toId) {
+    Objects.requireNonNull(fromId, "fromId **MUST** not be `null.");
+    Objects.requireNonNull(toId, "toId **MUST** not be `null.");
+
+    final UserFollows userFollows =
+        this.getUsersFollows(String.format("from_id=%s&to_id=%s", fromId, toId));
+
+    return userFollows.getUserFollowList().size() > 0;
+  }
+
+  private UserFollows getUsersFollows(final String queryString) {
+    final String url = String.format("users/follows/?first=100&%s", queryString);
+    final Builder userFollowsBuilder = TwitchClientMessage.UserFollows.newBuilder();
+
+    this.twitchClientUtils.handleResponse(url, (responseReader) -> {
+      final JsonReader jsonReader = this.gson.newJsonReader(responseReader);
+
+      jsonReader.beginObject();
+      while (jsonReader.hasNext()) {
+        final String name = jsonReader.nextName();
+
+        switch (name) {
+          case "total":
+            userFollowsBuilder.setTotalFollows(jsonReader.nextInt());
+            break;
+          case "pagination":
+            jsonReader.beginObject();
+            while (jsonReader.hasNext()) {
+              switch (jsonReader.nextName()) {
+                case "cursor":
+                  userFollowsBuilder.setCursor(jsonReader.nextString());
+                  break;
+                default:
+                  this.twitchClientUtils.handleInvalidName(name);
+                  break;
+              }
+            }
+            jsonReader.endObject();
+            break;
+          case "data":
+            jsonReader.beginArray();
+            while (jsonReader.hasNext()) {
+              userFollowsBuilder.addUserFollow(this.userTypeAdapter.read(jsonReader));
+            }
+            jsonReader.endArray();
+            break;
+          default:
+            this.twitchClientUtils.handleInvalidName(name);
+            break;
+        }
+      }
+      jsonReader.endObject();
+    });
+    return userFollowsBuilder.build();
+  }
+
+}
+

@@ -9,23 +9,23 @@ import javax.inject.Inject;
 @SuppressWarnings("CanBeFinal")
 public class QuitCommand extends AbstractCommand {
 
-    @Inject
-    public QuitCommand(final CommandUtils commandUtils) {
-        super("!quit", commandUtils);
-    }
+  @Inject
+  public QuitCommand(final CommandUtils commandUtils) {
+    super("!quit", commandUtils);
+  }
 
-    @Override
-    public final String getDescription() {
-        return "Shuts the chat bot down.";
-    }
+  @Override
+  public final String getDescription() {
+    return "Shuts the chat bot down.";
+  }
 
-    @Override
-    @RestrictToOwner
-    public void handleMessage(final MessageEvent messageEvent) {
-        final ChatBot chatBot = messageEvent.getChatBot();
+  @Override
+  @RestrictToOwner
+  public void handleMessage(final MessageEvent messageEvent) {
+    final ChatBot chatBot = messageEvent.getChatBot();
 
-        messageEvent.sendResponse("That's all for me, folks");
-        chatBot.stop();
-    }
+    messageEvent.sendResponse("That's all for me, folks");
+    chatBot.stop();
+  }
 
 }
