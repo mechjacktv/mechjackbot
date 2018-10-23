@@ -59,7 +59,7 @@ public final class CasterService {
             log.info(String.format("Channel, %s, is following %d casters (%d added, %d removed)",
                     channel, userFollows.size(), addCount, removeCount));
         } else {
-            log.warn(String.format("Failed to find Twitch id for Twitch login, %s. Using existing casters data", channel));
+            log.warn(String.format("Failed to find Twitch id for Twitch login, %s. Using existing data", channel));
         }
         return casters;
     }
@@ -69,7 +69,7 @@ public final class CasterService {
         final Set<TwitchClientMessage.UserFollow> userFollowsList = new HashSet<>(userFollows.getUserFollowList());
         int lastSize = 0;
 
-        while(userFollowsList.size() < userFollows.getTotalFollows() || lastSize != userFollowsList.size()) {
+        while(userFollowsList.size() < userFollows.getTotalFollows() && lastSize != userFollowsList.size()) {
             userFollows = twitchClient.getUserFollowsFromId(casterId, userFollows.getCursor());
             userFollowsList.addAll(userFollows.getUserFollowList());
             lastSize = userFollowsList.size();
