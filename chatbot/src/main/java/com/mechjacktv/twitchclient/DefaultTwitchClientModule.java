@@ -9,7 +9,7 @@ public final class DefaultTwitchClientModule extends AbstractModule {
 
   @Override
   protected final void configure() {
-      this.bind(TwitchClientFactory.class).to(DefaultTwitchClientFactory.class).asEagerSingleton();
+    this.bind(TwitchClientFactory.class).to(DefaultTwitchClientFactory.class).asEagerSingleton();
 
     Multibinder.newSetBinder(this.binder(), TypeAdapterRegistrar.class).addBinding()
         .to(MessageAdapterRegistrar.class).asEagerSingleton();

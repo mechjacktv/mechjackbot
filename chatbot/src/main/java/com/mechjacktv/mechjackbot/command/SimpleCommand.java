@@ -60,10 +60,10 @@ public abstract class SimpleCommand implements Command {
       final String commandBody = messageMatcher.group(2);
 
       if (this.commandUtils.isGloballyCooledDown("!addcommand")) {
-          this.setCommand(commandTrigger, commandBody);
+        this.setCommand(commandTrigger, commandBody);
         messageEvent.sendResponse(String.format("Added %s command", commandTrigger));
         try {
-            this.commands.store(System.out, "");
+          this.commands.store(System.out, "");
         } catch (final IOException e) {
           e.printStackTrace();
         }
@@ -73,8 +73,8 @@ public abstract class SimpleCommand implements Command {
         final String[] messageParts = message.split(" ");
 
         if (messageParts.length > 1 && this.commands.containsKey(messageParts[1])) {
-            this.commands.remove(messageParts[1]);
-            this.saveCommands();
+          this.commands.remove(messageParts[1]);
+          this.saveCommands();
           messageEvent.sendResponse(String.format("Removed %s command", messageParts[1]));
         }
       }
@@ -97,14 +97,14 @@ public abstract class SimpleCommand implements Command {
   }
 
   private void setCommand(final String commandTrigger, final String commandBody) {
-      this.commands.setProperty(commandTrigger, commandBody);
-      this.saveCommands();
+    this.commands.setProperty(commandTrigger, commandBody);
+    this.saveCommands();
   }
 
 
   private void saveCommands() {
     try (final FileOutputStream castersFile = new FileOutputStream(COMMANDS_LOCATION)) {
-        this.commands.store(castersFile, "");
+      this.commands.store(castersFile, "");
     } catch (final IOException e) {
       e.printStackTrace();
     }

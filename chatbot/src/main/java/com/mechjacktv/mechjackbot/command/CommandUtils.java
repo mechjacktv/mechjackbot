@@ -69,7 +69,7 @@ public final class CommandUtils {
     final Long now = System.currentTimeMillis();
 
     if (lastCalled == null || now - lastCalled > commandCoolDownPeriodMs) {
-        this.commandLastCalled.put(commandTrigger, now);
+      this.commandLastCalled.put(commandTrigger, now);
       return true;
     }
     return false;

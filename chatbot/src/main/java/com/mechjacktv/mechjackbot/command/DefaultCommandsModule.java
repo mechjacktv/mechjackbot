@@ -10,10 +10,10 @@ public final class DefaultCommandsModule extends AbstractModule {
 
   @Override
   protected final void configure() {
-      this.install(new DefaultCommandInterceptorsModule());
+    this.install(new DefaultCommandInterceptorsModule());
 
-      this.bind(CommandUtils.class).asEagerSingleton();
-      this.bind(CasterService.class).asEagerSingleton();
+    this.bind(CommandUtils.class).asEagerSingleton();
+    this.bind(CasterService.class).asEagerSingleton();
 
     // TODO automate
     Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(AddCasterCommand.class).asEagerSingleton();

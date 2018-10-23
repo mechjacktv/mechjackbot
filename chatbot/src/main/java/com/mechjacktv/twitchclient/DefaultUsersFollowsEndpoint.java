@@ -52,7 +52,7 @@ final class DefaultUsersFollowsEndpoint implements UsersFollowsEndpoint {
     Objects.requireNonNull(toId, "toId **MUST** not be `null.");
 
     final TwitchClientMessage.UserFollows userFollows =
-            this.getUsersFollows(String.format("from_id=%s&to_id=%s", fromId, toId));
+        this.getUsersFollows(String.format("from_id=%s&to_id=%s", fromId, toId));
 
     return userFollows.getUserFollowList().size() > 0;
   }
