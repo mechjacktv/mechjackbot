@@ -25,7 +25,7 @@ public abstract class AbstractCommand implements Command {
 
   @Override
   public boolean isHandledMessage(MessageEvent messageEvent) {
-    return this.commandUtils.isCommandTrigger(getTrigger(), messageEvent);
+    return this.commandUtils.isCommandTrigger(this.getTrigger(), messageEvent);
   }
 
   @Override

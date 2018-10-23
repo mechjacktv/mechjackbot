@@ -38,7 +38,7 @@ public class CasterCommand extends AbstractCommand {
 
       this.casterService.sendCasterShoutOut(messageEvent, casterName);
     } else {
-      this.commandUtils.sendUsage(messageEvent, String.format("%s <casterName>", getTrigger()));
+      this.commandUtils.sendUsage(messageEvent, String.format("%s <casterName>", this.getTrigger()));
     }
 
   }

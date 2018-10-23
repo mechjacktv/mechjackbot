@@ -17,12 +17,12 @@ public final class DefaultExecutionUtils implements ExecutionUtils {
   @Override
   @Deprecated
   public void softenException(RunnableWithException runnable) {
-    softenException(runnable, SoftenedException.class);
+    this.softenException(runnable, SoftenedException.class);
   }
 
   @Override
   public final void softenException(RunnableWithException runnable, Class<? extends RuntimeException> exceptionClass) {
-    softenException(() -> {
+    this.softenException(() -> {
       runnable.run();
       return null;
     }, exceptionClass);
@@ -34,7 +34,7 @@ public final class DefaultExecutionUtils implements ExecutionUtils {
   @Override
   @Deprecated
   public <T> T softenException(SupplierWithException<T> supplier) {
-    return softenException(supplier, SoftenedException.class);
+    return this.softenException(supplier, SoftenedException.class);
   }
 
   @Override

@@ -31,7 +31,7 @@ public class CommandsCommand extends AbstractCommand {
   public void handleMessage(final MessageEvent messageEvent) {
     final StringBuilder builder = new StringBuilder("Channel Commands:");
 
-    for (final Command command : getSortedCommands()) {
+    for (final Command command : this.getSortedCommands()) {
       if (command.isTriggerable()) {
         builder.append(String.format(" %s", command.getTrigger()));
       }
@@ -42,7 +42,7 @@ public class CommandsCommand extends AbstractCommand {
   private Set<Command> getSortedCommands() {
     final SortedSet<Command> sortedCommands = new TreeSet<>(this::compareCommands);
 
-    sortedCommands.addAll(messageEventHandler.getCommands());
+    sortedCommands.addAll(this.messageEventHandler.getCommands());
     return sortedCommands;
   }
 

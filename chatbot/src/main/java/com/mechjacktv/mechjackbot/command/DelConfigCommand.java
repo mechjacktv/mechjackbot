@@ -22,7 +22,7 @@ class DelConfigCommand extends AbstractCommand {
   DelConfigCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils) {
     super("!delconfig", commandUtils);
     this.appConfiguration = appConfiguration;
-    this.commandSyntaxPattern = Pattern.compile(getTrigger() + COMMAND_SYNTAX_REGEX);
+    this.commandSyntaxPattern = Pattern.compile(this.getTrigger() + COMMAND_SYNTAX_REGEX);
     this.commandUtils = commandUtils;
   }
 
@@ -44,7 +44,7 @@ class DelConfigCommand extends AbstractCommand {
       this.appConfiguration.remove(key);
       messageEvent.sendResponse(String.format("%s deleted", key));
     } else {
-      this.commandUtils.sendUsage(messageEvent, String.format("%s <key> = <value>", getTrigger()));
+      this.commandUtils.sendUsage(messageEvent, String.format("%s <key> = <value>", this.getTrigger()));
     }
   }
 

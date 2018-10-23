@@ -23,27 +23,27 @@ final class DefaultUsersFollowsEndpoint implements UsersFollowsEndpoint {
   @Override
   public final TwitchClientMessage.UserFollows getUserFollowsFromId(final String fromId) {
     Objects.requireNonNull(fromId, "fromId **MUST** not be `null.");
-    return getUsersFollows(String.format("from_id=%s", fromId));
+    return this.getUsersFollows(String.format("from_id=%s", fromId));
   }
 
   @Override
   public final TwitchClientMessage.UserFollows getUserFollowsFromId(final String fromId, final String cursor) {
     Objects.requireNonNull(fromId, "fromId **MUST** not be `null.");
     Objects.requireNonNull(cursor, "cursor **MUST** not be `null.");
-    return getUsersFollows(String.format("from_id=%s&after=%s", fromId, cursor));
+    return this.getUsersFollows(String.format("from_id=%s&after=%s", fromId, cursor));
   }
 
   @Override
   public final TwitchClientMessage.UserFollows getUserFollowsToId(final String toId) {
     Objects.requireNonNull(toId, "toId **MUST** not be `null.");
-    return getUsersFollows(String.format("to_id=%s", toId));
+    return this.getUsersFollows(String.format("to_id=%s", toId));
   }
 
   @Override
   public final TwitchClientMessage.UserFollows getUserFollowsToId(final String toId, final String cursor) {
     Objects.requireNonNull(toId, "toId **MUST** not be `null.");
     Objects.requireNonNull(cursor, "cursor **MUST** not be `null.");
-    return getUsersFollows(String.format("to_id=%s&after=%s", toId, cursor));
+    return this.getUsersFollows(String.format("to_id=%s&after=%s", toId, cursor));
   }
 
   @Override
@@ -52,7 +52,7 @@ final class DefaultUsersFollowsEndpoint implements UsersFollowsEndpoint {
     Objects.requireNonNull(toId, "toId **MUST** not be `null.");
 
     final TwitchClientMessage.UserFollows userFollows =
-        getUsersFollows(String.format("from_id=%s&to_id=%s", fromId, toId));
+            this.getUsersFollows(String.format("from_id=%s&to_id=%s", fromId, toId));
 
     return userFollows.getUserFollowList().size() > 0;
   }
@@ -62,7 +62,7 @@ final class DefaultUsersFollowsEndpoint implements UsersFollowsEndpoint {
     final TwitchClientMessage.UserFollows.Builder userFollowsBuilder = TwitchClientMessage.UserFollows.newBuilder();
 
     this.twitchClientUtils.handleResponse(url, (responseReader) -> {
-      final JsonReader jsonReader = gson.newJsonReader(responseReader);
+      final JsonReader jsonReader = this.gson.newJsonReader(responseReader);
 
       jsonReader.beginObject();
       while (jsonReader.hasNext()) {

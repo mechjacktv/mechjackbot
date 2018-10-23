@@ -18,12 +18,12 @@ public final class PircBotXMessageEvent implements MessageEvent {
 
   @Override
   public ChatBot getChatBot() {
-    return new PircBotXChatBot(executionUtils, genericMessageEvent.getBot());
+    return new PircBotXChatBot(this.executionUtils, this.genericMessageEvent.getBot());
   }
 
   @Override
   public ChatUser getChatUser() {
-    return new PircBotXChatUser(genericMessageEvent.getUser());
+    return new PircBotXChatUser(this.genericMessageEvent.getUser());
   }
 
   @Override

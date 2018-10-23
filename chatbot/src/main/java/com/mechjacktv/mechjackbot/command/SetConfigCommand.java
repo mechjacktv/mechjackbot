@@ -22,7 +22,7 @@ class SetConfigCommand extends AbstractCommand {
   SetConfigCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils) {
     super("!setconfig", commandUtils);
     this.appConfiguration = appConfiguration;
-    this.commandSyntaxPattern = Pattern.compile(getTrigger() + COMMAND_SYNTAX_REGEX);
+    this.commandSyntaxPattern = Pattern.compile(this.getTrigger() + COMMAND_SYNTAX_REGEX);
     this.commandUtils = commandUtils;
   }
 
@@ -45,7 +45,7 @@ class SetConfigCommand extends AbstractCommand {
       this.appConfiguration.set(key, value);
       messageEvent.sendResponse(String.format("%s: %s", key, value));
     } else {
-      this.commandUtils.sendUsage(messageEvent, String.format("%s <key> = <value>", getTrigger()));
+      this.commandUtils.sendUsage(messageEvent, String.format("%s <key> = <value>", this.getTrigger()));
     }
   }
 

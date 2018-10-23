@@ -19,13 +19,13 @@ final class MainModule extends AbstractModule {
 
   @Override
   protected final void configure() {
-    install(new DefaultCommandsModule());
-    install(new DefaultConfigurationModule());
-    install(new DefaultTwitchClientModule());
-    install(new DefaultUtilsModule());
-    install(new GsonModule());
-    install(new MapDbKeyValueStoreModule());
-    install(new PircBotXChatBotModule());
+      this.install(new DefaultCommandsModule());
+      this.install(new DefaultConfigurationModule());
+      this.install(new DefaultTwitchClientModule());
+      this.install(new DefaultUtilsModule());
+      this.install(new GsonModule());
+      this.install(new MapDbKeyValueStoreModule());
+      this.install(new PircBotXChatBotModule());
   }
 
   @Provides

@@ -23,7 +23,7 @@ final class DefaultProtobufUtils implements ProtobufUtils {
     final Set<T> messages = new HashSet<>();
 
     for (final byte[] messageBytes : messageBytesSet) {
-      messages.add(parseMessage(messageClass, messageBytes));
+      messages.add(this.parseMessage(messageClass, messageBytes));
     }
     return messages;
   }

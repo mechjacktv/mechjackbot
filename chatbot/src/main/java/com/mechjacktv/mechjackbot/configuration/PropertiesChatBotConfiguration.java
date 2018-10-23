@@ -26,7 +26,7 @@ final class PropertiesChatBotConfiguration implements ChatBotConfiguration {
   private final String twitchUsername;
 
   public PropertiesChatBotConfiguration() throws IOException {
-    final Properties configProperties = loadConfigProperties();
+    final Properties configProperties = this.loadConfigProperties();
 
     this.twitchChannel = configProperties.getProperty(TWITCH_CHANNEL_KEY);
     this.twitchClientId = configProperties.getProperty(TWITCH_CLIENT_ID_KEY);
@@ -37,12 +37,12 @@ final class PropertiesChatBotConfiguration implements ChatBotConfiguration {
   private Properties loadConfigProperties() throws IOException {
     final Properties configProperties = new Properties();
 
-    if (didCreateConfigProperties()) {
+    if (this.didCreateConfigProperties()) {
       throw new IllegalStateException(String.format("Please configure your chat bot (%s)",
           new File(new File(DATA_LOCATION), CONFIG_PROPERTIES_FILE_NAME).getCanonicalPath()));
     }
     configProperties.load(new FileInputStream(new File(new File(DATA_LOCATION), CONFIG_PROPERTIES_FILE_NAME)));
-    if (isMissingRequiredValues(configProperties)) {
+    if (this.isMissingRequiredValues(configProperties)) {
       throw new IllegalStateException(String.format("Please complete your chat bot configuration (%s)",
           new File(new File(DATA_LOCATION), CONFIG_PROPERTIES_FILE_NAME).getCanonicalPath()));
     }

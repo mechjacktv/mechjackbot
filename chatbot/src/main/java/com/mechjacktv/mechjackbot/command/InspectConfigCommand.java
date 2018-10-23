@@ -27,7 +27,7 @@ class InspectConfigCommand extends AbstractCommand {
   InspectConfigCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils) {
     super("!inspectconfig", commandUtils);
     this.appConfiguration = appConfiguration;
-    this.commandSyntaxPattern = Pattern.compile(getTrigger() + COMMAND_SYNTAX_REGEX);
+    this.commandSyntaxPattern = Pattern.compile(this.getTrigger() + COMMAND_SYNTAX_REGEX);
     this.commandUtils = commandUtils;
   }
 
@@ -47,19 +47,19 @@ class InspectConfigCommand extends AbstractCommand {
       final String key = messageMatcher.group(1).trim().toLowerCase();
 
       if ("all".equals(key)) {
-        logConfigurationValues();
+        this.logConfigurationValues();
         messageEvent.sendResponse("Dumped all configuration values to the log");
       } else {
         final Optional<String> value = this.appConfiguration.get(key);
 
         if (value.isPresent()) {
-          messageEvent.sendResponse(formatMessage(key, value.get()));
+          messageEvent.sendResponse(this.formatMessage(key, value.get()));
         } else {
           messageEvent.sendResponse(String.format("No value was found for %s", key));
         }
       }
     } else {
-      this.commandUtils.sendUsage(messageEvent, String.format("%s <key> = <value>", getTrigger()));
+      this.commandUtils.sendUsage(messageEvent, String.format("%s <key> = <value>", this.getTrigger()));
     }
   }
 
@@ -67,7 +67,7 @@ class InspectConfigCommand extends AbstractCommand {
     for (final String key : this.appConfiguration.getKeys()) {
       final Optional<String> value = this.appConfiguration.get(key);
 
-      log.info(formatMessage(key, value.orElse("<<missing>>")));
+      log.info(this.formatMessage(key, value.orElse("<<missing>>")));
     }
   }
 

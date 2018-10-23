@@ -45,7 +45,7 @@ public class HelpCommand extends AbstractCommand {
             this.commandUtils.getSanitizedViewerName(messageEvent), commandTrigger));
       }
     } else {
-      this.commandUtils.sendUsage(messageEvent, String.format("%s <commandTrigger>", getTrigger()));
+      this.commandUtils.sendUsage(messageEvent, String.format("%s <commandTrigger>", this.getTrigger()));
     }
   }
 

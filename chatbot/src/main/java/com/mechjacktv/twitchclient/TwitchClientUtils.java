@@ -37,7 +37,7 @@ final class TwitchClientUtils {
   }
 
   private Reader openResponseReader(final String serviceUrl) {
-    return new InputStreamReader(openResponseInputStream(serviceUrl));
+    return new InputStreamReader(this.openResponseInputStream(serviceUrl));
   }
 
   private InputStream openResponseInputStream(final String serviceUrl) {
@@ -46,7 +46,7 @@ final class TwitchClientUtils {
   }
 
   private URLConnection openConnection(final String serviceUrl) {
-    return executionUtils.softenException(() -> {
+    return this.executionUtils.softenException(() -> {
       final URL url = new URL(String.format("%s/%s", TWITCH_API_URL, serviceUrl));
       final URLConnection urlConnection = url.openConnection();
 

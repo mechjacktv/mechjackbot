@@ -8,8 +8,8 @@ public final class DefaultConfigurationModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    bind(AppConfiguration.class).to(KeyValueStoreAppConfiguration.class).asEagerSingleton();
-    bind(ChatBotConfiguration.class).to(PropertiesChatBotConfiguration.class).asEagerSingleton();
+      this.bind(AppConfiguration.class).to(KeyValueStoreAppConfiguration.class).asEagerSingleton();
+      this.bind(ChatBotConfiguration.class).to(PropertiesChatBotConfiguration.class).asEagerSingleton();
   }
 
 }

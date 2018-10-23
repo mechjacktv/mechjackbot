@@ -9,19 +9,19 @@ public final class DefaultCommandInterceptorsModule extends AbstractModule {
 
   @Override
   protected final void configure() {
-    bindInterceptor(Matchers.subclassesOf(Command.class),
+      this.bindInterceptor(Matchers.subclassesOf(Command.class),
         new CommandHandleMessageMethodMatcher().and(Matchers.annotatedWith(RestrictToOwner.class)),
-        new RestrictToOwnerMethodInterceptor(getProvider(CommandUtils.class)));
-    bindInterceptor(Matchers.subclassesOf(Command.class),
+        new RestrictToOwnerMethodInterceptor(this.getProvider(CommandUtils.class)));
+      this.bindInterceptor(Matchers.subclassesOf(Command.class),
         new CommandHandleMessageMethodMatcher().and(Matchers.annotatedWith(RestrictToPrivileged.class)),
-        new RestrictToPrivilegedMethodInterceptor(getProvider(CommandUtils.class)));
-    bindInterceptor(Matchers.subclassesOf(Command.class),
+        new RestrictToPrivilegedMethodInterceptor(this.getProvider(CommandUtils.class)));
+      this.bindInterceptor(Matchers.subclassesOf(Command.class),
         new CommandHandleMessageMethodMatcher().and(Matchers.annotatedWith(RestrictToRegular.class)),
-        new RestrictToRegularMethodInterceptor(getProvider(CommandUtils.class)));
-    bindInterceptor(Matchers.subclassesOf(Command.class),
+        new RestrictToRegularMethodInterceptor(this.getProvider(CommandUtils.class)));
+      this.bindInterceptor(Matchers.subclassesOf(Command.class),
         new CommandHandleMessageMethodMatcher().and(Matchers.annotatedWith(GlobalCoolDown.class)),
-        new GlobalCoolDownMethodInterceptor(getProvider(CommandUtils.class)));
-    bindInterceptor(Matchers.subclassesOf(Command.class),
+        new GlobalCoolDownMethodInterceptor(this.getProvider(CommandUtils.class)));
+      this.bindInterceptor(Matchers.subclassesOf(Command.class),
         new CommandHandleMessageMethodMatcher(),
         new LogCommandHandleMessageMethodInterceptor());
   }

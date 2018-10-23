@@ -19,7 +19,7 @@ final class MapDbKeyValueStore implements KeyValueStore {
 
   @Override
   public boolean containsKey(final byte[] key) {
-    return concurrentMap.containsKey(key);
+    return this.concurrentMap.containsKey(key);
   }
 
   @Override

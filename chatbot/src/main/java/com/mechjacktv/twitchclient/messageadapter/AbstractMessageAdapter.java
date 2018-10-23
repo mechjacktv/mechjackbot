@@ -19,7 +19,7 @@ abstract class AbstractMessageAdapter<M extends Message> extends TypeAdapter<M> 
   @Override
   @SuppressWarnings("unchecked")
   public final M read(final JsonReader jsonReader) throws IOException {
-    final Message.Builder builder = getBuilder();
+    final Message.Builder builder = this.getBuilder();
     final JsonParser jsonParser = new JsonParser();
 
     JsonFormat.parser().merge(jsonParser.parse(jsonReader).toString(), builder);

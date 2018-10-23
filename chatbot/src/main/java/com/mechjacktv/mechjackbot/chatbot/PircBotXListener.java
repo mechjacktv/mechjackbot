@@ -32,7 +32,7 @@ final class PircBotXListener extends ListenerAdapter {
 
   @Override
   public final void onGenericMessage(final GenericMessageEvent event) {
-    this.messageEventHandler.handleMessage(new PircBotXMessageEvent(executionUtils, event));
+    this.messageEventHandler.handleMessage(new PircBotXMessageEvent(this.executionUtils, event));
   }
 
 }

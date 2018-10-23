@@ -34,11 +34,11 @@ final class DefaultUsersEndpoint implements UsersEndpoint {
     Preconditions.checkArgument(logins.size() + ids.size() <= 100,
         "Maximum number of combined Twitch logins and ids is 100.");
 
-    final String url = String.format("users/?%s", buildQuery(logins, ids));
+    final String url = String.format("users/?%s", this.buildQuery(logins, ids));
     final TwitchClientMessage.Users.Builder usersBuilder = TwitchClientMessage.Users.newBuilder();
 
     this.twitchClientUtils.handleResponse(url, (responseReader) -> {
-      final JsonReader jsonReader = gson.newJsonReader(responseReader);
+      final JsonReader jsonReader = this.gson.newJsonReader(responseReader);
 
       jsonReader.beginObject();
       while (jsonReader.hasNext()) {

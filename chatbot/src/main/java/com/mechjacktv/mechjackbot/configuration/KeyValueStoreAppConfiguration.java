@@ -31,7 +31,7 @@ final class KeyValueStoreAppConfiguration implements AppConfiguration {
 
   @Override
   public String get(final String key, final String defaultValue) {
-    return get(key).orElse(defaultValue);
+    return this.get(key).orElse(defaultValue);
   }
 
   @Override

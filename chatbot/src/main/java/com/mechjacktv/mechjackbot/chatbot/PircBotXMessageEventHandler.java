@@ -31,7 +31,7 @@ public final class PircBotXMessageEventHandler implements MessageEventHandler {
 
   @Override
   public final void handleMessage(final MessageEvent messageEvent) {
-    for (final Command command : getCommands()) {
+    for (final Command command : this.getCommands()) {
       if (command.isHandledMessage(messageEvent)) {
         command.handleMessage(messageEvent);
       }
