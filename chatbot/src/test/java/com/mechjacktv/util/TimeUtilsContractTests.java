@@ -24,7 +24,7 @@ public abstract class TimeUtilsContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.secondsAsMs(null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class);
+    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessageContaining("**MUST** not be `null`");
   }
 
 }
