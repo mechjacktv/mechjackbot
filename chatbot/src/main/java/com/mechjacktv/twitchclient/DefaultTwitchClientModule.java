@@ -13,7 +13,6 @@ public final class DefaultTwitchClientModule extends AbstractModule {
 
     Multibinder.newSetBinder(this.binder(), TypeAdapterRegistrar.class).addBinding()
         .to(MessageAdapterRegistrar.class).asEagerSingleton();
-
   }
 
 }

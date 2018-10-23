@@ -2,6 +2,8 @@ package com.mechjacktv.twitchclient;
 
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
+import com.mechjacktv.twitchclient.endpoint.DefaultUsersEndpoint;
+import com.mechjacktv.twitchclient.endpoint.DefaultUsersFollowsEndpoint;
 
 import java.util.List;
 import java.util.Objects;

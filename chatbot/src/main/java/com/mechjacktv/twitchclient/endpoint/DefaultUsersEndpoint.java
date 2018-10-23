@@ -1,20 +1,23 @@
-package com.mechjacktv.twitchclient;
+package com.mechjacktv.twitchclient.endpoint;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.mechjacktv.twitchclient.TwitchClientMessage;
+import com.mechjacktv.twitchclient.TwitchClientUtils;
+import com.mechjacktv.twitchclient.UsersEndpoint;
 
 import java.util.Objects;
 import java.util.Set;
 
-final class DefaultUsersEndpoint implements UsersEndpoint {
+public final class DefaultUsersEndpoint implements UsersEndpoint {
 
   private final Gson gson;
   private final TwitchClientUtils twitchClientUtils;
   private final TypeAdapter<TwitchClientMessage.User> userTypeAdapter;
 
-  DefaultUsersEndpoint(final Gson gson, final TwitchClientUtils twitchClientUtils) {
+  public DefaultUsersEndpoint(final Gson gson, final TwitchClientUtils twitchClientUtils) {
     this.gson = gson;
     this.twitchClientUtils = twitchClientUtils;
     this.userTypeAdapter = this.gson.getAdapter(TwitchClientMessage.User.class);
