@@ -10,6 +10,7 @@ import com.mechjacktv.scheduleservice.ScheduleService;
 import com.mechjacktv.twitchclient.TwitchClient;
 import com.mechjacktv.twitchclient.TwitchClientMessage;
 import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollow;
+import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollows;
 import com.mechjacktv.util.ProtobufUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,8 +60,8 @@ public final class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Cas
     final Set<UserFollow> userFollows = this.getUserFollows(casterId, twitchClient);
     int addCount = 0;
 
-    for (final TwitchClientMessage.UserFollow userFollow : userFollows) {
-      final ShoutOutServiceMessage.CasterKey casterKey = this.createCasterKey(userFollow.getToName());
+    for (final UserFollow userFollow : userFollows) {
+      final CasterKey casterKey = this.createCasterKey(userFollow.getToName());
 
       if(this.containsKey(casterKey)) {
         existingCasterKeys.remove(casterKey);
@@ -75,16 +76,16 @@ public final class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Cas
   private int removeCasters(final Collection<CasterKey> existingCasterKeys) {
     int removeCount = 0;
 
-    for (final ShoutOutServiceMessage.CasterKey casterKey : existingCasterKeys) {
+    for (final CasterKey casterKey : existingCasterKeys) {
       this.remove(casterKey);
       removeCount++;
     }
     return removeCount;
   }
 
-  private Set<TwitchClientMessage.UserFollow> getUserFollows(final String casterId, final TwitchClient twitchClient) {
-    TwitchClientMessage.UserFollows userFollows = twitchClient.getUserFollowsFromId(casterId);
-    final Set<TwitchClientMessage.UserFollow> userFollowsList = new HashSet<>(userFollows.getUserFollowList());
+  private Set<UserFollow> getUserFollows(final String casterId, final TwitchClient twitchClient) {
+    UserFollows userFollows = twitchClient.getUserFollowsFromId(casterId);
+    final Set<UserFollow> userFollowsList = new HashSet<>(userFollows.getUserFollowList());
     int lastSize = 0;
 
     while (userFollowsList.size() < userFollows.getTotalFollows() && lastSize != userFollowsList.size()) {
@@ -95,15 +96,15 @@ public final class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Cas
     return userFollowsList;
   }
 
-  final ShoutOutServiceMessage.CasterKey createCasterKey(final String casterName) {
-    final ShoutOutServiceMessage.CasterKey.Builder builder = ShoutOutServiceMessage.CasterKey.newBuilder();
+  final CasterKey createCasterKey(final String casterName) {
+    final CasterKey.Builder builder = CasterKey.newBuilder();
 
     return builder.setName(casterName)
         .build();
   }
 
-  final ShoutOutServiceMessage.Caster createCaster(final String casterName, final Long lastShoutOut) {
-    final ShoutOutServiceMessage.Caster.Builder builder = ShoutOutServiceMessage.Caster.newBuilder();
+  final Caster createCaster(final String casterName, final Long lastShoutOut) {
+    final Caster.Builder builder = Caster.newBuilder();
 
     return builder.setName(casterName)
         .setLastShoutOut(lastShoutOut)

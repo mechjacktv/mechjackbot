@@ -23,7 +23,7 @@ public final class DefaultUsersFollowsEndpoint implements UsersFollowsEndpoint {
     this.twitchClientUtils = twitchClientUtils;
     this.userTypeAdapter = this.gson.getAdapter(UserFollow.class);
     Objects.requireNonNull(this.twitchClientUtils,
-        "TwitchClientMessage.UserFollow adapter **MUST** be registered.");
+        "UserFollow adapter **MUST** be registered.");
   }
 
   @Override
@@ -41,7 +41,7 @@ public final class DefaultUsersFollowsEndpoint implements UsersFollowsEndpoint {
 
   private UserFollows getUsersFollows(final String queryString) {
     final String url = String.format("users/follows/?first=100&%s", queryString);
-    final Builder userFollowsBuilder = TwitchClientMessage.UserFollows.newBuilder();
+    final Builder userFollowsBuilder = UserFollows.newBuilder();
 
     this.twitchClientUtils.handleResponse(url, (responseReader) -> {
       final JsonReader jsonReader = this.gson.newJsonReader(responseReader);
@@ -86,4 +86,3 @@ public final class DefaultUsersFollowsEndpoint implements UsersFollowsEndpoint {
   }
 
 }
-

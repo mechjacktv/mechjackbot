@@ -2,6 +2,9 @@ package com.mechjacktv.twitchclient;
 
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
+import com.mechjacktv.twitchclient.TwitchClientMessage.User;
+import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollows;
+import com.mechjacktv.twitchclient.TwitchClientMessage.Users;
 import com.mechjacktv.twitchclient.endpoint.DefaultUsersEndpoint;
 import com.mechjacktv.twitchclient.endpoint.DefaultUsersFollowsEndpoint;
 
@@ -25,8 +28,8 @@ final class DefaultTwitchClient implements TwitchClient {
   public Optional<String> getUserId(final String login) {
     Objects.requireNonNull(login, "Twitch login **MUST** not be `null`.");
 
-    final TwitchClientMessage.Users users = this.getUsers(Sets.newHashSet(login), Sets.newHashSet());
-    final List<TwitchClientMessage.User> userList = users.getUserList();
+    final Users users = this.getUsers(Sets.newHashSet(login), Sets.newHashSet());
+    final List<User> userList = users.getUserList();
 
     if (userList.isEmpty()) {
       return Optional.empty();
@@ -36,17 +39,17 @@ final class DefaultTwitchClient implements TwitchClient {
   }
 
   @Override
-  public TwitchClientMessage.Users getUsers(final Set<String> logins, final Set<String> ids) {
+  public Users getUsers(final Set<String> logins, final Set<String> ids) {
     return this.usersEndpoint.getUsers(logins, ids);
   }
 
   @Override
-  public TwitchClientMessage.UserFollows getUserFollowsFromId(final String fromId) {
+  public UserFollows getUserFollowsFromId(final String fromId) {
     return this.usersFollowsEndpoint.getUserFollowsFromId(fromId);
   }
 
   @Override
-  public TwitchClientMessage.UserFollows getUserFollowsFromId(final String fromId, final String cursor) {
+  public UserFollows getUserFollowsFromId(final String fromId, final String cursor) {
     return this.usersFollowsEndpoint.getUserFollowsFromId(fromId, cursor);
   }
 

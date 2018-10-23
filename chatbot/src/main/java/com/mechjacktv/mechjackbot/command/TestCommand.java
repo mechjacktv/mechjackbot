@@ -6,6 +6,8 @@ import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.mechjackbot.RestrictToOwner;
 import com.mechjacktv.twitchclient.TwitchClient;
 import com.mechjacktv.twitchclient.TwitchClientMessage;
+import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollow;
+import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollows;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -36,10 +38,10 @@ public class TestCommand extends AbstractCommand {
 
     if (login.isPresent()) {
       final String fromId = login.get();
-      final TwitchClientMessage.UserFollows userFollows = this.twitchClient.getUserFollowsFromId(fromId);
+      final UserFollows userFollows = this.twitchClient.getUserFollowsFromId(fromId);
       final StringBuilder builder = new StringBuilder("@%s is following: ");
 
-      for (final TwitchClientMessage.UserFollow userFollow : userFollows.getUserFollowList()) {
+      for (final UserFollow userFollow : userFollows.getUserFollowList()) {
         builder.append(userFollow.getToName());
         builder.append(" ");
       }

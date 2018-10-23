@@ -1,13 +1,13 @@
 package com.mechjacktv.twitchclient.messageadapter;
 
 import com.google.protobuf.Message;
-import com.mechjacktv.twitchclient.TwitchClientMessage;
+import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollow;
 
-final class UserFollowMessageAdapter extends AbstractMessageAdapter<TwitchClientMessage.UserFollow> {
+final class UserFollowMessageAdapter extends AbstractMessageAdapter<UserFollow> {
 
   @Override
   Message.Builder getBuilder() {
-    return TwitchClientMessage.UserFollow.newBuilder();
+    return UserFollow.newBuilder();
   }
 
 }

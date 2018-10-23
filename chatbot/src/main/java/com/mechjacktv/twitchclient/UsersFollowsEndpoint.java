@@ -1,9 +1,11 @@
 package com.mechjacktv.twitchclient;
 
+import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollows;
+
 public interface UsersFollowsEndpoint {
 
-  TwitchClientMessage.UserFollows getUserFollowsFromId(String fromId);
+  UserFollows getUserFollowsFromId(String fromId);
 
-  TwitchClientMessage.UserFollows getUserFollowsFromId(String fromId, String cursor);
+  UserFollows getUserFollowsFromId(String fromId, String cursor);
 
 }

@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.mechjacktv.twitchclient.TwitchClientMessage;
+import com.mechjacktv.twitchclient.TwitchClientMessage.User;
+import com.mechjacktv.twitchclient.TwitchClientMessage.Users;
 import com.mechjacktv.twitchclient.TwitchClientUtils;
 import com.mechjacktv.twitchclient.UsersEndpoint;
 
@@ -15,18 +17,18 @@ public final class DefaultUsersEndpoint implements UsersEndpoint {
 
   private final Gson gson;
   private final TwitchClientUtils twitchClientUtils;
-  private final TypeAdapter<TwitchClientMessage.User> userTypeAdapter;
+  private final TypeAdapter<User> userTypeAdapter;
 
   public DefaultUsersEndpoint(final Gson gson, final TwitchClientUtils twitchClientUtils) {
     this.gson = gson;
     this.twitchClientUtils = twitchClientUtils;
-    this.userTypeAdapter = this.gson.getAdapter(TwitchClientMessage.User.class);
+    this.userTypeAdapter = this.gson.getAdapter(User.class);
     Objects.requireNonNull(this.twitchClientUtils,
-        "TwitchClientMessage.User adapter **MUST** be registered.");
+        "User adapter **MUST** be registered.");
   }
 
   @Override
-  public TwitchClientMessage.Users getUsers(final Set<String> logins, final Set<String> ids) {
+  public Users getUsers(final Set<String> logins, final Set<String> ids) {
     Objects.requireNonNull(logins,
         "Logins set **MUST** not be `null.");
     Objects.requireNonNull(ids,
@@ -38,7 +40,7 @@ public final class DefaultUsersEndpoint implements UsersEndpoint {
         "Maximum number of combined Twitch logins and ids is 100.");
 
     final String url = String.format("users/?%s", this.buildQuery(logins, ids));
-    final TwitchClientMessage.Users.Builder usersBuilder = TwitchClientMessage.Users.newBuilder();
+    final Users.Builder usersBuilder = Users.newBuilder();
 
     this.twitchClientUtils.handleResponse(url, (responseReader) -> {
       final JsonReader jsonReader = this.gson.newJsonReader(responseReader);
