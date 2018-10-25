@@ -2,8 +2,8 @@ package com.mechjacktv.twitchclient;
 
 import java.util.Optional;
 
-public interface TwitchClient extends UsersEndpoint, UsersFollowsEndpoint {
+public interface TwitchClient extends TwitchUsersEndpoint, TwitchUsersFollowsEndpoint {
 
-  Optional<String> getUserId(String login);
+  Optional<TwitchUserId> getUserId(TwitchLogin login);
 
 }

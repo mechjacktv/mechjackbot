@@ -4,21 +4,20 @@ import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.mechjacktv.twitchclient.*;
 import com.mechjacktv.twitchclient.TwitchClientMessage.User;
 import com.mechjacktv.twitchclient.TwitchClientMessage.Users;
-import com.mechjacktv.twitchclient.TwitchClientUtils;
-import com.mechjacktv.twitchclient.UsersEndpoint;
 
 import java.util.Objects;
 import java.util.Set;
 
-public final class DefaultUsersEndpoint implements UsersEndpoint {
+public final class DefaultTwitchUsersEndpoint implements TwitchUsersEndpoint {
 
   private final Gson gson;
   private final TwitchClientUtils twitchClientUtils;
   private final TypeAdapter<User> userTypeAdapter;
 
-  public DefaultUsersEndpoint(final Gson gson, final TwitchClientUtils twitchClientUtils) {
+  public DefaultTwitchUsersEndpoint(final Gson gson, final TwitchClientUtils twitchClientUtils) {
     this.gson = gson;
     this.twitchClientUtils = twitchClientUtils;
     this.userTypeAdapter = this.gson.getAdapter(User.class);
@@ -27,7 +26,7 @@ public final class DefaultUsersEndpoint implements UsersEndpoint {
   }
 
   @Override
-  public Users getUsers(final Set<String> logins, final Set<String> ids) {
+  public Users getUsers(final Set<TwitchLogin> logins, final Set<TwitchUserId> ids) {
     Objects.requireNonNull(logins,
         "Logins set **MUST** not be `null.");
     Objects.requireNonNull(ids,
@@ -41,7 +40,7 @@ public final class DefaultUsersEndpoint implements UsersEndpoint {
     final String url = String.format("users/?%s", this.buildQuery(logins, ids));
     final Users.Builder usersBuilder = Users.newBuilder();
 
-    this.twitchClientUtils.handleResponse(url, (responseReader) -> {
+    this.twitchClientUtils.handleResponse(TwitchUrl.of(url), (responseReader) -> {
       final JsonReader jsonReader = this.gson.newJsonReader(responseReader);
 
       jsonReader.beginObject();
@@ -57,7 +56,7 @@ public final class DefaultUsersEndpoint implements UsersEndpoint {
             jsonReader.endArray();
             break;
           default:
-            this.twitchClientUtils.handleInvalidName(name);
+            this.twitchClientUtils.handleInvalidObjectName(name);
             break;
         }
       }
@@ -66,14 +65,14 @@ public final class DefaultUsersEndpoint implements UsersEndpoint {
     return usersBuilder.build();
   }
 
-  private String buildQuery(final Set<String> logins, final Set<String> ids) {
+  private String buildQuery(final Set<TwitchLogin> twitchLogins, final Set<TwitchUserId> twitchUserIds) {
     final StringBuilder queryBuilder = new StringBuilder();
 
-    for (final String login : logins) {
-      queryBuilder.append(String.format("&login=%s", login));
+    for (final TwitchLogin twitchLogin : twitchLogins) {
+      queryBuilder.append(String.format("&login=%s", twitchLogin.value));
     }
-    for (final String id : ids) {
-      queryBuilder.append(String.format("&id=%s", id));
+    for (final TwitchUserId twitchUserId : twitchUserIds) {
+      queryBuilder.append(String.format("&id=%s", twitchUserId.value));
     }
     return queryBuilder.toString().substring(1);
   }

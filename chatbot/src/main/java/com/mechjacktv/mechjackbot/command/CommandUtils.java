@@ -15,39 +15,39 @@ public final class CommandUtils {
   private static final String COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS_DEFAULT = "5";
 
   private final AppConfiguration appConfiguration;
-  private final String botOwner;
-  private final Map<String, Long> commandLastCalled;
-  private final Map<String, Pattern> commandTriggerPatterns;
+  private final ChatUsername botOwner;
+  private final Map<CommandTrigger, CommandLastCalled> commandLastCalled;
+  private final Map<CommandTrigger, Pattern> commandTriggerPatterns;
   private final TimeUtils timeUtils;
 
   @Inject
   public CommandUtils(final AppConfiguration appConfiguration, final ChatBotConfiguration botConfiguration,
                       final TimeUtils timeUtils) {
     this.appConfiguration = appConfiguration;
-    this.botOwner = this.sanitizeViewerName(botConfiguration.getTwitchChannel());
+    this.botOwner = this.sanitizeViewerName(ChatUsername.of(botConfiguration.getTwitchChannel().value));
     this.commandLastCalled = new HashMap<>();
     this.commandTriggerPatterns = new HashMap<>();
     this.timeUtils = timeUtils;
   }
 
-  private String sanitizeViewerName(final String username) {
-    String sanitizedUsername = username.trim().toLowerCase();
+  private ChatUsername sanitizeViewerName(final ChatUsername username) {
+    String sanitizedUsername = username.value.trim().toLowerCase();
 
     if (sanitizedUsername.startsWith("@")) {
       sanitizedUsername = sanitizedUsername.substring(1);
     }
-    return sanitizedUsername;
+    return ChatUsername.of(sanitizedUsername);
   }
 
-  final boolean isCommandTrigger(final String commandTrigger, final MessageEvent messageEvent) {
-    final String message = messageEvent.getMessage();
+  final boolean isCommandTrigger(final CommandTrigger commandTrigger, final MessageEvent messageEvent) {
+    final Message message = messageEvent.getMessage();
     final Pattern commandTriggerPattern = this.getCommandTriggerPattern(commandTrigger);
-    final Matcher commandTriggerMatcher = commandTriggerPattern.matcher(message);
+    final Matcher commandTriggerMatcher = commandTriggerPattern.matcher(message.value);
 
     return commandTriggerMatcher.matches();
   }
 
-  private Pattern getCommandTriggerPattern(final String commandTrigger) {
+  private Pattern getCommandTriggerPattern(final CommandTrigger commandTrigger) {
     if (this.commandTriggerPatterns.containsKey(commandTrigger)) {
       return this.commandTriggerPatterns.get(commandTrigger);
     }
@@ -63,46 +63,44 @@ public final class CommandUtils {
     return this.isGloballyCooledDown(command.getTrigger());
   }
 
-  private boolean isGloballyCooledDown(final String commandTrigger) {
-    final Long lastCalled = this.commandLastCalled.get(commandTrigger);
-    final Integer commandCoolDownPeriodMs = this.getCommandCoolDownPeriodMs();
+  private boolean isGloballyCooledDown(final CommandTrigger commandTrigger) {
+    final CommandLastCalled commandLastCalled = this.commandLastCalled.get(commandTrigger);
+    final CommandCoolDownPeriodMs commandCoolDownPeriodMs = this.getCommandCoolDownPeriodMs();
     final Long now = System.currentTimeMillis();
 
-    if (lastCalled == null || now - lastCalled > commandCoolDownPeriodMs) {
-      this.commandLastCalled.put(commandTrigger, now);
+    if (commandLastCalled == null || now - commandLastCalled.value > commandCoolDownPeriodMs.value) {
+      this.commandLastCalled.put(commandTrigger, CommandLastCalled.of(now));
       return true;
     }
     return false;
   }
 
-  private Integer getCommandCoolDownPeriodMs() {
-    return this.timeUtils.secondsAsMs(Integer.parseInt(
+  private CommandCoolDownPeriodMs getCommandCoolDownPeriodMs() {
+    return CommandCoolDownPeriodMs.of(this.timeUtils.secondsAsMs(Integer.parseInt(
         this.appConfiguration.get(COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS,
-            COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS_DEFAULT)));
+            COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS_DEFAULT))));
   }
 
   public final boolean isRegularUserViewer(final MessageEvent messageEvent) {
-    // TODO implement regular check
     return this.isPrivilegedViewer(messageEvent);
   }
 
   public final boolean isPrivilegedViewer(final MessageEvent messageEvent) {
-    // TODO implement mod check
     return this.isChannelOwner(messageEvent);
   }
 
   public final boolean isChannelOwner(final MessageEvent messageEvent) {
     final ChatUser chatUser = messageEvent.getChatUser();
-    final String chatUsername = chatUser.getUsername().toLowerCase();
+    final ChatUsername chatUsername = this.sanitizeViewerName(chatUser.getUsername());
 
     return this.botOwner.equals(chatUsername);
   }
 
-  public final void sendUsage(final MessageEvent messageEvent, final String usage) {
-    messageEvent.sendResponse(String.format("@%s, usage: %s", this.getSanitizedViewerName(messageEvent), usage));
+  final void sendUsage(final MessageEvent messageEvent, final CommandUsage usage) {
+    messageEvent.sendResponse(Message.of(String.format("@%s, usage: %s", this.getSanitizedViewerName(messageEvent), usage)));
   }
 
-  public final String getSanitizedViewerName(final MessageEvent messageEvent) {
+  public final ChatUsername getSanitizedViewerName(final MessageEvent messageEvent) {
     return this.sanitizeViewerName(messageEvent.getChatUser().getUsername());
   }
 

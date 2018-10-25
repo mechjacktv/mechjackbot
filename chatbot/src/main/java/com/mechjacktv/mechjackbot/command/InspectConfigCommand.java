@@ -1,9 +1,6 @@
 package com.mechjacktv.mechjackbot.command;
 
-import com.mechjacktv.mechjackbot.AppConfiguration;
-import com.mechjacktv.mechjackbot.GlobalCoolDown;
-import com.mechjacktv.mechjackbot.MessageEvent;
-import com.mechjacktv.mechjackbot.RestrictToOwner;
+import com.mechjacktv.mechjackbot.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,41 +22,41 @@ class InspectConfigCommand extends AbstractCommand {
 
   @Inject
   InspectConfigCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils) {
-    super("!inspectconfig", commandUtils);
+    super(CommandTrigger.of("!inspectconfig"), commandUtils);
     this.appConfiguration = appConfiguration;
     this.commandSyntaxPattern = Pattern.compile(this.getTrigger() + COMMAND_SYNTAX_REGEX);
     this.commandUtils = commandUtils;
   }
 
   @Override
-  public String getDescription() {
-    return "Reports the value for the configuration key specified.";
+  public CommandDescription getDescription() {
+    return CommandDescription.of("Reports the value for the configuration key specified.");
   }
 
   @Override
   @RestrictToOwner
   @GlobalCoolDown
   public void handleMessage(MessageEvent messageEvent) {
-    final String message = messageEvent.getMessage();
-    final Matcher messageMatcher = this.commandSyntaxPattern.matcher(message);
+    final Message message = messageEvent.getMessage();
+    final Matcher messageMatcher = this.commandSyntaxPattern.matcher(message.value);
 
     if (messageMatcher.matches()) {
       final String key = messageMatcher.group(1).trim().toLowerCase();
 
       if ("all".equals(key)) {
         this.logConfigurationValues();
-        messageEvent.sendResponse("Dumped all configuration values to the log");
+        messageEvent.sendResponse(Message.of("Dumped all configuration values to the log"));
       } else {
         final Optional<String> value = this.appConfiguration.get(key);
 
         if (value.isPresent()) {
-          messageEvent.sendResponse(this.formatMessage(key, value.get()));
+          messageEvent.sendResponse(Message.of(this.formatMessage(key, value.get())));
         } else {
-          messageEvent.sendResponse(String.format("No value was found for %s", key));
+          messageEvent.sendResponse(Message.of(String.format("No value was found for %s", key)));
         }
       }
     } else {
-      this.commandUtils.sendUsage(messageEvent, String.format("%s <key> = <value>", this.getTrigger()));
+      this.commandUtils.sendUsage(messageEvent, CommandUsage.of(String.format("%s <key> = <value>", this.getTrigger())));
     }
   }
 

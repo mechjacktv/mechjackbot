@@ -6,8 +6,8 @@ public interface MessageEvent {
 
   ChatUser getChatUser();
 
-  String getMessage();
+  Message getMessage();
 
-  void sendResponse(String message);
+  void sendResponse(Message message);
 
 }

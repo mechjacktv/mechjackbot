@@ -11,8 +11,4 @@ public interface AppConfiguration {
 
   Collection<String> getKeys();
 
-  void remove(String key);
-
-  void set(String key, String value);
-
 }

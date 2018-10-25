@@ -2,6 +2,7 @@ package com.mechjacktv.mechjackbot.chatbot;
 
 import com.mechjacktv.mechjackbot.ChatBot;
 import com.mechjacktv.mechjackbot.ChatUser;
+import com.mechjacktv.mechjackbot.Message;
 import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.util.ExecutionUtils;
 import org.pircbotx.hooks.types.GenericMessageEvent;
@@ -27,13 +28,13 @@ public final class PircBotXMessageEvent implements MessageEvent {
   }
 
   @Override
-  public String getMessage() {
-    return this.genericMessageEvent.getMessage();
+  public Message getMessage() {
+    return Message.of(this.genericMessageEvent.getMessage());
   }
 
   @Override
-  public void sendResponse(String message) {
-    this.genericMessageEvent.respondWith(String.format("/me mechja1Heart <( %s )", message));
+  public void sendResponse(final Message message) {
+    this.genericMessageEvent.respondWith(String.format("/me mechja1Heart <( %s )", message.value));
   }
 
 }

@@ -14,7 +14,7 @@ final class MapDbKeyValueStoreFactory implements KeyValueStoreFactory {
 
   @Inject
   MapDbKeyValueStoreFactory(final ChatBotConfiguration chatBotConfiguration) {
-    this.db = DBMaker.fileDB(new File(chatBotConfiguration.getDataLocation(), "mapdb.bin"))
+    this.db = DBMaker.fileDB(new File(chatBotConfiguration.getDataLocation().value, "mapdb.bin"))
         .closeOnJvmShutdown()
         .make();
   }

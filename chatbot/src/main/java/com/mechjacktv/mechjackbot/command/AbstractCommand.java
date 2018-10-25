@@ -1,30 +1,32 @@
 package com.mechjacktv.mechjackbot.command;
 
 import com.mechjacktv.mechjackbot.Command;
+import com.mechjacktv.mechjackbot.CommandName;
+import com.mechjacktv.mechjackbot.CommandTrigger;
 import com.mechjacktv.mechjackbot.MessageEvent;
 
 public abstract class AbstractCommand implements Command {
 
-  private final String commandTrigger;
+  private final CommandTrigger commandTrigger;
   private final CommandUtils commandUtils;
 
-  protected AbstractCommand(final String commandTrigger, final CommandUtils commandUtils) {
+  protected AbstractCommand(final CommandTrigger commandTrigger, final CommandUtils commandUtils) {
     this.commandTrigger = commandTrigger;
     this.commandUtils = commandUtils;
   }
 
   @Override
-  public String getName() {
-    return this.getClass().getCanonicalName();
+  public CommandName getName() {
+    return CommandName.of(this.getClass().getCanonicalName());
   }
 
   @Override
-  public final String getTrigger() {
+  public final CommandTrigger getTrigger() {
     return this.commandTrigger;
   }
 
   @Override
-  public boolean isHandledMessage(MessageEvent messageEvent) {
+  public boolean isTriggered(MessageEvent messageEvent) {
     return this.commandUtils.isCommandTrigger(this.getTrigger(), messageEvent);
   }
 

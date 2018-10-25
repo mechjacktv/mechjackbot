@@ -17,7 +17,7 @@ final class DefaultTwitchClientFactory implements TwitchClientFactory {
   }
 
   @Override
-  public TwitchClient createTwitchClient(String clientId) {
+  public TwitchClient createTwitchClient(TwitchClientId clientId) {
     final TwitchClientUtils twitchClientUtils = new TwitchClientUtils(clientId, this.executionUtils);
 
     return new DefaultTwitchClient(this.gson, twitchClientUtils);

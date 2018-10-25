@@ -1,5 +1,7 @@
 package com.mechjacktv.mechjackbot.command.shoutout;
 
+import com.mechjacktv.mechjackbot.CommandDescription;
+import com.mechjacktv.mechjackbot.CommandTrigger;
 import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.mechjackbot.command.AbstractCommand;
 import com.mechjacktv.mechjackbot.command.CommandUtils;
@@ -14,14 +16,14 @@ public class ShoutOutListenerCommand extends AbstractCommand {
 
   @Inject
   public ShoutOutListenerCommand(final ShoutOutService shoutOutService, final CommandUtils commandUtils) {
-    super("!casterListener", commandUtils);
+    super(CommandTrigger.of("!casterListener"), commandUtils);
     this.shoutOutService = shoutOutService;
     this.commandUtils = commandUtils;
   }
 
   @Override
-  public final String getDescription() {
-    return "Monitors chat looking for casters who are due for a shout out.";
+  public final CommandDescription getDescription() {
+    return CommandDescription.of("Monitors chat looking for casters who are due for a shout out.");
   }
 
   @Override
@@ -30,7 +32,7 @@ public class ShoutOutListenerCommand extends AbstractCommand {
   }
 
   @Override
-  public final boolean isHandledMessage(MessageEvent messageEvent) {
+  public final boolean isTriggered(MessageEvent messageEvent) {
     return this.shoutOutService.isCasterDue(this.commandUtils.getSanitizedViewerName(messageEvent));
   }
 

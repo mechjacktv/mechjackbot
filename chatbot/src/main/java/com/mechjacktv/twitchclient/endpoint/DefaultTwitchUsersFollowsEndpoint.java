@@ -3,21 +3,20 @@ package com.mechjacktv.twitchclient.endpoint;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.mechjacktv.twitchclient.*;
 import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollow;
 import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollows;
 import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollows.Builder;
-import com.mechjacktv.twitchclient.TwitchClientUtils;
-import com.mechjacktv.twitchclient.UsersFollowsEndpoint;
 
 import java.util.Objects;
 
-public final class DefaultUsersFollowsEndpoint implements UsersFollowsEndpoint {
+public final class DefaultTwitchUsersFollowsEndpoint implements TwitchUsersFollowsEndpoint {
 
   private final Gson gson;
   private final TwitchClientUtils twitchClientUtils;
   private final TypeAdapter<UserFollow> userTypeAdapter;
 
-  public DefaultUsersFollowsEndpoint(final Gson gson, final TwitchClientUtils twitchClientUtils) {
+  public DefaultTwitchUsersFollowsEndpoint(final Gson gson, final TwitchClientUtils twitchClientUtils) {
     this.gson = gson;
     this.twitchClientUtils = twitchClientUtils;
     this.userTypeAdapter = this.gson.getAdapter(UserFollow.class);
@@ -26,13 +25,13 @@ public final class DefaultUsersFollowsEndpoint implements UsersFollowsEndpoint {
   }
 
   @Override
-  public final UserFollows getUserFollowsFromId(final String fromId) {
+  public final UserFollows getUserFollowsFromId(final TwitchUserId fromId) {
     Objects.requireNonNull(fromId, "fromId **MUST** not be `null.");
     return this.getUsersFollows(String.format("from_id=%s", fromId));
   }
 
   @Override
-  public final UserFollows getUserFollowsFromId(final String fromId, final String cursor) {
+  public final UserFollows getUserFollowsFromId(final TwitchUserId fromId, final TwitchUserFollowsCursor cursor) {
     Objects.requireNonNull(fromId, "fromId **MUST** not be `null.");
     Objects.requireNonNull(cursor, "cursor **MUST** not be `null.");
     return this.getUsersFollows(String.format("from_id=%s&after=%s", fromId, cursor));
@@ -42,7 +41,7 @@ public final class DefaultUsersFollowsEndpoint implements UsersFollowsEndpoint {
     final String url = String.format("users/follows/?first=100&%s", queryString);
     final Builder userFollowsBuilder = UserFollows.newBuilder();
 
-    this.twitchClientUtils.handleResponse(url, (responseReader) -> {
+    this.twitchClientUtils.handleResponse(TwitchUrl.of(url), (responseReader) -> {
       final JsonReader jsonReader = this.gson.newJsonReader(responseReader);
 
       jsonReader.beginObject();
@@ -61,7 +60,7 @@ public final class DefaultUsersFollowsEndpoint implements UsersFollowsEndpoint {
                   userFollowsBuilder.setCursor(jsonReader.nextString());
                   break;
                 default:
-                  this.twitchClientUtils.handleInvalidName(name);
+                  this.twitchClientUtils.handleInvalidObjectName(name);
                   break;
               }
             }
@@ -75,7 +74,7 @@ public final class DefaultUsersFollowsEndpoint implements UsersFollowsEndpoint {
             jsonReader.endArray();
             break;
           default:
-            this.twitchClientUtils.handleInvalidName(name);
+            this.twitchClientUtils.handleInvalidObjectName(name);
             break;
         }
       }

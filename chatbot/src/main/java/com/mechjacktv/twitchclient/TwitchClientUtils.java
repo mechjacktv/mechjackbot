@@ -16,43 +16,43 @@ public final class TwitchClientUtils {
   private static final Logger log = LoggerFactory.getLogger(TwitchClientUtils.class);
   private static final String TWITCH_API_URL = "https://api.twitch.tv/helix";
 
-  private final String clientId;
+  private final TwitchClientId clientId;
   private final ExecutionUtils executionUtils;
 
-  TwitchClientUtils(final String clientId, final ExecutionUtils executionUtils) {
+  TwitchClientUtils(final TwitchClientId clientId, final ExecutionUtils executionUtils) {
     this.clientId = clientId;
     this.executionUtils = executionUtils;
   }
 
-  public final void handleInvalidName(final String name) {
+  public final void handleInvalidObjectName(final String name) {
     log.warn(String.format("Name '%s' was found but not expected", name));
   }
 
-  public final void handleResponse(final String serviceUrl, final ConsumerWithException<Reader> consumer) {
+  public final void handleResponse(final TwitchUrl serviceUrl, final ConsumerWithException<Reader> consumer) {
     this.executionUtils.softenException(() -> {
       try (final Reader reader = this.openResponseReader(serviceUrl)) {
         consumer.accept(reader);
       }
-    }, ConnectionException.class);
+    }, TwitchConnectionException.class);
   }
 
-  private Reader openResponseReader(final String serviceUrl) {
+  private Reader openResponseReader(final TwitchUrl serviceUrl) {
     return new InputStreamReader(this.openResponseInputStream(serviceUrl));
   }
 
-  private InputStream openResponseInputStream(final String serviceUrl) {
+  private InputStream openResponseInputStream(final TwitchUrl serviceUrl) {
     return this.executionUtils.softenException(() -> this.openConnection(serviceUrl).getInputStream(),
-        ConnectionException.class);
+        TwitchConnectionException.class);
   }
 
-  private URLConnection openConnection(final String serviceUrl) {
+  private URLConnection openConnection(final TwitchUrl serviceUrl) {
     return this.executionUtils.softenException(() -> {
-      final URL url = new URL(String.format("%s/%s", TWITCH_API_URL, serviceUrl));
+      final URL url = new URL(String.format("%s/%s", TWITCH_API_URL, serviceUrl.value));
       final URLConnection urlConnection = url.openConnection();
 
-      urlConnection.setRequestProperty("Client-ID", this.clientId);
+      urlConnection.setRequestProperty("Client-ID", this.clientId.value);
       return urlConnection;
-    }, ConnectionException.class);
+    }, TwitchConnectionException.class);
   }
 
 }

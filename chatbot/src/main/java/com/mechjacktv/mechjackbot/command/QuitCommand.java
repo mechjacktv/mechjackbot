@@ -1,8 +1,6 @@
 package com.mechjacktv.mechjackbot.command;
 
-import com.mechjacktv.mechjackbot.ChatBot;
-import com.mechjacktv.mechjackbot.MessageEvent;
-import com.mechjacktv.mechjackbot.RestrictToOwner;
+import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.scheduleservice.ScheduleService;
 
 import javax.inject.Inject;
@@ -15,13 +13,13 @@ public class QuitCommand extends AbstractCommand {
 
   @Inject
   public QuitCommand(final CommandUtils commandUtils, final ScheduleService scheduleService) {
-    super("!quit", commandUtils);
+    super(CommandTrigger.of("!quit"), commandUtils);
     this.scheduleService = scheduleService;
   }
 
   @Override
-  public final String getDescription() {
-    return "Shuts the chat bot down.";
+  public final CommandDescription getDescription() {
+    return CommandDescription.of("Shuts the chat bot down.");
   }
 
   @Override
@@ -29,7 +27,7 @@ public class QuitCommand extends AbstractCommand {
   public void handleMessage(final MessageEvent messageEvent) {
     final ChatBot chatBot = messageEvent.getChatBot();
 
-    messageEvent.sendResponse("That's all for me, folks");
+    messageEvent.sendResponse(Message.of("That's all for me, folks"));
     this.scheduleService.stop();
     chatBot.stop();
   }

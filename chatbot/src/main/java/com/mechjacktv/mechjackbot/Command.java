@@ -2,16 +2,16 @@ package com.mechjacktv.mechjackbot;
 
 public interface Command {
 
-  String getDescription();
+  CommandDescription getDescription();
 
-  String getName();
+  CommandName getName();
 
-  String getTrigger();
+  CommandTrigger getTrigger();
 
-  boolean isHandledMessage(MessageEvent messageEvent);
+  void handleMessage(MessageEvent messageEvent);
 
   boolean isTriggerable();
 
-  void handleMessage(MessageEvent messageEvent);
+  boolean isTriggered(MessageEvent messageEvent);
 
 }

@@ -1,7 +1,8 @@
 package com.mechjacktv.mechjackbot.configuration;
 
 import com.google.common.base.Strings;
-import com.mechjacktv.mechjackbot.ChatBotConfiguration;
+import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.twitchclient.TwitchClientId;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,18 +21,20 @@ final class PropertiesChatBotConfiguration implements ChatBotConfiguration {
   private static final String TWITCH_PASSWORD_KEY = "twitch.password";
   private static final String TWITCH_USERNAME_KEY = "twitch.username";
 
-  private final String twitchChannel;
-  private final String twitchClientId;
-  private final String twitchPassword;
-  private final String twitchUsername;
+  private final DataLocation dataLocation;
+  private final TwitchChannel twitchChannel;
+  private final TwitchClientId twitchClientId;
+  private final TwitchPassword twitchPassword;
+  private final TwitchUsername twitchUsername;
 
   public PropertiesChatBotConfiguration() throws IOException {
     final Properties configProperties = this.loadConfigProperties();
 
-    this.twitchChannel = configProperties.getProperty(TWITCH_CHANNEL_KEY);
-    this.twitchClientId = configProperties.getProperty(TWITCH_CLIENT_ID_KEY);
-    this.twitchPassword = configProperties.getProperty(TWITCH_PASSWORD_KEY);
-    this.twitchUsername = configProperties.getProperty(TWITCH_USERNAME_KEY);
+    this.dataLocation = DataLocation.of(DATA_LOCATION);
+    this.twitchChannel = TwitchChannel.of(configProperties.getProperty(TWITCH_CHANNEL_KEY));
+    this.twitchClientId = TwitchClientId.of(configProperties.getProperty(TWITCH_CLIENT_ID_KEY));
+    this.twitchPassword = TwitchPassword.of(configProperties.getProperty(TWITCH_PASSWORD_KEY));
+    this.twitchUsername = TwitchUsername.of(configProperties.getProperty(TWITCH_USERNAME_KEY));
   }
 
   private Properties loadConfigProperties() throws IOException {
@@ -71,27 +74,27 @@ final class PropertiesChatBotConfiguration implements ChatBotConfiguration {
   }
 
   @Override
-  public String getDataLocation() {
-    return DATA_LOCATION;
+  public DataLocation getDataLocation() {
+    return this.dataLocation;
   }
 
   @Override
-  public String getTwitchChannel() {
+  public TwitchChannel getTwitchChannel() {
     return this.twitchChannel;
   }
 
   @Override
-  public String getTwitchClientId() {
+  public TwitchClientId getTwitchClientId() {
     return this.twitchClientId;
   }
 
   @Override
-  public String getTwitchPassword() {
+  public TwitchPassword getTwitchPassword() {
     return this.twitchPassword;
   }
 
   @Override
-  public String getTwitchUsername() {
+  public TwitchUsername getTwitchUsername() {
     return this.twitchUsername;
   }
 

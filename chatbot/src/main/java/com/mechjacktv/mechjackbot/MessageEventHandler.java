@@ -7,7 +7,7 @@ public interface MessageEventHandler {
 
   Collection<Command> getCommands();
 
-  Optional<Command> getCommand(String commandTrigger);
+  Optional<Command> getCommand(CommandTrigger commandTrigger);
 
   void addCommand(Command command);
 

@@ -5,8 +5,8 @@ import com.google.gson.Gson;
 import com.mechjacktv.twitchclient.TwitchClientMessage.User;
 import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollows;
 import com.mechjacktv.twitchclient.TwitchClientMessage.Users;
-import com.mechjacktv.twitchclient.endpoint.DefaultUsersEndpoint;
-import com.mechjacktv.twitchclient.endpoint.DefaultUsersFollowsEndpoint;
+import com.mechjacktv.twitchclient.endpoint.DefaultTwitchUsersEndpoint;
+import com.mechjacktv.twitchclient.endpoint.DefaultTwitchUsersFollowsEndpoint;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,17 +15,17 @@ import java.util.Set;
 
 final class DefaultTwitchClient implements TwitchClient {
 
-  private final UsersEndpoint usersEndpoint;
-  private final UsersFollowsEndpoint usersFollowsEndpoint;
+  private final TwitchUsersEndpoint usersEndpoint;
+  private final TwitchUsersFollowsEndpoint usersFollowsEndpoint;
 
   DefaultTwitchClient(final Gson gson, final TwitchClientUtils twitchClientUtils) {
-    this.usersEndpoint = new DefaultUsersEndpoint(gson, twitchClientUtils);
-    this.usersFollowsEndpoint = new DefaultUsersFollowsEndpoint(gson, twitchClientUtils);
+    this.usersEndpoint = new DefaultTwitchUsersEndpoint(gson, twitchClientUtils);
+    this.usersFollowsEndpoint = new DefaultTwitchUsersFollowsEndpoint(gson, twitchClientUtils);
   }
 
 
   @Override
-  public Optional<String> getUserId(final String login) {
+  public Optional<TwitchUserId> getUserId(final TwitchLogin login) {
     Objects.requireNonNull(login, "Twitch login **MUST** not be `null`.");
 
     final Users users = this.getUsers(Sets.newHashSet(login), Sets.newHashSet());
@@ -34,22 +34,22 @@ final class DefaultTwitchClient implements TwitchClient {
     if (userList.isEmpty()) {
       return Optional.empty();
     } else {
-      return Optional.of(userList.get(0).getId());
+      return Optional.of(TwitchUserId.of(userList.get(0).getId()));
     }
   }
 
   @Override
-  public Users getUsers(final Set<String> logins, final Set<String> ids) {
-    return this.usersEndpoint.getUsers(logins, ids);
+  public Users getUsers(final Set<TwitchLogin> twitchLogins, final Set<TwitchUserId> twitchUserIds) {
+    return this.usersEndpoint.getUsers(twitchLogins, twitchUserIds);
   }
 
   @Override
-  public UserFollows getUserFollowsFromId(final String fromId) {
+  public UserFollows getUserFollowsFromId(final TwitchUserId fromId) {
     return this.usersFollowsEndpoint.getUserFollowsFromId(fromId);
   }
 
   @Override
-  public UserFollows getUserFollowsFromId(final String fromId, final String cursor) {
+  public UserFollows getUserFollowsFromId(final TwitchUserId fromId, final TwitchUserFollowsCursor cursor) {
     return this.usersFollowsEndpoint.getUserFollowsFromId(fromId, cursor);
   }
 

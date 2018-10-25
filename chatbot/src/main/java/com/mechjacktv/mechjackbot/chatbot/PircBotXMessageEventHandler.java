@@ -1,6 +1,7 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
 import com.mechjacktv.mechjackbot.Command;
+import com.mechjacktv.mechjackbot.CommandTrigger;
 import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.mechjackbot.MessageEventHandler;
 
@@ -8,7 +9,7 @@ import java.util.*;
 
 public final class PircBotXMessageEventHandler implements MessageEventHandler {
 
-  private final Map<String, Command> commands;
+  private final Map<CommandTrigger, Command> commands;
 
   public PircBotXMessageEventHandler() {
     this.commands = new HashMap<>();
@@ -20,7 +21,7 @@ public final class PircBotXMessageEventHandler implements MessageEventHandler {
   }
 
   @Override
-  public final Optional<Command> getCommand(final String commandTrigger) {
+  public final Optional<Command> getCommand(final CommandTrigger commandTrigger) {
     return Optional.ofNullable(this.commands.get(commandTrigger));
   }
 
@@ -32,7 +33,7 @@ public final class PircBotXMessageEventHandler implements MessageEventHandler {
   @Override
   public final void handleMessage(final MessageEvent messageEvent) {
     for (final Command command : this.getCommands()) {
-      if (command.isHandledMessage(messageEvent)) {
+      if (command.isTriggered(messageEvent)) {
         command.handleMessage(messageEvent);
       }
     }

@@ -1,6 +1,7 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
 import com.mechjacktv.mechjackbot.ChatUser;
+import com.mechjacktv.mechjackbot.ChatUsername;
 import org.pircbotx.User;
 
 final class PircBotXChatUser implements ChatUser {
@@ -12,8 +13,8 @@ final class PircBotXChatUser implements ChatUser {
   }
 
   @Override
-  public String getUsername() {
-    return this.user.getNick();
+  public ChatUsername getUsername() {
+    return ChatUsername.of(this.user.getNick());
   }
 
 }

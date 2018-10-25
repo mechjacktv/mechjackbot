@@ -3,7 +3,7 @@ package com.mechjacktv.typedobject;
 import java.util.Objects;
 
 /**
- * Abstract base class for wrapping commonly used types with a stronly typed wrapper. Take for example the following
+ * Abstract base class for wrapping commonly used types with a strongly typed wrapper. Take for example the following
  * code:
  *
  * ```java
@@ -72,7 +72,7 @@ public abstract class StronglyTyped<T> {
    *
    * @param value the `value` to wrap
    */
-  public StronglyTyped(final T value) {
+  StronglyTyped(final T value) {
     Objects.requireNonNull(value, "A `StronglyTyped` `value` **MUST NOT** be `null`");
     this.value = value;
   }

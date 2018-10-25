@@ -44,14 +44,4 @@ final class KeyValueStoreAppConfiguration implements AppConfiguration {
     return keys;
   }
 
-  @Override
-  public void remove(String key) {
-    this.properties.remove(key.getBytes());
-  }
-
-  @Override
-  public void set(String key, String value) {
-    this.properties.put(key.getBytes(), value.getBytes());
-  }
-
 }

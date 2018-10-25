@@ -4,8 +4,8 @@ import com.mechjacktv.twitchclient.TwitchClientMessage.Users;
 
 import java.util.Set;
 
-public interface UsersEndpoint {
+public interface TwitchUsersEndpoint {
 
-  Users getUsers(Set<String> logins, Set<String> ids);
+  Users getUsers(Set<TwitchLogin> twitchLogins, Set<TwitchUserId> twitchUserIds);
 
 }

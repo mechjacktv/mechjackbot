@@ -11,7 +11,7 @@ public abstract class TimeUtilsContractTests {
 
   @Test
   public final void secondsAsMs_oneSecond_returns1000() {
-    final TimeUtils subjectUnderTest = givenASubjectToTest();
+    final TimeUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Integer result = subjectUnderTest.secondsAsMs(1);
 
@@ -19,8 +19,8 @@ public abstract class TimeUtilsContractTests {
   }
 
   @Test
-  public final void secondAsMs_nullSecond_throwsNullPointerExeption() {
-    final TimeUtils subjectUnderTest = givenASubjectToTest();
+  public final void secondAsMs_nullSecond_throwsNullPointerException() {
+    final TimeUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.secondsAsMs(null));
 

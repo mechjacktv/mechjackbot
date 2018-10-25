@@ -1,9 +1,6 @@
 package com.mechjacktv.mechjackbot.command;
 
-import com.mechjacktv.mechjackbot.Command;
-import com.mechjacktv.mechjackbot.GlobalCoolDown;
-import com.mechjacktv.mechjackbot.MessageEvent;
-import com.mechjacktv.mechjackbot.MessageEventHandler;
+import com.mechjacktv.mechjackbot.*;
 
 import javax.inject.Inject;
 import java.util.Set;
@@ -17,13 +14,13 @@ public class CommandsCommand extends AbstractCommand {
 
   @Inject
   public CommandsCommand(final CommandUtils commandUtils, final MessageEventHandler messageEventHandler) {
-    super("!commands", commandUtils);
+    super(CommandTrigger.of("!commands"), commandUtils);
     this.messageEventHandler = messageEventHandler;
   }
 
   @Override
-  public String getDescription() {
-    return "Lists all the commands available to users.";
+  public CommandDescription getDescription() {
+    return CommandDescription.of("Lists all the commands available to users.");
   }
 
   @Override
@@ -36,7 +33,7 @@ public class CommandsCommand extends AbstractCommand {
         builder.append(String.format(" %s", command.getTrigger()));
       }
     }
-    messageEvent.sendResponse(builder.toString());
+    messageEvent.sendResponse(Message.of(builder.toString()));
   }
 
   private Set<Command> getSortedCommands() {
@@ -47,7 +44,7 @@ public class CommandsCommand extends AbstractCommand {
   }
 
   private int compareCommands(final Command command1, final Command command2) {
-    return command1.getTrigger().compareTo(command2.getTrigger());
+    return command1.getTrigger().value.compareTo(command2.getTrigger().value);
   }
 
 }

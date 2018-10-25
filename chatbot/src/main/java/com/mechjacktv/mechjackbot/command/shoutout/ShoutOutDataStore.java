@@ -9,6 +9,9 @@ import com.mechjacktv.scheduleservice.ScheduleService;
 import com.mechjacktv.twitchclient.TwitchClient;
 import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollow;
 import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollows;
+import com.mechjacktv.twitchclient.TwitchLogin;
+import com.mechjacktv.twitchclient.TwitchUserFollowsCursor;
+import com.mechjacktv.twitchclient.TwitchUserId;
 import com.mechjacktv.util.ProtobufUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,8 +40,8 @@ public final class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Cas
 
   private void updateCasters(final ChatBotConfiguration chatBotConfiguration,
                                        final TwitchClient twitchClient) {
-    final String channel = chatBotConfiguration.getTwitchChannel();
-    final Optional<String> casterId = twitchClient.getUserId(channel);
+    final String channel = chatBotConfiguration.getTwitchChannel().value;
+    final Optional<TwitchUserId> casterId = twitchClient.getUserId(TwitchLogin.of(channel));
 
     if (casterId.isPresent()) {
       final Collection<CasterKey> existingCasterKeys = this.getKeys();
@@ -52,7 +55,7 @@ public final class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Cas
     }
   }
 
-  private int addCasters(final String casterId,
+  private int addCasters(final TwitchUserId casterId,
                          final Collection<CasterKey> existingCasterKeys,
                          final TwitchClient twitchClient) {
     final Set<UserFollow> userFollows = this.getUserFollows(casterId, twitchClient);
@@ -81,13 +84,13 @@ public final class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Cas
     return removeCount;
   }
 
-  private Set<UserFollow> getUserFollows(final String casterId, final TwitchClient twitchClient) {
+  private Set<UserFollow> getUserFollows(final TwitchUserId casterId, final TwitchClient twitchClient) {
     UserFollows userFollows = twitchClient.getUserFollowsFromId(casterId);
     final Set<UserFollow> userFollowsList = new HashSet<>(userFollows.getUserFollowList());
     int lastSize = 0;
 
     while (userFollowsList.size() < userFollows.getTotalFollows() && lastSize != userFollowsList.size()) {
-      userFollows = twitchClient.getUserFollowsFromId(casterId, userFollows.getCursor());
+      userFollows = twitchClient.getUserFollowsFromId(casterId, TwitchUserFollowsCursor.of(userFollows.getCursor()));
       userFollowsList.addAll(userFollows.getUserFollowList());
       lastSize = userFollowsList.size();
     }
