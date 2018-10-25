@@ -19,15 +19,6 @@ public final class DefaultExecutionUtils implements ExecutionUtils {
     }, exceptionClass);
   }
 
-  /**
-   * @deprecated Not deprecated, but discouraged. Use alternative.
-   */
-  @Override
-  @Deprecated
-  public <T> T softenException(SupplierWithException<T> supplier) {
-    return this.softenException(supplier, SoftenedException.class);
-  }
-
   @Override
   public final <T> T softenException(SupplierWithException<T> supplier, Class<? extends RuntimeException> exceptionClass) {
     try {
