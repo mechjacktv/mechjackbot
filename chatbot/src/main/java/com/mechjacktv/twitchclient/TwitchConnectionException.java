@@ -1,6 +1,6 @@
 package com.mechjacktv.twitchclient;
 
-final class TwitchConnectionException extends TwitchClientException {
+public final class TwitchConnectionException extends TwitchClientException {
 
   public TwitchConnectionException() {
     super(null, null);

@@ -8,6 +8,7 @@ import com.mechjacktv.twitchclient.*;
 import com.mechjacktv.twitchclient.TwitchClientMessage.User;
 import com.mechjacktv.twitchclient.TwitchClientMessage.Users;
 
+import javax.inject.Inject;
 import java.util.Objects;
 import java.util.Set;
 
@@ -17,6 +18,7 @@ public final class DefaultTwitchUsersEndpoint implements TwitchUsersEndpoint {
   private final TwitchClientUtils twitchClientUtils;
   private final TypeAdapter<User> userTypeAdapter;
 
+  @Inject
   public DefaultTwitchUsersEndpoint(final Gson gson, final TwitchClientUtils twitchClientUtils) {
     this.gson = gson;
     this.twitchClientUtils = twitchClientUtils;

@@ -1,13 +1,11 @@
 package com.mechjacktv.twitchclient;
 
 import com.google.common.collect.Sets;
-import com.google.gson.Gson;
 import com.mechjacktv.twitchclient.TwitchClientMessage.User;
 import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollows;
 import com.mechjacktv.twitchclient.TwitchClientMessage.Users;
-import com.mechjacktv.twitchclient.endpoint.DefaultTwitchUsersEndpoint;
-import com.mechjacktv.twitchclient.endpoint.DefaultTwitchUsersFollowsEndpoint;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -15,12 +13,14 @@ import java.util.Set;
 
 final class DefaultTwitchClient implements TwitchClient {
 
-  private final TwitchUsersEndpoint usersEndpoint;
-  private final TwitchUsersFollowsEndpoint usersFollowsEndpoint;
+  private final TwitchUsersEndpoint twitchUsersEndpoint;
+  private final TwitchUsersFollowsEndpoint twitchUsersFollowsEndpoint;
 
-  DefaultTwitchClient(final Gson gson, final TwitchClientUtils twitchClientUtils) {
-    this.usersEndpoint = new DefaultTwitchUsersEndpoint(gson, twitchClientUtils);
-    this.usersFollowsEndpoint = new DefaultTwitchUsersFollowsEndpoint(gson, twitchClientUtils);
+  @Inject
+  DefaultTwitchClient(final TwitchUsersEndpoint twitchUsersEndpoint,
+                      final TwitchUsersFollowsEndpoint twitchUsersFollowsEndpoint) {
+    this.twitchUsersEndpoint = twitchUsersEndpoint;
+    this.twitchUsersFollowsEndpoint = twitchUsersFollowsEndpoint;
   }
 
 
@@ -40,17 +40,17 @@ final class DefaultTwitchClient implements TwitchClient {
 
   @Override
   public Users getUsers(final Set<TwitchLogin> twitchLogins, final Set<TwitchUserId> twitchUserIds) {
-    return this.usersEndpoint.getUsers(twitchLogins, twitchUserIds);
+    return this.twitchUsersEndpoint.getUsers(twitchLogins, twitchUserIds);
   }
 
   @Override
   public UserFollows getUserFollowsFromId(final TwitchUserId fromId) {
-    return this.usersFollowsEndpoint.getUserFollowsFromId(fromId);
+    return this.twitchUsersFollowsEndpoint.getUserFollowsFromId(fromId);
   }
 
   @Override
   public UserFollows getUserFollowsFromId(final TwitchUserId fromId, final TwitchUserFollowsCursor cursor) {
-    return this.usersFollowsEndpoint.getUserFollowsFromId(fromId, cursor);
+    return this.twitchUsersFollowsEndpoint.getUserFollowsFromId(fromId, cursor);
   }
 
 }

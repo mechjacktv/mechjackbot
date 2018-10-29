@@ -2,6 +2,7 @@ package com.mechjacktv.mechjackbot.configuration;
 
 import com.google.common.base.Strings;
 import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.twitchclient.TwitchClientConfiguration;
 import com.mechjacktv.twitchclient.TwitchClientId;
 
 import java.io.File;
@@ -9,7 +10,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-final class PropertiesChatBotConfiguration implements ChatBotConfiguration {
+final class PropertiesChatBotConfiguration implements ChatBotConfiguration, TwitchClientConfiguration {
 
   private static final String DATA_LOCATION_KEY = "mechjackbot.data_location";
   private static final String DATA_LOCATION_DEFAULT = System.getProperty("user.home") + "/.mechjackbot";
