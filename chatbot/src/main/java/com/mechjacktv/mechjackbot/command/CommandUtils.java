@@ -52,7 +52,7 @@ public final class CommandUtils {
       return this.commandTriggerPatterns.get(commandTrigger);
     }
 
-    final String commandTriggerRegex = commandTrigger.value + "(\\s+.+)?";
+    final String commandTriggerRegex = commandTrigger + "(\\s+.+)?";
     final Pattern commandTriggerPattern = Pattern.compile(commandTriggerRegex);
 
     this.commandTriggerPatterns.put(commandTrigger, commandTriggerPattern);
@@ -93,7 +93,7 @@ public final class CommandUtils {
     final ChatUser chatUser = messageEvent.getChatUser();
     final ChatUsername chatUsername = this.sanitizeViewerName(chatUser.getUsername());
 
-    return this.botOwner.value.equals(chatUsername.value);
+    return this.botOwner.equals(chatUsername);
   }
 
   final void sendUsage(final MessageEvent messageEvent, final CommandUsage usage) {
