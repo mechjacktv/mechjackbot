@@ -27,7 +27,7 @@ public class QuitCommand extends AbstractCommand {
   public void handleMessage(final MessageEvent messageEvent) {
     final ChatBot chatBot = messageEvent.getChatBot();
 
-    messageEvent.sendResponse(Message.of("That's all for me, folks"));
+    messageEvent.sendResponse(Message.of("MechJackBot powering down"));
     this.scheduleService.stop();
     chatBot.stop();
   }

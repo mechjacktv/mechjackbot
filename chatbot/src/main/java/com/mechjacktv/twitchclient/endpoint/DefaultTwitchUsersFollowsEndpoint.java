@@ -29,14 +29,14 @@ public final class DefaultTwitchUsersFollowsEndpoint implements TwitchUsersFollo
   @Override
   public final UserFollows getUserFollowsFromId(final TwitchUserId fromId) {
     Objects.requireNonNull(fromId, "fromId **MUST** not be `null.");
-    return this.getUsersFollows(String.format("from_id=%s", fromId));
+    return this.getUsersFollows(String.format("from_id=%s", fromId.value));
   }
 
   @Override
   public final UserFollows getUserFollowsFromId(final TwitchUserId fromId, final TwitchUserFollowsCursor cursor) {
     Objects.requireNonNull(fromId, "fromId **MUST** not be `null.");
     Objects.requireNonNull(cursor, "cursor **MUST** not be `null.");
-    return this.getUsersFollows(String.format("from_id=%s&after=%s", fromId, cursor));
+    return this.getUsersFollows(String.format("from_id=%s&after=%s", fromId.value, cursor.value));
   }
 
   private UserFollows getUsersFollows(final String queryString) {

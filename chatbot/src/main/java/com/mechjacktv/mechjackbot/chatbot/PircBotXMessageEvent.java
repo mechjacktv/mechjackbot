@@ -34,7 +34,7 @@ public final class PircBotXMessageEvent implements MessageEvent {
 
   @Override
   public void sendResponse(final Message message) {
-    this.genericMessageEvent.respondWith(String.format("/me mechja1Heart <( %s )", message.value));
+    this.genericMessageEvent.respondWith(String.format("/me MrDestructoid > %s ", message.value));
   }
 
 }
