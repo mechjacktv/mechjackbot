@@ -30,14 +30,14 @@ public final class DefaultTwitchUsersEndpoint implements TwitchUsersEndpoint {
   @Override
   public Users getUsers(final Set<TwitchLogin> logins, final Set<TwitchUserId> ids) {
     Objects.requireNonNull(logins,
-        "Logins set **MUST** not be `null.");
+        "Logins set **MUST** not be `null`.");
     Objects.requireNonNull(ids,
-        "Ids set **MUST** not be `null.");
+        "Ids set **MUST** not be `null`.");
     Preconditions.checkArgument(logins.size() + ids.size() > 0,
-        "Minimum number of combined Twitch logins and ids is 1.");
+        "Minimum number of combined Twitch logins and ids is `1`.");
     // NOTE the documentation makes it look like maybe 100 each?
     Preconditions.checkArgument(logins.size() + ids.size() <= 100,
-        "Maximum number of combined Twitch logins and ids is 100.");
+        "Maximum number of combined Twitch logins and ids is `100`.");
 
     final String url = String.format("users/?%s", this.buildQuery(logins, ids));
     final Users.Builder usersBuilder = Users.newBuilder();
