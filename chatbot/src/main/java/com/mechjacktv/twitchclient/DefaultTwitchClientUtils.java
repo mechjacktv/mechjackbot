@@ -35,7 +35,7 @@ public final class DefaultTwitchClientUtils implements TwitchClientUtils {
   public final void handleResponse(final TwitchUrl serviceUrl, final ConsumerWithException<Reader> consumer) {
     this.executionUtils.softenException(() -> {
       try (final Reader reader = this.openResponseReader(serviceUrl)) {
-        consumer.accept(reader);
+        this.executionUtils.softenException(() -> consumer.accept(reader), TwitchDataException.class);
       }
     }, TwitchConnectionException.class);
   }

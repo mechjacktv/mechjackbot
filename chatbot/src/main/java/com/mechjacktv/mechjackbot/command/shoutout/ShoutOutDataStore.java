@@ -100,7 +100,7 @@ public final class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Cas
   final CasterKey createCasterKey(final String casterName) {
     final CasterKey.Builder builder = CasterKey.newBuilder();
 
-    return builder.setName(casterName)
+    return builder.setName(casterName.toLowerCase())
         .build();
   }
 

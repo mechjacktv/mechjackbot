@@ -5,11 +5,11 @@ import com.mechjacktv.gson.TypeAdapterRegistrar;
 import com.mechjacktv.twitchclient.TwitchClientMessage.User;
 import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollow;
 
-public final class MessageAdapterRegistrar implements TypeAdapterRegistrar {
+public final class MessageTypeAdapterRegistrar implements TypeAdapterRegistrar {
 
   @Override
   public void registerTypeAdapters(final GsonBuilder gsonBuilder) {
-    gsonBuilder.registerTypeAdapter(User.class, new UserMessageAdapter());
-    gsonBuilder.registerTypeAdapter(UserFollow.class, new UserFollowMessageAdapter());
+    gsonBuilder.registerTypeAdapter(User.class, new UserMessageTypeAdapter());
+    gsonBuilder.registerTypeAdapter(UserFollow.class, new UserFollowMessageTypeAdapter());
   }
 }

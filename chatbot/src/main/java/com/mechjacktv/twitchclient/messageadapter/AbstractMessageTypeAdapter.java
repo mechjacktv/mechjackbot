@@ -9,7 +9,7 @@ import com.google.protobuf.util.JsonFormat;
 
 import java.io.IOException;
 
-abstract class AbstractMessageAdapter<M extends Message> extends TypeAdapter<M> {
+abstract class AbstractMessageTypeAdapter<M extends Message> extends TypeAdapter<M> {
 
   @Override
   public final void write(final JsonWriter jsonWriter, final Message message) throws IOException {
