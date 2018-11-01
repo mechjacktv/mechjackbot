@@ -39,19 +39,23 @@ public final class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Cas
   }
 
   private void updateCasters(final ChatBotConfiguration chatBotConfiguration,
-                                       final TwitchClient twitchClient) {
-    final String channel = chatBotConfiguration.getTwitchChannel().value;
-    final Optional<TwitchUserId> casterId = twitchClient.getUserId(TwitchLogin.of(channel));
+                             final TwitchClient twitchClient) {
+    try {
+      final String channel = chatBotConfiguration.getTwitchChannel().value;
+      final Optional<TwitchUserId> casterId = twitchClient.getUserId(TwitchLogin.of(channel));
 
-    if (casterId.isPresent()) {
-      final Collection<CasterKey> existingCasterKeys = this.getKeys();
-      final int addCount = this.addCasters(casterId.get(), existingCasterKeys, twitchClient);
-      final int removeCount = this.removeCasters(existingCasterKeys);
+      if (casterId.isPresent()) {
+        final Collection<CasterKey> existingCasterKeys = this.getKeys();
+        final int addCount = this.addCasters(casterId.get(), existingCasterKeys, twitchClient);
+        final int removeCount = this.removeCasters(existingCasterKeys);
 
-      log.info(String.format("Channel, %s, is following %d casters (%d added, %d removed)",
-          channel, this.getKeys().size(), addCount, removeCount));
-    } else {
-      log.warn(String.format("Failed to find Twitch id for Twitch login, %s. Using existing data", channel));
+        log.info(String.format("Channel, %s, is following %d casters (%d added, %d removed)",
+            channel, this.getKeys().size(), addCount, removeCount));
+      } else {
+        log.warn(String.format("Failed to find Twitch id for Twitch login, %s. Using existing data", channel));
+      }
+    } catch (final Throwable t) {
+      log.error("Failure while updating caster shout out data store", t);
     }
   }
 
@@ -64,7 +68,7 @@ public final class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Cas
     for (final UserFollow userFollow : userFollows) {
       final CasterKey casterKey = this.createCasterKey(userFollow.getToName());
 
-      if(this.containsKey(casterKey)) {
+      if (this.containsKey(casterKey)) {
         existingCasterKeys.remove(casterKey);
       } else {
         this.put(casterKey, this.createCaster(userFollow.getToName(), 0L));
