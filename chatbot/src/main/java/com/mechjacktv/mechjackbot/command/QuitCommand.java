@@ -10,7 +10,6 @@ public class QuitCommand extends AbstractCommand {
 
   private final ScheduleService scheduleService;
 
-
   @Inject
   public QuitCommand(final CommandUtils commandUtils, final ScheduleService scheduleService) {
     super(CommandTrigger.of("!quit"), commandUtils);

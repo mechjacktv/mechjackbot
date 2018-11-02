@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public final class ShoutOutService {
 
-  private static final long TWELVE_HOURS = 1000 * 60 * 60 * 12;
+  private static final long ONE_HOUR = 1000 * 60 * 60;
 
   private final ShoutOutDataStore shoutOutDataStore;
 
@@ -24,7 +24,7 @@ public final class ShoutOutService {
     final CasterKey casterKey = this.shoutOutDataStore.createCasterKey(casterUsername.value);
     final Optional<Caster> caster = this.shoutOutDataStore.get(casterKey);
 
-    return caster.filter(c -> System.currentTimeMillis() - c.getLastShoutOut() > TWELVE_HOURS).isPresent();
+    return caster.filter(c -> System.currentTimeMillis() - c.getLastShoutOut() > ONE_HOUR).isPresent();
   }
 
   final void sendCasterShoutOut(final MessageEvent messageEvent, final ChatUsername casterUsername) {

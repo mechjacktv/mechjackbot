@@ -38,6 +38,8 @@ public final class DefaultExecutionUtils implements ExecutionUtils {
 
           throw constructor.newInstance(e1);
         }
+      } catch (final RuntimeException e2) {
+        throw e2;
       } catch (final Exception e2) {
         log.error(String.format("Failed to instantiate RuntimeException. exceptionClass=%s, ",
             exceptionClass.getCanonicalName()), e2);

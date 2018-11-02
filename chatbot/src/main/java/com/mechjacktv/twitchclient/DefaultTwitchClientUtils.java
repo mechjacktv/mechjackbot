@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -15,15 +16,23 @@ import java.net.URLConnection;
 public final class DefaultTwitchClientUtils implements TwitchClientUtils {
 
   private static final Logger log = LoggerFactory.getLogger(DefaultTwitchClientUtils.class);
-  private static final String TWITCH_API_URL = "https://api.twitch.tv/helix";
 
   private final TwitchClientId clientId;
   private final ExecutionUtils executionUtils;
+  private final UrlConnectionFactory urlConnectionFactory;
 
   @Inject
-  DefaultTwitchClientUtils(final TwitchClientConfiguration twitchClientConfiguration, final ExecutionUtils executionUtils) {
+  DefaultTwitchClientUtils(final TwitchClientConfiguration twitchClientConfiguration,
+                           final ExecutionUtils executionUtils) {
+    this(twitchClientConfiguration, executionUtils, new DefaultUrlConnectionFactory());
+  }
+
+  DefaultTwitchClientUtils(final TwitchClientConfiguration twitchClientConfiguration,
+                           final ExecutionUtils executionUtils,
+                           final UrlConnectionFactory urlConnectionFactory) {
     this.clientId = twitchClientConfiguration.getTwitchClientId();
     this.executionUtils = executionUtils;
+    this.urlConnectionFactory = urlConnectionFactory;
   }
 
   @Override
@@ -49,14 +58,44 @@ public final class DefaultTwitchClientUtils implements TwitchClientUtils {
         TwitchConnectionException.class);
   }
 
-  private URLConnection openConnection(final TwitchUrl serviceUrl) {
+  private UrlConnection openConnection(final TwitchUrl serviceUrl) {
     return this.executionUtils.softenException(() -> {
-      final URL url = new URL(String.format("%s/%s", TWITCH_API_URL, serviceUrl.value));
-      final URLConnection urlConnection = url.openConnection();
+      final UrlConnection urlConnection = urlConnectionFactory
+          .openConnection(String.format("%s/%s", TWITCH_API_URL, serviceUrl.value));
 
       urlConnection.setRequestProperty("Client-ID", this.clientId.value);
       return urlConnection;
     }, TwitchConnectionException.class);
+  }
+
+  private static final class DefaultUrlConnectionFactory implements UrlConnectionFactory {
+
+    @Override
+    public UrlConnection openConnection(final String url) throws IOException {
+      final URLConnection urlConnection = new URL(url).openConnection();
+
+      return new DefaultUrlConnection(urlConnection);
+    }
+
+  }
+
+  private static final class DefaultUrlConnection implements UrlConnection {
+
+    private final URLConnection urlConnection;
+
+    DefaultUrlConnection(final URLConnection urlConnection) {
+      this.urlConnection = urlConnection;
+    }
+
+    @Override
+    public InputStream getInputStream() throws IOException {
+      return urlConnection.getInputStream();
+    }
+
+    @Override
+    public void setRequestProperty(final String name, final String value) {
+      urlConnection.setRequestProperty(name, value);
+    }
   }
 
 }
