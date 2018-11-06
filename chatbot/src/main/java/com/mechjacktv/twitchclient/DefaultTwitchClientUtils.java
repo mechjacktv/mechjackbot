@@ -60,7 +60,7 @@ public final class DefaultTwitchClientUtils implements TwitchClientUtils {
 
   private UrlConnection openConnection(final TwitchUrl serviceUrl) {
     return this.executionUtils.softenException(() -> {
-      final UrlConnection urlConnection = urlConnectionFactory
+      final UrlConnection urlConnection = this.urlConnectionFactory
           .openConnection(String.format("%s/%s", TWITCH_API_URL, serviceUrl.value));
 
       urlConnection.setRequestProperty("Client-ID", this.clientId.value);
@@ -89,12 +89,12 @@ public final class DefaultTwitchClientUtils implements TwitchClientUtils {
 
     @Override
     public InputStream getInputStream() throws IOException {
-      return urlConnection.getInputStream();
+      return this.urlConnection.getInputStream();
     }
 
     @Override
     public void setRequestProperty(final String name, final String value) {
-      urlConnection.setRequestProperty(name, value);
+      this.urlConnection.setRequestProperty(name, value);
     }
   }
 
