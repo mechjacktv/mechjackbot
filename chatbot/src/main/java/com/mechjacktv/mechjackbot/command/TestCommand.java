@@ -10,7 +10,7 @@ public class TestCommand extends AbstractCommand {
 
   @Inject
   public TestCommand(final ChatBotConfiguration chatBotConfiguration, final CommandUtils commandUtils,
-          final TwitchClient twitchClient) {
+      final TwitchClient twitchClient) {
     super(CommandTrigger.of("!test"), commandUtils);
   }
 

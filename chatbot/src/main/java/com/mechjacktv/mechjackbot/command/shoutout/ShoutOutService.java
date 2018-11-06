@@ -30,12 +30,12 @@ public final class ShoutOutService {
 
   final void sendCasterShoutOut(final MessageEvent messageEvent, final ChatUsername casterUsername) {
     messageEvent.sendResponse(Message.of(String.format("Fellow caster in the stream! " +
-            "Everyone, please give a warm welcome to @%s. " +
-            "It would be great if you checked them out " +
-            "and gave them a follow. https://twitch.tv/%s",
-            casterUsername, casterUsername)));
+        "Everyone, please give a warm welcome to @%s. " +
+        "It would be great if you checked them out " +
+        "and gave them a follow. https://twitch.tv/%s",
+        casterUsername, casterUsername)));
     this.shoutOutDataStore.put(this.shoutOutDataStore.createCasterKey(casterUsername.value),
-            this.shoutOutDataStore.createCaster(casterUsername.value, System.currentTimeMillis()));
+        this.shoutOutDataStore.createCaster(casterUsername.value, System.currentTimeMillis()));
   }
 
 }

@@ -20,7 +20,7 @@ final class DefaultTwitchClient implements TwitchClient {
 
   @Inject
   DefaultTwitchClient(final TwitchUsersEndpoint twitchUsersEndpoint,
-          final TwitchUsersFollowsEndpoint twitchUsersFollowsEndpoint) {
+      final TwitchUsersFollowsEndpoint twitchUsersFollowsEndpoint) {
     this.twitchUsersEndpoint = twitchUsersEndpoint;
     this.twitchUsersFollowsEndpoint = twitchUsersFollowsEndpoint;
   }

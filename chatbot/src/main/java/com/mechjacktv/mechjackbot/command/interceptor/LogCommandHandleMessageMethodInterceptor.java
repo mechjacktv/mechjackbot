@@ -25,19 +25,19 @@ final class LogCommandHandleMessageMethodInterceptor implements MethodIntercepto
     final MessageEvent messageEvent = (MessageEvent) invocation.getArguments()[0];
 
     this.getLogger(thisCommand.getName().value).info(
-            String.format("Executed: trigger=%s, user=%s, message=%s",
-                    thisCommand.getTrigger(),
-                    messageEvent.getChatUser().getUsername(),
-                    messageEvent.getMessage()));
+        String.format("Executed: trigger=%s, user=%s, message=%s",
+            thisCommand.getTrigger(),
+            messageEvent.getChatUser().getUsername(),
+            messageEvent.getMessage()));
     try {
       return invocation.proceed();
     } catch (final Throwable t) {
       this.getLogger(thisCommand.getName().value).error(
-              String.format("Failed: trigger=%s, user=%s, message=%s",
-                      thisCommand.getTrigger(),
-                      messageEvent.getChatUser().getUsername(),
-                      messageEvent.getMessage()),
-              t);
+          String.format("Failed: trigger=%s, user=%s, message=%s",
+              thisCommand.getTrigger(),
+              messageEvent.getChatUser().getUsername(),
+              messageEvent.getMessage()),
+          t);
     }
     return null;
   }

@@ -7,8 +7,6 @@ import org.junit.Test;
 
 public abstract class TimeUtilsContractTests {
 
-  abstract TimeUtils givenASubjectToTest();
-
   @Test
   public final void secondsAsMs_oneSecond_returns1000() {
     final TimeUtils subjectUnderTest = this.givenASubjectToTest();
@@ -17,6 +15,8 @@ public abstract class TimeUtilsContractTests {
 
     assertThat(result).isEqualTo(1000);
   }
+
+  abstract TimeUtils givenASubjectToTest();
 
   @Test
   public final void secondAsMs_nullSecond_throwsNullPointerException() {

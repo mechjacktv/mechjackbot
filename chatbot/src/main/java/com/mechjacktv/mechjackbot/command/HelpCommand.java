@@ -36,15 +36,15 @@ public class HelpCommand extends AbstractCommand {
 
       if (command.isPresent() && command.get().isTriggerable()) {
         messageEvent.sendResponse(Message.of(String.format("@%s, %s -> %s",
-                this.commandUtils.getSanitizedViewerName(messageEvent),
-                command.get().getTrigger(), command.get().getDescription())));
+            this.commandUtils.getSanitizedViewerName(messageEvent),
+            command.get().getTrigger(), command.get().getDescription())));
       } else {
         messageEvent.sendResponse(Message.of(String.format("@%s, I don't see a command triggered by %s.",
-                this.commandUtils.getSanitizedViewerName(messageEvent), commandTrigger)));
+            this.commandUtils.getSanitizedViewerName(messageEvent), commandTrigger)));
       }
     } else {
       this.commandUtils.sendUsage(messageEvent,
-              CommandUsage.of(String.format("%s <commandTrigger>", this.getTrigger())));
+          CommandUsage.of(String.format("%s <commandTrigger>", this.getTrigger())));
     }
   }
 

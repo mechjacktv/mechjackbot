@@ -18,7 +18,7 @@ public final class DefaultTwitchClientModule extends AbstractModule {
     this.bind(TwitchUsersFollowsEndpoint.class).to(DefaultTwitchUsersFollowsEndpoint.class).asEagerSingleton();
 
     Multibinder.newSetBinder(this.binder(), TypeAdapterRegistrar.class).addBinding()
-            .to(MessageTypeAdapterRegistrar.class).asEagerSingleton();
+        .to(MessageTypeAdapterRegistrar.class).asEagerSingleton();
   }
 
 }

@@ -20,7 +20,7 @@ final class DefaultProtobufUtils implements ProtobufUtils {
 
   @Override
   public <T extends Message> Collection<T> parseAllMessages(final Class<T> messageClass,
-          final Collection<byte[]> messageBytesSet) {
+      final Collection<byte[]> messageBytesSet) {
     final Set<T> messages = new HashSet<>();
 
     for (final byte[] messageBytes : messageBytesSet) {

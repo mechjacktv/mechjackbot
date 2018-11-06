@@ -59,7 +59,7 @@ class InspectConfigCommand extends AbstractCommand {
       }
     } else {
       this.commandUtils.sendUsage(messageEvent,
-              CommandUsage.of(String.format("%s <key> = <value>", this.getTrigger())));
+          CommandUsage.of(String.format("%s <key> = <value>", this.getTrigger())));
     }
   }
 

@@ -23,7 +23,7 @@ public final class CommandUtils {
 
   @Inject
   public CommandUtils(final AppConfiguration appConfiguration, final ChatBotConfiguration botConfiguration,
-          final TimeUtils timeUtils) {
+      final TimeUtils timeUtils) {
     this.appConfiguration = appConfiguration;
     this.botOwner = this.sanitizeViewerName(ChatUsername.of(botConfiguration.getTwitchChannel().value));
     this.commandLastCalled = new HashMap<>();
@@ -78,8 +78,8 @@ public final class CommandUtils {
 
   private CommandCoolDownPeriodMs getCommandCoolDownPeriodMs() {
     return CommandCoolDownPeriodMs.of(this.timeUtils.secondsAsMs(Integer.parseInt(
-            this.appConfiguration.get(COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS,
-                    COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS_DEFAULT))));
+        this.appConfiguration.get(COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS,
+            COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS_DEFAULT))));
   }
 
   public final boolean isRegularUserViewer(final MessageEvent messageEvent) {
@@ -99,7 +99,7 @@ public final class CommandUtils {
 
   final void sendUsage(final MessageEvent messageEvent, final CommandUsage usage) {
     messageEvent.sendResponse(
-            Message.of(String.format("@%s, usage: %s", this.getSanitizedViewerName(messageEvent), usage)));
+        Message.of(String.format("@%s, usage: %s", this.getSanitizedViewerName(messageEvent), usage)));
   }
 
   public final ChatUsername getSanitizedViewerName(final MessageEvent messageEvent) {

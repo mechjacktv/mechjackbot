@@ -32,13 +32,13 @@ public class ShoutOutListenerCommand extends AbstractCommand {
   }
 
   @Override
-  public final boolean isTriggered(MessageEvent messageEvent) {
-    return this.shoutOutService.isCasterDue(this.commandUtils.getSanitizedViewerName(messageEvent));
+  public boolean isTriggerable() {
+    return false;
   }
 
   @Override
-  public boolean isTriggerable() {
-    return false;
+  public final boolean isTriggered(MessageEvent messageEvent) {
+    return this.shoutOutService.isCasterDue(this.commandUtils.getSanitizedViewerName(messageEvent));
   }
 
 }

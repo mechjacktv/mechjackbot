@@ -19,7 +19,7 @@ final class PircBotXListener extends ListenerAdapter {
 
   @Inject
   public PircBotXListener(final Set<Command> commands, final ExecutionUtils executionUtils,
-          final MessageEventHandler messageEventHandler) {
+      final MessageEventHandler messageEventHandler) {
     for (final Command command : commands) {
       messageEventHandler.addCommand(command);
     }

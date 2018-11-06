@@ -18,14 +18,14 @@ public final class PircBotXChatBot implements ChatBot {
   @Inject
   @SuppressWarnings("unused")
   public PircBotXChatBot(final ChatBotConfiguration chatBotConfiguration, final ExecutionUtils executionUtils,
-          final Listener listener) {
+      final Listener listener) {
     final Configuration configuration = new Configuration.Builder()
-            .setName(chatBotConfiguration.getTwitchUsername().value)
-            .addServer("irc.chat.twitch.tv", 6667)
-            .setServerPassword(chatBotConfiguration.getTwitchPassword().value)
-            .addListener(listener)
-            .addAutoJoinChannel("#" + chatBotConfiguration.getTwitchChannel().value)
-            .buildConfiguration();
+        .setName(chatBotConfiguration.getTwitchUsername().value)
+        .addServer("irc.chat.twitch.tv", 6667)
+        .setServerPassword(chatBotConfiguration.getTwitchPassword().value)
+        .addListener(listener)
+        .addAutoJoinChannel("#" + chatBotConfiguration.getTwitchChannel().value)
+        .buildConfiguration();
 
     this.executionUtils = executionUtils;
     this.pircBotX = new PircBotX(configuration);

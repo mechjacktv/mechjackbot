@@ -25,7 +25,7 @@ public class PingCommand extends AbstractCommand {
   @GlobalCoolDown
   public void handleMessage(MessageEvent messageEvent) {
     messageEvent.sendResponse(Message.of(String.format("Don't worry, @%s. I'm here.",
-            this.commandUtils.getSanitizedViewerName(messageEvent))));
+        this.commandUtils.getSanitizedViewerName(messageEvent))));
   }
 
 }

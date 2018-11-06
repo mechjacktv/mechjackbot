@@ -13,7 +13,7 @@ public final class ShoutOutModule extends AbstractModule {
     this.bind(ShoutOutService.class).asEagerSingleton();
 
     Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(ShoutOutListenerCommand.class)
-            .asEagerSingleton();
+        .asEagerSingleton();
   }
 
 }

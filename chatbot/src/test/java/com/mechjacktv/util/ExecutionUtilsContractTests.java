@@ -9,8 +9,6 @@ import com.mechjacktv.util.function.SupplierWithException;
 
 public abstract class ExecutionUtilsContractTests {
 
-  abstract ExecutionUtils givenASubjectToTest();
-
   @Test
   public final void softenException_withRunnableNoException_completesNormally() {
     final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
@@ -21,6 +19,8 @@ public abstract class ExecutionUtilsContractTests {
 
     assertThat(thrown).isNull();
   }
+
+  abstract ExecutionUtils givenASubjectToTest();
 
   @Test
   public final void softenException_withRunnableThrowsException_throwsRuntimeException() {
@@ -50,7 +50,7 @@ public abstract class ExecutionUtilsContractTests {
     final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.softenException(this::throwsException,
-            RuntimeException.class));
+        RuntimeException.class));
 
     assertThat(thrown).isInstanceOf(RuntimeException.class).hasMessageContaining("test exception");
   }

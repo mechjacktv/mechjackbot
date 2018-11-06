@@ -26,13 +26,13 @@ public abstract class AbstractCommand implements Command {
   }
 
   @Override
-  public boolean isTriggered(MessageEvent messageEvent) {
-    return this.commandUtils.isCommandTrigger(this.getTrigger(), messageEvent);
+  public boolean isTriggerable() {
+    return true; // List a command by default
   }
 
   @Override
-  public boolean isTriggerable() {
-    return true; // List a command by default
+  public boolean isTriggered(MessageEvent messageEvent) {
+    return this.commandUtils.isCommandTrigger(this.getTrigger(), messageEvent);
   }
 
 }

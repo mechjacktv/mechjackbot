@@ -44,15 +44,15 @@ final class PropertiesChatBotConfiguration implements ChatBotConfiguration, Twit
 
     if (this.didCreateConfigProperties()) {
       throw new IllegalStateException(String.format("Please configure your chat bot (%s)",
-              new File(new File(DATA_LOCATION), CONFIG_PROPERTIES_FILE_NAME).getCanonicalPath()));
+          new File(new File(DATA_LOCATION), CONFIG_PROPERTIES_FILE_NAME).getCanonicalPath()));
     }
     try (final FileInputStream fileInputStream = new FileInputStream(
-            new File(new File(DATA_LOCATION), CONFIG_PROPERTIES_FILE_NAME))) {
+        new File(new File(DATA_LOCATION), CONFIG_PROPERTIES_FILE_NAME))) {
       configProperties.load(fileInputStream);
     }
     if (this.isMissingRequiredValues(configProperties)) {
       throw new IllegalStateException(String.format("Please complete your chat bot configuration (%s)",
-              new File(new File(DATA_LOCATION), CONFIG_PROPERTIES_FILE_NAME).getCanonicalPath()));
+          new File(new File(DATA_LOCATION), CONFIG_PROPERTIES_FILE_NAME).getCanonicalPath()));
     }
     return configProperties;
   }
@@ -73,9 +73,9 @@ final class PropertiesChatBotConfiguration implements ChatBotConfiguration, Twit
 
   private boolean isMissingRequiredValues(final Properties configProperties) {
     return Strings.isNullOrEmpty(configProperties.getProperty(TWITCH_USERNAME_KEY))
-            || Strings.isNullOrEmpty(configProperties.getProperty(TWITCH_PASSWORD_KEY))
-            || Strings.isNullOrEmpty(configProperties.getProperty(TWITCH_CHANNEL_KEY))
-            || Strings.isNullOrEmpty(configProperties.getProperty(TWITCH_CLIENT_ID_KEY));
+        || Strings.isNullOrEmpty(configProperties.getProperty(TWITCH_PASSWORD_KEY))
+        || Strings.isNullOrEmpty(configProperties.getProperty(TWITCH_CHANNEL_KEY))
+        || Strings.isNullOrEmpty(configProperties.getProperty(TWITCH_CLIENT_ID_KEY));
   }
 
   @Override

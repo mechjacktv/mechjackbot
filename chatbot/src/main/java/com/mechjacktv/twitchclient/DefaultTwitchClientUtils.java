@@ -26,13 +26,13 @@ public final class DefaultTwitchClientUtils implements TwitchClientUtils {
 
   @Inject
   DefaultTwitchClientUtils(final TwitchClientConfiguration twitchClientConfiguration,
-          final ExecutionUtils executionUtils) {
+      final ExecutionUtils executionUtils) {
     this(twitchClientConfiguration, executionUtils, new DefaultUrlConnectionFactory());
   }
 
   DefaultTwitchClientUtils(final TwitchClientConfiguration twitchClientConfiguration,
-          final ExecutionUtils executionUtils,
-          final UrlConnectionFactory urlConnectionFactory) {
+      final ExecutionUtils executionUtils,
+      final UrlConnectionFactory urlConnectionFactory) {
     this.clientId = twitchClientConfiguration.getTwitchClientId();
     this.executionUtils = executionUtils;
     this.urlConnectionFactory = urlConnectionFactory;
@@ -58,13 +58,13 @@ public final class DefaultTwitchClientUtils implements TwitchClientUtils {
 
   private InputStream openResponseInputStream(final TwitchUrl serviceUrl) {
     return this.executionUtils.softenException(() -> this.openConnection(serviceUrl).getInputStream(),
-            TwitchConnectionException.class);
+        TwitchConnectionException.class);
   }
 
   private UrlConnection openConnection(final TwitchUrl serviceUrl) {
     return this.executionUtils.softenException(() -> {
       final UrlConnection urlConnection = this.urlConnectionFactory
-              .openConnection(String.format("%s/%s", TWITCH_API_URL, serviceUrl.value));
+          .openConnection(String.format("%s/%s", TWITCH_API_URL, serviceUrl.value));
 
       urlConnection.setRequestProperty("Client-ID", this.clientId.value);
       return urlConnection;

@@ -72,8 +72,8 @@ public abstract class StronglyTyped<T> {
   }
 
   @Override
-  public String toString() {
-    return this.value.toString();
+  public int hashCode() {
+    return this.value.hashCode();
   }
 
   @Override
@@ -88,8 +88,8 @@ public abstract class StronglyTyped<T> {
   }
 
   @Override
-  public int hashCode() {
-    return this.value.hashCode();
+  public String toString() {
+    return this.value.toString();
   }
 
 }

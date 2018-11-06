@@ -25,7 +25,7 @@ public final class DefaultTwitchUsersFollowsEndpoint implements TwitchUsersFollo
     this.twitchClientUtils = twitchClientUtils;
     this.userTypeAdapter = this.gson.getAdapter(UserFollow.class);
     Objects.requireNonNull(this.twitchClientUtils,
-            "UserFollow adapter **MUST** be registered.");
+        "UserFollow adapter **MUST** be registered.");
   }
 
   @Override

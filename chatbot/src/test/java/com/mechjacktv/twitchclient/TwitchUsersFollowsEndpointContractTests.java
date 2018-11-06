@@ -30,20 +30,30 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
   private static final String TO_ID = "987654321";
   private static final String TO_NAME = "TestTo";
   private static final String RESPONSE_BODY = "{\n" +
-          "    \"total\": 1,\n" +
-          "    \"data\": [\n" +
-          "        {\n" +
-          "            \"from_id\": \"" + FROM_ID + "\",\n" +
-          "            \"from_name\": \"" + FROM_NAME + "\",\n" +
-          "            \"to_id\": \"" + TO_ID + "\",\n" +
-          "            \"to_name\": \"" + TO_NAME + "\",\n" +
-          "            \"followed_at\": \"" + FOLLOWED_AT + "\"\n" +
-          "        }\n" +
-          "    ],\n" +
-          "    \"pagination\": {\n" +
-          "        \"cursor\": \"" + CURSOR + "\"\n" +
-          "    }\n" +
-          "}\n";
+      "    \"total\": 1,\n" +
+      "    \"data\": [\n" +
+      "        {\n" +
+      "            \"from_id\": \"" + FROM_ID + "\",\n" +
+      "            \"from_name\": \"" + FROM_NAME + "\",\n" +
+      "            \"to_id\": \"" + TO_ID + "\",\n" +
+      "            \"to_name\": \"" + TO_NAME + "\",\n" +
+      "            \"followed_at\": \"" + FOLLOWED_AT + "\"\n" +
+      "        }\n" +
+      "    ],\n" +
+      "    \"pagination\": {\n" +
+      "        \"cursor\": \"" + CURSOR + "\"\n" +
+      "    }\n" +
+      "}\n";
+
+  @Test
+  public final void getUserFollowsFromId_nullFromId_throwsNullPointerExceptionWithMessage() {
+    final TwitchUsersFollowsEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
+        mock(TwitchClientUtils.class));
+
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.getUserFollowsFromId(null));
+
+    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessageContaining("**MUST** not be `null`");
+  }
 
   abstract TwitchUsersFollowsEndpoint givenASubjectToTest(Gson gson, TwitchClientUtils twitchClientUtils);
 
@@ -55,21 +65,11 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
   }
 
   @Test
-  public final void getUserFollowsFromId_nullFromId_throwsNullPointerExceptionWithMessage() {
-    final TwitchUsersFollowsEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-            mock(TwitchClientUtils.class));
-
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.getUserFollowsFromId(null));
-
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessageContaining("**MUST** not be `null`");
-  }
-
-  @Test
   @SuppressWarnings("unchecked")
   public final void getUserFollowsFromId_forFromId_returnsListOfUsersFollowed() {
     final TwitchClientUtils twitchClientUtils = mock(TwitchClientUtils.class);
     final TwitchUsersFollowsEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-            twitchClientUtils);
+        twitchClientUtils);
     doAnswer((invocation) -> {
       final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
 
@@ -97,7 +97,7 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
   public final void getUserFollowsFromId_forFromId_requestsFollowsForId() {
     final TwitchClientUtils twitchClientUtils = mock(TwitchClientUtils.class);
     final TwitchUsersFollowsEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-            twitchClientUtils);
+        twitchClientUtils);
     final ArgumentCaptor<TwitchUrl> serviceUrl = ArgumentCaptor.forClass(TwitchUrl.class);
     doAnswer((invocation) -> {
       final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
@@ -116,7 +116,7 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
   public final void getUserFollowsFromId_forFromIdAndCursor_requestsFollowsForIdAndCursor() {
     final TwitchClientUtils twitchClientUtils = mock(TwitchClientUtils.class);
     final TwitchUsersFollowsEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-            twitchClientUtils);
+        twitchClientUtils);
     final ArgumentCaptor<TwitchUrl> serviceUrl = ArgumentCaptor.forClass(TwitchUrl.class);
     doAnswer((invocation) -> {
       final ConsumerWithException<Reader> consumer = invocation.getArgument(1);

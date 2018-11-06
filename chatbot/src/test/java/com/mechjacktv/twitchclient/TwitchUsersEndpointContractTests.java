@@ -35,30 +35,39 @@ public abstract class TwitchUsersEndpointContractTests {
   private static final String USER_OFFLINE_IMAGE_URL = "https://static-cdn.jtvnw.net/jtv_user_pictures/0b371e3acf19d098-channel_offline_image-1920x1080.png";
   private static final int USER_VIEW_COUNT = 9001;
   private static final String RESPONSE_BODY = "{\n" +
-          "    \"data\": [\n" +
-          "        {\n" +
-          "            \"id\": \"" + USER_ID + "\",\n" +
-          "            \"login\": \"" + USER_LOGIN + "\",\n" +
-          "            \"display_name\": \"" + USER_DISPLAY_NAME + "\",\n" +
-          "            \"type\": \"" + USER_TYPE + "\",\n" +
-          "            \"broadcaster_type\": \"" + USER_BROADCASTER_TYPE + "\",\n" +
-          "            \"description\": \"" + USER_DESCRIPTION + "\",\n" +
-          "            \"profile_image_url\": \"" + USER_PROFILE_IMAGE_URL + "\",\n" +
-          "            \"offline_image_url\": \"" + USER_OFFLINE_IMAGE_URL + "\",\n" +
-          "            \"view_count\": " + USER_VIEW_COUNT + "\n" +
-          "        }\n" +
-          "    ]\n" +
-          "}\n";
+      "    \"data\": [\n" +
+      "        {\n" +
+      "            \"id\": \"" + USER_ID + "\",\n" +
+      "            \"login\": \"" + USER_LOGIN + "\",\n" +
+      "            \"display_name\": \"" + USER_DISPLAY_NAME + "\",\n" +
+      "            \"type\": \"" + USER_TYPE + "\",\n" +
+      "            \"broadcaster_type\": \"" + USER_BROADCASTER_TYPE + "\",\n" +
+      "            \"description\": \"" + USER_DESCRIPTION + "\",\n" +
+      "            \"profile_image_url\": \"" + USER_PROFILE_IMAGE_URL + "\",\n" +
+      "            \"offline_image_url\": \"" + USER_OFFLINE_IMAGE_URL + "\",\n" +
+      "            \"view_count\": " + USER_VIEW_COUNT + "\n" +
+      "        }\n" +
+      "    ]\n" +
+      "}\n";
+
+  @Test
+  public final void getUsers_nullLogins_throwsNullPointerExceptionWithMessage() {
+    final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
+        mock(TwitchClientUtils.class));
+
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.getUsers(null,
+        this.givenASetOfTwitchIds(1)));
+
+    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage("Logins set **MUST** not be `null`.");
+  }
 
   abstract TwitchUsersEndpoint givenASubjectToTest(Gson gson, TwitchClientUtils twitchClientUtils);
 
-  private Set<TwitchLogin> givenASetOfTwitchLogins(final int count) {
-    final Set<TwitchLogin> logins = Sets.newHashSet();
+  private Gson givenAGson() {
+    final GsonBuilder gsonBuilder = new GsonBuilder();
 
-    for (int i = 0; i < count; i++) {
-      logins.add(TwitchLogin.of("Login" + i));
-    }
-    return logins;
+    gsonBuilder.registerTypeAdapter(User.class, new UserMessageTypeAdapter());
+    return gsonBuilder.create();
   }
 
   private Set<TwitchUserId> givenASetOfTwitchIds(final int count) {
@@ -70,81 +79,72 @@ public abstract class TwitchUsersEndpointContractTests {
     return ids;
   }
 
-  private Gson givenAGson() {
-    final GsonBuilder gsonBuilder = new GsonBuilder();
-
-    gsonBuilder.registerTypeAdapter(User.class, new UserMessageTypeAdapter());
-    return gsonBuilder.create();
-  }
-
-  @Test
-  public final void getUsers_nullLogins_throwsNullPointerExceptionWithMessage() {
-    final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-            mock(TwitchClientUtils.class));
-
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.getUsers(null,
-            this.givenASetOfTwitchIds(1)));
-
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage("Logins set **MUST** not be `null`.");
-  }
-
   @Test
   public final void getUsers_nullIds_throwsNullPointerExceptionWithMessage() {
     final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-            mock(TwitchClientUtils.class));
+        mock(TwitchClientUtils.class));
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.getUsers(this.givenASetOfTwitchLogins(1),
-            null));
+        null));
 
     assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage("Ids set **MUST** not be `null`.");
+  }
+
+  private Set<TwitchLogin> givenASetOfTwitchLogins(final int count) {
+    final Set<TwitchLogin> logins = Sets.newHashSet();
+
+    for (int i = 0; i < count; i++) {
+      logins.add(TwitchLogin.of("Login" + i));
+    }
+    return logins;
   }
 
   @Test
   public final void getUsers_notEnoughLoginsAndIds_throwsIllegalArgumentExceptionWithMessage() {
     final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-            mock(TwitchClientUtils.class));
+        mock(TwitchClientUtils.class));
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.getUsers(this.givenASetOfTwitchLogins(0),
-            this.givenASetOfTwitchIds(0)));
+        this.givenASetOfTwitchIds(0)));
 
     assertThat(thrown).isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Minimum number of combined Twitch logins and ids is `1`.");
+        .hasMessage("Minimum number of combined Twitch logins and ids is `1`.");
   }
 
   @Test
   public final void getUsers_tooManyLogins_throwsIllegalArgumentExceptionWithMessage() {
     final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-            mock(TwitchClientUtils.class));
+        mock(TwitchClientUtils.class));
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.getUsers(this.givenASetOfTwitchLogins(101),
-            this.givenASetOfTwitchIds(0)));
+        this.givenASetOfTwitchIds(0)));
 
     assertThat(thrown).isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Maximum number of combined Twitch logins and ids is `100`.");
+        .hasMessage("Maximum number of combined Twitch logins and ids is `100`.");
   }
 
   @Test
   public final void getUsers_tooManyIds_throwsIllegalArgumentExceptionWithMessage() {
     final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-            mock(TwitchClientUtils.class));
+        mock(TwitchClientUtils.class));
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.getUsers(this.givenASetOfTwitchLogins(0),
-            this.givenASetOfTwitchIds(101)));
+        this.givenASetOfTwitchIds(101)));
 
     assertThat(thrown).isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Maximum number of combined Twitch logins and ids is `100`.");
+        .hasMessage("Maximum number of combined Twitch logins and ids is `100`.");
   }
 
   @Test
   public final void getUsers_tooManyLoginsAndIds_throwsIllegalArgumentExceptionWithMessage() {
     final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-            mock(TwitchClientUtils.class));
+        mock(TwitchClientUtils.class));
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.getUsers(this.givenASetOfTwitchLogins(51),
-            this.givenASetOfTwitchIds(51)));
+        this.givenASetOfTwitchIds(51)));
 
     assertThat(thrown).isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Maximum number of combined Twitch logins and ids is `100`.");
+        .hasMessage("Maximum number of combined Twitch logins and ids is `100`.");
   }
 
   @Test
@@ -160,7 +160,7 @@ public abstract class TwitchUsersEndpointContractTests {
     }).when(twitchClientUtils).handleResponse(isA(TwitchUrl.class), isA(ConsumerWithException.class));
 
     final Users result = subjectUnderTest.getUsers(this.givenASetOfTwitchLogins(1),
-            this.givenASetOfTwitchIds(0));
+        this.givenASetOfTwitchIds(0));
 
     final SoftAssertions softly = new SoftAssertions();
     softly.assertThat(result).isNotNull();

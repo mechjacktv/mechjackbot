@@ -17,10 +17,6 @@ public abstract class AbstractMessageStore<K extends Message, V extends Message>
     this.protobufUtils = protobufUtils;
   }
 
-  protected abstract Class<K> getKeyClass();
-
-  protected abstract Class<V> getValueClass();
-
   public final boolean containsKey(final K key) {
     return this.keyValueStore.containsKey(key.toByteArray());
   }
@@ -29,11 +25,15 @@ public abstract class AbstractMessageStore<K extends Message, V extends Message>
     return this.protobufUtils.parseAllMessages(this.getKeyClass(), this.keyValueStore.getKeys());
   }
 
+  protected abstract Class<K> getKeyClass();
+
   public final Optional<V> get(final K key) {
     final Optional<byte[]> valueBytes = this.keyValueStore.get(key.toByteArray());
 
     return valueBytes.map(bytes -> this.protobufUtils.parseMessage(this.getValueClass(), bytes));
   }
+
+  protected abstract Class<V> getValueClass();
 
   public final void put(final K key, final V value) {
     this.keyValueStore.put(key.toByteArray(), value.toByteArray());

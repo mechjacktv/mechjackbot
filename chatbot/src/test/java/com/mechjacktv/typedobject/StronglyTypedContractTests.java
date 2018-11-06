@@ -16,15 +16,15 @@ public abstract class StronglyTypedContractTests<T> {
     assertThat(result.value).isEqualTo(value);
   }
 
+  protected abstract T givenIHaveAValue();
+
+  protected abstract StronglyTyped givenIHaveAStronglyTypedValue(final T value);
+
   @Test
   public final void new_nullValue_throwsNullPointerException() {
     final Throwable result = catchThrowable(() -> this.givenIHaveAStronglyTypedValue(null));
 
     assertThat(result).isInstanceOf(NullPointerException.class);
   }
-
-  protected abstract T givenIHaveAValue();
-
-  protected abstract StronglyTyped givenIHaveAStronglyTypedValue(final T value);
 
 }

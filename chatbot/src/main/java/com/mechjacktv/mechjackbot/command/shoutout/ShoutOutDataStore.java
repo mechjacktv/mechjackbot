@@ -32,16 +32,16 @@ public final class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Cas
 
   @Inject
   ShoutOutDataStore(final ChatBotConfiguration chatBotConfiguration,
-          final KeyValueStoreFactory keyValueStoreFactory,
-          final ProtobufUtils protobufUtils,
-          final ScheduleService scheduleService,
-          final TwitchClient twitchClient) {
+      final KeyValueStoreFactory keyValueStoreFactory,
+      final ProtobufUtils protobufUtils,
+      final ScheduleService scheduleService,
+      final TwitchClient twitchClient) {
     super(keyValueStoreFactory.createOrOpenKeyValueStore(KEY_VALUE_STORE_NAME), protobufUtils);
     scheduleService.schedule(() -> this.updateCasters(chatBotConfiguration, twitchClient), 10, TimeUnit.MINUTES);
   }
 
   private void updateCasters(final ChatBotConfiguration chatBotConfiguration,
-          final TwitchClient twitchClient) {
+      final TwitchClient twitchClient) {
     try {
       final String channel = chatBotConfiguration.getTwitchChannel().value;
       final Optional<TwitchUserId> casterId = twitchClient.getUserId(TwitchLogin.of(channel));
@@ -52,7 +52,7 @@ public final class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Cas
         final int removeCount = this.removeCasters(existingCasterKeys);
 
         log.info(String.format("Channel, %s, is following %d casters (%d added, %d removed)",
-                channel, this.getKeys().size(), addCount, removeCount));
+            channel, this.getKeys().size(), addCount, removeCount));
       } else {
         log.warn(String.format("Failed to find Twitch id for Twitch login, %s. Using existing data", channel));
       }
@@ -62,8 +62,8 @@ public final class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Cas
   }
 
   private int addCasters(final TwitchUserId casterId,
-          final Collection<CasterKey> existingCasterKeys,
-          final TwitchClient twitchClient) {
+      final Collection<CasterKey> existingCasterKeys,
+      final TwitchClient twitchClient) {
     final Set<UserFollow> userFollows = this.getUserFollows(casterId, twitchClient);
     int addCount = 0;
 
@@ -107,15 +107,15 @@ public final class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Cas
     final CasterKey.Builder builder = CasterKey.newBuilder();
 
     return builder.setName(casterName.toLowerCase())
-            .build();
+        .build();
   }
 
   final Caster createCaster(final String casterName, final Long lastShoutOut) {
     final Caster.Builder builder = Caster.newBuilder();
 
     return builder.setName(casterName)
-            .setLastShoutOut(lastShoutOut)
-            .build();
+        .setLastShoutOut(lastShoutOut)
+        .build();
   }
 
   @Override

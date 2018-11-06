@@ -22,7 +22,7 @@ public final class DefaultExecutionUtils implements ExecutionUtils {
 
   @Override
   public final <T> T softenException(SupplierWithException<T> supplier,
-          Class<? extends RuntimeException> exceptionClass) {
+      Class<? extends RuntimeException> exceptionClass) {
     try {
       return supplier.get();
     } catch (final RuntimeException e) {
@@ -31,12 +31,12 @@ public final class DefaultExecutionUtils implements ExecutionUtils {
       try {
         try {
           final Constructor<? extends RuntimeException> constructor = exceptionClass
-                  .getConstructor(String.class, Throwable.class);
+              .getConstructor(String.class, Throwable.class);
 
           throw constructor.newInstance(e1.getMessage(), e1);
         } catch (final NoSuchMethodException e2) {
           final Constructor<? extends RuntimeException> constructor = exceptionClass
-                  .getConstructor(Throwable.class);
+              .getConstructor(Throwable.class);
 
           throw constructor.newInstance(e1);
         }
@@ -44,7 +44,7 @@ public final class DefaultExecutionUtils implements ExecutionUtils {
         throw e2;
       } catch (final Exception e2) {
         log.error(String.format("Failed to instantiate RuntimeException. exceptionClass=%s, ",
-                exceptionClass.getCanonicalName()), e2);
+            exceptionClass.getCanonicalName()), e2);
         throw new SoftenedException(e1.getMessage(), e1);
       }
     }
