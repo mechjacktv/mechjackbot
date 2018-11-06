@@ -13,16 +13,16 @@ import com.mechjacktv.util.DefaultUtilsModule;
 
 final class MainModule extends AbstractModule {
 
-    @Override
-    protected final void configure() {
-        this.install(new DefaultCommandsModule());
-        this.install(new DefaultConfigurationModule());
-        this.install(new DefaultScheduleServiceModule());
-        this.install(new DefaultTwitchClientModule());
-        this.install(new DefaultUtilsModule());
-        this.install(new GsonModule());
-        this.install(new MapDbKeyValueStoreModule());
-        this.install(new PircBotXChatBotModule());
-    }
+  @Override
+  protected final void configure() {
+    this.install(new DefaultCommandsModule());
+    this.install(new DefaultConfigurationModule());
+    this.install(new DefaultScheduleServiceModule());
+    this.install(new DefaultTwitchClientModule());
+    this.install(new DefaultUtilsModule());
+    this.install(new GsonModule());
+    this.install(new MapDbKeyValueStoreModule());
+    this.install(new PircBotXChatBotModule());
+  }
 
 }

@@ -10,20 +10,20 @@ import com.mechjacktv.mechjackbot.command.CommandUtils;
 
 final class RestrictToOwnerMethodInterceptor implements MethodInterceptor {
 
-    private final Provider<CommandUtils> commandUtils;
+  private final Provider<CommandUtils> commandUtils;
 
-    RestrictToOwnerMethodInterceptor(final Provider<CommandUtils> commandUtils) {
-        this.commandUtils = commandUtils;
+  RestrictToOwnerMethodInterceptor(final Provider<CommandUtils> commandUtils) {
+    this.commandUtils = commandUtils;
+  }
+
+  @Override
+  public final Object invoke(final MethodInvocation invocation) throws Throwable {
+    final MessageEvent messageEvent = (MessageEvent) invocation.getArguments()[0];
+
+    if (this.commandUtils.get().isChannelOwner(messageEvent)) {
+      return invocation.proceed();
     }
-
-    @Override
-    public final Object invoke(final MethodInvocation invocation) throws Throwable {
-        final MessageEvent messageEvent = (MessageEvent) invocation.getArguments()[0];
-
-        if (this.commandUtils.get().isChannelOwner(messageEvent)) {
-            return invocation.proceed();
-        }
-        return null;
-    }
+    return null;
+  }
 
 }

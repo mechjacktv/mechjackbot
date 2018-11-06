@@ -11,20 +11,20 @@ import com.google.inject.Provides;
 
 public final class GsonModule extends AbstractModule {
 
-    @Override
-    protected final void configure() {
-        // empty
-    }
+  @Override
+  protected final void configure() {
+    // empty
+  }
 
-    @Provides
-    @Singleton
-    Gson provideGson(final Set<TypeAdapterRegistrar> typeAdapterRegistrars) {
-        final GsonBuilder gsonBuilder = new GsonBuilder();
+  @Provides
+  @Singleton
+  Gson provideGson(final Set<TypeAdapterRegistrar> typeAdapterRegistrars) {
+    final GsonBuilder gsonBuilder = new GsonBuilder();
 
-        gsonBuilder.setPrettyPrinting();
-        for (final TypeAdapterRegistrar typeAdapterRegistrar : typeAdapterRegistrars) {
-            typeAdapterRegistrar.registerTypeAdapters(gsonBuilder);
-        }
-        return gsonBuilder.create();
+    gsonBuilder.setPrettyPrinting();
+    for (final TypeAdapterRegistrar typeAdapterRegistrar : typeAdapterRegistrars) {
+      typeAdapterRegistrar.registerTypeAdapters(gsonBuilder);
     }
+    return gsonBuilder.create();
+  }
 }

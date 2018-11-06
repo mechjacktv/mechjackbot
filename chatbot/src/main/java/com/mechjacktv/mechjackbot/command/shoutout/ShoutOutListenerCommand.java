@@ -11,34 +11,34 @@ import com.mechjacktv.mechjackbot.command.CommandUtils;
 @SuppressWarnings("CanBeFinal")
 public class ShoutOutListenerCommand extends AbstractCommand {
 
-    private final ShoutOutService shoutOutService;
-    private final CommandUtils commandUtils;
+  private final ShoutOutService shoutOutService;
+  private final CommandUtils commandUtils;
 
-    @Inject
-    public ShoutOutListenerCommand(final ShoutOutService shoutOutService, final CommandUtils commandUtils) {
-        super(CommandTrigger.of("!casterListener"), commandUtils);
-        this.shoutOutService = shoutOutService;
-        this.commandUtils = commandUtils;
-    }
+  @Inject
+  public ShoutOutListenerCommand(final ShoutOutService shoutOutService, final CommandUtils commandUtils) {
+    super(CommandTrigger.of("!casterListener"), commandUtils);
+    this.shoutOutService = shoutOutService;
+    this.commandUtils = commandUtils;
+  }
 
-    @Override
-    public final CommandDescription getDescription() {
-        return CommandDescription.of("Monitors chat looking for casters who are due for a shout out.");
-    }
+  @Override
+  public final CommandDescription getDescription() {
+    return CommandDescription.of("Monitors chat looking for casters who are due for a shout out.");
+  }
 
-    @Override
-    public void handleMessage(MessageEvent messageEvent) {
-        this.shoutOutService.sendCasterShoutOut(messageEvent, this.commandUtils.getSanitizedViewerName(messageEvent));
-    }
+  @Override
+  public void handleMessage(MessageEvent messageEvent) {
+    this.shoutOutService.sendCasterShoutOut(messageEvent, this.commandUtils.getSanitizedViewerName(messageEvent));
+  }
 
-    @Override
-    public final boolean isTriggered(MessageEvent messageEvent) {
-        return this.shoutOutService.isCasterDue(this.commandUtils.getSanitizedViewerName(messageEvent));
-    }
+  @Override
+  public final boolean isTriggered(MessageEvent messageEvent) {
+    return this.shoutOutService.isCasterDue(this.commandUtils.getSanitizedViewerName(messageEvent));
+  }
 
-    @Override
-    public boolean isTriggerable() {
-        return false;
-    }
+  @Override
+  public boolean isTriggerable() {
+    return false;
+  }
 
 }

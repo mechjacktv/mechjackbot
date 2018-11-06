@@ -10,20 +10,20 @@ import com.mechjacktv.mechjackbot.command.CommandUtils;
 
 final class GlobalCoolDownMethodInterceptor implements MethodInterceptor {
 
-    private final Provider<CommandUtils> commandUtils;
+  private final Provider<CommandUtils> commandUtils;
 
-    GlobalCoolDownMethodInterceptor(final Provider<CommandUtils> commandUtils) {
-        this.commandUtils = commandUtils;
+  GlobalCoolDownMethodInterceptor(final Provider<CommandUtils> commandUtils) {
+    this.commandUtils = commandUtils;
+  }
+
+  @Override
+  public final Object invoke(final MethodInvocation invocation) throws Throwable {
+    final Command thisCommand = (Command) invocation.getThis();
+
+    if (this.commandUtils.get().isGloballyCooledDown(thisCommand)) {
+      return invocation.proceed();
     }
-
-    @Override
-    public final Object invoke(final MethodInvocation invocation) throws Throwable {
-        final Command thisCommand = (Command) invocation.getThis();
-
-        if (this.commandUtils.get().isGloballyCooledDown(thisCommand)) {
-            return invocation.proceed();
-        }
-        return null;
-    }
+    return null;
+  }
 
 }

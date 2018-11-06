@@ -5,8 +5,8 @@ import java.io.InputStream;
 
 interface UrlConnection {
 
-    InputStream getInputStream() throws IOException;
+  InputStream getInputStream() throws IOException;
 
-    void setRequestProperty(String name, String value);
+  void setRequestProperty(String name, String value);
 
 }

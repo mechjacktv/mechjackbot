@@ -6,9 +6,9 @@ import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollow;
 
 public final class UserFollowMessageTypeAdapter extends AbstractMessageTypeAdapter<UserFollow> {
 
-    @Override
-    Message.Builder getBuilder() {
-        return UserFollow.newBuilder();
-    }
+  @Override
+  Message.Builder getBuilder() {
+    return UserFollow.newBuilder();
+  }
 
 }

@@ -11,21 +11,21 @@ import com.google.protobuf.util.JsonFormat;
 
 abstract class AbstractMessageTypeAdapter<M extends Message> extends TypeAdapter<M> {
 
-    @Override
-    public final void write(final JsonWriter jsonWriter, final Message message) throws IOException {
-        jsonWriter.jsonValue(JsonFormat.printer().print(message));
-    }
+  @Override
+  public final void write(final JsonWriter jsonWriter, final Message message) throws IOException {
+    jsonWriter.jsonValue(JsonFormat.printer().print(message));
+  }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public final M read(final JsonReader jsonReader) throws IOException {
-        final Message.Builder builder = this.getBuilder();
-        final JsonParser jsonParser = new JsonParser();
+  @Override
+  @SuppressWarnings("unchecked")
+  public final M read(final JsonReader jsonReader) throws IOException {
+    final Message.Builder builder = this.getBuilder();
+    final JsonParser jsonParser = new JsonParser();
 
-        JsonFormat.parser().merge(jsonParser.parse(jsonReader).toString(), builder);
-        return (M) builder.build();
-    }
+    JsonFormat.parser().merge(jsonParser.parse(jsonReader).toString(), builder);
+    return (M) builder.build();
+  }
 
-    abstract Message.Builder getBuilder();
+  abstract Message.Builder getBuilder();
 
 }

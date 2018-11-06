@@ -7,15 +7,15 @@ import com.mechjacktv.mechjackbot.ChatBot;
 
 final class Main {
 
-    public static void main(final String[] args) {
-        // TODO make logging great again
-        System.setProperty("org.slf4j.simpleLogger.log.org.pircbotx", "warn");
-        System.setProperty("org.slf4j.simpleLogger.log.org.pircbotx.PircBotX", "info");
+  public static void main(final String[] args) {
+    // TODO make logging great again
+    System.setProperty("org.slf4j.simpleLogger.log.org.pircbotx", "warn");
+    System.setProperty("org.slf4j.simpleLogger.log.org.pircbotx.PircBotX", "info");
 
-        final Injector injector = Guice.createInjector(new MainModule());
-        final ChatBot chatBot = injector.getInstance(ChatBot.class);
+    final Injector injector = Guice.createInjector(new MainModule());
+    final ChatBot chatBot = injector.getInstance(ChatBot.class);
 
-        chatBot.start();
-    }
+    chatBot.start();
+  }
 
 }

@@ -2,8 +2,8 @@ package com.mechjacktv.mechjackbot;
 
 public interface ChatBot {
 
-    void start();
+  void start();
 
-    void stop();
+  void stop();
 
 }

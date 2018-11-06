@@ -7,15 +7,15 @@ import com.mechjacktv.mechjackbot.ChatUsername;
 
 final class PircBotXChatUser implements ChatUser {
 
-    private final User user;
+  private final User user;
 
-    PircBotXChatUser(final User user) {
-        this.user = user;
-    }
+  PircBotXChatUser(final User user) {
+    this.user = user;
+  }
 
-    @Override
-    public ChatUsername getUsername() {
-        return ChatUsername.of(this.user.getNick());
-    }
+  @Override
+  public ChatUsername getUsername() {
+    return ChatUsername.of(this.user.getNick());
+  }
 
 }

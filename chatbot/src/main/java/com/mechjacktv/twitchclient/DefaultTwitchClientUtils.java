@@ -18,87 +18,87 @@ import com.mechjacktv.util.function.ConsumerWithException;
 
 public final class DefaultTwitchClientUtils implements TwitchClientUtils {
 
-    private static final Logger log = LoggerFactory.getLogger(DefaultTwitchClientUtils.class);
+  private static final Logger log = LoggerFactory.getLogger(DefaultTwitchClientUtils.class);
 
-    private final TwitchClientId clientId;
-    private final ExecutionUtils executionUtils;
-    private final UrlConnectionFactory urlConnectionFactory;
+  private final TwitchClientId clientId;
+  private final ExecutionUtils executionUtils;
+  private final UrlConnectionFactory urlConnectionFactory;
 
-    @Inject
-    DefaultTwitchClientUtils(final TwitchClientConfiguration twitchClientConfiguration,
-                             final ExecutionUtils executionUtils) {
-        this(twitchClientConfiguration, executionUtils, new DefaultUrlConnectionFactory());
+  @Inject
+  DefaultTwitchClientUtils(final TwitchClientConfiguration twitchClientConfiguration,
+          final ExecutionUtils executionUtils) {
+    this(twitchClientConfiguration, executionUtils, new DefaultUrlConnectionFactory());
+  }
+
+  DefaultTwitchClientUtils(final TwitchClientConfiguration twitchClientConfiguration,
+          final ExecutionUtils executionUtils,
+          final UrlConnectionFactory urlConnectionFactory) {
+    this.clientId = twitchClientConfiguration.getTwitchClientId();
+    this.executionUtils = executionUtils;
+    this.urlConnectionFactory = urlConnectionFactory;
+  }
+
+  @Override
+  public final void handleInvalidObjectName(final String name) {
+    log.warn(String.format("Name '%s' was found but not expected", name));
+  }
+
+  @Override
+  public final void handleResponse(final TwitchUrl serviceUrl, final ConsumerWithException<Reader> consumer) {
+    this.executionUtils.softenException(() -> {
+      try (final Reader reader = this.openResponseReader(serviceUrl)) {
+        this.executionUtils.softenException(() -> consumer.accept(reader), TwitchDataException.class);
+      }
+    }, TwitchConnectionException.class);
+  }
+
+  private Reader openResponseReader(final TwitchUrl serviceUrl) {
+    return new InputStreamReader(this.openResponseInputStream(serviceUrl), Charset.defaultCharset());
+  }
+
+  private InputStream openResponseInputStream(final TwitchUrl serviceUrl) {
+    return this.executionUtils.softenException(() -> this.openConnection(serviceUrl).getInputStream(),
+            TwitchConnectionException.class);
+  }
+
+  private UrlConnection openConnection(final TwitchUrl serviceUrl) {
+    return this.executionUtils.softenException(() -> {
+      final UrlConnection urlConnection = this.urlConnectionFactory
+              .openConnection(String.format("%s/%s", TWITCH_API_URL, serviceUrl.value));
+
+      urlConnection.setRequestProperty("Client-ID", this.clientId.value);
+      return urlConnection;
+    }, TwitchConnectionException.class);
+  }
+
+  private static final class DefaultUrlConnectionFactory implements UrlConnectionFactory {
+
+    @Override
+    public UrlConnection openConnection(final String url) throws IOException {
+      final URLConnection urlConnection = new URL(url).openConnection();
+
+      return new DefaultUrlConnection(urlConnection);
     }
 
-    DefaultTwitchClientUtils(final TwitchClientConfiguration twitchClientConfiguration,
-                             final ExecutionUtils executionUtils,
-                             final UrlConnectionFactory urlConnectionFactory) {
-        this.clientId = twitchClientConfiguration.getTwitchClientId();
-        this.executionUtils = executionUtils;
-        this.urlConnectionFactory = urlConnectionFactory;
+  }
+
+  private static final class DefaultUrlConnection implements UrlConnection {
+
+    private final URLConnection urlConnection;
+
+    DefaultUrlConnection(final URLConnection urlConnection) {
+      this.urlConnection = urlConnection;
     }
 
     @Override
-    public final void handleInvalidObjectName(final String name) {
-        log.warn(String.format("Name '%s' was found but not expected", name));
+    public InputStream getInputStream() throws IOException {
+      return this.urlConnection.getInputStream();
     }
 
     @Override
-    public final void handleResponse(final TwitchUrl serviceUrl, final ConsumerWithException<Reader> consumer) {
-        this.executionUtils.softenException(() -> {
-            try (final Reader reader = this.openResponseReader(serviceUrl)) {
-                this.executionUtils.softenException(() -> consumer.accept(reader), TwitchDataException.class);
-            }
-        }, TwitchConnectionException.class);
+    public void setRequestProperty(final String name, final String value) {
+      this.urlConnection.setRequestProperty(name, value);
     }
-
-    private Reader openResponseReader(final TwitchUrl serviceUrl) {
-        return new InputStreamReader(this.openResponseInputStream(serviceUrl), Charset.defaultCharset());
-    }
-
-    private InputStream openResponseInputStream(final TwitchUrl serviceUrl) {
-        return this.executionUtils.softenException(() -> this.openConnection(serviceUrl).getInputStream(),
-                TwitchConnectionException.class);
-    }
-
-    private UrlConnection openConnection(final TwitchUrl serviceUrl) {
-        return this.executionUtils.softenException(() -> {
-            final UrlConnection urlConnection = this.urlConnectionFactory
-                    .openConnection(String.format("%s/%s", TWITCH_API_URL, serviceUrl.value));
-
-            urlConnection.setRequestProperty("Client-ID", this.clientId.value);
-            return urlConnection;
-        }, TwitchConnectionException.class);
-    }
-
-    private static final class DefaultUrlConnectionFactory implements UrlConnectionFactory {
-
-        @Override
-        public UrlConnection openConnection(final String url) throws IOException {
-            final URLConnection urlConnection = new URL(url).openConnection();
-
-            return new DefaultUrlConnection(urlConnection);
-        }
-
-    }
-
-    private static final class DefaultUrlConnection implements UrlConnection {
-
-        private final URLConnection urlConnection;
-
-        DefaultUrlConnection(final URLConnection urlConnection) {
-            this.urlConnection = urlConnection;
-        }
-
-        @Override
-        public InputStream getInputStream() throws IOException {
-            return this.urlConnection.getInputStream();
-        }
-
-        @Override
-        public void setRequestProperty(final String name, final String value) {
-            this.urlConnection.setRequestProperty(name, value);
-        }
-    }
+  }
 
 }

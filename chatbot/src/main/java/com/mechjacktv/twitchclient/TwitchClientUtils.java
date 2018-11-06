@@ -6,10 +6,10 @@ import com.mechjacktv.util.function.ConsumerWithException;
 
 public interface TwitchClientUtils {
 
-    String TWITCH_API_URL = "https://api.twitch.tv/helix";
+  String TWITCH_API_URL = "https://api.twitch.tv/helix";
 
-    void handleInvalidObjectName(String name);
+  void handleInvalidObjectName(String name);
 
-    void handleResponse(TwitchUrl serviceUrl, ConsumerWithException<Reader> consumer);
+  void handleResponse(TwitchUrl serviceUrl, ConsumerWithException<Reader> consumer);
 
 }

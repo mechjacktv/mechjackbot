@@ -6,9 +6,9 @@ import com.mechjacktv.twitchclient.endpoint.DefaultTwitchUsersFollowsEndpoint;
 
 public class DefaultTwitchUsersFollowsEndpointUnitTests extends TwitchUsersFollowsEndpointContractTests {
 
-    @Override
-    TwitchUsersFollowsEndpoint givenASubjectToTest(final Gson gson, final TwitchClientUtils twitchClientUtils) {
-        return new DefaultTwitchUsersFollowsEndpoint(gson, twitchClientUtils);
-    }
+  @Override
+  TwitchUsersFollowsEndpoint givenASubjectToTest(final Gson gson, final TwitchClientUtils twitchClientUtils) {
+    return new DefaultTwitchUsersFollowsEndpoint(gson, twitchClientUtils);
+  }
 
 }

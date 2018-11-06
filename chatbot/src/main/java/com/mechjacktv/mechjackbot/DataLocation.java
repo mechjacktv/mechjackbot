@@ -4,12 +4,12 @@ import com.mechjacktv.typedobject.TypedString;
 
 public final class DataLocation extends TypedString {
 
-    private DataLocation(final String value) {
-        super(value);
-    }
+  private DataLocation(final String value) {
+    super(value);
+  }
 
-    public static DataLocation of(final String value) {
-        return new DataLocation(value);
-    }
+  public static DataLocation of(final String value) {
+    return new DataLocation(value);
+  }
 
 }

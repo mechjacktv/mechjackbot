@@ -70,7 +70,15 @@ project(':chatbot') {
     spotless {
         java {
             importOrder 'java', 'javax', 'com', 'org', '', 'com.mechjacktv'
-            removeUnusedImports() // removes any unused imports
+            removeUnusedImports()
+            eclipse().configFile rootProject.file('chatbot/src/main/resource/eclipse_java_formatter_rules.xml')
+        }
+        format 'misc', {
+            target '**/*.gradle', '**/*.md', '**/.gitignore'
+
+            trimTrailingWhitespace()
+            indentWithSpaces(2)
+            endWithNewline()
         }
     }
 

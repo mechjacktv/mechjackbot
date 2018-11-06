@@ -6,6 +6,6 @@ import com.mechjacktv.twitchclient.TwitchClientMessage.Users;
 
 public interface TwitchUsersEndpoint {
 
-    Users getUsers(Set<TwitchLogin> twitchLogins, Set<TwitchUserId> twitchUserIds);
+  Users getUsers(Set<TwitchLogin> twitchLogins, Set<TwitchUserId> twitchUserIds);
 
 }

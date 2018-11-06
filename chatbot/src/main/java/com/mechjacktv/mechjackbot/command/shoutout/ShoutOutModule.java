@@ -7,12 +7,13 @@ import com.mechjacktv.mechjackbot.Command;
 
 public final class ShoutOutModule extends AbstractModule {
 
-    @Override
-    protected final void configure() {
-        this.bind(ShoutOutDataStore.class).asEagerSingleton();
-        this.bind(ShoutOutService.class).asEagerSingleton();
+  @Override
+  protected final void configure() {
+    this.bind(ShoutOutDataStore.class).asEagerSingleton();
+    this.bind(ShoutOutService.class).asEagerSingleton();
 
-        Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(ShoutOutListenerCommand.class).asEagerSingleton();
-    }
+    Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(ShoutOutListenerCommand.class)
+            .asEagerSingleton();
+  }
 
 }

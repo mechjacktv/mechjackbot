@@ -6,9 +6,9 @@ import com.google.inject.matcher.AbstractMatcher;
 
 final class CommandHandleMessageMethodMatcher extends AbstractMatcher<Method> {
 
-    @Override
-    public final boolean matches(final Method method) {
-        return "handleMessage".equals(method.getName());
-    }
+  @Override
+  public final boolean matches(final Method method) {
+    return "handleMessage".equals(method.getName());
+  }
 
 }

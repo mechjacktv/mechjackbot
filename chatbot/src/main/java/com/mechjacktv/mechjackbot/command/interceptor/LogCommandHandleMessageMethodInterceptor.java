@@ -13,43 +13,44 @@ import com.mechjacktv.mechjackbot.MessageEvent;
 
 final class LogCommandHandleMessageMethodInterceptor implements MethodInterceptor {
 
-    private final Map<String, Logger> loggers;
+  private final Map<String, Logger> loggers;
 
-    LogCommandHandleMessageMethodInterceptor() {
-        this.loggers = new HashMap<>();
+  LogCommandHandleMessageMethodInterceptor() {
+    this.loggers = new HashMap<>();
+  }
+
+  @Override
+  public final Object invoke(final MethodInvocation invocation) {
+    final Command thisCommand = (Command) invocation.getThis();
+    final MessageEvent messageEvent = (MessageEvent) invocation.getArguments()[0];
+
+    this.getLogger(thisCommand.getName().value).info(
+            String.format("Executed: trigger=%s, user=%s, message=%s",
+                    thisCommand.getTrigger(),
+                    messageEvent.getChatUser().getUsername(),
+                    messageEvent.getMessage()));
+    try {
+      return invocation.proceed();
+    } catch (final Throwable t) {
+      this.getLogger(thisCommand.getName().value).error(
+              String.format("Failed: trigger=%s, user=%s, message=%s",
+                      thisCommand.getTrigger(),
+                      messageEvent.getChatUser().getUsername(),
+                      messageEvent.getMessage()),
+              t);
+    }
+    return null;
+  }
+
+  private Logger getLogger(final String name) {
+    if (this.loggers.containsKey(name)) {
+      return this.loggers.get(name);
     }
 
-    @Override
-    public final Object invoke(final MethodInvocation invocation) {
-        final Command thisCommand = (Command) invocation.getThis();
-        final MessageEvent messageEvent = (MessageEvent) invocation.getArguments()[0];
+    final Logger logger = LoggerFactory.getLogger(name);
 
-        this.getLogger(thisCommand.getName().value).info(
-                String.format("Executed: trigger=%s, user=%s, message=%s",
-                        thisCommand.getTrigger(),
-                        messageEvent.getChatUser().getUsername(),
-                        messageEvent.getMessage()));
-        try {
-            return invocation.proceed();
-        } catch (final Throwable t) {
-            this.getLogger(thisCommand.getName().value).error(
-                    String.format("Failed: trigger=%s, user=%s, message=%s",
-                            thisCommand.getTrigger(),
-                            messageEvent.getChatUser().getUsername(),
-                            messageEvent.getMessage()), t);
-        }
-        return null;
-    }
-
-    private Logger getLogger(final String name) {
-        if (this.loggers.containsKey(name)) {
-            return this.loggers.get(name);
-        }
-
-        final Logger logger = LoggerFactory.getLogger(name);
-
-        this.loggers.put(name, logger);
-        return logger;
-    }
+    this.loggers.put(name, logger);
+    return logger;
+  }
 
 }

@@ -8,9 +8,9 @@ import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollow;
 
 public final class MessageTypeAdapterRegistrar implements TypeAdapterRegistrar {
 
-    @Override
-    public void registerTypeAdapters(final GsonBuilder gsonBuilder) {
-        gsonBuilder.registerTypeAdapter(User.class, new UserMessageTypeAdapter());
-        gsonBuilder.registerTypeAdapter(UserFollow.class, new UserFollowMessageTypeAdapter());
-    }
+  @Override
+  public void registerTypeAdapters(final GsonBuilder gsonBuilder) {
+    gsonBuilder.registerTypeAdapter(User.class, new UserMessageTypeAdapter());
+    gsonBuilder.registerTypeAdapter(UserFollow.class, new UserFollowMessageTypeAdapter());
+  }
 }

@@ -10,20 +10,20 @@ import com.mechjacktv.mechjackbot.command.CommandUtils;
 
 final class RestrictToRegularMethodInterceptor implements MethodInterceptor {
 
-    private final Provider<CommandUtils> commandUtils;
+  private final Provider<CommandUtils> commandUtils;
 
-    RestrictToRegularMethodInterceptor(final Provider<CommandUtils> commandUtils) {
-        this.commandUtils = commandUtils;
+  RestrictToRegularMethodInterceptor(final Provider<CommandUtils> commandUtils) {
+    this.commandUtils = commandUtils;
+  }
+
+  @Override
+  public final Object invoke(final MethodInvocation invocation) throws Throwable {
+    final MessageEvent messageEvent = (MessageEvent) invocation.getArguments()[0];
+
+    if (this.commandUtils.get().isRegularUserViewer(messageEvent)) {
+      return invocation.proceed();
     }
-
-    @Override
-    public final Object invoke(final MethodInvocation invocation) throws Throwable {
-        final MessageEvent messageEvent = (MessageEvent) invocation.getArguments()[0];
-
-        if (this.commandUtils.get().isRegularUserViewer(messageEvent)) {
-            return invocation.proceed();
-        }
-        return null;
-    }
+    return null;
+  }
 
 }

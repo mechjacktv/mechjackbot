@@ -12,17 +12,17 @@ import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 
 final class MapDbKeyValueStoreFactory implements KeyValueStoreFactory {
 
-    private final DB db;
+  private final DB db;
 
-    @Inject
-    MapDbKeyValueStoreFactory(final ChatBotConfiguration chatBotConfiguration) {
-        this.db = DBMaker.fileDB(new File(chatBotConfiguration.getDataLocation().value, "mapdb.bin"))
-                .closeOnJvmShutdown()
-                .make();
-    }
+  @Inject
+  MapDbKeyValueStoreFactory(final ChatBotConfiguration chatBotConfiguration) {
+    this.db = DBMaker.fileDB(new File(chatBotConfiguration.getDataLocation().value, "mapdb.bin"))
+            .closeOnJvmShutdown()
+            .make();
+  }
 
-    @Override
-    public KeyValueStore createOrOpenKeyValueStore(String name) {
-        return new MapDbKeyValueStore(this.db.hashMap(name, Serializer.BYTE_ARRAY, Serializer.BYTE_ARRAY).createOrOpen());
-    }
+  @Override
+  public KeyValueStore createOrOpenKeyValueStore(String name) {
+    return new MapDbKeyValueStore(this.db.hashMap(name, Serializer.BYTE_ARRAY, Serializer.BYTE_ARRAY).createOrOpen());
+  }
 }
