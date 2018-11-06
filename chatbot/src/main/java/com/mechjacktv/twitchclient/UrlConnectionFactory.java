@@ -4,6 +4,6 @@ import java.io.IOException;
 
 interface UrlConnectionFactory {
 
-  UrlConnection openConnection(String url) throws IOException;
+    UrlConnection openConnection(String url) throws IOException;
 
 }

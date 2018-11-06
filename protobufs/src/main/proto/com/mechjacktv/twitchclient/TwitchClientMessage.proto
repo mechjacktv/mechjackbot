@@ -3,32 +3,32 @@ syntax = "proto3";
 package com.mechjacktv.twitchclient;
 
 message User {
-  string id = 1;
-  string login = 2;
-  string display_name = 3;
-  string type = 4;
-  string broadcaster_type = 5;
-  string description = 6;
-  string profile_image_url = 7;
-  string offline_image_url = 8;
-  int32 view_count = 9;
-  string email = 10;
+    string id = 1;
+    string login = 2;
+    string display_name = 3;
+    string type = 4;
+    string broadcaster_type = 5;
+    string description = 6;
+    string profile_image_url = 7;
+    string offline_image_url = 8;
+    int32 view_count = 9;
+    string email = 10;
 }
 
 message Users {
-  repeated User user = 1;
+    repeated User user = 1;
 }
 
 message UserFollow {
-  string from_id = 1;
-  string from_name = 2;
-  string to_id = 3;
-  string to_name = 4;
-  string followed_at = 5;
+    string from_id = 1;
+    string from_name = 2;
+    string to_id = 3;
+    string to_name = 4;
+    string followed_at = 5;
 }
 
 message UserFollows {
-  int32 total_follows = 1;
-  repeated UserFollow user_follow = 2;
-  string cursor = 3;
+    int32 total_follows = 1;
+    repeated UserFollow user_follow = 2;
+    string cursor = 3;
 }

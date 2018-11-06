@@ -6,6 +6,7 @@ buildscript {
 
     dependencies {
         classpath 'ch.raffael.markdown-doclet:markdown-doclet:1.4'
+        classpath "com.diffplug.spotless:spotless-plugin-gradle:3.16.0"
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.4'
     }
 
@@ -13,10 +14,10 @@ buildscript {
 
 subprojects {
 
-    apply plugin: 'java'
-    apply plugin: 'idea'
-    apply plugin: 'eclipse'
     apply plugin: 'ch.raffael.markdown-doclet'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    apply plugin: 'java'
 
     archivesBaseName = "${rootProject.name}-${project.name}"
     group = 'com.mechjacktv.mechjackbot'
@@ -38,6 +39,9 @@ subprojects {
 project(':chatbot') {
 
     apply plugin: 'application'
+    apply plugin: "com.diffplug.gradle.spotless"
+    apply plugin: 'findbugs'
+    apply plugin: "jacoco"
 
     applicationName = "${rootProject.name}"
     mainClassName = 'com.mechjacktv.mechjackbot.main.Main'
@@ -52,6 +56,22 @@ project(':chatbot') {
         implementation group: 'org.pircbotx', name: 'pircbotx', version: '2.+'
         implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
         implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'
+    }
+
+    build.dependsOn 'jacocoTestReport'
+
+    tasks.withType(FindBugs) {
+        reports {
+            xml.enabled false
+            html.enabled true
+        }
+    }
+
+    spotless {
+        java {
+            importOrder 'java', 'javax', 'com', 'org', '', 'com.mechjacktv'
+            removeUnusedImports() // removes any unused imports
+        }
     }
 
 }

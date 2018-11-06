@@ -4,14 +4,14 @@ import com.mechjacktv.twitchclient.TwitchClientId;
 
 public interface ChatBotConfiguration {
 
-  DataLocation getDataLocation();
+    DataLocation getDataLocation();
 
-  TwitchChannel getTwitchChannel();
+    TwitchChannel getTwitchChannel();
 
-  TwitchClientId getTwitchClientId();
+    TwitchClientId getTwitchClientId();
 
-  TwitchPassword getTwitchPassword();
+    TwitchPassword getTwitchPassword();
 
-  TwitchUsername getTwitchUsername();
+    TwitchUsername getTwitchUsername();
 
 }

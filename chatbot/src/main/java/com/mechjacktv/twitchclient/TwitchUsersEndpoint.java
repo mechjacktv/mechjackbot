@@ -1,11 +1,11 @@
 package com.mechjacktv.twitchclient;
 
-import com.mechjacktv.twitchclient.TwitchClientMessage.Users;
-
 import java.util.Set;
+
+import com.mechjacktv.twitchclient.TwitchClientMessage.Users;
 
 public interface TwitchUsersEndpoint {
 
-  Users getUsers(Set<TwitchLogin> twitchLogins, Set<TwitchUserId> twitchUserIds);
+    Users getUsers(Set<TwitchLogin> twitchLogins, Set<TwitchUserId> twitchUserIds);
 
 }

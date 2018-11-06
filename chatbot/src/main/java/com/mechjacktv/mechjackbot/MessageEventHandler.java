@@ -5,12 +5,12 @@ import java.util.Optional;
 
 public interface MessageEventHandler {
 
-  Collection<Command> getCommands();
+    Collection<Command> getCommands();
 
-  Optional<Command> getCommand(CommandTrigger commandTrigger);
+    Optional<Command> getCommand(CommandTrigger commandTrigger);
 
-  void addCommand(Command command);
+    void addCommand(Command command);
 
-  void handleMessage(MessageEvent messageEvent);
+    void handleMessage(MessageEvent messageEvent);
 
 }

@@ -4,8 +4,8 @@ import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollows;
 
 public interface TwitchUsersFollowsEndpoint {
 
-  UserFollows getUserFollowsFromId(TwitchUserId fromId);
+    UserFollows getUserFollowsFromId(TwitchUserId fromId);
 
-  UserFollows getUserFollowsFromId(TwitchUserId fromId, TwitchUserFollowsCursor cursor);
+    UserFollows getUserFollowsFromId(TwitchUserId fromId, TwitchUserFollowsCursor cursor);
 
 }

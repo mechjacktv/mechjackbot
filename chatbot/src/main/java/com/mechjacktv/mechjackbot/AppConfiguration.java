@@ -5,10 +5,10 @@ import java.util.Optional;
 
 public interface AppConfiguration {
 
-  Optional<String> get(String key);
+    Optional<String> get(String key);
 
-  String get(String key, String defaultValue);
+    String get(String key, String defaultValue);
 
-  Collection<String> getKeys();
+    Collection<String> getKeys();
 
 }

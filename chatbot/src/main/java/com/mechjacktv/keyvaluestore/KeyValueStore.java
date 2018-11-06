@@ -5,14 +5,14 @@ import java.util.Optional;
 
 public interface KeyValueStore {
 
-  boolean containsKey(byte[] key);
+    boolean containsKey(byte[] key);
 
-  Collection<byte[]> getKeys();
+    Collection<byte[]> getKeys();
 
-  Optional<byte[]> get(byte[] key);
+    Optional<byte[]> get(byte[] key);
 
-  void put(byte[] key, byte[] value);
+    void put(byte[] key, byte[] value);
 
-  void remove(byte[] key);
+    void remove(byte[] key);
 
 }
