@@ -72,23 +72,23 @@ public abstract class StronglyTyped<T> {
   }
 
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     return this.value.hashCode();
   }
 
   @Override
-  public boolean equals(final Object obj) {
+  public final boolean equals(final Object obj) {
     if (Objects.isNull(obj)) {
       return false;
     } else if (!this.getClass().isAssignableFrom(obj.getClass())) {
       return false;
     } else {
-      return this.value.equals(((StronglyTyped) obj).value);
+      return this.value.equals(((StronglyTyped<?>) obj).value);
     }
   }
 
   @Override
-  public String toString() {
+  public final String toString() {
     return this.value.toString();
   }
 

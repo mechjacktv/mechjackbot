@@ -8,7 +8,7 @@ public class TypedCharacterUnitTests extends StronglyTypedContractTests<Characte
   }
 
   @Override
-  protected StronglyTyped givenIHaveAStronglyTypedValue(final Character value) {
+  protected StronglyTyped<Character> givenIHaveAStronglyTypedValue(final Character value) {
     return new TestTypedCharacter(value);
   }
 

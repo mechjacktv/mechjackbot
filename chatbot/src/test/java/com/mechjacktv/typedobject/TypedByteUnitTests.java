@@ -8,7 +8,7 @@ public class TypedByteUnitTests extends StronglyTypedContractTests<Byte> {
   }
 
   @Override
-  protected StronglyTyped givenIHaveAStronglyTypedValue(final Byte value) {
+  protected StronglyTyped<Byte> givenIHaveAStronglyTypedValue(final Byte value) {
     return new TestTypedByte(value);
   }
 

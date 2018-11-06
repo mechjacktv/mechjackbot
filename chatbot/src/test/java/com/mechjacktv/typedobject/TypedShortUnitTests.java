@@ -8,7 +8,7 @@ public class TypedShortUnitTests extends StronglyTypedContractTests<Short> {
   }
 
   @Override
-  protected StronglyTyped givenIHaveAStronglyTypedValue(final Short value) {
+  protected StronglyTyped<Short> givenIHaveAStronglyTypedValue(final Short value) {
     return new TestTypedShort(value);
   }
 

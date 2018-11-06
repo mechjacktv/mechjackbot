@@ -8,7 +8,7 @@ public class TypedLongUnitTests extends StronglyTypedContractTests<Long> {
   }
 
   @Override
-  protected StronglyTyped givenIHaveAStronglyTypedValue(final Long value) {
+  protected StronglyTyped<Long> givenIHaveAStronglyTypedValue(final Long value) {
     return new TestTypedLong(value);
   }
 

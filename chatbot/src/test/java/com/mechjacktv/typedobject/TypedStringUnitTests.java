@@ -8,7 +8,7 @@ public class TypedStringUnitTests extends StronglyTypedContractTests<String> {
   }
 
   @Override
-  protected StronglyTyped givenIHaveAStronglyTypedValue(final String value) {
+  protected StronglyTyped<String> givenIHaveAStronglyTypedValue(final String value) {
     return new TestTypedString(value);
   }
 

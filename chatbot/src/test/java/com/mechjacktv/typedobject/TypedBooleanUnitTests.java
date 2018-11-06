@@ -8,7 +8,7 @@ public class TypedBooleanUnitTests extends StronglyTypedContractTests<Boolean> {
   }
 
   @Override
-  protected StronglyTyped givenIHaveAStronglyTypedValue(final Boolean value) {
+  protected StronglyTyped<Boolean> givenIHaveAStronglyTypedValue(final Boolean value) {
     return new TestTypedBoolean(value);
   }
 

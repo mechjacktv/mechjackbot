@@ -8,7 +8,7 @@ public class TypedDoubleUnitTests extends StronglyTypedContractTests<Double> {
   }
 
   @Override
-  protected StronglyTyped givenIHaveAStronglyTypedValue(final Double value) {
+  protected StronglyTyped<Double> givenIHaveAStronglyTypedValue(final Double value) {
     return new TestTypedDouble(value);
   }
 

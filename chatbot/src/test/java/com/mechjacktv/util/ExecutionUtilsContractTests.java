@@ -38,9 +38,7 @@ public abstract class ExecutionUtilsContractTests {
     final Object suppliedObject = new Object();
     final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Object result = subjectUnderTest.softenException(() -> {
-      return suppliedObject;
-    }, RuntimeException.class);
+    final Object result = subjectUnderTest.softenException(() -> suppliedObject, RuntimeException.class);
 
     assertThat(result).isEqualTo(suppliedObject);
   }

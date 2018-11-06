@@ -8,7 +8,7 @@ public class TypedIntegerUnitTests extends StronglyTypedContractTests<Integer> {
   }
 
   @Override
-  protected StronglyTyped givenIHaveAStronglyTypedValue(final Integer value) {
+  protected StronglyTyped<Integer> givenIHaveAStronglyTypedValue(final Integer value) {
     return new TestTypedInteger(value);
   }
 

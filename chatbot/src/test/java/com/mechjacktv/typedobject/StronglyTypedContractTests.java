@@ -11,14 +11,14 @@ public abstract class StronglyTypedContractTests<T> {
   public final void new_notNullValue_wrapsValue() {
     final T value = this.givenIHaveAValue();
 
-    final StronglyTyped result = this.givenIHaveAStronglyTypedValue(value);
+    final StronglyTyped<?> result = this.givenIHaveAStronglyTypedValue(value);
 
     assertThat(result.value).isEqualTo(value);
   }
 
   protected abstract T givenIHaveAValue();
 
-  protected abstract StronglyTyped givenIHaveAStronglyTypedValue(final T value);
+  protected abstract StronglyTyped<?> givenIHaveAStronglyTypedValue(final T value);
 
   @Test
   public final void new_nullValue_throwsNullPointerException() {

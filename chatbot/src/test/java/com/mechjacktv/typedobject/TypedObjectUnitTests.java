@@ -8,7 +8,7 @@ public class TypedObjectUnitTests extends StronglyTypedContractTests<Object> {
   }
 
   @Override
-  protected StronglyTyped givenIHaveAStronglyTypedValue(final Object value) {
+  protected StronglyTyped<Object> givenIHaveAStronglyTypedValue(final Object value) {
     return new TestTypedObject(value);
   }
 

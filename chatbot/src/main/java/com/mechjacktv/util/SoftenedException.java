@@ -2,6 +2,8 @@ package com.mechjacktv.util;
 
 final class SoftenedException extends RuntimeException {
 
+  private static final long serialVersionUID = -217972066245379725L;
+
   public SoftenedException(final Throwable cause) {
     super(cause.getMessage(), cause);
   }

@@ -16,7 +16,6 @@ public final class PircBotXChatBot implements ChatBot {
   private final PircBotX pircBotX;
 
   @Inject
-  @SuppressWarnings("unused")
   public PircBotXChatBot(final ChatBotConfiguration chatBotConfiguration, final ExecutionUtils executionUtils,
       final Listener listener) {
     final Configuration configuration = new Configuration.Builder()

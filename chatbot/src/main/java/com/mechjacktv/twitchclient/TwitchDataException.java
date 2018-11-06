@@ -1,6 +1,8 @@
 package com.mechjacktv.twitchclient;
 
-public class TwitchDataException extends TwitchClientException {
+public final class TwitchDataException extends TwitchClientException {
+
+  private static final long serialVersionUID = 1953550685625943603L;
 
   public TwitchDataException() {
     super(null, null);

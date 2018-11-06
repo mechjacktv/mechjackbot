@@ -8,7 +8,7 @@ public class TypedFloatUnitTests extends StronglyTypedContractTests<Float> {
   }
 
   @Override
-  protected StronglyTyped givenIHaveAStronglyTypedValue(final Float value) {
+  protected StronglyTyped<Float> givenIHaveAStronglyTypedValue(final Float value) {
     return new TestTypedFloat(value);
   }
 
