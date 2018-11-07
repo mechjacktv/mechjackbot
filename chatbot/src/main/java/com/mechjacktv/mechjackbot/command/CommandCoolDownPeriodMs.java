@@ -1,6 +1,6 @@
 package com.mechjacktv.mechjackbot.command;
 
-import com.mechjacktv.typedobject.TypedInteger;
+import com.mechjacktv.util.typedobject.TypedInteger;
 
 public final class CommandCoolDownPeriodMs extends TypedInteger {
 

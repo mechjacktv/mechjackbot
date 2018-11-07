@@ -1,4 +1,4 @@
-package com.mechjacktv.typedobject;
+package com.mechjacktv.util.typedobject;
 
 public class TypedBooleanUnitTests extends StronglyTypedContractTests<Boolean> {
 

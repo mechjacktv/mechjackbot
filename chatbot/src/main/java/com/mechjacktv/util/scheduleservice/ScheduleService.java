@@ -1,4 +1,4 @@
-package com.mechjacktv.scheduleservice;
+package com.mechjacktv.util.scheduleservice;
 
 import java.util.concurrent.TimeUnit;
 

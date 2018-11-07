@@ -1,4 +1,4 @@
-package com.mechjacktv.typedobject;
+package com.mechjacktv.util.typedobject;
 
 public abstract class TypedInteger extends StronglyTyped<Integer> {
 

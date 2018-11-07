@@ -16,7 +16,6 @@ import com.mechjacktv.keyvaluestore.KeyValueStoreFactory;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.command.shoutout.ShoutOutServiceMessage.Caster;
 import com.mechjacktv.mechjackbot.command.shoutout.ShoutOutServiceMessage.CasterKey;
-import com.mechjacktv.scheduleservice.ScheduleService;
 import com.mechjacktv.twitchclient.TwitchClient;
 import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollow;
 import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollows;
@@ -24,6 +23,7 @@ import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.twitchclient.TwitchUserFollowsCursor;
 import com.mechjacktv.twitchclient.TwitchUserId;
 import com.mechjacktv.util.ProtobufUtils;
+import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 public final class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Caster> {
 

@@ -3,7 +3,7 @@ package com.mechjacktv.mechjackbot.command;
 import javax.inject.Inject;
 
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.scheduleservice.ScheduleService;
+import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 @SuppressWarnings("CanBeFinal")
 public class QuitCommand extends AbstractCommand {

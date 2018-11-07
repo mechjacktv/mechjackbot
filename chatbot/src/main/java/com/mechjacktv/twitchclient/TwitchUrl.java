@@ -1,6 +1,6 @@
 package com.mechjacktv.twitchclient;
 
-import com.mechjacktv.typedobject.TypedString;
+import com.mechjacktv.util.typedobject.TypedString;
 
 public final class TwitchUrl extends TypedString {
 

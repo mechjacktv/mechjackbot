@@ -1,6 +1,6 @@
 package com.mechjacktv.mechjackbot.command;
 
-import com.mechjacktv.typedobject.TypedLong;
+import com.mechjacktv.util.typedobject.TypedLong;
 
 public final class CommandLastCalled extends TypedLong {
 

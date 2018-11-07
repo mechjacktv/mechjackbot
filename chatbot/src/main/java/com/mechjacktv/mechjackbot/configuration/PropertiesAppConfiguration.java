@@ -1,0 +1,44 @@
+package com.mechjacktv.mechjackbot.configuration;
+
+import java.io.File;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+
+import com.mechjacktv.mechjackbot.AppConfiguration;
+import com.mechjacktv.mechjackbot.ChatBotConfiguration;
+import com.mechjacktv.util.HotUpdatePropertiesWrapper;
+import com.mechjacktv.util.scheduleservice.ScheduleService;
+
+public final class PropertiesAppConfiguration extends HotUpdatePropertiesWrapper implements AppConfiguration {
+
+  private static final String CONFIG_PROPERTIES_FILE_NAME = "application.config";
+
+  @Inject
+  PropertiesAppConfiguration(final ChatBotConfiguration chatBotConfiguration, final ScheduleService scheduleService) {
+    super(new File(chatBotConfiguration.getDataLocation().value, CONFIG_PROPERTIES_FILE_NAME), scheduleService);
+  }
+
+  @Override
+  public final Optional<String> get(final String key) {
+    return Optional.ofNullable(this.get(key, null));
+  }
+
+  @Override
+  public final String get(final String key, final String defaultValue) {
+    final Object value = this.getProperties().get(key);
+
+    if (value != null) {
+      return value.toString();
+    }
+    return defaultValue;
+  }
+
+  @Override
+  public final Collection<String> getKeys() {
+    return this.getProperties().keySet().stream().map(Object::toString).collect(Collectors.toSet());
+  }
+
+}
