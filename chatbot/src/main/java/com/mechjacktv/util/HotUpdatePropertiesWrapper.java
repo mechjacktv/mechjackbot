@@ -19,25 +19,22 @@ public abstract class HotUpdatePropertiesWrapper {
 
   public HotUpdatePropertiesWrapper(final File propertiesFile, final ScheduleService scheduleService) {
     this.properties = new Properties();
-    scheduleService.schedule(() -> this.loadProperties(propertiesFile), 10, TimeUnit.MINUTES);
+    this.loadProperties(propertiesFile);
+    scheduleService.schedule(() -> this.loadProperties(propertiesFile), 10, TimeUnit.MINUTES, true);
   }
 
   private void loadProperties(final File propertiesFile) {
     try {
       if (this.didCreatePropertiesFile(propertiesFile)) {
-        this.handleMissingPropertiesFile();
+        log.info(String.format("Created %s", propertiesFile.getCanonicalPath()));
       }
-
       try (final FileInputStream fileInputStream = new FileInputStream(propertiesFile)) {
         log.info(String.format("Loading %s", propertiesFile.getCanonicalPath()));
         this.properties.load(fileInputStream);
       }
-
-      if (this.isMissingRequiredValues()) {
-        this.handleMissingRequiredValues();
-      }
     } catch (final Throwable t) {
-      log.error(String.format("Failure while loading properties file, %s", propertiesFile.getPath()), t);
+      log.error(String.format("Failure while loading properties file, %s: %s", propertiesFile.getPath(),
+          t.getMessage()), t);
     }
   }
 
@@ -52,18 +49,6 @@ public abstract class HotUpdatePropertiesWrapper {
       throw new IOException(parentLocation.getCanonicalPath() + " MUST be a directory");
     }
     return propertiesFile.createNewFile();
-  }
-
-  protected void handleMissingPropertiesFile() {
-    // empty
-  }
-
-  protected boolean isMissingRequiredValues() {
-    return false;
-  }
-
-  protected void handleMissingRequiredValues() {
-    // empty
   }
 
   protected Properties getProperties() {

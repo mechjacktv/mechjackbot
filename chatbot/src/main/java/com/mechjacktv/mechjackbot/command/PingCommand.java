@@ -7,11 +7,20 @@ import com.mechjacktv.mechjackbot.*;
 @SuppressWarnings("CanBeFinal")
 public class PingCommand extends AbstractCommand {
 
+  private static final String COMMAND_TRIGGER_KEY = "command.oing.trigger";
+  private static final String COMMAND_TRIGGER_DEFAULT = "!ping";
+
+  private static final String COMMAND_MESSAGE_FORMAT_KEY = "command.ping.message_format";
+  private static final String COMMAND_MESSAGE_FORMAT_DEFAULT = "Don't worry, @%s. I'm here.";
+
+  private final AppConfiguration appConfiguration;
   private final CommandUtils commandUtils;
 
   @Inject
-  public PingCommand(final CommandUtils commandUtils) {
-    super(CommandTrigger.of("!ping"), commandUtils);
+  public PingCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils) {
+    super(appConfiguration, CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT),
+        commandUtils);
+    this.appConfiguration = appConfiguration;
     this.commandUtils = commandUtils;
   }
 
@@ -24,7 +33,10 @@ public class PingCommand extends AbstractCommand {
   @RestrictToPrivileged
   @GlobalCoolDown
   public void handleMessage(MessageEvent messageEvent) {
-    messageEvent.sendResponse(Message.of(String.format("Don't worry, @%s. I'm here.",
+    final String messageFormat = this.appConfiguration.get(COMMAND_MESSAGE_FORMAT_KEY,
+        COMMAND_MESSAGE_FORMAT_DEFAULT);
+
+    messageEvent.sendResponse(Message.of(String.format(messageFormat,
         this.commandUtils.getSanitizedViewerName(messageEvent))));
   }
 

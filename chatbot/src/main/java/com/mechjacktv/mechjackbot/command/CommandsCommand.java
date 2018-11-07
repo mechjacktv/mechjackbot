@@ -11,11 +11,21 @@ import com.mechjacktv.mechjackbot.*;
 @SuppressWarnings("CanBeFinal")
 public class CommandsCommand extends AbstractCommand {
 
+  private static final String COMMAND_TRIGGER_KEY = "command.commands.trigger";
+  private static final String COMMAND_TRIGGER_DEFAULT = "!commands";
+
+  private static final String COMMAND_MESSAGE_FORMAT_KEY = "command.commands.message_format";
+  private static final String COMMAND_MESSAGE_FORMAT_DEFAULT = "Channel Commands:%s";
+
+  private final AppConfiguration appConfiguration;
   private final MessageEventHandler messageEventHandler;
 
   @Inject
-  public CommandsCommand(final CommandUtils commandUtils, final MessageEventHandler messageEventHandler) {
-    super(CommandTrigger.of("!commands"), commandUtils);
+  public CommandsCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils,
+      final MessageEventHandler messageEventHandler) {
+    super(appConfiguration, CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT),
+        commandUtils);
+    this.appConfiguration = appConfiguration;
     this.messageEventHandler = messageEventHandler;
   }
 
@@ -27,14 +37,15 @@ public class CommandsCommand extends AbstractCommand {
   @Override
   @GlobalCoolDown
   public void handleMessage(final MessageEvent messageEvent) {
-    final StringBuilder builder = new StringBuilder("Channel Commands:");
+    final String messageFormat = this.appConfiguration.get(COMMAND_MESSAGE_FORMAT_KEY, COMMAND_MESSAGE_FORMAT_DEFAULT);
+    final StringBuilder builder = new StringBuilder();
 
     for (final Command command : this.getSortedCommands()) {
       if (command.isTriggerable()) {
         builder.append(String.format(" %s", command.getTrigger()));
       }
     }
-    messageEvent.sendResponse(Message.of(builder.toString()));
+    messageEvent.sendResponse(Message.of(String.format(messageFormat, builder.toString())));
   }
 
   private Set<Command> getSortedCommands() {

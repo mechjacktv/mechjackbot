@@ -1,17 +1,19 @@
 package com.mechjacktv.mechjackbot.configuration;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
+
+import javax.inject.Inject;
 
 import com.google.common.base.Strings;
 
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.twitchclient.TwitchClientConfiguration;
 import com.mechjacktv.twitchclient.TwitchClientId;
+import com.mechjacktv.util.HotUpdatePropertiesWrapper;
+import com.mechjacktv.util.scheduleservice.ScheduleService;
 
-final class PropertiesChatBotConfiguration implements ChatBotConfiguration, TwitchClientConfiguration {
+final class PropertiesChatBotConfiguration extends HotUpdatePropertiesWrapper
+    implements ChatBotConfiguration, TwitchClientConfiguration {
 
   private static final String DATA_LOCATION_KEY = "mechjackbot.data_location";
   private static final String DATA_LOCATION_DEFAULT = System.getProperty("user.home") + "/.mechjackbot";
@@ -24,58 +26,23 @@ final class PropertiesChatBotConfiguration implements ChatBotConfiguration, Twit
   private static final String TWITCH_USERNAME_KEY = "twitch.username";
 
   private final DataLocation dataLocation;
-  private final TwitchChannel twitchChannel;
-  private final TwitchClientId twitchClientId;
-  private final TwitchPassword twitchPassword;
-  private final TwitchUsername twitchUsername;
 
-  public PropertiesChatBotConfiguration() throws IOException {
-    final Properties configProperties = this.loadConfigProperties();
+  @Inject
+  public PropertiesChatBotConfiguration(final ScheduleService scheduleService) {
+    super(new File(DATA_LOCATION, CONFIG_PROPERTIES_FILE_NAME), scheduleService);
 
-    this.dataLocation = DataLocation.of(DATA_LOCATION);
-    this.twitchChannel = TwitchChannel.of(configProperties.getProperty(TWITCH_CHANNEL_KEY));
-    this.twitchClientId = TwitchClientId.of(configProperties.getProperty(TWITCH_CLIENT_ID_KEY));
-    this.twitchPassword = TwitchPassword.of(configProperties.getProperty(TWITCH_PASSWORD_KEY));
-    this.twitchUsername = TwitchUsername.of(configProperties.getProperty(TWITCH_USERNAME_KEY));
-  }
-
-  private Properties loadConfigProperties() throws IOException {
-    final Properties configProperties = new Properties();
-
-    if (this.didCreateConfigProperties()) {
-      throw new IllegalStateException(String.format("Please configure your chat bot (%s)",
-          new File(new File(DATA_LOCATION), CONFIG_PROPERTIES_FILE_NAME).getCanonicalPath()));
-    }
-    try (final FileInputStream fileInputStream = new FileInputStream(
-        new File(new File(DATA_LOCATION), CONFIG_PROPERTIES_FILE_NAME))) {
-      configProperties.load(fileInputStream);
-    }
-    if (this.isMissingRequiredValues(configProperties)) {
+    if (this.isMissingRequiredValues()) {
       throw new IllegalStateException(String.format("Please complete your chat bot configuration (%s)",
-          new File(new File(DATA_LOCATION), CONFIG_PROPERTIES_FILE_NAME).getCanonicalPath()));
+          new File(new File(DATA_LOCATION), CONFIG_PROPERTIES_FILE_NAME).getPath()));
     }
-    return configProperties;
+    this.dataLocation = DataLocation.of(DATA_LOCATION);
   }
 
-  @SuppressWarnings("ignored")
-  private boolean didCreateConfigProperties() throws IOException {
-    final File dataLocation = new File(DATA_LOCATION);
-
-    if (!dataLocation.exists()) {
-      if (!dataLocation.mkdirs()) {
-        throw new IOException(String.format("Failed to create %s", dataLocation.getCanonicalPath()));
-      }
-    } else if (!dataLocation.isDirectory()) {
-      throw new IOException(dataLocation.getCanonicalPath() + " MUST be a directory");
-    }
-    return new File(dataLocation, CONFIG_PROPERTIES_FILE_NAME).createNewFile();
-  }
-
-  private boolean isMissingRequiredValues(final Properties configProperties) {
-    return Strings.isNullOrEmpty(configProperties.getProperty(TWITCH_USERNAME_KEY))
-        || Strings.isNullOrEmpty(configProperties.getProperty(TWITCH_PASSWORD_KEY))
-        || Strings.isNullOrEmpty(configProperties.getProperty(TWITCH_CHANNEL_KEY))
-        || Strings.isNullOrEmpty(configProperties.getProperty(TWITCH_CLIENT_ID_KEY));
+  private boolean isMissingRequiredValues() {
+    return Strings.isNullOrEmpty(this.getProperties().getProperty(TWITCH_USERNAME_KEY))
+        || Strings.isNullOrEmpty(this.getProperties().getProperty(TWITCH_PASSWORD_KEY))
+        || Strings.isNullOrEmpty(this.getProperties().getProperty(TWITCH_CHANNEL_KEY))
+        || Strings.isNullOrEmpty(this.getProperties().getProperty(TWITCH_CLIENT_ID_KEY));
   }
 
   @Override
@@ -85,22 +52,22 @@ final class PropertiesChatBotConfiguration implements ChatBotConfiguration, Twit
 
   @Override
   public TwitchChannel getTwitchChannel() {
-    return this.twitchChannel;
+    return TwitchChannel.of(this.getProperties().getProperty(TWITCH_CHANNEL_KEY));
   }
 
   @Override
   public TwitchClientId getTwitchClientId() {
-    return this.twitchClientId;
+    return TwitchClientId.of(this.getProperties().getProperty(TWITCH_CLIENT_ID_KEY));
   }
 
   @Override
   public TwitchPassword getTwitchPassword() {
-    return this.twitchPassword;
+    return TwitchPassword.of(this.getProperties().getProperty(TWITCH_PASSWORD_KEY));
   }
 
   @Override
   public TwitchUsername getTwitchUsername() {
-    return this.twitchUsername;
+    return TwitchUsername.of(this.getProperties().getProperty(TWITCH_USERNAME_KEY));
   }
 
 }

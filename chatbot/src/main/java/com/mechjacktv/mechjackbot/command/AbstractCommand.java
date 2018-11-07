@@ -1,17 +1,19 @@
 package com.mechjacktv.mechjackbot.command;
 
-import com.mechjacktv.mechjackbot.Command;
-import com.mechjacktv.mechjackbot.CommandName;
-import com.mechjacktv.mechjackbot.CommandTrigger;
-import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.*;
 
 public abstract class AbstractCommand implements Command {
 
-  private final CommandTrigger commandTrigger;
+  private final AppConfiguration appConfiguration;
+  private final CommandTriggerKey commandTriggerKey;
+  private final CommandTrigger commandTriggerDefault;
   private final CommandUtils commandUtils;
 
-  protected AbstractCommand(final CommandTrigger commandTrigger, final CommandUtils commandUtils) {
-    this.commandTrigger = commandTrigger;
+  protected AbstractCommand(final AppConfiguration appConfiguration, final CommandTriggerKey commandTriggerKey,
+      final CommandTrigger commandTriggerDefault, final CommandUtils commandUtils) {
+    this.appConfiguration = appConfiguration;
+    this.commandTriggerKey = commandTriggerKey;
+    this.commandTriggerDefault = commandTriggerDefault;
     this.commandUtils = commandUtils;
   }
 
@@ -22,7 +24,7 @@ public abstract class AbstractCommand implements Command {
 
   @Override
   public final CommandTrigger getTrigger() {
-    return this.commandTrigger;
+    return CommandTrigger.of(this.appConfiguration.get(this.commandTriggerKey.value, this.commandTriggerDefault.value));
   }
 
   @Override

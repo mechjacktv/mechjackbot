@@ -2,21 +2,24 @@ package com.mechjacktv.mechjackbot.command.shoutout;
 
 import javax.inject.Inject;
 
-import com.mechjacktv.mechjackbot.CommandDescription;
-import com.mechjacktv.mechjackbot.CommandTrigger;
-import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.command.AbstractCommand;
 import com.mechjacktv.mechjackbot.command.CommandUtils;
 
 @SuppressWarnings("CanBeFinal")
 public class ShoutOutListenerCommand extends AbstractCommand {
 
+  private static final String COMMAND_TRIGGER_KEY = "command.shout_out.shout_out_listener.trigger";
+  private static final String COMMAND_TRIGGER_DEFAULT = "!casterListener";
+
   private final ShoutOutService shoutOutService;
   private final CommandUtils commandUtils;
 
   @Inject
-  public ShoutOutListenerCommand(final ShoutOutService shoutOutService, final CommandUtils commandUtils) {
-    super(CommandTrigger.of("!casterListener"), commandUtils);
+  public ShoutOutListenerCommand(final AppConfiguration appConfiguration, final ShoutOutService shoutOutService,
+      final CommandUtils commandUtils) {
+    super(appConfiguration, CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT),
+        commandUtils);
     this.shoutOutService = shoutOutService;
     this.commandUtils = commandUtils;
   }

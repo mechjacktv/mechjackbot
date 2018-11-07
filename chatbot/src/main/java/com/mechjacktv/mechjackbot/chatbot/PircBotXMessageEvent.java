@@ -2,25 +2,28 @@ package com.mechjacktv.mechjackbot.chatbot;
 
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
-import com.mechjacktv.mechjackbot.ChatBot;
-import com.mechjacktv.mechjackbot.ChatUser;
-import com.mechjacktv.mechjackbot.Message;
-import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.util.ExecutionUtils;
 
 public final class PircBotXMessageEvent implements MessageEvent {
 
+  private static final String RESPONSE_MESSAGE_FORMAT_KEY = "chat_bot.message_event.message_format";
+  private static final String RESPONSE_MESSAGE_FORMAT_DEFAULT = "/me MrDestructoid > %s";
+
+  private final AppConfiguration appConfiguration;
   private final ExecutionUtils executionUtils;
   private final GenericMessageEvent genericMessageEvent;
 
-  PircBotXMessageEvent(final ExecutionUtils executionUtils, final GenericMessageEvent genericMessageEvent) {
+  PircBotXMessageEvent(final AppConfiguration appConfiguration, final ExecutionUtils executionUtils,
+      final GenericMessageEvent genericMessageEvent) {
+    this.appConfiguration = appConfiguration;
     this.executionUtils = executionUtils;
     this.genericMessageEvent = genericMessageEvent;
   }
 
   @Override
   public ChatBot getChatBot() {
-    return new PircBotXChatBot(this.executionUtils, this.genericMessageEvent.getBot());
+    return new PircBotXChatBot(this.appConfiguration, this.executionUtils, this.genericMessageEvent.getBot());
   }
 
   @Override
@@ -35,7 +38,8 @@ public final class PircBotXMessageEvent implements MessageEvent {
 
   @Override
   public void sendResponse(final Message message) {
-    this.genericMessageEvent.respondWith(String.format("/me MrDestructoid > %s ", message.value));
+    this.genericMessageEvent.respondWith(String.format(
+        this.appConfiguration.get(RESPONSE_MESSAGE_FORMAT_KEY, RESPONSE_MESSAGE_FORMAT_DEFAULT), message.value));
   }
 
 }

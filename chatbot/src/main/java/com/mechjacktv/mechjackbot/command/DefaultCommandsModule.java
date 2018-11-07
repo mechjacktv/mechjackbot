@@ -18,8 +18,6 @@ public final class DefaultCommandsModule extends AbstractModule {
 
     Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(CommandsCommand.class).asEagerSingleton();
     Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(HelpCommand.class).asEagerSingleton();
-    Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(InspectConfigCommand.class)
-        .asEagerSingleton();
     Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(PingCommand.class).asEagerSingleton();
     Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(TestCommand.class).asEagerSingleton();
     Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(QuitCommand.class).asEagerSingleton();

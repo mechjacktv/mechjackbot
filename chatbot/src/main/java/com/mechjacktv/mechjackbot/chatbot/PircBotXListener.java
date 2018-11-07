@@ -8,21 +8,25 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.PingEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
+import com.mechjacktv.mechjackbot.AppConfiguration;
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.MessageEventHandler;
 import com.mechjacktv.util.ExecutionUtils;
 
 final class PircBotXListener extends ListenerAdapter {
 
+  private final AppConfiguration appConfiguration;
   private final ExecutionUtils executionUtils;
   private final MessageEventHandler messageEventHandler;
 
   @Inject
-  public PircBotXListener(final Set<Command> commands, final ExecutionUtils executionUtils,
+  public PircBotXListener(final Set<Command> commands, final AppConfiguration appConfiguration,
+      final ExecutionUtils executionUtils,
       final MessageEventHandler messageEventHandler) {
     for (final Command command : commands) {
       messageEventHandler.addCommand(command);
     }
+    this.appConfiguration = appConfiguration;
     this.executionUtils = executionUtils;
     this.messageEventHandler = messageEventHandler;
   }
@@ -34,7 +38,7 @@ final class PircBotXListener extends ListenerAdapter {
 
   @Override
   public final void onGenericMessage(final GenericMessageEvent event) {
-    this.messageEventHandler.handleMessage(new PircBotXMessageEvent(this.executionUtils, event));
+    this.messageEventHandler.handleMessage(new PircBotXMessageEvent(this.appConfiguration, this.executionUtils, event));
   }
 
 }

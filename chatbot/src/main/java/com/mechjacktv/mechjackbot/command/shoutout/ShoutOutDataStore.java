@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mechjacktv.keyvaluestore.AbstractMessageStore;
 import com.mechjacktv.keyvaluestore.KeyValueStoreFactory;
+import com.mechjacktv.mechjackbot.AppConfiguration;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.command.shoutout.ShoutOutServiceMessage.Caster;
 import com.mechjacktv.mechjackbot.command.shoutout.ShoutOutServiceMessage.CasterKey;
@@ -29,15 +30,19 @@ public final class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Cas
 
   private static final Logger log = LoggerFactory.getLogger(ShoutOutDataStore.class);
   private static final String KEY_VALUE_STORE_NAME = ShoutOutDataStore.class.getCanonicalName();
+  private static final String UPDATE_PERIOD_KEY = "command.shout_out.data_store.update_period.minutes";
+  private static final String UPDATE_PERIOD_DEFAULT = "10";
 
   @Inject
-  ShoutOutDataStore(final ChatBotConfiguration chatBotConfiguration,
+  ShoutOutDataStore(final AppConfiguration appConfiguration,
+      final ChatBotConfiguration chatBotConfiguration,
       final KeyValueStoreFactory keyValueStoreFactory,
       final ProtobufUtils protobufUtils,
       final ScheduleService scheduleService,
       final TwitchClient twitchClient) {
     super(keyValueStoreFactory.createOrOpenKeyValueStore(KEY_VALUE_STORE_NAME), protobufUtils);
-    scheduleService.schedule(() -> this.updateCasters(chatBotConfiguration, twitchClient), 10, TimeUnit.MINUTES);
+    scheduleService.schedule(() -> this.updateCasters(chatBotConfiguration, twitchClient),
+        Integer.parseInt(appConfiguration.get(UPDATE_PERIOD_KEY, UPDATE_PERIOD_DEFAULT)), TimeUnit.MINUTES);
   }
 
   private void updateCasters(final ChatBotConfiguration chatBotConfiguration,

@@ -8,10 +8,15 @@ import com.mechjacktv.twitchclient.TwitchClient;
 @SuppressWarnings("CanBeFinal")
 public class TestCommand extends AbstractCommand {
 
+  private static final String COMMAND_TRIGGER_KEY = "command.test.trigger";
+  private static final String COMMAND_TRIGGER_DEFAULT = "!test";
+
   @Inject
-  public TestCommand(final ChatBotConfiguration chatBotConfiguration, final CommandUtils commandUtils,
+  public TestCommand(final AppConfiguration appConfiguration, final ChatBotConfiguration chatBotConfiguration,
+      final CommandUtils commandUtils,
       final TwitchClient twitchClient) {
-    super(CommandTrigger.of("!test"), commandUtils);
+    super(appConfiguration, CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT),
+        commandUtils);
   }
 
   @Override
@@ -23,7 +28,7 @@ public class TestCommand extends AbstractCommand {
   @RestrictToOwner
   @GlobalCoolDown
   public void handleMessage(final MessageEvent messageEvent) {
-    messageEvent.sendResponse(Message.of("Test run"));
+    messageEvent.sendResponse(Message.of("Your test is run"));
   }
 
   @Override

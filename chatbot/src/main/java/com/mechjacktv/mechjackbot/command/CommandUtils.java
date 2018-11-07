@@ -12,8 +12,10 @@ import com.mechjacktv.util.TimeUtils;
 
 public final class CommandUtils {
 
-  private static final String COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS = "command.default_cool_down_period.seconds";
-  private static final String COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS_DEFAULT = "5";
+  private static final String COMMAND_COOL_DOWN_PERIOD_SECONDS_KEY = "command.cool_down_period.seconds";
+  private static final String COMMAND_COOL_DOWN_PERIOD_SECONDS_DEFAULT = "5";
+  private static final String COMMAND_USAGE_MESSAGE_FORMAT_KEY = "command.usage.message_format";
+  private static final String COMMAND_USAGE_MESSAGE_FORMAT_DEFAULT = "@%s, usage: %s";
 
   private final AppConfiguration appConfiguration;
   private final ChatUsername botOwner;
@@ -78,8 +80,8 @@ public final class CommandUtils {
 
   private CommandCoolDownPeriodMs getCommandCoolDownPeriodMs() {
     return CommandCoolDownPeriodMs.of(this.timeUtils.secondsAsMs(Integer.parseInt(
-        this.appConfiguration.get(COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS,
-            COMMAND_DEFAULT_COOL_DOWN_PERIOD_SECONDS_DEFAULT))));
+        this.appConfiguration.get(COMMAND_COOL_DOWN_PERIOD_SECONDS_KEY,
+            COMMAND_COOL_DOWN_PERIOD_SECONDS_DEFAULT))));
   }
 
   public final boolean isRegularUserViewer(final MessageEvent messageEvent) {
@@ -98,8 +100,11 @@ public final class CommandUtils {
   }
 
   final void sendUsage(final MessageEvent messageEvent, final CommandUsage usage) {
-    messageEvent.sendResponse(
-        Message.of(String.format("@%s, usage: %s", this.getSanitizedViewerName(messageEvent), usage)));
+    final String messageFormat = this.appConfiguration.get(COMMAND_USAGE_MESSAGE_FORMAT_KEY,
+        COMMAND_USAGE_MESSAGE_FORMAT_DEFAULT);
+
+    messageEvent.sendResponse(Message.of(String.format(messageFormat,
+        this.getSanitizedViewerName(messageEvent), usage)));
   }
 
   public final ChatUsername getSanitizedViewerName(final MessageEvent messageEvent) {

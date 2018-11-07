@@ -10,4 +10,9 @@ final class DefaultTimeUtils implements TimeUtils {
     return seconds * SECOND;
   }
 
+  @Override
+  public Long hoursAsMs(final Integer hours) {
+    return hours * HOUR;
+  }
+
 }
