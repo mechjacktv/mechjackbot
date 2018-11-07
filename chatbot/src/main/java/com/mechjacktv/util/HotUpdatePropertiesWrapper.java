@@ -15,12 +15,17 @@ public abstract class HotUpdatePropertiesWrapper {
 
   private static final Logger log = LoggerFactory.getLogger(HotUpdatePropertiesWrapper.class);
 
+  private static final String UPDATE_PERIOD_KEY = "properties_wrapper.update_period.minutes";
+  private static final String UPDATE_PERIOD = System.getProperty(UPDATE_PERIOD_KEY, "10");
+
   private final Properties properties;
 
   public HotUpdatePropertiesWrapper(final File propertiesFile, final ScheduleService scheduleService) {
     this.properties = new Properties();
     this.loadProperties(propertiesFile);
-    scheduleService.schedule(() -> this.loadProperties(propertiesFile), 10, TimeUnit.MINUTES, true);
+
+    scheduleService.schedule(() -> this.loadProperties(propertiesFile), Integer.parseInt(UPDATE_PERIOD),
+        TimeUnit.MINUTES, true);
   }
 
   private void loadProperties(final File propertiesFile) {
