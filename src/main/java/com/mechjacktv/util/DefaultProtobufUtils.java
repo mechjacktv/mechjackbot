@@ -36,7 +36,7 @@ final class DefaultProtobufUtils implements ProtobufUtils {
       final Method parseFrom = messageClass.getMethod("parseFrom", byte[].class);
 
       return (T) parseFrom.invoke(null, (Object) messageBytes);
-    }, MessageParsingException.class); // TODO throw a better exception
+    }, MessageParsingException.class);
   }
 
 }

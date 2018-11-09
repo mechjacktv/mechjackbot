@@ -7,16 +7,16 @@ import org.junit.Test;
 
 public abstract class TimeUtilsContractTests {
 
+  abstract TimeUtils givenASubjectToTest();
+
   @Test
   public final void secondsAsMs_oneSecond_returns1000() {
     final TimeUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Integer result = subjectUnderTest.secondsAsMs(1);
 
-    assertThat(result).isEqualTo(1000);
+    assertThat(result).isEqualTo(TimeUtils.SECOND);
   }
-
-  abstract TimeUtils givenASubjectToTest();
 
   @Test
   public final void secondAsMs_nullSecond_throwsNullPointerException() {
@@ -24,7 +24,25 @@ public abstract class TimeUtilsContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.secondsAsMs(null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessageContaining("**MUST** not be `null`");
+    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage("`seconds` **MUST** not be `null`");
+  }
+
+  @Test
+  public final void hoursAsMs_oneSecond_returns1000() {
+    final TimeUtils subjectUnderTest = this.givenASubjectToTest();
+
+    final Long result = subjectUnderTest.hoursAsMs(1);
+
+    assertThat(result).isEqualTo(TimeUtils.HOUR);
+  }
+
+  @Test
+  public final void hoursAsMs_nullSecond_throwsNullPointerException() {
+    final TimeUtils subjectUnderTest = this.givenASubjectToTest();
+
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.hoursAsMs(null));
+
+    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage("`hours` **MUST** not be `null`");
   }
 
 }

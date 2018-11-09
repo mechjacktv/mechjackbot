@@ -12,6 +12,7 @@ final class DefaultTimeUtils implements TimeUtils {
 
   @Override
   public Long hoursAsMs(final Integer hours) {
+    Objects.requireNonNull(hours, "`hours` **MUST** not be `null`");
     return hours * HOUR;
   }
 
