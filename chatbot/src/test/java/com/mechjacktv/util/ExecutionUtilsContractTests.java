@@ -1,13 +1,27 @@
 package com.mechjacktv.util;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-
 import org.junit.Test;
 
 import com.mechjacktv.util.function.SupplierWithException;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
 public abstract class ExecutionUtilsContractTests {
+
+  private static final class TestableRuntimeException extends RuntimeException {
+
+    private static final long serialVersionUID = -2149332864017817028L;
+
+    TestableRuntimeException(Throwable cause) {
+      this(cause.getMessage(), cause);
+    }
+
+    TestableRuntimeException(String message, Throwable cause) {
+      super(message, cause);
+    }
+
+  }
 
   @Test
   public final void softenException_withRunnableNoException_completesNormally() {
@@ -15,7 +29,7 @@ public abstract class ExecutionUtilsContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.softenException(() -> {
       // do nothing
-    }, RuntimeException.class));
+    }, TestableRuntimeException.class));
 
     assertThat(thrown).isNull();
   }
@@ -28,9 +42,9 @@ public abstract class ExecutionUtilsContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.softenException(() -> {
       throw new Exception("test exception");
-    }, RuntimeException.class));
+    }, TestableRuntimeException.class));
 
-    assertThat(thrown).isInstanceOf(RuntimeException.class).hasMessageContaining("test exception");
+    assertThat(thrown).isInstanceOf(TestableRuntimeException.class).hasMessageContaining("test exception");
   }
 
   @Test
@@ -38,7 +52,7 @@ public abstract class ExecutionUtilsContractTests {
     final Object suppliedObject = new Object();
     final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Object result = subjectUnderTest.softenException(() -> suppliedObject, RuntimeException.class);
+    final Object result = subjectUnderTest.softenException(() -> suppliedObject, TestableRuntimeException.class);
 
     assertThat(result).isEqualTo(suppliedObject);
   }
@@ -48,9 +62,9 @@ public abstract class ExecutionUtilsContractTests {
     final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.softenException(this::throwsException,
-        RuntimeException.class));
+        TestableRuntimeException.class));
 
-    assertThat(thrown).isInstanceOf(RuntimeException.class).hasMessageContaining("test exception");
+    assertThat(thrown).isInstanceOf(TestableRuntimeException.class).hasMessageContaining("test exception");
   }
 
   private SupplierWithException<Object> throwsException() throws Exception {
