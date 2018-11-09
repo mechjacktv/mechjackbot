@@ -1,2 +1,1 @@
-include 'chatbot', 'protobufs'
 rootProject.name = 'mechjackbot'
