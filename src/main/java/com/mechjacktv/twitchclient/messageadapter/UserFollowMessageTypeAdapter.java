@@ -2,7 +2,7 @@ package com.mechjacktv.twitchclient.messageadapter;
 
 import com.google.protobuf.Message;
 
-import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollow;
+import com.mechjacktv.proto.twitchclient.TwitchClientMessage.UserFollow;
 
 public final class UserFollowMessageTypeAdapter extends AbstractMessageTypeAdapter<UserFollow> {
 

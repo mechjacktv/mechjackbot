@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package com.mechjacktv.util;
+package com.mechjacktv.proto.util;
 
 message TestMessage {
     string value = 1;

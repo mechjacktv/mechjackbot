@@ -16,8 +16,8 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
-import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollow;
-import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollows;
+import com.mechjacktv.proto.twitchclient.TwitchClientMessage.UserFollow;
+import com.mechjacktv.proto.twitchclient.TwitchClientMessage.UserFollows;
 import com.mechjacktv.twitchclient.messageadapter.UserFollowMessageTypeAdapter;
 import com.mechjacktv.util.function.ConsumerWithException;
 

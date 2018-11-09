@@ -8,10 +8,10 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 
+import com.mechjacktv.proto.twitchclient.TwitchClientMessage.UserFollow;
+import com.mechjacktv.proto.twitchclient.TwitchClientMessage.UserFollows;
+import com.mechjacktv.proto.twitchclient.TwitchClientMessage.UserFollows.Builder;
 import com.mechjacktv.twitchclient.*;
-import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollow;
-import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollows;
-import com.mechjacktv.twitchclient.TwitchClientMessage.UserFollows.Builder;
 
 public final class DefaultTwitchUsersFollowsEndpoint implements TwitchUsersFollowsEndpoint {
 

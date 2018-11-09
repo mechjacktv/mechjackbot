@@ -8,8 +8,8 @@ import com.mechjacktv.mechjackbot.AppConfiguration;
 import com.mechjacktv.mechjackbot.ChatUsername;
 import com.mechjacktv.mechjackbot.Message;
 import com.mechjacktv.mechjackbot.MessageEvent;
-import com.mechjacktv.mechjackbot.command.shoutout.ShoutOutServiceMessage.Caster;
-import com.mechjacktv.mechjackbot.command.shoutout.ShoutOutServiceMessage.CasterKey;
+import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.Caster;
+import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.CasterKey;
 import com.mechjacktv.util.TimeUtils;
 
 public final class ShoutOutService {
