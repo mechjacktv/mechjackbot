@@ -58,7 +58,7 @@ project(':chatbot') {
         implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'
     }
 
-    build.dependsOn 'jacocoTestReport'
+    build.dependsOn 'jacocoTestReport', 'spotlessApply'
 
     tasks.withType(FindBugs) {
         reports {

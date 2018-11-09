@@ -1,11 +1,11 @@
 package com.mechjacktv.util;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
 import org.junit.Test;
 
 import com.mechjacktv.util.function.SupplierWithException;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
 
 public abstract class ExecutionUtilsContractTests {
 
@@ -13,11 +13,11 @@ public abstract class ExecutionUtilsContractTests {
 
     private static final long serialVersionUID = -2149332864017817028L;
 
-    TestableRuntimeException(Throwable cause) {
+    public TestableRuntimeException(Throwable cause) {
       this(cause.getMessage(), cause);
     }
 
-    TestableRuntimeException(String message, Throwable cause) {
+    public TestableRuntimeException(String message, Throwable cause) {
       super(message, cause);
     }
 
