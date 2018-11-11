@@ -40,7 +40,7 @@ public class FileInputStreamSupplier implements Supplier<InputStream> {
         throw new IOException(String.format("Failed to create %s", parentLocation.getCanonicalPath()));
       }
     } else if (!parentLocation.isDirectory()) {
-      throw new IOException(parentLocation.getCanonicalPath() + " MUST be a directory");
+      throw new IllegalStateException(parentLocation.getCanonicalPath() + " MUST be a directory");
     }
     return file.createNewFile();
   }

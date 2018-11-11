@@ -6,7 +6,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
@@ -17,11 +16,6 @@ public abstract class HotUpdatePropertiesWrapper {
 
   private final Logger log;
   private final Properties properties;
-
-  public HotUpdatePropertiesWrapper(final Supplier<InputStream> propertiesSupplier,
-      final ScheduleService scheduleService) {
-    this(propertiesSupplier, scheduleService, LoggerFactory.getLogger(HotUpdatePropertiesWrapper.class));
-  }
 
   public HotUpdatePropertiesWrapper(final Supplier<InputStream> propertiesSupplier,
       final ScheduleService scheduleService, final Logger log) {

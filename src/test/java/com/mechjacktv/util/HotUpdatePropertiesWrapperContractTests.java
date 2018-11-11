@@ -1,5 +1,9 @@
 package com.mechjacktv.util;
 
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Properties;
@@ -10,10 +14,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 
 import com.mechjacktv.util.scheduleservice.ScheduleService;
-
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 public abstract class HotUpdatePropertiesWrapperContractTests {
 

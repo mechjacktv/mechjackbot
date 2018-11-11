@@ -6,6 +6,9 @@ import javax.inject.Inject;
 
 import com.google.common.base.Strings;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.twitchclient.TwitchClientConfiguration;
 import com.mechjacktv.twitchclient.TwitchClientId;
@@ -16,6 +19,8 @@ import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 final class PropertiesChatBotConfiguration extends HotUpdatePropertiesWrapper
     implements ChatBotConfiguration, TwitchClientConfiguration {
+
+  private static final Logger log = LoggerFactory.getLogger(PropertiesChatBotConfiguration.class);
 
   private static final String DATA_LOCATION_KEY = "mechjackbot.data_location";
   private static final String DATA_LOCATION_DEFAULT = System.getProperty("user.home") + "/.mechjackbot";
@@ -32,7 +37,7 @@ final class PropertiesChatBotConfiguration extends HotUpdatePropertiesWrapper
   @Inject
   public PropertiesChatBotConfiguration(final ExecutionUtils executionUtils, final ScheduleService scheduleService) {
     super(new FileInputStreamSupplier(executionUtils, new File(DATA_LOCATION, CONFIG_PROPERTIES_FILE_NAME)),
-        scheduleService);
+        scheduleService, log);
 
     if (this.isMissingRequiredValues()) {
       throw new IllegalStateException(String.format("Please complete your chat bot configuration (%s)",
