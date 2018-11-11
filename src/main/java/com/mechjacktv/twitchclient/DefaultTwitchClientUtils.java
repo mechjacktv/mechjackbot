@@ -1,11 +1,8 @@
 package com.mechjacktv.twitchclient;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.nio.charset.Charset;
 
 import javax.inject.Inject;
@@ -70,36 +67,6 @@ public final class DefaultTwitchClientUtils implements TwitchClientUtils {
       urlConnection.setRequestProperty("Client-ID", this.clientId.value);
       return urlConnection;
     }, TwitchConnectionException.class);
-  }
-
-  private static final class DefaultUrlConnectionFactory implements UrlConnectionFactory {
-
-    @Override
-    public UrlConnection openConnection(final String url) throws IOException {
-      final URLConnection urlConnection = new URL(url).openConnection();
-
-      return new DefaultUrlConnection(urlConnection);
-    }
-
-  }
-
-  private static final class DefaultUrlConnection implements UrlConnection {
-
-    private final URLConnection urlConnection;
-
-    DefaultUrlConnection(final URLConnection urlConnection) {
-      this.urlConnection = urlConnection;
-    }
-
-    @Override
-    public InputStream getInputStream() throws IOException {
-      return this.urlConnection.getInputStream();
-    }
-
-    @Override
-    public void setRequestProperty(final String name, final String value) {
-      this.urlConnection.setRequestProperty(name, value);
-    }
   }
 
 }
