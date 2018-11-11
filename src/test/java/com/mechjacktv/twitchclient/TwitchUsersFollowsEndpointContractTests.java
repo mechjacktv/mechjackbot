@@ -3,8 +3,7 @@ package com.mechjacktv.twitchclient;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -23,12 +22,13 @@ import com.mechjacktv.util.function.ConsumerWithException;
 
 public abstract class TwitchUsersFollowsEndpointContractTests {
 
-  private static final String CURSOR = "eyJiIjpudWxsLCJhIjp7IkN1cnNvciI6IjE1NDA2MTE0NzA2NjU2ODM4NDUifX0";
+  private static final String CURSOR = "CURSOR_CURSOR_CURSOR_CURSOR";
   private static final String FOLLOWED_AT = "2018-10-30T21:47:09Z";
   private static final String FROM_ID = "123456789";
   private static final String FROM_NAME = "TestFrom";
   private static final String TO_ID = "987654321";
   private static final String TO_NAME = "TestTo";
+  private static final String UNKNOWN_DATA = "unknown";
   private static final String RESPONSE_BODY = "{\n" +
       "    \"total\": 1,\n" +
       "    \"data\": [\n" +
@@ -41,9 +41,20 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
       "        }\n" +
       "    ],\n" +
       "    \"pagination\": {\n" +
-      "        \"cursor\": \"" + CURSOR + "\"\n" +
-      "    }\n" +
+      "        \"cursor\": \"" + CURSOR + "\",\n" +
+      "        \"" + UNKNOWN_DATA + "\": \"" + UNKNOWN_DATA + "\"\n" +
+      "    },\n" +
+      "  \"" + UNKNOWN_DATA + "\": \"" + UNKNOWN_DATA + "\"\n" +
       "}\n";
+
+  abstract TwitchUsersFollowsEndpoint givenASubjectToTest(Gson gson, TwitchClientUtils twitchClientUtils);
+
+  private Gson givenAGson() {
+    final GsonBuilder gsonBuilder = new GsonBuilder();
+
+    gsonBuilder.registerTypeAdapter(UserFollow.class, new UserFollowMessageTypeAdapter());
+    return gsonBuilder.create();
+  }
 
   @Test
   public final void getUserFollowsFromId_nullFromId_throwsNullPointerExceptionWithMessage() {
@@ -53,15 +64,6 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.getUserFollowsFromId(null));
 
     assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessageContaining("**MUST** not be `null`");
-  }
-
-  abstract TwitchUsersFollowsEndpoint givenASubjectToTest(Gson gson, TwitchClientUtils twitchClientUtils);
-
-  private Gson givenAGson() {
-    final GsonBuilder gsonBuilder = new GsonBuilder();
-
-    gsonBuilder.registerTypeAdapter(UserFollow.class, new UserFollowMessageTypeAdapter());
-    return gsonBuilder.create();
   }
 
   @Test
@@ -131,6 +133,24 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
     softly.assertThat(serviceUrl.getValue().value).contains("from_id=" + FROM_ID);
     softly.assertThat(serviceUrl.getValue().value).contains("after=" + CURSOR);
     softly.assertAll();
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public final void getUsers_invalidObjectNames_handlesInvalidObjectName() {
+    final TwitchClientUtils twitchClientUtils = mock(TwitchClientUtils.class);
+    final TwitchUsersFollowsEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
+        twitchClientUtils);
+    doAnswer((invocation) -> {
+      final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
+
+      consumer.accept(new StringReader(RESPONSE_BODY));
+      return null;
+    }).when(twitchClientUtils).handleResponse(isA(TwitchUrl.class), isA(ConsumerWithException.class));
+
+    subjectUnderTest.getUserFollowsFromId(TwitchUserId.of(FROM_ID));
+
+    verify(twitchClientUtils, times(2)).handleInvalidObjectName(isA(String.class));
   }
 
 }

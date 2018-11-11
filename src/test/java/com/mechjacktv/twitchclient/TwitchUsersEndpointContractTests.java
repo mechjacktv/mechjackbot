@@ -2,7 +2,6 @@ package com.mechjacktv.twitchclient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
@@ -214,6 +213,7 @@ public abstract class TwitchUsersEndpointContractTests {
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public final void getUsers_invalidObjectName_handlesInvalidObjectName() {
     final TwitchClientUtils twitchClientUtils = mock(TwitchClientUtils.class);
     final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
@@ -227,7 +227,7 @@ public abstract class TwitchUsersEndpointContractTests {
 
     subjectUnderTest.getUsers(this.givenASetOfTwitchLogins(0), Sets.newHashSet(TwitchUserId.of(USER_ID)));
 
-    verify(twitchClientUtils).handleInvalidObjectName(eq(UNKNOWN_DATA));
+    verify(twitchClientUtils).handleInvalidObjectName(isA(String.class));
   }
 
 }
