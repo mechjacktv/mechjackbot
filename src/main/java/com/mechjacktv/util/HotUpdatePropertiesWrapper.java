@@ -1,10 +1,9 @@
 package com.mechjacktv.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,47 +12,34 @@ import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 public abstract class HotUpdatePropertiesWrapper {
 
-  private static final Logger log = LoggerFactory.getLogger(HotUpdatePropertiesWrapper.class);
-
   private static final String UPDATE_PERIOD_KEY = "properties_wrapper.update_period.minutes";
   private static final String UPDATE_PERIOD = System.getProperty(UPDATE_PERIOD_KEY, "10");
 
+  private final Logger log;
   private final Properties properties;
 
-  public HotUpdatePropertiesWrapper(final File propertiesFile, final ScheduleService scheduleService) {
-    this.properties = new Properties();
-    this.loadProperties(propertiesFile);
+  public HotUpdatePropertiesWrapper(final Supplier<InputStream> propertiesSupplier,
+      final ScheduleService scheduleService) {
+    this(propertiesSupplier, scheduleService, LoggerFactory.getLogger(HotUpdatePropertiesWrapper.class));
+  }
 
-    scheduleService.schedule(() -> this.loadProperties(propertiesFile), Integer.parseInt(UPDATE_PERIOD),
+  public HotUpdatePropertiesWrapper(final Supplier<InputStream> propertiesSupplier,
+      final ScheduleService scheduleService, final Logger log) {
+    this.log = log;
+    this.properties = new Properties();
+    this.loadProperties(propertiesSupplier);
+    scheduleService.schedule(() -> this.loadProperties(propertiesSupplier), Integer.parseInt(UPDATE_PERIOD),
         TimeUnit.MINUTES, true);
   }
 
-  private void loadProperties(final File propertiesFile) {
+  private void loadProperties(final Supplier<InputStream> propertiesSupplier) {
     try {
-      if (this.didCreatePropertiesFile(propertiesFile)) {
-        log.info(String.format("Created %s", propertiesFile.getCanonicalPath()));
-      }
-      try (final FileInputStream fileInputStream = new FileInputStream(propertiesFile)) {
-        log.info(String.format("Loading %s", propertiesFile.getCanonicalPath()));
-        this.properties.load(fileInputStream);
+      try (final InputStream propertiesInputStream = propertiesSupplier.get()) {
+        this.properties.load(propertiesInputStream);
       }
     } catch (final Throwable t) {
-      log.error(String.format("Failure while loading properties file, %s: %s", propertiesFile.getPath(),
-          t.getMessage()), t);
+      this.log.error(String.format("Failure while loading properties file: %s", t.getMessage()), t);
     }
-  }
-
-  private boolean didCreatePropertiesFile(final File propertiesFile) throws IOException {
-    final File parentLocation = propertiesFile.getParentFile();
-
-    if (!parentLocation.exists()) {
-      if (!parentLocation.mkdirs()) {
-        throw new IOException(String.format("Failed to create %s", parentLocation.getCanonicalPath()));
-      }
-    } else if (!parentLocation.isDirectory()) {
-      throw new IOException(parentLocation.getCanonicalPath() + " MUST be a directory");
-    }
-    return propertiesFile.createNewFile();
   }
 
   protected Properties getProperties() {

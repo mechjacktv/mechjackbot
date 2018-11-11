@@ -9,6 +9,8 @@ import com.google.common.base.Strings;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.twitchclient.TwitchClientConfiguration;
 import com.mechjacktv.twitchclient.TwitchClientId;
+import com.mechjacktv.util.ExecutionUtils;
+import com.mechjacktv.util.FileInputStreamSupplier;
 import com.mechjacktv.util.HotUpdatePropertiesWrapper;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
@@ -28,8 +30,9 @@ final class PropertiesChatBotConfiguration extends HotUpdatePropertiesWrapper
   private final DataLocation dataLocation;
 
   @Inject
-  public PropertiesChatBotConfiguration(final ScheduleService scheduleService) {
-    super(new File(DATA_LOCATION, CONFIG_PROPERTIES_FILE_NAME), scheduleService);
+  public PropertiesChatBotConfiguration(final ExecutionUtils executionUtils, final ScheduleService scheduleService) {
+    super(new FileInputStreamSupplier(executionUtils, new File(DATA_LOCATION, CONFIG_PROPERTIES_FILE_NAME)),
+        scheduleService);
 
     if (this.isMissingRequiredValues()) {
       throw new IllegalStateException(String.format("Please complete your chat bot configuration (%s)",
