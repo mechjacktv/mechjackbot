@@ -36,8 +36,8 @@ public abstract class HotUpdatePropertiesWrapperContractTests {
 
   @Test
   public final void getProperties_withPropertiesInputStream_returnsLoadedProperties() {
-    final InputStream properitesInputStream = this.givenAPropertiesInputStream();
-    final HotUpdatePropertiesWrapper subjectUnderTest = this.givenASubjectToTest(() -> properitesInputStream);
+    final InputStream propertiesInputStream = this.givenAPropertiesInputStream();
+    final HotUpdatePropertiesWrapper subjectUnderTest = this.givenASubjectToTest(() -> propertiesInputStream);
 
     final Properties result = subjectUnderTest.getProperties();
 
