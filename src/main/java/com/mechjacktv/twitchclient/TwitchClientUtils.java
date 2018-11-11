@@ -8,7 +8,7 @@ public interface TwitchClientUtils {
 
   String TWITCH_API_URL = "https://api.twitch.tv/helix";
 
-  void handleInvalidObjectName(String name);
+  void handleUnknownObjectName(String name);
 
   void handleResponse(TwitchUrl serviceUrl, ConsumerWithException<Reader> consumer);
 

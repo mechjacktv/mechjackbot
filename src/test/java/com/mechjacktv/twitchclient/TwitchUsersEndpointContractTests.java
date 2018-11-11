@@ -227,7 +227,7 @@ public abstract class TwitchUsersEndpointContractTests {
 
     subjectUnderTest.getUsers(this.givenASetOfTwitchLogins(0), Sets.newHashSet(TwitchUserId.of(USER_ID)));
 
-    verify(twitchClientUtils).handleInvalidObjectName(isA(String.class));
+    verify(twitchClientUtils).handleUnknownObjectName(isA(String.class));
   }
 
 }

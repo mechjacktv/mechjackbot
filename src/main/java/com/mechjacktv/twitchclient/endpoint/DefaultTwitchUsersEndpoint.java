@@ -60,7 +60,7 @@ public final class DefaultTwitchUsersEndpoint implements TwitchUsersEndpoint {
           jsonReader.endArray();
           break;
         default:
-          this.twitchClientUtils.handleInvalidObjectName(name);
+          this.twitchClientUtils.handleUnknownObjectName(name);
           jsonReader.skipValue();
           break;
         }

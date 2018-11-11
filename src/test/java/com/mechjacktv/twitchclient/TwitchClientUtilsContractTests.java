@@ -162,19 +162,19 @@ public abstract class TwitchClientUtilsContractTests {
     final Logger logger = mock(Logger.class);
     final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest(logger);
 
-    subjectUnderTest.handleInvalidObjectName(UNKNOWN_OBJECT_NAME);
+    subjectUnderTest.handleUnknownObjectName(UNKNOWN_OBJECT_NAME);
 
     verify(logger).warn(isA(String.class));
   }
 
   @Test
-  public final void handleInvalidObjectName_forName_warningMessageContainsUnknownObjectName() {
+  public final void handleUnknownObjectName_forName_warningMessageContainsUnknownObjectName() {
     final Logger logger = mock(Logger.class);
     final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest(logger);
     final ArgumentCaptor<String> unknownObjectNameCaptor = ArgumentCaptor.forClass(String.class);
     doNothing().when(logger).warn(unknownObjectNameCaptor.capture());
 
-    subjectUnderTest.handleInvalidObjectName(UNKNOWN_OBJECT_NAME);
+    subjectUnderTest.handleUnknownObjectName(UNKNOWN_OBJECT_NAME);
 
     assertThat(unknownObjectNameCaptor.getValue()).contains(UNKNOWN_OBJECT_NAME);
   }

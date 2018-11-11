@@ -40,7 +40,7 @@ public final class DefaultTwitchClientUtils implements TwitchClientUtils {
   }
 
   @Override
-  public final void handleInvalidObjectName(final String name) {
+  public final void handleUnknownObjectName(final String name) {
     this.log.warn(String.format("Name '%s' was found but not expected", name));
   }
 

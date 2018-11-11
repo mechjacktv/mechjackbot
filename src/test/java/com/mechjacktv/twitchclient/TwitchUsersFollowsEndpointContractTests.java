@@ -150,7 +150,7 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
 
     subjectUnderTest.getUserFollowsFromId(TwitchUserId.of(FROM_ID));
 
-    verify(twitchClientUtils, times(2)).handleInvalidObjectName(isA(String.class));
+    verify(twitchClientUtils, times(2)).handleUnknownObjectName(isA(String.class));
   }
 
 }

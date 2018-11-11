@@ -64,7 +64,7 @@ public final class DefaultTwitchUsersFollowsEndpoint implements TwitchUsersFollo
               userFollowsBuilder.setCursor(jsonReader.nextString());
               break;
             default:
-              this.twitchClientUtils.handleInvalidObjectName(name);
+              this.twitchClientUtils.handleUnknownObjectName(name);
               jsonReader.skipValue();
               break;
             }
@@ -79,7 +79,7 @@ public final class DefaultTwitchUsersFollowsEndpoint implements TwitchUsersFollo
           jsonReader.endArray();
           break;
         default:
-          this.twitchClientUtils.handleInvalidObjectName(name);
+          this.twitchClientUtils.handleUnknownObjectName(name);
           jsonReader.skipValue();
           break;
         }
