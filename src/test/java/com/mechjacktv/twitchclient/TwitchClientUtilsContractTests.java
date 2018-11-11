@@ -1,24 +1,45 @@
 package com.mechjacktv.twitchclient;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.slf4j.Logger;
 
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.function.ConsumerWithException;
+
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public abstract class TwitchClientUtilsContractTests {
 
   private static final String EXCEPTION_MESSAGE = "exception message";
   private static final TwitchUrl SERVICE_URL = TwitchUrl.of("api/test");
   private static final TwitchClientId TWITCH_CLIENT_ID = TwitchClientId.of("TWITCH_CLIENT_ID");
+  private static final String UNKNOWN_OBJECT_NAME = "unknown";
+
+  private TwitchClientUtils givenASubjectToTest(final UrlConnectionFactory urlConnectionFactory) {
+    final TwitchClientConfiguration twitchClientConfiguration = mock(TwitchClientConfiguration.class);
+
+    when(twitchClientConfiguration.getTwitchClientId()).thenReturn(TWITCH_CLIENT_ID);
+    return this.givenASubjectToTest(twitchClientConfiguration, new DefaultExecutionUtils(),
+        urlConnectionFactory, mock(Logger.class));
+  }
+
+  private TwitchClientUtils givenASubjectToTest(final Logger logger) {
+    final TwitchClientConfiguration twitchClientConfiguration = mock(TwitchClientConfiguration.class);
+
+    when(twitchClientConfiguration.getTwitchClientId()).thenReturn(TWITCH_CLIENT_ID);
+    return this.givenASubjectToTest(twitchClientConfiguration, new DefaultExecutionUtils(),
+        mock(UrlConnectionFactory.class), logger);
+  }
+
+  abstract TwitchClientUtils givenASubjectToTest(TwitchClientConfiguration twitchClientConfiguration,
+      ExecutionUtils executionUtils, UrlConnectionFactory urlConnectionFactory, Logger logger);
 
   @Test
   public final void handleResponse_openConnectionThrowsIOException_consumerIsNotCalled() throws IOException {
@@ -33,18 +54,6 @@ public abstract class TwitchClientUtilsContractTests {
 
     assertThat(thrown).isNotNull();
   }
-
-  private TwitchClientUtils givenASubjectToTest(final UrlConnectionFactory urlConnectionFactory) {
-    final TwitchClientConfiguration twitchClientConfiguration = mock(TwitchClientConfiguration.class);
-
-    when(twitchClientConfiguration.getTwitchClientId()).thenReturn(TWITCH_CLIENT_ID);
-    return this.givenASubjectToTest(twitchClientConfiguration, new DefaultExecutionUtils(),
-        urlConnectionFactory);
-  }
-
-  abstract TwitchClientUtils givenASubjectToTest(TwitchClientConfiguration twitchClientConfiguration,
-      ExecutionUtils executionUtils,
-      UrlConnectionFactory urlConnectionFactory);
 
   @Test
   public final void handleResponse_openConnectionThrowsIOException_twitchConnectExceptionIsThrown() throws IOException {
@@ -146,6 +155,28 @@ public abstract class TwitchClientUtilsContractTests {
     subjectUnderTest.handleResponse(SERVICE_URL, consumer);
 
     verify(consumer).accept(isA(Reader.class));
+  }
+
+  @Test
+  public final void handleInvalidObjectName_forName_logsWarning() {
+    final Logger logger = mock(Logger.class);
+    final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest(logger);
+
+    subjectUnderTest.handleInvalidObjectName(UNKNOWN_OBJECT_NAME);
+
+    verify(logger).warn(isA(String.class));
+  }
+
+  @Test
+  public final void handleInvalidObjectName_forName_warningMessageContainsUnknownObjectName() {
+    final Logger logger = mock(Logger.class);
+    final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest(logger);
+    final ArgumentCaptor<String> unknownObjectNameCaptor = ArgumentCaptor.forClass(String.class);
+    doNothing().when(logger).warn(unknownObjectNameCaptor.capture());
+
+    subjectUnderTest.handleInvalidObjectName(UNKNOWN_OBJECT_NAME);
+
+    assertThat(unknownObjectNameCaptor.getValue()).contains(UNKNOWN_OBJECT_NAME);
   }
 
 }

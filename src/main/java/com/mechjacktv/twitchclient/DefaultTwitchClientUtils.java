@@ -18,8 +18,7 @@ import com.mechjacktv.util.function.ConsumerWithException;
 
 public final class DefaultTwitchClientUtils implements TwitchClientUtils {
 
-  private static final Logger log = LoggerFactory.getLogger(DefaultTwitchClientUtils.class);
-
+  private final Logger log;
   private final TwitchClientId clientId;
   private final ExecutionUtils executionUtils;
   private final UrlConnectionFactory urlConnectionFactory;
@@ -27,12 +26,14 @@ public final class DefaultTwitchClientUtils implements TwitchClientUtils {
   @Inject
   DefaultTwitchClientUtils(final TwitchClientConfiguration twitchClientConfiguration,
       final ExecutionUtils executionUtils) {
-    this(twitchClientConfiguration, executionUtils, new DefaultUrlConnectionFactory());
+    this(twitchClientConfiguration, executionUtils, new DefaultUrlConnectionFactory(),
+        LoggerFactory.getLogger(DefaultTwitchClientUtils.class));
   }
 
   DefaultTwitchClientUtils(final TwitchClientConfiguration twitchClientConfiguration,
       final ExecutionUtils executionUtils,
-      final UrlConnectionFactory urlConnectionFactory) {
+      final UrlConnectionFactory urlConnectionFactory, final Logger log) {
+    this.log = log;
     this.clientId = twitchClientConfiguration.getTwitchClientId();
     this.executionUtils = executionUtils;
     this.urlConnectionFactory = urlConnectionFactory;
@@ -40,7 +41,7 @@ public final class DefaultTwitchClientUtils implements TwitchClientUtils {
 
   @Override
   public final void handleInvalidObjectName(final String name) {
-    log.warn(String.format("Name '%s' was found but not expected", name));
+    this.log.warn(String.format("Name '%s' was found but not expected", name));
   }
 
   @Override
