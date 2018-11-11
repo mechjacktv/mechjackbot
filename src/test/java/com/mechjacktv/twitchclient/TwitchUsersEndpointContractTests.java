@@ -2,9 +2,9 @@ package com.mechjacktv.twitchclient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -34,32 +34,21 @@ public abstract class TwitchUsersEndpointContractTests {
   private static final String USER_PROFILE_IMAGE_URL = "https://static-cdn.jtvnw.net/jtv_user_pictures/769d567c-2bd0-4544-b865-03a67f03f8a8-profile_image-300x300.png";
   private static final String USER_OFFLINE_IMAGE_URL = "https://static-cdn.jtvnw.net/jtv_user_pictures/0b371e3acf19d098-channel_offline_image-1920x1080.png";
   private static final int USER_VIEW_COUNT = 9001;
-  private static final String RESPONSE_BODY = "{\n" +
-      "    \"data\": [\n" +
-      "        {\n" +
-      "            \"id\": \"" + USER_ID + "\",\n" +
-      "            \"login\": \"" + USER_LOGIN + "\",\n" +
-      "            \"display_name\": \"" + USER_DISPLAY_NAME + "\",\n" +
-      "            \"type\": \"" + USER_TYPE + "\",\n" +
-      "            \"broadcaster_type\": \"" + USER_BROADCASTER_TYPE + "\",\n" +
-      "            \"description\": \"" + USER_DESCRIPTION + "\",\n" +
-      "            \"profile_image_url\": \"" + USER_PROFILE_IMAGE_URL + "\",\n" +
-      "            \"offline_image_url\": \"" + USER_OFFLINE_IMAGE_URL + "\",\n" +
-      "            \"view_count\": " + USER_VIEW_COUNT + "\n" +
-      "        }\n" +
-      "    ]\n" +
-      "}\n";
-
-  @Test
-  public final void getUsers_nullLogins_throwsNullPointerExceptionWithMessage() {
-    final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-        mock(TwitchClientUtils.class));
-
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.getUsers(null,
-        this.givenASetOfTwitchIds(1)));
-
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage("Logins set **MUST** not be `null`.");
-  }
+  private static final String UNKNOWN_DATA = "unknown";
+  private static final String RESPONSE_BODY = "{\n"
+      + "  \"data\": [{\n"
+      + "    \"id\": \"" + USER_ID + "\",\n"
+      + "    \"login\": \"" + USER_LOGIN + "\",\n"
+      + "    \"display_name\": \"" + USER_DISPLAY_NAME + "\",\n"
+      + "    \"type\": \"" + USER_TYPE + "\",\n"
+      + "    \"broadcaster_type\": \"" + USER_BROADCASTER_TYPE + "\",\n"
+      + "    \"description\": \"" + USER_DESCRIPTION + "\",\n"
+      + "    \"profile_image_url\": \"" + USER_PROFILE_IMAGE_URL + "\",\n"
+      + "    \"offline_image_url\": \"" + USER_OFFLINE_IMAGE_URL + "\",\n"
+      + "    \"view_count\": " + USER_VIEW_COUNT + "\n"
+      + "  }],\n"
+      + "  \"" + UNKNOWN_DATA + "\": \"" + UNKNOWN_DATA + "\"\n"
+      + "}";
 
   abstract TwitchUsersEndpoint givenASubjectToTest(Gson gson, TwitchClientUtils twitchClientUtils);
 
@@ -79,6 +68,26 @@ public abstract class TwitchUsersEndpointContractTests {
     return ids;
   }
 
+  private Set<TwitchLogin> givenASetOfTwitchLogins(final int count) {
+    final Set<TwitchLogin> logins = Sets.newHashSet();
+
+    for (int i = 0; i < count; i++) {
+      logins.add(TwitchLogin.of("Login" + i));
+    }
+    return logins;
+  }
+
+  @Test
+  public final void getUsers_nullLogins_throwsNullPointerExceptionWithMessage() {
+    final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
+        mock(TwitchClientUtils.class));
+
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.getUsers(null,
+        this.givenASetOfTwitchIds(1)));
+
+    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage("Logins set **MUST** not be `null`.");
+  }
+
   @Test
   public final void getUsers_nullIds_throwsNullPointerExceptionWithMessage() {
     final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
@@ -88,15 +97,6 @@ public abstract class TwitchUsersEndpointContractTests {
         null));
 
     assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage("Ids set **MUST** not be `null`.");
-  }
-
-  private Set<TwitchLogin> givenASetOfTwitchLogins(final int count) {
-    final Set<TwitchLogin> logins = Sets.newHashSet();
-
-    for (int i = 0; i < count; i++) {
-      logins.add(TwitchLogin.of("Login" + i));
-    }
-    return logins;
   }
 
   @Test
@@ -211,6 +211,23 @@ public abstract class TwitchUsersEndpointContractTests {
     subjectUnderTest.getUsers(this.givenASetOfTwitchLogins(0), Sets.newHashSet(TwitchUserId.of(USER_ID)));
 
     assertThat(serviceUrl.getValue().value).contains("id=" + USER_ID);
+  }
+
+  @Test
+  public final void getUsers_invalidObjectName_handlesInvalidObjectName() {
+    final TwitchClientUtils twitchClientUtils = mock(TwitchClientUtils.class);
+    final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
+        twitchClientUtils);
+    doAnswer((invocation) -> {
+      final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
+
+      consumer.accept(new StringReader(RESPONSE_BODY));
+      return null;
+    }).when(twitchClientUtils).handleResponse(isA(TwitchUrl.class), isA(ConsumerWithException.class));
+
+    subjectUnderTest.getUsers(this.givenASetOfTwitchLogins(0), Sets.newHashSet(TwitchUserId.of(USER_ID)));
+
+    verify(twitchClientUtils).handleInvalidObjectName(eq(UNKNOWN_DATA));
   }
 
 }
