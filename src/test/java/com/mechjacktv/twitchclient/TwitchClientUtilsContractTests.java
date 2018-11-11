@@ -1,5 +1,8 @@
 package com.mechjacktv.twitchclient;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -11,9 +14,6 @@ import org.slf4j.Logger;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.function.ConsumerWithException;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 public abstract class TwitchClientUtilsContractTests {
 
