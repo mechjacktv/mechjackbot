@@ -27,7 +27,7 @@ final class DefaultTwitchClient implements TwitchClient {
 
   @Override
   public Optional<TwitchUserId> getUserId(final TwitchLogin login) {
-    Objects.requireNonNull(login, "Twitch login **MUST** not be `null`.");
+    Objects.requireNonNull(login, "`login` **MUST** not be `null`.");
 
     final Users users = this.getUsers(Sets.newHashSet(login), Sets.newHashSet());
     final List<User> userList = users.getUserList();
