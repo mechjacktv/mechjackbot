@@ -8,6 +8,11 @@ public class TypedDoubleUnitTests extends StronglyTypedContractTests<Double> {
   }
 
   @Override
+  protected Double givenIHaveADifferentValue() {
+    return Double.MIN_VALUE;
+  }
+
+  @Override
   protected StronglyTyped<Double> givenIHaveAStronglyTypedValue(final Double value) {
     return new TestTypedDouble(value);
   }

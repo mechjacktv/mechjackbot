@@ -1,5 +1,11 @@
 package com.mechjacktv.twitchclient;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
+
 import java.util.Optional;
 import java.util.Set;
 
@@ -10,12 +16,6 @@ import org.junit.Test;
 
 import com.mechjacktv.proto.twitchclient.TwitchClientMessage.User;
 import com.mechjacktv.proto.twitchclient.TwitchClientMessage.Users;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
 
 public abstract class TwitchClientContractTests {
 

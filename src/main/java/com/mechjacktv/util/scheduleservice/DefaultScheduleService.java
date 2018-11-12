@@ -1,8 +1,11 @@
 package com.mechjacktv.util.scheduleservice;
 
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 public final class DefaultScheduleService implements ScheduleService {
 
@@ -11,8 +14,13 @@ public final class DefaultScheduleService implements ScheduleService {
 
   private final ScheduledExecutorService scheduledExecutorService;
 
+  @Inject
   DefaultScheduleService() {
-    this.scheduledExecutorService = Executors.newScheduledThreadPool(POOL_SIZE);
+    this(Executors.newScheduledThreadPool(POOL_SIZE));
+  }
+
+  DefaultScheduleService(final ScheduledExecutorService scheduledExecutorService) {
+    this.scheduledExecutorService = scheduledExecutorService;
   }
 
   @Override
@@ -21,7 +29,12 @@ public final class DefaultScheduleService implements ScheduleService {
   }
 
   @Override
-  public void schedule(Runnable runnable, Integer period, TimeUnit unit, boolean delay) {
+  public void schedule(Runnable runnable, Integer period, TimeUnit unit, Boolean delay) {
+    Objects.requireNonNull(runnable, "`runnable` **MUST** not be `null`");
+    Objects.requireNonNull(period, "`period` **MUST** not be `null`");
+    Objects.requireNonNull(unit, "`unit` **MUST** not be `null`");
+    Objects.requireNonNull(delay, "`delay` **MUST** not be `null`");
+
     this.scheduledExecutorService.scheduleAtFixedRate(runnable, delay ? period : 0, period, unit);
   }
 

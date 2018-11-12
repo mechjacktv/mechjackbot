@@ -8,6 +8,11 @@ public class TypedObjectUnitTests extends StronglyTypedContractTests<Object> {
   }
 
   @Override
+  protected Object givenIHaveADifferentValue() {
+    return this.givenIHaveAValue();
+  }
+
+  @Override
   protected StronglyTyped<Object> givenIHaveAStronglyTypedValue(final Object value) {
     return new TestTypedObject(value);
   }

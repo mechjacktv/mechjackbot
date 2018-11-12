@@ -8,6 +8,11 @@ public class TypedShortUnitTests extends StronglyTypedContractTests<Short> {
   }
 
   @Override
+  protected Short givenIHaveADifferentValue() {
+    return Short.MIN_VALUE;
+  }
+
+  @Override
   protected StronglyTyped<Short> givenIHaveAStronglyTypedValue(final Short value) {
     return new TestTypedShort(value);
   }

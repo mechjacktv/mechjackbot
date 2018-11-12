@@ -8,6 +8,11 @@ public class TypedFloatUnitTests extends StronglyTypedContractTests<Float> {
   }
 
   @Override
+  protected Float givenIHaveADifferentValue() {
+    return Float.MIN_VALUE;
+  }
+
+  @Override
   protected StronglyTyped<Float> givenIHaveAStronglyTypedValue(final Float value) {
     return new TestTypedFloat(value);
   }

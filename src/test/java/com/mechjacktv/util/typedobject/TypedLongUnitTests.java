@@ -8,6 +8,11 @@ public class TypedLongUnitTests extends StronglyTypedContractTests<Long> {
   }
 
   @Override
+  protected Long givenIHaveADifferentValue() {
+    return Long.MIN_VALUE;
+  }
+
+  @Override
   protected StronglyTyped<Long> givenIHaveAStronglyTypedValue(final Long value) {
     return new TestTypedLong(value);
   }

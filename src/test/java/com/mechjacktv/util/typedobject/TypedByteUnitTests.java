@@ -8,6 +8,11 @@ public class TypedByteUnitTests extends StronglyTypedContractTests<Byte> {
   }
 
   @Override
+  protected Byte givenIHaveADifferentValue() {
+    return Byte.MIN_VALUE;
+  }
+
+  @Override
   protected StronglyTyped<Byte> givenIHaveAStronglyTypedValue(final Byte value) {
     return new TestTypedByte(value);
   }

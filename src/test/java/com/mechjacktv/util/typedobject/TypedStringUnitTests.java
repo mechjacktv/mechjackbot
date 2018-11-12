@@ -8,6 +8,11 @@ public class TypedStringUnitTests extends StronglyTypedContractTests<String> {
   }
 
   @Override
+  protected String givenIHaveADifferentValue() {
+    return "DIFFERENT TEST STRING";
+  }
+
+  @Override
   protected StronglyTyped<String> givenIHaveAStronglyTypedValue(final String value) {
     return new TestTypedString(value);
   }

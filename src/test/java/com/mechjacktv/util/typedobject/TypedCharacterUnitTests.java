@@ -8,6 +8,11 @@ public class TypedCharacterUnitTests extends StronglyTypedContractTests<Characte
   }
 
   @Override
+  protected Character givenIHaveADifferentValue() {
+    return Character.MIN_VALUE;
+  }
+
+  @Override
   protected StronglyTyped<Character> givenIHaveAStronglyTypedValue(final Character value) {
     return new TestTypedCharacter(value);
   }
