@@ -9,12 +9,12 @@ import javax.inject.Inject;
 
 import com.google.protobuf.Message;
 
-final class DefaultProtobufUtils implements ProtobufUtils {
+public final class DefaultProtobufUtils implements ProtobufUtils {
 
   private final ExecutionUtils executionUtils;
 
   @Inject
-  DefaultProtobufUtils(final ExecutionUtils executionUtils) {
+  public DefaultProtobufUtils(final ExecutionUtils executionUtils) {
     this.executionUtils = executionUtils;
   }
 

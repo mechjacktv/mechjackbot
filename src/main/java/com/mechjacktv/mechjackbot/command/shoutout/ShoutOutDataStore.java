@@ -11,8 +11,8 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mechjacktv.keyvaluestore.AbstractMessageStore;
 import com.mechjacktv.keyvaluestore.KeyValueStoreFactory;
+import com.mechjacktv.keyvaluestore.MessageStore;
 import com.mechjacktv.mechjackbot.AppConfiguration;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.Caster;
@@ -23,10 +23,11 @@ import com.mechjacktv.twitchclient.TwitchClient;
 import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.twitchclient.TwitchUserFollowsCursor;
 import com.mechjacktv.twitchclient.TwitchUserId;
+import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.ProtobufUtils;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
-public final class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Caster> {
+public final class ShoutOutDataStore extends MessageStore<CasterKey, Caster> {
 
   private static final Logger log = LoggerFactory.getLogger(ShoutOutDataStore.class);
   private static final String KEY_VALUE_STORE_NAME = ShoutOutDataStore.class.getCanonicalName();
@@ -37,10 +38,11 @@ public final class ShoutOutDataStore extends AbstractMessageStore<CasterKey, Cas
   ShoutOutDataStore(final AppConfiguration appConfiguration,
       final ChatBotConfiguration chatBotConfiguration,
       final KeyValueStoreFactory keyValueStoreFactory,
+      final ExecutionUtils executionUtils,
       final ProtobufUtils protobufUtils,
       final ScheduleService scheduleService,
       final TwitchClient twitchClient) {
-    super(keyValueStoreFactory.createOrOpenKeyValueStore(KEY_VALUE_STORE_NAME), protobufUtils);
+    super(keyValueStoreFactory.createOrOpenKeyValueStore(KEY_VALUE_STORE_NAME), executionUtils, protobufUtils);
     scheduleService.schedule(() -> this.updateCasters(chatBotConfiguration, twitchClient),
         Integer.parseInt(appConfiguration.get(UPDATE_PERIOD_KEY, UPDATE_PERIOD_DEFAULT)), TimeUnit.MINUTES);
   }

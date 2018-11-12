@@ -13,6 +13,11 @@ public final class DefaultExecutionUtils implements ExecutionUtils {
   private static final Logger log = LoggerFactory.getLogger(DefaultExecutionUtils.class);
 
   @Override
+  public String nullMessageForName(final String name) {
+    return String.format("`%s` **MUST** not be `null`", name);
+  }
+
+  @Override
   public final void softenException(RunnableWithException runnable, Class<? extends RuntimeException> exceptionClass) {
     this.softenException(() -> {
       runnable.run();

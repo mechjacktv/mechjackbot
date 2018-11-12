@@ -16,6 +16,8 @@ final class MapDbKeyValueStore implements KeyValueStore {
 
   @Override
   public boolean containsKey(final byte[] key) {
+    Objects.requireNonNull(key, "`key` **MUST** not be `null`");
+
     return this.concurrentMap.containsKey(key);
   }
 
@@ -26,15 +28,15 @@ final class MapDbKeyValueStore implements KeyValueStore {
 
   @Override
   public Optional<byte[]> get(byte[] key) {
-    Objects.requireNonNull(key, "`key` MUST NOT be null");
+    Objects.requireNonNull(key, "`key` **MUST** not be `null`");
 
     return Optional.ofNullable(this.concurrentMap.get(key));
   }
 
   @Override
   public void put(byte[] key, byte[] value) {
-    Objects.requireNonNull(key, "`key` MUST NOT be null");
-    Objects.requireNonNull(value, "`value` MUST NOT be null");
+    Objects.requireNonNull(key, "`key` **MUST** not be `null`");
+    Objects.requireNonNull(value, "`value` **MUST** not be `null`");
 
     if (this.concurrentMap.containsKey(key)) {
       this.concurrentMap.replace(key, value);
@@ -45,7 +47,7 @@ final class MapDbKeyValueStore implements KeyValueStore {
 
   @Override
   public void remove(byte[] key) {
-    Objects.requireNonNull(key, "`key` MUST NOT be null");
+    Objects.requireNonNull(key, "`key` **MUST** not be `null`");
 
     this.concurrentMap.remove(key);
   }

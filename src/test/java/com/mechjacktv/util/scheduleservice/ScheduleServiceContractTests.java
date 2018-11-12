@@ -1,18 +1,22 @@
 package com.mechjacktv.util.scheduleservice;
 
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import org.junit.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import org.junit.Test;
+
+import com.mechjacktv.util.DefaultExecutionUtils;
+import com.mechjacktv.util.ExecutionUtils;
+
 public abstract class ScheduleServiceContractTests {
 
+  private static final ExecutionUtils EXECUTION_UTILS = new DefaultExecutionUtils();
   private static final Integer PERIOD = 10;
   private static final Runnable RUNNABLE = System::currentTimeMillis;
   private static final TimeUnit TIME_UNIT = TimeUnit.MINUTES;
@@ -31,7 +35,8 @@ public abstract class ScheduleServiceContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectToTest.schedule(null, PERIOD, TIME_UNIT));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage("`runnable` **MUST** not be `null`");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(EXECUTION_UTILS.nullMessageForName("runnable"));
   }
 
   @Test
@@ -40,7 +45,8 @@ public abstract class ScheduleServiceContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectToTest.schedule(RUNNABLE, null, TIME_UNIT));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage("`period` **MUST** not be `null`");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(EXECUTION_UTILS.nullMessageForName("period"));
   }
 
   @Test
@@ -49,7 +55,7 @@ public abstract class ScheduleServiceContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectToTest.schedule(RUNNABLE, PERIOD, null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage("`unit` **MUST** not be `null`");
+    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(EXECUTION_UTILS.nullMessageForName("unit"));
   }
 
   @Test
@@ -60,6 +66,15 @@ public abstract class ScheduleServiceContractTests {
     subjectToTest.schedule(RUNNABLE, PERIOD, TIME_UNIT);
 
     verify(scheduledExecutorService).scheduleAtFixedRate(eq(RUNNABLE), eq(0L), eq((long) PERIOD), eq(TIME_UNIT));
+  }
+
+  @Test
+  public final void schedule_nullDelay_throwsNullPointerExceptionWithMessage() {
+    final ScheduleService subjectToTest = this.givenASubjectToTest();
+
+    final Throwable thrown = catchThrowable(() -> subjectToTest.schedule(RUNNABLE, PERIOD, TIME_UNIT, null));
+
+    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(EXECUTION_UTILS.nullMessageForName("delay"));
   }
 
   @Test
@@ -84,7 +99,7 @@ public abstract class ScheduleServiceContractTests {
   }
 
   @Test
-  public final void stop_called_shutsdownExecutor() {
+  public final void stop_called_shutsDownExecutor() {
     final ScheduledExecutorService scheduledExecutorService = mock(ScheduledExecutorService.class);
     final ScheduleService subjectToTest = this.givenASubjectToTest(scheduledExecutorService);
 

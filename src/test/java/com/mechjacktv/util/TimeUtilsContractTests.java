@@ -7,6 +7,8 @@ import org.junit.Test;
 
 public abstract class TimeUtilsContractTests {
 
+  private static final ExecutionUtils EXECUTION_UTILS = new DefaultExecutionUtils();
+
   abstract TimeUtils givenASubjectToTest();
 
   @Test
@@ -24,7 +26,8 @@ public abstract class TimeUtilsContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.secondsAsMs(null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage("`seconds` **MUST** not be `null`");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(EXECUTION_UTILS.nullMessageForName("seconds"));
   }
 
   @Test
@@ -42,7 +45,7 @@ public abstract class TimeUtilsContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.hoursAsMs(null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage("`hours` **MUST** not be `null`");
+    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(EXECUTION_UTILS.nullMessageForName("hours"));
   }
 
 }
