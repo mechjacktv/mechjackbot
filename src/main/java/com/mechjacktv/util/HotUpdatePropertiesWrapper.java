@@ -11,8 +11,8 @@ import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 public abstract class HotUpdatePropertiesWrapper {
 
-  private static final String UPDATE_PERIOD_KEY = "properties_wrapper.update_period.minutes";
-  private static final String UPDATE_PERIOD = System.getProperty(UPDATE_PERIOD_KEY, "10");
+  public static final String UPDATE_PERIOD_KEY = "properties_wrapper.update_period.minutes";
+  public static final String DEFAULT_UPDATE_PERIOD = "10";
 
   private final Logger log;
   private final Properties properties;
@@ -22,7 +22,8 @@ public abstract class HotUpdatePropertiesWrapper {
     this.log = log;
     this.properties = new Properties();
     this.loadProperties(propertiesSupplier);
-    scheduleService.schedule(() -> this.loadProperties(propertiesSupplier), Integer.parseInt(UPDATE_PERIOD),
+    scheduleService.schedule(() -> this.loadProperties(propertiesSupplier),
+        Integer.parseInt(System.getProperty(UPDATE_PERIOD_KEY, DEFAULT_UPDATE_PERIOD)),
         TimeUnit.MINUTES, true);
   }
 
