@@ -10,7 +10,7 @@ else
   rm -rf $PROTOBUF3_DIR
   mkdir $PROTOBUF3_DIR
 
-  apt-get udpate
+  apt-get update
   apt-get install --no-install-recommends \
     autoconf \
     automake \
