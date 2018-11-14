@@ -1,6 +1,8 @@
 package com.mechjacktv.mechjackbot.configuration;
 
 import java.io.File;
+import java.io.InputStream;
+import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
@@ -24,26 +26,31 @@ final class PropertiesChatBotConfiguration extends HotUpdatePropertiesWrapper
 
   private static final String DATA_LOCATION_KEY = "mechjackbot.data_location";
   private static final String DATA_LOCATION_DEFAULT = System.getProperty("user.home") + "/.mechjackbot";
-  private static final String DATA_LOCATION = System.getProperty(DATA_LOCATION_KEY, DATA_LOCATION_DEFAULT);
   private static final String CONFIG_PROPERTIES_FILE_NAME = "chat_bot.config";
 
-  private static final String TWITCH_CHANNEL_KEY = "twitch.channel";
-  private static final String TWITCH_CLIENT_ID_KEY = "twitch.client_id";
-  private static final String TWITCH_PASSWORD_KEY = "twitch.password";
-  private static final String TWITCH_USERNAME_KEY = "twitch.username";
+  public static final String TWITCH_CHANNEL_KEY = "twitch.channel";
+  public static final String TWITCH_CLIENT_ID_KEY = "twitch.client_id";
+  public static final String TWITCH_PASSWORD_KEY = "twitch.password";
+  public static final String TWITCH_USERNAME_KEY = "twitch.username";
 
   private final DataLocation dataLocation;
 
   @Inject
   public PropertiesChatBotConfiguration(final ExecutionUtils executionUtils, final ScheduleService scheduleService) {
-    super(new FileInputStreamSupplier(executionUtils, new File(DATA_LOCATION, CONFIG_PROPERTIES_FILE_NAME)),
-        scheduleService, log);
+    this(System.getProperty(DATA_LOCATION_KEY, DATA_LOCATION_DEFAULT),
+        new FileInputStreamSupplier(executionUtils,
+            new File(System.getProperty(DATA_LOCATION_KEY, DATA_LOCATION_DEFAULT), CONFIG_PROPERTIES_FILE_NAME)),
+        scheduleService);
+  }
 
+  PropertiesChatBotConfiguration(final String dataLocation, final Supplier<InputStream> inputStreamSupplier,
+      final ScheduleService scheduleService) {
+    super(inputStreamSupplier, scheduleService, log);
     if (this.isMissingRequiredValues()) {
       throw new IllegalStateException(String.format("Please complete your chat bot configuration (%s)",
-          new File(new File(DATA_LOCATION), CONFIG_PROPERTIES_FILE_NAME).getPath()));
+          new File(new File(dataLocation), CONFIG_PROPERTIES_FILE_NAME).getPath()));
     }
-    this.dataLocation = DataLocation.of(DATA_LOCATION);
+    this.dataLocation = DataLocation.of(dataLocation);
   }
 
   private boolean isMissingRequiredValues() {

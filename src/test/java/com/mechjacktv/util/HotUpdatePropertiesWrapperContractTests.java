@@ -2,10 +2,11 @@ package com.mechjacktv.util;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -13,14 +14,12 @@ import java.util.function.Supplier;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 
+import com.mechjacktv.test.PropertiesUtils;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 public abstract class HotUpdatePropertiesWrapperContractTests {
 
-  protected static final String KEY_1 = "KEY_1";
-  protected static final String KEY_2 = "KEY_2";
-  protected static final String VALUE_1 = "VALUE_1";
-  protected static final String VALUE_2 = "VALUE_2";
+  private final PropertiesUtils propertiesUtils = new PropertiesUtils();
 
   private HotUpdatePropertiesWrapper givenASubjectToTest(final Supplier<InputStream> propertiesSupplier) {
     return this.givenASubjectToTest(propertiesSupplier, mock(ScheduleService.class));
@@ -28,34 +27,28 @@ public abstract class HotUpdatePropertiesWrapperContractTests {
 
   @SuppressWarnings("unchecked")
   private void givenASubjectToTest(final ScheduleService scheduleService) {
-    final Supplier<InputStream> supplier = mock(Supplier.class);
-
-    when(supplier.get()).thenReturn(mock(InputStream.class));
-    this.givenASubjectToTest(supplier, scheduleService);
+    this.givenASubjectToTest(this::givenAPropertiesInputStream, scheduleService);
   }
 
   protected abstract HotUpdatePropertiesWrapper givenASubjectToTest(Supplier<InputStream> propertiesSupplier,
       ScheduleService scheduleService);
 
-  protected InputStream givenAPropertiesInputStream() {
-    return new ByteArrayInputStream((String.format("%s = %s\n", KEY_1, VALUE_1)
-        + String.format("%s = %s\n", KEY_2, VALUE_2)).getBytes());
+  protected abstract Map<String, String> givenAPropertiesMap();
+
+  private InputStream givenAPropertiesInputStream() {
+    return this.propertiesUtils.propertiesMapAsInputStream(this.givenAPropertiesMap());
   }
 
   @Test
   public final void getProperties_withPropertiesInputStream_returnsLoadedProperties() {
-    final InputStream propertiesInputStream = this.givenAPropertiesInputStream();
+    final Map<String, String> properties = this.givenAPropertiesMap();
+    final InputStream propertiesInputStream = this.propertiesUtils.propertiesMapAsInputStream(properties);
     final HotUpdatePropertiesWrapper subjectUnderTest = this.givenASubjectToTest(() -> propertiesInputStream);
 
     final Properties result = subjectUnderTest.getProperties();
 
     final SoftAssertions softly = new SoftAssertions();
-
-    softly.assertThat(result).hasSize(2);
-    softly.assertThat(result.containsKey(KEY_1)).isTrue();
-    softly.assertThat(result.containsValue(VALUE_1)).isTrue();
-    softly.assertThat(result.containsKey(KEY_2)).isTrue();
-    softly.assertThat(result.containsValue(VALUE_2)).isTrue();
+    softly.assertThat(result).containsAllEntriesOf(properties);
     softly.assertAll();
   }
 
