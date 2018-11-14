@@ -1,5 +1,7 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
+import java.util.function.Function;
+
 import javax.inject.Inject;
 
 import org.pircbotx.Configuration;
@@ -13,8 +15,11 @@ import com.mechjacktv.util.ExecutionUtils;
 
 public final class PircBotXChatBot implements ChatBot {
 
-  private static final String SHUTDOWN_MESSAGE_KEY = "chat_bot.shutdown.message";
-  private static final String SHUTDOWN_MESSAGE_DEFAULT = "Shutdown";
+  public static final String TWITCH_IRC_SERVER_HOST = "irc.chat.twitch.tv";
+  public static final Integer TWITCH_IRC_SERVER_PORT = 6667;
+
+  public static final String SHUTDOWN_MESSAGE_KEY = "chat_bot.shutdown.message";
+  public static final String SHUTDOWN_MESSAGE_DEFAULT = "Shutdown";
 
   private final AppConfiguration appConfiguration;
   private final ExecutionUtils executionUtils;
@@ -23,9 +28,16 @@ public final class PircBotXChatBot implements ChatBot {
   @Inject
   public PircBotXChatBot(final AppConfiguration appConfiguration, final ChatBotConfiguration chatBotConfiguration,
       final ExecutionUtils executionUtils, final Listener listener) {
+    this(appConfiguration, chatBotConfiguration, executionUtils, listener,
+        (configuration -> new PircBotX(configuration)));
+  }
+
+  PircBotXChatBot(final AppConfiguration appConfiguration, final ChatBotConfiguration chatBotConfiguration,
+      final ExecutionUtils executionUtils, final Listener listener,
+      final Function<Configuration, PircBotX> botFactory) {
     final Configuration configuration = new Configuration.Builder()
         .setName(chatBotConfiguration.getTwitchUsername().value)
-        .addServer("irc.chat.twitch.tv", 6667)
+        .addServer(TWITCH_IRC_SERVER_HOST, TWITCH_IRC_SERVER_PORT)
         .setServerPassword(chatBotConfiguration.getTwitchPassword().value)
         .addListener(listener)
         .addAutoJoinChannel("#" + chatBotConfiguration.getTwitchChannel().value)
@@ -33,7 +45,7 @@ public final class PircBotXChatBot implements ChatBot {
 
     this.appConfiguration = appConfiguration;
     this.executionUtils = executionUtils;
-    this.pircBotX = new PircBotX(configuration);
+    this.pircBotX = botFactory.apply(configuration);
   }
 
   PircBotXChatBot(final AppConfiguration appConfiguration, final ExecutionUtils executionUtils,
