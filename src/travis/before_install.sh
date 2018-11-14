@@ -10,8 +10,8 @@ else
   rm -rf $PROTOBUF3_DIR
   mkdir $PROTOBUF3_DIR
 
-  apt-get -y udpate
-  apt-get install -y --no-install-recommends \
+  apt-get udpate
+  apt-get install --no-install-recommends \
     autoconf \
     automake \
     libtool \
