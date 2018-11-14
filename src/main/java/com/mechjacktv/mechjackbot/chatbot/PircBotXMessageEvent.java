@@ -1,5 +1,7 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
+import java.util.Objects;
+
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import com.mechjacktv.mechjackbot.*;
@@ -7,8 +9,8 @@ import com.mechjacktv.util.ExecutionUtils;
 
 public final class PircBotXMessageEvent implements MessageEvent {
 
-  private static final String RESPONSE_MESSAGE_FORMAT_KEY = "chat_bot.message_event.message_format";
-  private static final String RESPONSE_MESSAGE_FORMAT_DEFAULT = "/me MrDestructoid > %s";
+  public static final String RESPONSE_MESSAGE_FORMAT_KEY = "chat_bot.message_event.message_format";
+  public static final String RESPONSE_MESSAGE_FORMAT_DEFAULT = "/me MrDestructoid > %s";
 
   private final AppConfiguration appConfiguration;
   private final ExecutionUtils executionUtils;
@@ -38,6 +40,7 @@ public final class PircBotXMessageEvent implements MessageEvent {
 
   @Override
   public void sendResponse(final Message message) {
+    Objects.requireNonNull(message, this.executionUtils.nullMessageForName("message"));
     this.genericMessageEvent.respondWith(String.format(
         this.appConfiguration.get(RESPONSE_MESSAGE_FORMAT_KEY, RESPONSE_MESSAGE_FORMAT_DEFAULT), message.value));
   }
