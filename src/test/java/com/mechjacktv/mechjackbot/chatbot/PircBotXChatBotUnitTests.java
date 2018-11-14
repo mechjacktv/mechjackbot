@@ -1,9 +1,5 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
-
 import java.io.IOException;
 import java.util.function.Function;
 
@@ -20,6 +16,12 @@ import com.mechjacktv.ArbitraryDataGenerator;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
 
 public class PircBotXChatBotUnitTests {
 
@@ -89,6 +91,28 @@ public class PircBotXChatBotUnitTests {
     subjectUnderTest.start();
 
     verify(pircBotX).startBot();
+  }
+
+  @Test
+  public final void start_startBotThrowsIOException_throwsPircBotXStartupException() throws IOException, IrcException {
+    final PircBotX pircBotX = mock(PircBotX.class);
+    doThrow(IOException.class).when(pircBotX).startBot();
+    final PircBotXChatBot subjectUnderTest = this.givenIHaveASubjectToTest(pircBotX);
+
+    final Throwable thrown = catchThrowable(subjectUnderTest::start);
+
+    assertThat(thrown).isInstanceOf(PircBotXStartupException.class).hasCauseInstanceOf(IOException.class);
+  }
+
+  @Test
+  public final void start_startBotThrowsIrcException_throwsPircBotXStartupException() throws IOException, IrcException {
+    final PircBotX pircBotX = mock(PircBotX.class);
+    doThrow(IrcException.class).when(pircBotX).startBot();
+    final PircBotXChatBot subjectUnderTest = this.givenIHaveASubjectToTest(pircBotX);
+
+    final Throwable thrown = catchThrowable(subjectUnderTest::start);
+
+    assertThat(thrown).isInstanceOf(PircBotXStartupException.class).hasCauseInstanceOf(IrcException.class);
   }
 
   @Test
