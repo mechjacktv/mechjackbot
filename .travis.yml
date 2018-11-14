@@ -1,6 +1,10 @@
 language: java
 install: true
 
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install libprotobuf-java protobuf-compiler
+
 jdk:
   - oraclejdk8
 
