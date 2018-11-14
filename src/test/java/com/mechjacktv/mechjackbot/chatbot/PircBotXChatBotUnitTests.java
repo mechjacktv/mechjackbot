@@ -1,5 +1,11 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
+
 import java.io.IOException;
 import java.util.function.Function;
 
@@ -16,12 +22,6 @@ import com.mechjacktv.ArbitraryDataGenerator;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
 
 public class PircBotXChatBotUnitTests {
 
@@ -63,7 +63,7 @@ public class PircBotXChatBotUnitTests {
   @Test
   @SuppressWarnings("unchecked")
   public final void new_withConfiguration_configuresPircBotXCorrectly() {
-    final ChatBotConfiguration chatBotConfiguration = givenIHaveAFakeChatBotConfiguration();
+    final ChatBotConfiguration chatBotConfiguration = this.givenIHaveAFakeChatBotConfiguration();
     final Listener listener = mock(Listener.class);
     final Function<Configuration, PircBotX> botFactory = mock(Function.class);
     final ArgumentCaptor<Configuration> configurationArgumentCaptor = ArgumentCaptor.forClass(Configuration.class);
