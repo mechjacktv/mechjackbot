@@ -11,7 +11,7 @@ cache:
   timeout: 604800  # 1 week
   apt: true
   directories:
-    - ~/protobuf-3.6.1
+    - ~/protobuf3
 
 jdk:
   - oraclejdk8
