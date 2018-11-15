@@ -1,5 +1,7 @@
 # MechJackBot - Twitch chat bot written in Java
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/58cd0154bb9940d48f8d67c75b09b7e7)](https://www.codacy.com/app/mechjacktv/mechjackbot?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mechjacktv/mechjackbot&amp;utm_campaign=Badge_Grade)[![Travis CI Badge](https://travis-ci.org/mechjacktv/mechjackbot.svg?branch=master)](https://travis-ci.org/mechjacktv/mechjackbot)
+
 MechJackBot is a Twitch chat bot written in Java with extensibility in mind for streamers who want full control over what their bot does. MechJackBot is still in its infancy and is not ready for general consumption. Stay tuned for further developments.
 
 ## Do you stream MechJackBot development?
