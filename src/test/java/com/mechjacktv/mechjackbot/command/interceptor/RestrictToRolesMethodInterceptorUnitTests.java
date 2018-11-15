@@ -1,5 +1,8 @@
 package com.mechjacktv.mechjackbot.command.interceptor;
 
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
+
 import java.lang.reflect.Method;
 
 import com.google.inject.Provider;
@@ -9,9 +12,6 @@ import org.junit.Test;
 
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.test.ArbitraryDataGenerator;
-
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
 
 public class RestrictToRolesMethodInterceptorUnitTests {
 
