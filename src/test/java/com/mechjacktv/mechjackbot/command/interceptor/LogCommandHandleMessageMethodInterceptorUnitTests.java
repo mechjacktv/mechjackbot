@@ -8,37 +8,18 @@ import java.util.function.Function;
 import org.aopalliance.intercept.MethodInvocation;
 import org.junit.Test;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mechjacktv.ArbitraryDataGenerator;
-import com.mechjacktv.mechjackbot.ChatUser;
-import com.mechjacktv.mechjackbot.Command;
-import com.mechjacktv.mechjackbot.CommandName;
-import com.mechjacktv.mechjackbot.MessageEvent;
 
 public class LogCommandHandleMessageMethodInterceptorUnitTests {
 
   private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
-
-  private LogCommandHandleMessageMethodInterceptor givenIHaveASubjectToTest() {
-    return this.givenIHaveASubjectToTest(LoggerFactory::getLogger);
-  }
+  private final CommandMethodInterceptorUnitTestUtils methodInterceptorUtils = new CommandMethodInterceptorUnitTestUtils(
+      this.arbitraryDataGenerator);
 
   private LogCommandHandleMessageMethodInterceptor givenIHaveASubjectToTest(
       final Function<String, Logger> loggerFactory) {
     return new LogCommandHandleMessageMethodInterceptor(loggerFactory);
-  }
-
-  private MethodInvocation givenAFakeMethodInvocation() {
-    final MethodInvocation methodInvocation = mock(MethodInvocation.class);
-    final Command command = mock(Command.class);
-    when(command.getName()).thenReturn(CommandName.of(this.arbitraryDataGenerator.getString()));
-    final MessageEvent messageEvent = mock(MessageEvent.class);
-    when(messageEvent.getChatUser()).thenReturn(mock(ChatUser.class));
-
-    when(methodInvocation.getThis()).thenReturn(command);
-    when(methodInvocation.getArguments()).thenReturn(new Object[] { messageEvent });
-    return methodInvocation;
   }
 
   @Test
@@ -48,9 +29,8 @@ public class LogCommandHandleMessageMethodInterceptorUnitTests {
     final Logger logger = mock(Logger.class);
     when(loggerFactory.apply(isA(String.class))).thenReturn(logger);
     final LogCommandHandleMessageMethodInterceptor subjectUnderTest = this.givenIHaveASubjectToTest(loggerFactory);
-    final MethodInvocation methodInvocation = this.givenAFakeMethodInvocation();
 
-    subjectUnderTest.invoke(methodInvocation);
+    subjectUnderTest.invoke(this.methodInterceptorUtils.givenAFakeMethodInvocation());
 
     verify(logger).info(isA(String.class));
   }
@@ -62,7 +42,7 @@ public class LogCommandHandleMessageMethodInterceptorUnitTests {
     final Logger logger = mock(Logger.class);
     when(loggerFactory.apply(isA(String.class))).thenReturn(logger);
     final LogCommandHandleMessageMethodInterceptor subjectUnderTest = this.givenIHaveASubjectToTest(loggerFactory);
-    final MethodInvocation methodInvocation = this.givenAFakeMethodInvocation();
+    final MethodInvocation methodInvocation = this.methodInterceptorUtils.givenAFakeMethodInvocation();
     when(methodInvocation.proceed()).thenThrow(RuntimeException.class);
 
     subjectUnderTest.invoke(methodInvocation);

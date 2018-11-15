@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.util.TimeUtils;
 
-public final class CommandUtils {
+public final class DefaultCommandUtils implements CommandUtils {
 
   private static final String COMMAND_COOL_DOWN_PERIOD_SECONDS_KEY = "command.cool_down_period.seconds";
   private static final String COMMAND_COOL_DOWN_PERIOD_SECONDS_DEFAULT = "5";
@@ -24,7 +24,7 @@ public final class CommandUtils {
   private final TimeUtils timeUtils;
 
   @Inject
-  public CommandUtils(final AppConfiguration appConfiguration, final ChatBotConfiguration botConfiguration,
+  public DefaultCommandUtils(final AppConfiguration appConfiguration, final ChatBotConfiguration botConfiguration,
       final TimeUtils timeUtils) {
     this.appConfiguration = appConfiguration;
     this.botOwner = this.sanitizeViewerName(ChatUsername.of(botConfiguration.getTwitchChannel().value));
@@ -42,7 +42,8 @@ public final class CommandUtils {
     return ChatUsername.of(sanitizedUsername);
   }
 
-  final boolean isCommandTrigger(final CommandTrigger commandTrigger, final MessageEvent messageEvent) {
+  @Override
+  public final boolean isCommandTrigger(final CommandTrigger commandTrigger, final MessageEvent messageEvent) {
     final Message message = messageEvent.getMessage();
     final Pattern commandTriggerPattern = this.getCommandTriggerPattern(commandTrigger);
     final Matcher commandTriggerMatcher = commandTriggerPattern.matcher(message.value);
@@ -62,6 +63,7 @@ public final class CommandUtils {
     return commandTriggerPattern;
   }
 
+  @Override
   public final boolean isGloballyCooledDown(final Command command) {
     return this.isGloballyCooledDown(command.getTrigger());
   }
@@ -84,14 +86,17 @@ public final class CommandUtils {
             COMMAND_COOL_DOWN_PERIOD_SECONDS_DEFAULT))));
   }
 
+  @Override
   public final boolean isRegularUserViewer(final MessageEvent messageEvent) {
     return this.isPrivilegedViewer(messageEvent);
   }
 
+  @Override
   public final boolean isPrivilegedViewer(final MessageEvent messageEvent) {
     return this.isChannelOwner(messageEvent);
   }
 
+  @Override
   public final boolean isChannelOwner(final MessageEvent messageEvent) {
     final ChatUser chatUser = messageEvent.getChatUser();
     final ChatUsername chatUsername = this.sanitizeViewerName(chatUser.getUsername());
@@ -99,7 +104,8 @@ public final class CommandUtils {
     return this.botOwner.equals(chatUsername);
   }
 
-  final void sendUsage(final MessageEvent messageEvent, final CommandUsage usage) {
+  @Override
+  public final void sendUsage(final MessageEvent messageEvent, final CommandUsage usage) {
     final String messageFormat = this.appConfiguration.get(COMMAND_USAGE_MESSAGE_FORMAT_KEY,
         COMMAND_USAGE_MESSAGE_FORMAT_DEFAULT);
 
@@ -107,6 +113,7 @@ public final class CommandUtils {
         this.getSanitizedViewerName(messageEvent), usage)));
   }
 
+  @Override
   public final ChatUsername getSanitizedViewerName(final MessageEvent messageEvent) {
     return this.sanitizeViewerName(messageEvent.getChatUser().getUsername());
   }

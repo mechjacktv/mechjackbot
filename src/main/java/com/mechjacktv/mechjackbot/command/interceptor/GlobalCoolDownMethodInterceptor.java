@@ -6,7 +6,7 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
 import com.mechjacktv.mechjackbot.Command;
-import com.mechjacktv.mechjackbot.command.CommandUtils;
+import com.mechjacktv.mechjackbot.CommandUtils;
 
 final class GlobalCoolDownMethodInterceptor implements MethodInterceptor {
 

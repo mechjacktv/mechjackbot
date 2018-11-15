@@ -4,7 +4,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.matcher.Matchers;
 
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.CommandUtils;
 
 public final class DefaultCommandInterceptorsModule extends AbstractModule {
 

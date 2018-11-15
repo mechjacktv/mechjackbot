@@ -5,8 +5,8 @@ import javax.inject.Provider;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
+import com.mechjacktv.mechjackbot.CommandUtils;
 import com.mechjacktv.mechjackbot.MessageEvent;
-import com.mechjacktv.mechjackbot.command.CommandUtils;
 
 final class RestrictToPrivilegedMethodInterceptor implements MethodInterceptor {
 

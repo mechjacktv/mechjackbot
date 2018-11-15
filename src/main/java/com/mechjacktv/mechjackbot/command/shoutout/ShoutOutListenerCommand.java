@@ -4,7 +4,6 @@ import javax.inject.Inject;
 
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.command.AbstractCommand;
-import com.mechjacktv.mechjackbot.command.CommandUtils;
 
 @SuppressWarnings("CanBeFinal")
 public class ShoutOutListenerCommand extends AbstractCommand {
