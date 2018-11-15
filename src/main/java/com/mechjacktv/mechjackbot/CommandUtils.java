@@ -16,4 +16,6 @@ public interface CommandUtils {
 
   void sendUsage(MessageEvent messageEvent, CommandUsage usage);
 
+  String stripTriggerOffMessage(CommandTrigger trigger, Message message);
+
 }

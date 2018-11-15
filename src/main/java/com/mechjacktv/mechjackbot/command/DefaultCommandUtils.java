@@ -12,9 +12,9 @@ import com.mechjacktv.util.TimeUtils;
 
 public final class DefaultCommandUtils implements CommandUtils {
 
-  private static final String COMMAND_COOL_DOWN_PERIOD_SECONDS_KEY = "command.cool_down_period.seconds";
-  private static final String COMMAND_COOL_DOWN_PERIOD_SECONDS_DEFAULT = "5";
-  private static final String COMMAND_USAGE_MESSAGE_FORMAT_KEY = "command.usage.message_format";
+  private static final String COMMAND_GLOBAL_COOL_DOWN_KEY = "command.global_cool_down.seconds";
+  private static final String COMMAND_GLOBAL_COOL_DOWN_DEFAULT = "5";
+  private static final String COMMAND_USAGE_MESSAGE_FORMAT_KEY = "command.usage_message_format";
   private static final String COMMAND_USAGE_MESSAGE_FORMAT_DEFAULT = "@%s, usage: %s";
 
   private final AppConfiguration appConfiguration;
@@ -82,8 +82,8 @@ public final class DefaultCommandUtils implements CommandUtils {
 
   private CommandCoolDownPeriodMs getCommandCoolDownPeriodMs() {
     return CommandCoolDownPeriodMs.of(this.timeUtils.secondsAsMs(Integer.parseInt(
-        this.appConfiguration.get(COMMAND_COOL_DOWN_PERIOD_SECONDS_KEY,
-            COMMAND_COOL_DOWN_PERIOD_SECONDS_DEFAULT))));
+        this.appConfiguration.get(COMMAND_GLOBAL_COOL_DOWN_KEY,
+            COMMAND_GLOBAL_COOL_DOWN_DEFAULT))));
   }
 
   @Override
@@ -118,4 +118,8 @@ public final class DefaultCommandUtils implements CommandUtils {
     return this.sanitizeViewerName(messageEvent.getChatUser().getUsername());
   }
 
+  @Override
+  public String stripTriggerOffMessage(CommandTrigger trigger, Message message) {
+    return message.value.substring(trigger.value.length()).trim();
+  }
 }

@@ -15,7 +15,7 @@ public class CommandsCommand extends AbstractCommand {
   static final String COMMAND_TRIGGER_DEFAULT = "!commands";
 
   static final String COMMAND_MESSAGE_FORMAT_KEY = "command.commands.message_format";
-  static final String COMMAND_MESSAGE_FORMAT_DEFAULT = "Channel Commands:%s";
+  static final String COMMAND_MESSAGE_FORMAT_DEFAULT = "Channel Commands: %s";
 
   private final AppConfiguration appConfiguration;
   private final CommandRegistry commandRegistry;
@@ -41,7 +41,7 @@ public class CommandsCommand extends AbstractCommand {
         builder.append(String.format(" %s", command.getTrigger()));
       }
     }
-    messageEvent.sendResponse(Message.of(String.format(messageFormat, builder.toString())));
+    messageEvent.sendResponse(Message.of(String.format(messageFormat, builder.toString().trim())));
   }
 
   private Set<Command> getSortedCommands() {
