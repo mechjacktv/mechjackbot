@@ -1,5 +1,8 @@
 package com.mechjacktv.mechjackbot.command.interceptor;
 
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
+
 import com.google.inject.Provider;
 
 import org.aopalliance.intercept.MethodInvocation;
@@ -8,9 +11,6 @@ import org.junit.Test;
 import com.mechjacktv.ArbitraryDataGenerator;
 import com.mechjacktv.mechjackbot.CommandUtils;
 import com.mechjacktv.mechjackbot.MessageEvent;
-
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
 
 public class RestrictToOwnerMethodInterceptorUnitTests {
 

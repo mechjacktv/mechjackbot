@@ -18,7 +18,7 @@ public abstract class AbstractCommand implements Command {
   }
 
   protected AbstractCommand(final AppConfiguration appConfiguration, final CommandDescription commandDescription,
-    final CommandTriggerKey commandTriggerKey, final CommandTrigger commandTriggerDefault,
+      final CommandTriggerKey commandTriggerKey, final CommandTrigger commandTriggerDefault,
       final CommandUtils commandUtils, final boolean viewerTriggerable) {
     this.appConfiguration = appConfiguration;
     this.commandDescription = commandDescription;
