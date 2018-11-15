@@ -1,14 +1,14 @@
 package com.mechjacktv.mechjackbot.command;
 
-import org.junit.Test;
-
-import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.test.ArbitraryDataGenerator;
-
 import static com.mechjacktv.mechjackbot.command.PingCommand.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
+
+import org.junit.Test;
+
+import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.test.ArbitraryDataGenerator;
 
 public class PingCommandUnitTests extends CommandContractTests {
 
