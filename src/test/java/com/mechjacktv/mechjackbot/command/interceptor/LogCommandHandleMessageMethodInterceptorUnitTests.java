@@ -1,5 +1,8 @@
 package com.mechjacktv.mechjackbot.command.interceptor;
 
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
+
 import java.util.function.Function;
 
 import org.aopalliance.intercept.MethodInvocation;
@@ -12,9 +15,6 @@ import com.mechjacktv.mechjackbot.ChatUser;
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.CommandName;
 import com.mechjacktv.mechjackbot.MessageEvent;
-
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
 
 public class LogCommandHandleMessageMethodInterceptorUnitTests {
 

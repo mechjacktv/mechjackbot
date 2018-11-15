@@ -6,9 +6,11 @@ import com.google.inject.matcher.AbstractMatcher;
 
 final class CommandHandleMessageMethodMatcher extends AbstractMatcher<Method> {
 
+  public static final String MATCHING_METHOD_NAME = "handleMessageEvent";
+
   @Override
   public final boolean matches(final Method method) {
-    return "handleMessageEvent".equals(method.getName());
+    return MATCHING_METHOD_NAME.equals(method.getName());
   }
 
 }
