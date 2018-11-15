@@ -1,15 +1,15 @@
 package com.mechjacktv.mechjackbot.command;
 
+import static com.mechjacktv.mechjackbot.command.QuitCommand.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
+
 import org.junit.Test;
 
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.test.ArbitraryDataGenerator;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
-
-import static com.mechjacktv.mechjackbot.command.QuitCommand.*;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
 
 public class QuitCommandUnitTests extends CommandContractTests {
 
@@ -20,6 +20,14 @@ public class QuitCommandUnitTests extends CommandContractTests {
   @Override
   protected Command givenASubjectToTest(final AppConfiguration appConfiguration) {
     return this.givenASubjectToTest(appConfiguration, mock(ScheduleService.class));
+  }
+
+  private Command givenASubjectToTest(final String message) {
+    return this.givenASubjectToTest(message, mock(ScheduleService.class));
+  }
+
+  private Command givenASubjectToTest(final String message, final ScheduleService scheduleService) {
+    return this.givenASubjectToTest(this.givenAFakeAppConfiguration(message), scheduleService);
   }
 
   private Command givenASubjectToTest(final AppConfiguration appConfiguration, final ScheduleService scheduleService) {
@@ -56,10 +64,10 @@ public class QuitCommandUnitTests extends CommandContractTests {
   }
 
   @Test
-  public final void handleMessageEvent_defaultFormat_returnsDefaultMessage() {
+  public final void handleMessageEvent_defaultFormat_sendsDefaultMessage() {
     final String message = COMMAND_MESSAGE_DEFAULT;
     final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    final Command subjectUnderTest = this.givenASubjectToTest(this.givenAFakeAppConfiguration(message));
+    final Command subjectUnderTest = this.givenASubjectToTest(message);
 
     subjectUnderTest.handleMessageEvent(messageEvent);
 
@@ -67,10 +75,10 @@ public class QuitCommandUnitTests extends CommandContractTests {
   }
 
   @Test
-  public final void handleMessageEvent_customFormat_returnsCustomMessage() {
+  public final void handleMessageEvent_customFormat_sendsCustomMessage() {
     final String message = this.arbitraryDataGenerator.getString();
     final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    final Command subjectUnderTest = this.givenASubjectToTest(this.givenAFakeAppConfiguration(message));
+    final Command subjectUnderTest = this.givenASubjectToTest(message);
 
     subjectUnderTest.handleMessageEvent(messageEvent);
 
@@ -81,7 +89,7 @@ public class QuitCommandUnitTests extends CommandContractTests {
   public final void handleMessageEvent_whenCalled_stopsChatBot() {
     final ChatBot chatBot = mock(ChatBot.class);
     final MessageEvent messageEvent = this.givenAFakeMessageEvent(chatBot);
-    final Command subjectUnderTest = this.givenASubjectToTest(this.givenAFakeAppConfiguration(COMMAND_MESSAGE_DEFAULT));
+    final Command subjectUnderTest = this.givenASubjectToTest(COMMAND_MESSAGE_DEFAULT);
 
     subjectUnderTest.handleMessageEvent(messageEvent);
 
@@ -92,8 +100,7 @@ public class QuitCommandUnitTests extends CommandContractTests {
   public final void handleMessageEvent_whenCalled_stopsScheduleService() {
     final ScheduleService scheduleService = mock(ScheduleService.class);
     final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    final Command subjectUnderTest = this.givenASubjectToTest(this.givenAFakeAppConfiguration(COMMAND_MESSAGE_DEFAULT),
-        scheduleService);
+    final Command subjectUnderTest = this.givenASubjectToTest(COMMAND_MESSAGE_DEFAULT, scheduleService);
 
     subjectUnderTest.handleMessageEvent(messageEvent);
 

@@ -51,7 +51,7 @@ public class PingCommandUnitTests extends CommandContractTests {
   }
 
   @Test
-  public final void handleMessageEvent_defaultFormat_returnsDefaultMessageWithUserName() {
+  public final void handleMessageEvent_defaultFormat_sendsDefaultMessage() {
     final String messageFormat = COMMAND_MESSAGE_FORMAT_DEFAULT;
     final ChatUsername chatUsername = ChatUsername.of(this.arbitraryDataGenerator.getString());
     final MessageEvent messageEvent = mock(MessageEvent.class);
@@ -63,7 +63,7 @@ public class PingCommandUnitTests extends CommandContractTests {
   }
 
   @Test
-  public final void handleMessageEvent_customFormat_returnsCustomMessageWithUserName() {
+  public final void handleMessageEvent_customFormat_sendsCustomMessage() {
     final String messageFormat = this.arbitraryDataGenerator.getString() + ", %s";
     final ChatUsername chatUsername = ChatUsername.of(this.arbitraryDataGenerator.getString());
     final MessageEvent messageEvent = mock(MessageEvent.class);

@@ -11,23 +11,23 @@ import com.mechjacktv.mechjackbot.*;
 @SuppressWarnings("CanBeFinal")
 public class CommandsCommand extends AbstractCommand {
 
-  private static final String COMMAND_TRIGGER_KEY = "command.commands.trigger";
-  private static final String COMMAND_TRIGGER_DEFAULT = "!commands";
+  static final String COMMAND_TRIGGER_KEY = "command.commands.trigger";
+  static final String COMMAND_TRIGGER_DEFAULT = "!commands";
 
-  private static final String COMMAND_MESSAGE_FORMAT_KEY = "command.commands.message_format";
-  private static final String COMMAND_MESSAGE_FORMAT_DEFAULT = "Channel Commands:%s";
+  static final String COMMAND_MESSAGE_FORMAT_KEY = "command.commands.message_format";
+  static final String COMMAND_MESSAGE_FORMAT_DEFAULT = "Channel Commands:%s";
 
   private final AppConfiguration appConfiguration;
-  private final CommandRegistry messageEventHandler;
+  private final CommandRegistry commandRegistry;
 
   @Inject
   public CommandsCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils,
-      final CommandRegistry messageEventHandler) {
+      final CommandRegistry commandRegistry) {
     super(appConfiguration, CommandDescription.of("Lists all the commands available to users."),
         CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT),
         commandUtils);
     this.appConfiguration = appConfiguration;
-    this.messageEventHandler = messageEventHandler;
+    this.commandRegistry = commandRegistry;
   }
 
   @Override
@@ -47,7 +47,7 @@ public class CommandsCommand extends AbstractCommand {
   private Set<Command> getSortedCommands() {
     final SortedSet<Command> sortedCommands = new TreeSet<>(this::compareCommands);
 
-    sortedCommands.addAll(this.messageEventHandler.getCommands());
+    sortedCommands.addAll(this.commandRegistry.getCommands());
     return sortedCommands;
   }
 
