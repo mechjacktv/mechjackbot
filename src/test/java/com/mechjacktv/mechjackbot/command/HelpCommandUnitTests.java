@@ -1,5 +1,11 @@
 package com.mechjacktv.mechjackbot.command;
 
+import static com.mechjacktv.mechjackbot.command.HelpCommand.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
+
 import java.util.Optional;
 
 import org.junit.Test;
@@ -7,12 +13,6 @@ import org.mockito.ArgumentCaptor;
 
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.test.ArbitraryDataGenerator;
-
-import static com.mechjacktv.mechjackbot.command.HelpCommand.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
 
 public class HelpCommandUnitTests extends CommandContractTests {
 
