@@ -8,9 +8,9 @@ import com.google.inject.Provider;
 import org.aopalliance.intercept.MethodInvocation;
 import org.junit.Test;
 
-import com.mechjacktv.ArbitraryDataGenerator;
 import com.mechjacktv.mechjackbot.CommandUtils;
 import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.test.ArbitraryDataGenerator;
 
 public class RestrictToOwnerMethodInterceptorUnitTests {
 

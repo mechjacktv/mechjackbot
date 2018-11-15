@@ -2,7 +2,7 @@ package com.mechjacktv.util;
 
 import java.util.Objects;
 
-final class DefaultTimeUtils implements TimeUtils {
+public final class DefaultTimeUtils implements TimeUtils {
 
   @Override
   public final Integer secondsAsMs(final Integer seconds) {

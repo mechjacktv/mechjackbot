@@ -18,8 +18,8 @@ import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.Listener;
 import org.pircbotx.output.OutputIRC;
 
-import com.mechjacktv.ArbitraryDataGenerator;
 import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.test.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
 

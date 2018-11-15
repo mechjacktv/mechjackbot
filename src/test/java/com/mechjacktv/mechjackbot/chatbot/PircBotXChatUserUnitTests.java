@@ -6,8 +6,8 @@ import static org.mockito.Mockito.*;
 import org.junit.Test;
 import org.pircbotx.User;
 
-import com.mechjacktv.ArbitraryDataGenerator;
 import com.mechjacktv.mechjackbot.ChatUsername;
+import com.mechjacktv.test.ArbitraryDataGenerator;
 
 public class PircBotXChatUserUnitTests {
 

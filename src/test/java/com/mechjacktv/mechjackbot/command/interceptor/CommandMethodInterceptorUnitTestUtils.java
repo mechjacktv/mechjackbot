@@ -5,11 +5,11 @@ import static org.mockito.Mockito.when;
 
 import org.aopalliance.intercept.MethodInvocation;
 
-import com.mechjacktv.ArbitraryDataGenerator;
 import com.mechjacktv.mechjackbot.ChatUser;
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.CommandName;
 import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.test.ArbitraryDataGenerator;
 
 final class CommandMethodInterceptorUnitTestUtils {
 

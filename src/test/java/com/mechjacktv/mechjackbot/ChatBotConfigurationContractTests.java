@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.mechjacktv.ArbitraryDataGenerator;
+import com.mechjacktv.test.ArbitraryDataGenerator;
 
 public abstract class ChatBotConfigurationContractTests {
 

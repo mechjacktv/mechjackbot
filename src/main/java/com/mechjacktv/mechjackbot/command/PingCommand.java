@@ -7,11 +7,11 @@ import com.mechjacktv.mechjackbot.*;
 @SuppressWarnings("CanBeFinal")
 public class PingCommand extends AbstractCommand {
 
-  private static final String COMMAND_TRIGGER_KEY = "command.oing.trigger";
-  private static final String COMMAND_TRIGGER_DEFAULT = "!ping";
+  static final String COMMAND_TRIGGER_KEY = "command.oing.trigger";
+  static final String COMMAND_TRIGGER_DEFAULT = "!ping";
 
-  private static final String COMMAND_MESSAGE_FORMAT_KEY = "command.ping.message_format";
-  private static final String COMMAND_MESSAGE_FORMAT_DEFAULT = "Don't worry, @%s. I'm here.";
+  static final String COMMAND_MESSAGE_FORMAT_KEY = "command.ping.message_format";
+  static final String COMMAND_MESSAGE_FORMAT_DEFAULT = "Don't worry, @%s. I'm here.";
 
   private final AppConfiguration appConfiguration;
   private final CommandUtils commandUtils;

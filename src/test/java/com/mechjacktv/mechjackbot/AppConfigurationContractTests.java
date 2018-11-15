@@ -11,7 +11,7 @@ import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 
-import com.mechjacktv.ArbitraryDataGenerator;
+import com.mechjacktv.test.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
 

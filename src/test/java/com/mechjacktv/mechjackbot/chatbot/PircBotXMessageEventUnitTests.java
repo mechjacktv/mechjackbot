@@ -8,11 +8,11 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
-import com.mechjacktv.ArbitraryDataGenerator;
 import com.mechjacktv.mechjackbot.AppConfiguration;
 import com.mechjacktv.mechjackbot.ChatBot;
 import com.mechjacktv.mechjackbot.ChatUser;
 import com.mechjacktv.mechjackbot.Message;
+import com.mechjacktv.test.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
 

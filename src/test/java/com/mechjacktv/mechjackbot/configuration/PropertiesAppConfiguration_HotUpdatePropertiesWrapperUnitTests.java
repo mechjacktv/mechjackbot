@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import com.mechjacktv.ArbitraryDataGenerator;
+import com.mechjacktv.test.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.HotUpdatePropertiesWrapperContractTests;
 import com.mechjacktv.util.scheduleservice.ScheduleService;

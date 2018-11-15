@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import org.mockito.Mockito;
 
-import com.mechjacktv.ArbitraryDataGenerator;
+import com.mechjacktv.test.ArbitraryDataGenerator;
 import com.mechjacktv.test.PropertiesUtils;
 import com.mechjacktv.twitchclient.TwitchClientConfiguration;
 import com.mechjacktv.twitchclient.TwitchClientConfigurationContractTests;

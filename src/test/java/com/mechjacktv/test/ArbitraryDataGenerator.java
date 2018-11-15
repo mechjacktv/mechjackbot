@@ -1,4 +1,4 @@
-package com.mechjacktv;
+package com.mechjacktv.test;
 
 import java.util.concurrent.atomic.AtomicLong;
 

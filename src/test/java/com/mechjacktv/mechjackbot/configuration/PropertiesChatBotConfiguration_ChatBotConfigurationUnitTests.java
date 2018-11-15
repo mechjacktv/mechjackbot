@@ -5,9 +5,9 @@ import java.util.Map;
 
 import org.mockito.Mockito;
 
-import com.mechjacktv.ArbitraryDataGenerator;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.ChatBotConfigurationContractTests;
+import com.mechjacktv.test.ArbitraryDataGenerator;
 import com.mechjacktv.test.PropertiesUtils;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 

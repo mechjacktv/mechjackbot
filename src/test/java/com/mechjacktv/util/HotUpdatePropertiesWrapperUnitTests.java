@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 import org.junit.Test;
 import org.slf4j.Logger;
 
-import com.mechjacktv.ArbitraryDataGenerator;
+import com.mechjacktv.test.ArbitraryDataGenerator;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 public class HotUpdatePropertiesWrapperUnitTests extends HotUpdatePropertiesWrapperContractTests {

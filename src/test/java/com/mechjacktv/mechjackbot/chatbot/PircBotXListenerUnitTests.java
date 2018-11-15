@@ -19,11 +19,11 @@ import org.pircbotx.hooks.events.PingEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.pircbotx.output.OutputIRC;
 
-import com.mechjacktv.ArbitraryDataGenerator;
 import com.mechjacktv.mechjackbot.AppConfiguration;
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.CommandTrigger;
 import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.test.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
 

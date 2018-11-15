@@ -9,7 +9,7 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.junit.Test;
 import org.slf4j.Logger;
 
-import com.mechjacktv.ArbitraryDataGenerator;
+import com.mechjacktv.test.ArbitraryDataGenerator;
 
 public class LogCommandHandleMessageMethodInterceptorUnitTests {
 

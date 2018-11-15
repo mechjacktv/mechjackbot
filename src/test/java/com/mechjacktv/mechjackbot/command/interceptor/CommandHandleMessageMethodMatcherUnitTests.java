@@ -1,16 +1,16 @@
 package com.mechjacktv.mechjackbot.command.interceptor;
 
+import static com.mechjacktv.mechjackbot.command.interceptor.CommandHandleMessageMethodMatcher.MATCHING_METHOD_NAME;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+
 import java.lang.reflect.Method;
 
 import org.junit.Test;
 
-import com.mechjacktv.ArbitraryDataGenerator;
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.MessageEvent;
-
-import static com.mechjacktv.mechjackbot.command.interceptor.CommandHandleMessageMethodMatcher.MATCHING_METHOD_NAME;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+import com.mechjacktv.test.ArbitraryDataGenerator;
 
 public class CommandHandleMessageMethodMatcherUnitTests {
 
