@@ -9,28 +9,28 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.junit.Test;
 
 import com.mechjacktv.ArbitraryDataGenerator;
-import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.CommandUtils;
+import com.mechjacktv.mechjackbot.MessageEvent;
 
-public class GlobalCoolDownMethodInterceptorUnitTests {
+public class RestrictToPrivilegedMethodInterceptorUnitTests {
 
   private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
   private final CommandMethodInterceptorUnitTestUtils methodInterceptorUtils = new CommandMethodInterceptorUnitTestUtils(
       this.arbitraryDataGenerator);
 
   @SuppressWarnings("unchecked")
-  private GlobalCoolDownMethodInterceptor givenASubjectToTest(final CommandUtils commandUtils) {
+  private RestrictToPrivilegedMethodInterceptor givenASubjectToTest(final CommandUtils commandUtils) {
     final Provider<CommandUtils> provider = mock(Provider.class);
 
     when(provider.get()).thenReturn(commandUtils);
-    return new GlobalCoolDownMethodInterceptor(provider);
+    return new RestrictToPrivilegedMethodInterceptor(provider);
   }
 
   @Test
-  public final void invoke_isCooledDown_invokesCommand() throws Throwable {
+  public final void invoke_isPrivilegedViewer_invokesCommand() throws Throwable {
     final CommandUtils commandUtils = mock(CommandUtils.class);
-    final GlobalCoolDownMethodInterceptor subjectUnderTest = this.givenASubjectToTest(commandUtils);
-    when(commandUtils.isGloballyCooledDown(isA(Command.class))).thenReturn(true);
+    final RestrictToPrivilegedMethodInterceptor subjectUnderTest = this.givenASubjectToTest(commandUtils);
+    when(commandUtils.isPrivilegedViewer(isA(MessageEvent.class))).thenReturn(true);
     final MethodInvocation methodInvocation = this.methodInterceptorUtils.givenAFakeMethodInvocation();
 
     subjectUnderTest.invoke(methodInvocation);
@@ -39,10 +39,10 @@ public class GlobalCoolDownMethodInterceptorUnitTests {
   }
 
   @Test
-  public final void invoke_isNotCooledDown_commandIsNotInvoked() throws Throwable {
+  public final void invoke_isNotPrivilegedViewer_commandIsNotInvoked() throws Throwable {
     final CommandUtils commandUtils = mock(CommandUtils.class);
-    final GlobalCoolDownMethodInterceptor subjectUnderTest = this.givenASubjectToTest(commandUtils);
-    when(commandUtils.isGloballyCooledDown(isA(Command.class))).thenReturn(false);
+    final RestrictToPrivilegedMethodInterceptor subjectUnderTest = this.givenASubjectToTest(commandUtils);
+    when(commandUtils.isPrivilegedViewer(isA(MessageEvent.class))).thenReturn(false);
     final MethodInvocation methodInvocation = this.methodInterceptorUtils.givenAFakeMethodInvocation();
 
     subjectUnderTest.invoke(methodInvocation);

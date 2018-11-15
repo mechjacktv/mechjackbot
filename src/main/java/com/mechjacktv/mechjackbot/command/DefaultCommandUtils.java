@@ -87,7 +87,7 @@ public final class DefaultCommandUtils implements CommandUtils {
   }
 
   @Override
-  public final boolean isRegularUserViewer(final MessageEvent messageEvent) {
+  public final boolean isRegularViewer(final MessageEvent messageEvent) {
     return this.isPrivilegedViewer(messageEvent);
   }
 

@@ -12,7 +12,7 @@ public interface CommandUtils {
 
   boolean isPrivilegedViewer(MessageEvent messageEvent);
 
-  boolean isRegularUserViewer(MessageEvent messageEvent);
+  boolean isRegularViewer(MessageEvent messageEvent);
 
   void sendUsage(MessageEvent messageEvent, CommandUsage usage);
 
