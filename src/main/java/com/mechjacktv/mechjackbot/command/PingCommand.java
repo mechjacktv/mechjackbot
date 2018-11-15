@@ -18,15 +18,11 @@ public class PingCommand extends AbstractCommand {
 
   @Inject
   public PingCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils) {
-    super(appConfiguration, CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT),
+    super(appConfiguration, CommandDescription.of("A simple check to see if the chat bot is running."),
+        CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT),
         commandUtils);
     this.appConfiguration = appConfiguration;
     this.commandUtils = commandUtils;
-  }
-
-  @Override
-  public final CommandDescription getDescription() {
-    return CommandDescription.of("A simple check to see if the chat bot is running.");
   }
 
   @Override

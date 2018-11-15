@@ -17,30 +17,21 @@ public class ShoutOutListenerCommand extends AbstractCommand {
   @Inject
   public ShoutOutListenerCommand(final AppConfiguration appConfiguration, final ShoutOutService shoutOutService,
       final CommandUtils commandUtils) {
-    super(appConfiguration, CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT),
-        commandUtils);
+    super(appConfiguration, CommandDescription.of("Monitors chat looking for casters who are due for a shout out."),
+        CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT),
+        commandUtils, false);
     this.shoutOutService = shoutOutService;
     this.commandUtils = commandUtils;
   }
 
   @Override
-  public final CommandDescription getDescription() {
-    return CommandDescription.of("Monitors chat looking for casters who are due for a shout out.");
+  public final boolean isTriggered(MessageEvent messageEvent) {
+    return this.shoutOutService.isCasterDue(this.commandUtils.getSanitizedViewerName(messageEvent));
   }
 
   @Override
   public void handleMessageEvent(MessageEvent messageEvent) {
     this.shoutOutService.sendCasterShoutOut(messageEvent, this.commandUtils.getSanitizedViewerName(messageEvent));
-  }
-
-  @Override
-  public boolean isTriggerable() {
-    return false;
-  }
-
-  @Override
-  public final boolean isTriggered(MessageEvent messageEvent) {
-    return this.shoutOutService.isCasterDue(this.commandUtils.getSanitizedViewerName(messageEvent));
   }
 
 }

@@ -23,15 +23,11 @@ public class CommandsCommand extends AbstractCommand {
   @Inject
   public CommandsCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils,
       final CommandRegistry messageEventHandler) {
-    super(appConfiguration, CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT),
+    super(appConfiguration, CommandDescription.of("Lists all the commands available to users."),
+        CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT),
         commandUtils);
     this.appConfiguration = appConfiguration;
     this.messageEventHandler = messageEventHandler;
-  }
-
-  @Override
-  public CommandDescription getDescription() {
-    return CommandDescription.of("Lists all the commands available to users.");
   }
 
   @Override
@@ -41,7 +37,7 @@ public class CommandsCommand extends AbstractCommand {
     final StringBuilder builder = new StringBuilder();
 
     for (final Command command : this.getSortedCommands()) {
-      if (command.isTriggerable()) {
+      if (command.isViewerTriggerable()) {
         builder.append(String.format(" %s", command.getTrigger()));
       }
     }

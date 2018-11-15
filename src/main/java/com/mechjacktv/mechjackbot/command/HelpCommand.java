@@ -26,16 +26,12 @@ public class HelpCommand extends AbstractCommand {
   @Inject
   public HelpCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils,
       final CommandRegistry messageEventHandler) {
-    super(appConfiguration, CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT),
+    super(appConfiguration, CommandDescription.of("Returns the description for a command."),
+        CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT),
         commandUtils);
     this.appConfiguration = appConfiguration;
     this.commandUtils = commandUtils;
     this.messageEventHandler = messageEventHandler;
-  }
-
-  @Override
-  public final CommandDescription getDescription() {
-    return CommandDescription.of("Returns the description for a command.");
   }
 
   @Override
@@ -48,7 +44,7 @@ public class HelpCommand extends AbstractCommand {
       final CommandTrigger commandTrigger = CommandTrigger.of(messageParts[1]);
       final Optional<Command> command = this.messageEventHandler.getCommand(commandTrigger);
 
-      if (command.isPresent() && command.get().isTriggerable()) {
+      if (command.isPresent() && command.get().isViewerTriggerable()) {
         final String messageFormat = this.appConfiguration.get(COMMAND_PRESENT_MESSAGE_FORMAT_KEY,
             COMMAND_PRESENT_MESSAGE_FORMAT_DEFAULT);
 
