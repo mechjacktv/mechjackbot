@@ -5,7 +5,7 @@ import com.google.inject.AbstractModule;
 import org.pircbotx.hooks.Listener;
 
 import com.mechjacktv.mechjackbot.ChatBot;
-import com.mechjacktv.mechjackbot.MessageEventHandler;
+import com.mechjacktv.mechjackbot.CommandRegistry;
 
 public final class PircBotXChatBotModule extends AbstractModule {
 
@@ -13,6 +13,6 @@ public final class PircBotXChatBotModule extends AbstractModule {
   protected void configure() {
     this.bind(ChatBot.class).to(PircBotXChatBot.class).asEagerSingleton();
     this.bind(Listener.class).to(PircBotXListener.class).asEagerSingleton();
-    this.bind(MessageEventHandler.class).to(PircBotXMessageEventHandler.class).asEagerSingleton();
+    this.bind(CommandRegistry.class).to(DefaultCommandRegistry.class).asEagerSingleton();
   }
 }

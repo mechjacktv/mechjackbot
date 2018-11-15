@@ -19,7 +19,14 @@ public abstract class AbstractCommand implements Command {
 
   @Override
   public CommandName getName() {
-    return CommandName.of(this.getClass().getCanonicalName());
+    return CommandName.of(this.sanitizeGuiceFromName(this.getClass().getCanonicalName()));
+  }
+
+  private String sanitizeGuiceFromName(final String rawCommandName) {
+    if (!rawCommandName.contains("$$Enhancer")) {
+      return rawCommandName;
+    }
+    return rawCommandName.substring(0, rawCommandName.indexOf("$$Enhancer"));
   }
 
   @Override

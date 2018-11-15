@@ -21,11 +21,11 @@ public class HelpCommand extends AbstractCommand {
 
   private final AppConfiguration appConfiguration;
   private final CommandUtils commandUtils;
-  private final MessageEventHandler messageEventHandler;
+  private final CommandRegistry messageEventHandler;
 
   @Inject
   public HelpCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils,
-      final MessageEventHandler messageEventHandler) {
+      final CommandRegistry messageEventHandler) {
     super(appConfiguration, CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT),
         commandUtils);
     this.appConfiguration = appConfiguration;

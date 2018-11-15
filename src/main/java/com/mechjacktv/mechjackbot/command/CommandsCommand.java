@@ -18,11 +18,11 @@ public class CommandsCommand extends AbstractCommand {
   private static final String COMMAND_MESSAGE_FORMAT_DEFAULT = "Channel Commands:%s";
 
   private final AppConfiguration appConfiguration;
-  private final MessageEventHandler messageEventHandler;
+  private final CommandRegistry messageEventHandler;
 
   @Inject
   public CommandsCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils,
-      final MessageEventHandler messageEventHandler) {
+      final CommandRegistry messageEventHandler) {
     super(appConfiguration, CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT),
         commandUtils);
     this.appConfiguration = appConfiguration;

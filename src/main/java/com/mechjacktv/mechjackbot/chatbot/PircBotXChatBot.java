@@ -57,7 +57,7 @@ public final class PircBotXChatBot implements ChatBot {
 
   @Override
   public void start() {
-    this.executionUtils.softenException(this.pircBotX::startBot, PircBotXStartupException.class);
+    this.executionUtils.softenException(this.pircBotX::startBot, ChatBotStartupException.class);
   }
 
   @Override

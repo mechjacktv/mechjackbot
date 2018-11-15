@@ -10,23 +10,24 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import com.mechjacktv.mechjackbot.AppConfiguration;
 import com.mechjacktv.mechjackbot.Command;
-import com.mechjacktv.mechjackbot.MessageEventHandler;
+import com.mechjacktv.mechjackbot.CommandRegistry;
+import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.util.ExecutionUtils;
 
 final class PircBotXListener extends ListenerAdapter {
 
   private final AppConfiguration appConfiguration;
   private final ExecutionUtils executionUtils;
-  private final MessageEventHandler messageEventHandler;
+  private final CommandRegistry commandRegistry;
 
   @Inject
   public PircBotXListener(final Set<Command> commands, final AppConfiguration appConfiguration,
-      final ExecutionUtils executionUtils, final MessageEventHandler messageEventHandler) {
+      final ExecutionUtils executionUtils, final CommandRegistry commandRegistry) {
     this.appConfiguration = appConfiguration;
     this.executionUtils = executionUtils;
-    this.messageEventHandler = messageEventHandler;
+    this.commandRegistry = commandRegistry;
     for (final Command command : commands) {
-      this.messageEventHandler.addCommand(command);
+      this.commandRegistry.addCommand(command);
     }
   }
 
@@ -36,9 +37,15 @@ final class PircBotXListener extends ListenerAdapter {
   }
 
   @Override
-  public final void onGenericMessage(final GenericMessageEvent event) {
-    this.messageEventHandler
-        .handleMessageEvent(new PircBotXMessageEvent(this.appConfiguration, this.executionUtils, event));
+  public final void onGenericMessage(final GenericMessageEvent genericMessageEvent) {
+    final MessageEvent messageEvent = new PircBotXMessageEvent(this.appConfiguration,
+        this.executionUtils, genericMessageEvent);
+
+    for (final Command command : this.commandRegistry.getCommands()) {
+      if (command.isTriggered(messageEvent)) {
+        command.handleMessageEvent(messageEvent);
+      }
+    }
   }
 
 }

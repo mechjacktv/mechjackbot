@@ -94,25 +94,25 @@ public class PircBotXChatBotUnitTests {
   }
 
   @Test
-  public final void start_startBotThrowsIOException_throwsPircBotXStartupException() throws IOException, IrcException {
+  public final void start_startBotThrowsIOException_throwsChatBotStartupException() throws IOException, IrcException {
     final PircBotX pircBotX = mock(PircBotX.class);
     doThrow(IOException.class).when(pircBotX).startBot();
     final PircBotXChatBot subjectUnderTest = this.givenIHaveASubjectToTest(pircBotX);
 
     final Throwable thrown = catchThrowable(subjectUnderTest::start);
 
-    assertThat(thrown).isInstanceOf(PircBotXStartupException.class).hasCauseInstanceOf(IOException.class);
+    assertThat(thrown).isInstanceOf(ChatBotStartupException.class).hasCauseInstanceOf(IOException.class);
   }
 
   @Test
-  public final void start_startBotThrowsIrcException_throwsPircBotXStartupException() throws IOException, IrcException {
+  public final void start_startBotThrowsIrcException_throwsChatBotStartupException() throws IOException, IrcException {
     final PircBotX pircBotX = mock(PircBotX.class);
     doThrow(IrcException.class).when(pircBotX).startBot();
     final PircBotXChatBot subjectUnderTest = this.givenIHaveASubjectToTest(pircBotX);
 
     final Throwable thrown = catchThrowable(subjectUnderTest::start);
 
-    assertThat(thrown).isInstanceOf(PircBotXStartupException.class).hasCauseInstanceOf(IrcException.class);
+    assertThat(thrown).isInstanceOf(ChatBotStartupException.class).hasCauseInstanceOf(IrcException.class);
   }
 
   @Test
