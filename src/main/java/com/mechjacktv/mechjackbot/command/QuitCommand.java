@@ -8,11 +8,11 @@ import com.mechjacktv.util.scheduleservice.ScheduleService;
 @SuppressWarnings("CanBeFinal")
 public class QuitCommand extends AbstractCommand {
 
-  private static final String COMMAND_TRIGGER_KEY = "command.quit.trigger";
-  private static final String COMMAND_TRIGGER_DEFAULT = "!quit";
+  static final String COMMAND_TRIGGER_KEY = "command.quit.trigger";
+  static final String COMMAND_TRIGGER_DEFAULT = "!quit";
 
-  private static final String COMMAND_MESSAGE_FORMAT_KEY = "command.quit.message_format";
-  private static final String COMMAND_MESSAGE_FORMAT_DEFAULT = "Powering down";
+  static final String COMMAND_MESSAGE_KEY = "command.quit.message";
+  static final String COMMAND_MESSAGE_DEFAULT = "Powering down";
 
   private final AppConfiguration appConfiguration;
   private final ScheduleService scheduleService;
@@ -30,11 +30,9 @@ public class QuitCommand extends AbstractCommand {
   @Override
   @RestrictToOwner
   public void handleMessageEvent(final MessageEvent messageEvent) {
-    final String messageFormat = this.appConfiguration.get(COMMAND_MESSAGE_FORMAT_KEY,
-        COMMAND_MESSAGE_FORMAT_DEFAULT);
     final ChatBot chatBot = messageEvent.getChatBot();
 
-    messageEvent.sendResponse(Message.of(messageFormat));
+    messageEvent.sendResponse(Message.of(this.appConfiguration.get(COMMAND_MESSAGE_KEY, COMMAND_MESSAGE_DEFAULT)));
     this.scheduleService.stop();
     chatBot.stop();
   }
