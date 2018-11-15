@@ -3,6 +3,8 @@ package com.mechjacktv.mechjackbot.command.interceptor;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Method;
+
 import org.aopalliance.intercept.MethodInvocation;
 
 import com.mechjacktv.mechjackbot.ChatUser;
@@ -19,7 +21,11 @@ final class CommandMethodInterceptorUnitTestUtils {
     this.arbitraryDataGenerator = arbitraryDataGenerator;
   }
 
-  MethodInvocation givenAFakeMethodInvocation() {
+  MethodInvocation givenAFakeMethodInvocation() throws NoSuchMethodException {
+    return this.givenAFakeMethodInvocation(Object.class.getMethod("hashCode"));
+  }
+
+  MethodInvocation givenAFakeMethodInvocation(final Method method) {
     final MethodInvocation methodInvocation = mock(MethodInvocation.class);
     final Command command = mock(Command.class);
     when(command.getName()).thenReturn(CommandName.of(this.arbitraryDataGenerator.getString()));
@@ -28,6 +34,7 @@ final class CommandMethodInterceptorUnitTestUtils {
 
     when(methodInvocation.getThis()).thenReturn(command);
     when(methodInvocation.getArguments()).thenReturn(new Object[] { messageEvent });
+    when(methodInvocation.getMethod()).thenReturn(method);
     return methodInvocation;
   }
 

@@ -40,6 +40,11 @@ public final class DefaultCommandUtils implements CommandUtils {
 
   @Override
   public boolean hasRole(final Command command, final MessageEvent messageEvent, final ViewerRole viewerRole) {
+    return this.hasRole(command, messageEvent, new ViewerRole[] { viewerRole });
+  }
+
+  @Override
+  public boolean hasRole(final Command command, final MessageEvent messageEvent, final ViewerRole[] viewerRoles) {
     final ChatUser chatUser = messageEvent.getChatUser();
     final ChatUsername chatUsername = this.sanitizeChatUsername(chatUser.getUsername());
 
@@ -48,8 +53,8 @@ public final class DefaultCommandUtils implements CommandUtils {
 
   @Override
   public final boolean isCooledDown(final Command command, final MessageEvent messageEvent) {
-    if (this.hasRole(command, messageEvent, ViewerRole.MODERATOR) || this.isCooledDown(command.getTrigger(),
-        messageEvent.getChatUser().getUsername())) {
+    if (this.hasRole(command, messageEvent, new ViewerRole[] { ViewerRole.OWNER, ViewerRole.MODERATOR })
+        || this.isCooledDown(command.getTrigger(), messageEvent.getChatUser().getUsername())) {
       this.commandLastTrigger.put(command.getTrigger(), LastTrigger.of(this.timeUtils.currentTime()));
       this.viewerLastTrigger.put(messageEvent.getChatUser().getUsername(),
           LastTrigger.of(this.timeUtils.currentTime()));

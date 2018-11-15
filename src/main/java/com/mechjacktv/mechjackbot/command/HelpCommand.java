@@ -30,14 +30,13 @@ public class HelpCommand extends AbstractCommand {
     super(new Configuration(appConfiguration, commandUtils,
         CommandDescription.of("Returns the description for a command."),
         CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT))
-        .setCommandUsage(CommandUsage.of(COMMAND_USAGE)));
+            .setCommandUsage(CommandUsage.of(COMMAND_USAGE)));
     this.appConfiguration = appConfiguration;
     this.commandUtils = commandUtils;
     this.commandRegistry = commandRegistry;
   }
 
   @Override
-  @CoolDown
   public void handleMessageEvent(final MessageEvent messageEvent) {
     final Message message = this.commandUtils.messageWithoutTrigger(this, messageEvent);
 

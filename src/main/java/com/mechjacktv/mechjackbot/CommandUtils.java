@@ -4,6 +4,8 @@ public interface CommandUtils {
 
   boolean hasRole(Command command, MessageEvent messageEvent, ViewerRole viewerRole);
 
+  boolean hasRole(Command command, MessageEvent messageEvent, ViewerRole[] viewerRoles);
+
   boolean isCooledDown(Command command, MessageEvent messageEvent);
 
   boolean isTriggered(Command command, MessageEvent messageEvent);

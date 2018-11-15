@@ -24,7 +24,7 @@ public class PingCommandUnitTests extends CommandContractTests {
   private Command givenASubjectToTest(final String messageFormat, final ChatUsername chatUsername) {
     final AppConfiguration appConfiguration = this.givenAFakeAppConfiguration(messageFormat);
     final CommandUtils commandUtils = mock(CommandUtils.class);
-    when(commandUtils.sanitizedChatUsername(isA(MessageEvent.class))).thenReturn(chatUsername);
+    when(commandUtils.sanitizedChatUsername(isA(Command.class), isA(MessageEvent.class))).thenReturn(chatUsername);
 
     return this.givenASubjectToTest(appConfiguration, commandUtils);
   }

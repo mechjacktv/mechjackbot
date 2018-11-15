@@ -79,9 +79,9 @@ public class HelpCommandUnitTests extends CommandContractTests {
   private CommandUtils givenAFakeCommandUtils(final ChatUsername chatUsername, final CommandTrigger commandTrigger) {
     final CommandUtils commandUtils = mock(CommandUtils.class);
 
-    when(commandUtils.messageWithoutTrigger(isA(CommandTrigger.class), isA(Message.class)))
-        .thenReturn(commandTrigger.value);
-    when(commandUtils.sanitizedChatUsername(isA(MessageEvent.class))).thenReturn(chatUsername);
+    when(commandUtils.messageWithoutTrigger(isA(Command.class), isA(MessageEvent.class)))
+        .thenReturn(Message.of(commandTrigger.value));
+    when(commandUtils.sanitizedChatUsername(isA(Command.class), isA(MessageEvent.class))).thenReturn(chatUsername);
     return commandUtils;
   }
 
@@ -101,13 +101,17 @@ public class HelpCommandUnitTests extends CommandContractTests {
 
   @Test
   public final void handleMessageEvent_notProperlyFormatted_sendsUsageMessage() {
+    final String messageArguments = "";
     final CommandUtils commandUtils = mock(CommandUtils.class);
     final Command subjectUnderTest = this.givenASubjectToTest(commandUtils);
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent(subjectUnderTest, CommandTrigger.of(""));
+    final MessageEvent messageEvent = this.givenAFakeMessageEvent(subjectUnderTest,
+        CommandTrigger.of(messageArguments));
+    when(commandUtils.messageWithoutTrigger(isA(Command.class), isA(MessageEvent.class)))
+        .thenReturn(Message.of(messageArguments));
 
     subjectUnderTest.handleMessageEvent(messageEvent);
 
-    verify(commandUtils).sendUsage(eq(messageEvent), isA(CommandUsage.class));
+    verify(commandUtils).sendUsage(eq(subjectUnderTest), eq(messageEvent));
   }
 
   @Test

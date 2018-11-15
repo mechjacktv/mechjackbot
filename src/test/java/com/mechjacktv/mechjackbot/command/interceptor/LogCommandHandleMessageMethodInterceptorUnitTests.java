@@ -1,8 +1,5 @@
 package com.mechjacktv.mechjackbot.command.interceptor;
 
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
-
 import java.util.function.Function;
 
 import org.aopalliance.intercept.MethodInvocation;
@@ -10,6 +7,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 
 import com.mechjacktv.test.ArbitraryDataGenerator;
+
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
 
 public class LogCommandHandleMessageMethodInterceptorUnitTests {
 
@@ -24,7 +24,7 @@ public class LogCommandHandleMessageMethodInterceptorUnitTests {
 
   @Test
   @SuppressWarnings("unchecked")
-  public final void invoke_isCalled_logsAnInfoLevelMessage() {
+  public final void invoke_isCalled_logsAnInfoLevelMessage() throws NoSuchMethodException {
     final Function<String, Logger> loggerFactory = mock(Function.class);
     final Logger logger = mock(Logger.class);
     when(loggerFactory.apply(isA(String.class))).thenReturn(logger);

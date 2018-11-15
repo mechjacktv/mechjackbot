@@ -27,7 +27,7 @@ public class QuitCommand extends AbstractCommand {
   }
 
   @Override
-  @RestrictToOwner
+  @RestrictToRoles({ ViewerRole.OWNER })
   public void handleMessageEvent(final MessageEvent messageEvent) {
     final ChatBot chatBot = messageEvent.getChatBot();
 

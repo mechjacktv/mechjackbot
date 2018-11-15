@@ -1,5 +1,10 @@
 package com.mechjacktv.mechjackbot.command.interceptor;
 
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
+
+import java.lang.reflect.Method;
+
 import com.google.inject.Provider;
 
 import org.aopalliance.intercept.MethodInvocation;
@@ -8,10 +13,8 @@ import org.junit.Test;
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.CommandUtils;
 import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.NoCoolDown;
 import com.mechjacktv.test.ArbitraryDataGenerator;
-
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
 
 public class CoolDownMethodInterceptorUnitTests {
 
@@ -49,6 +52,34 @@ public class CoolDownMethodInterceptorUnitTests {
     subjectUnderTest.invoke(methodInvocation);
 
     verify(methodInvocation, never()).proceed();
+  }
+
+  @Test
+  @NoCoolDown
+  public final void invoke_noCoolDown_invokesCommand() throws Throwable {
+    final CommandUtils commandUtils = mock(CommandUtils.class);
+    final CoolDownMethodInterceptor subjectUnderTest = this.givenASubjectToTest(commandUtils);
+    when(commandUtils.isCooledDown(isA(Command.class), isA(MessageEvent.class))).thenReturn(true);
+    final Method method = this.getClass().getMethod("invoke_noCoolDown_doesNotCheckCoolDownStatus");
+    final MethodInvocation methodInvocation = this.methodInterceptorUtils.givenAFakeMethodInvocation(method);
+
+    subjectUnderTest.invoke(methodInvocation);
+
+    verify(methodInvocation).proceed();
+  }
+
+  @Test
+  @NoCoolDown
+  public final void invoke_noCoolDown_doesNotCheckCoolDownStatus() throws Throwable {
+    final CommandUtils commandUtils = mock(CommandUtils.class);
+    final CoolDownMethodInterceptor subjectUnderTest = this.givenASubjectToTest(commandUtils);
+    when(commandUtils.isCooledDown(isA(Command.class), isA(MessageEvent.class))).thenReturn(true);
+    final Method method = this.getClass().getMethod("invoke_noCoolDown_doesNotCheckCoolDownStatus");
+    final MethodInvocation methodInvocation = this.methodInterceptorUtils.givenAFakeMethodInvocation(method);
+
+    subjectUnderTest.invoke(methodInvocation);
+
+    verify(commandUtils, never()).isCooledDown(isA(Command.class), isA(MessageEvent.class));
   }
 
 }
