@@ -19,8 +19,8 @@ public final class CommandInterceptorsModule extends AbstractModule {
         new CommandHandleMessageMethodMatcher().and(Matchers.annotatedWith(RestrictToRegular.class)),
         new RestrictToRegularMethodInterceptor(this.getProvider(CommandUtils.class)));
     this.bindInterceptor(Matchers.subclassesOf(Command.class),
-        new CommandHandleMessageMethodMatcher().and(Matchers.annotatedWith(GlobalCoolDown.class)),
-        new GlobalCoolDownMethodInterceptor(this.getProvider(CommandUtils.class)));
+        new CommandHandleMessageMethodMatcher().and(Matchers.annotatedWith(CoolDown.class)),
+        new CoolDownMethodInterceptor(this.getProvider(CommandUtils.class)));
     this.bindInterceptor(Matchers.subclassesOf(Command.class),
         new CommandHandleMessageMethodMatcher(),
         new LogCommandHandleMessageMethodInterceptor());

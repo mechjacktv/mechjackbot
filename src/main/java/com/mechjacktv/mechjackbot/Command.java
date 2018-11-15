@@ -6,7 +6,9 @@ public interface Command {
 
   CommandDescription getDescription();
 
-  boolean isViewerTriggerable();
+  CommandUsage getUsage();
+
+  boolean isTriggerable();
 
   CommandTrigger getTrigger();
 

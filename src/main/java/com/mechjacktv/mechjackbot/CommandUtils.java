@@ -2,20 +2,16 @@ package com.mechjacktv.mechjackbot;
 
 public interface CommandUtils {
 
-  ChatUsername getSanitizedViewerName(MessageEvent messageEvent);
+  boolean hasRole(Command command, MessageEvent messageEvent, ViewerRole viewerRole);
 
-  boolean isChannelOwner(MessageEvent messageEvent);
+  boolean isCooledDown(Command command, MessageEvent messageEvent);
 
-  boolean isCommandTrigger(CommandTrigger commandTrigger, MessageEvent messageEvent);
+  boolean isTriggered(Command command, MessageEvent messageEvent);
 
-  boolean isGloballyCooledDown(Command command);
+  void sendUsage(Command command, MessageEvent messageEvent);
 
-  boolean isPrivilegedViewer(MessageEvent messageEvent);
+  Message messageWithoutTrigger(Command command, MessageEvent messageEvent);
 
-  boolean isRegularViewer(MessageEvent messageEvent);
-
-  void sendUsage(MessageEvent messageEvent, CommandUsage usage);
-
-  String stripTriggerOffMessage(CommandTrigger trigger, Message message);
+  ChatUsername sanitizedChatUsername(Command command, MessageEvent messageEvent);
 
 }

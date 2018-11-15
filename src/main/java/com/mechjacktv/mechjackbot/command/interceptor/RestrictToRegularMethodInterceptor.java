@@ -20,7 +20,7 @@ final class RestrictToRegularMethodInterceptor implements MethodInterceptor {
   public final Object invoke(final MethodInvocation invocation) throws Throwable {
     final MessageEvent messageEvent = (MessageEvent) invocation.getArguments()[0];
 
-    if (this.commandUtils.get().isRegularViewer(messageEvent)) {
+    if (this.commandUtils.get().isRegular(messageEvent)) {
       return invocation.proceed();
     }
     return null;

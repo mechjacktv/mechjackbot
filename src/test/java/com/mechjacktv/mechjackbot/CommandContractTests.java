@@ -80,7 +80,7 @@ public abstract class CommandContractTests {
   @Test
   public final void isTriggered_messageContainsTrigger_returnsTrue() {
     final Command subjectUnderTest = this.givenASubjectToTest();
-    assumeTrue(subjectUnderTest.isViewerTriggerable());
+    assumeTrue(subjectUnderTest.isTriggerable());
     final CommandTrigger commandTrigger = this.getCommandTriggerDefault();
     final MessageEvent messageEvent = mock(MessageEvent.class);
     final Message message = Message.of(String.format("%s %s", commandTrigger.value,
@@ -95,7 +95,7 @@ public abstract class CommandContractTests {
   @Test
   public final void isTriggered_messageDoesNotContainTrigger_returnsFalse() {
     final Command subjectUnderTest = this.givenASubjectToTest();
-    assumeTrue(subjectUnderTest.isViewerTriggerable());
+    assumeTrue(subjectUnderTest.isTriggerable());
     final MessageEvent messageEvent = mock(MessageEvent.class);
     final Message message = Message.of(this.arbitraryDataGenerator.getString());
     when(messageEvent.getMessage()).thenReturn(message);

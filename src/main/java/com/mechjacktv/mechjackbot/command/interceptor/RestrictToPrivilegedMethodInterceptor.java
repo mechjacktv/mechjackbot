@@ -20,7 +20,7 @@ final class RestrictToPrivilegedMethodInterceptor implements MethodInterceptor {
   public final Object invoke(final MethodInvocation invocation) throws Throwable {
     final MessageEvent messageEvent = (MessageEvent) invocation.getArguments()[0];
 
-    if (this.commandUtils.get().isPrivilegedViewer(messageEvent)) {
+    if (this.commandUtils.get().isPrivileged(messageEvent)) {
       return invocation.proceed();
     }
     return null;

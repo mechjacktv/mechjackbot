@@ -18,7 +18,7 @@ public class HelpCommand extends AbstractCommand {
   static final String COMMAND_MESSAGE_FORMAT_DEFAULT = "@%s, %s -> %s";
   static final String COMMAND_MISSING_MESSAGE_FORMAT_KEY = "command.help.missing_message_format";
   static final String COMMAND_MISSING_MESSAGE_FORMAT_DEFAULT = "@%s, I don't see a command triggered by %s.";
-  static final String COMMAND_USAGE_MESSAGE_FORMAT = "%s <commandTrigger>";
+  private static final String COMMAND_USAGE = "<commandTrigger>";
 
   private final AppConfiguration appConfiguration;
   private final CommandUtils commandUtils;
@@ -27,32 +27,31 @@ public class HelpCommand extends AbstractCommand {
   @Inject
   public HelpCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils,
       final CommandRegistry commandRegistry) {
-    super(appConfiguration, CommandDescription.of("Returns the description for a command."),
-        CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT),
-        commandUtils);
+    super(new Configuration(appConfiguration, commandUtils,
+        CommandDescription.of("Returns the description for a command."),
+        CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT))
+        .setCommandUsage(CommandUsage.of(COMMAND_USAGE)));
     this.appConfiguration = appConfiguration;
     this.commandUtils = commandUtils;
     this.commandRegistry = commandRegistry;
   }
 
   @Override
-  @GlobalCoolDown
+  @CoolDown
   public void handleMessageEvent(final MessageEvent messageEvent) {
-    final String messageArgument = this.commandUtils.stripTriggerOffMessage(this.getTrigger(),
-        messageEvent.getMessage());
+    final Message message = this.commandUtils.messageWithoutTrigger(this, messageEvent);
 
-    if (!Strings.isNullOrEmpty(messageArgument)) {
-      final CommandTrigger commandTrigger = CommandTrigger.of(messageArgument);
+    if (!Strings.isNullOrEmpty(message.value)) {
+      final CommandTrigger commandTrigger = CommandTrigger.of(message.value);
       final Optional<Command> command = this.commandRegistry.getCommand(commandTrigger);
 
-      if (command.isPresent() && command.get().isViewerTriggerable()) {
+      if (command.isPresent() && command.get().isTriggerable()) {
         this.sendCommandHelp(messageEvent, command.get());
       } else {
         this.sendCommandMissing(messageEvent, commandTrigger);
       }
     } else {
-      this.commandUtils.sendUsage(messageEvent,
-          CommandUsage.of(String.format(COMMAND_USAGE_MESSAGE_FORMAT, this.getTrigger())));
+      this.commandUtils.sendUsage(this, messageEvent);
     }
   }
 
@@ -61,7 +60,7 @@ public class HelpCommand extends AbstractCommand {
         COMMAND_MESSAGE_FORMAT_DEFAULT);
 
     messageEvent.sendResponse(Message.of(String.format(messageFormat,
-        this.commandUtils.getSanitizedViewerName(messageEvent),
+        this.commandUtils.sanitizedChatUsername(this, messageEvent),
         command.getTrigger(), command.getDescription())));
   }
 
@@ -70,7 +69,7 @@ public class HelpCommand extends AbstractCommand {
         COMMAND_MISSING_MESSAGE_FORMAT_DEFAULT);
 
     messageEvent.sendResponse(Message.of(String.format(messageFormat,
-        this.commandUtils.getSanitizedViewerName(messageEvent), commandTrigger)));
+        this.commandUtils.sanitizedChatUsername(this, messageEvent), commandTrigger)));
   }
 
 }

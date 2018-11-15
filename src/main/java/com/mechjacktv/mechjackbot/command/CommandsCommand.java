@@ -23,21 +23,21 @@ public class CommandsCommand extends AbstractCommand {
   @Inject
   public CommandsCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils,
       final CommandRegistry commandRegistry) {
-    super(appConfiguration, CommandDescription.of("Lists all the commands available to users."),
-        CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT),
-        commandUtils);
+    super(new Configuration(appConfiguration, commandUtils,
+        CommandDescription.of("Lists all the commands available to users."),
+        CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT)));
     this.appConfiguration = appConfiguration;
     this.commandRegistry = commandRegistry;
   }
 
   @Override
-  @GlobalCoolDown
+  @CoolDown
   public void handleMessageEvent(final MessageEvent messageEvent) {
     final String messageFormat = this.appConfiguration.get(COMMAND_MESSAGE_FORMAT_KEY, COMMAND_MESSAGE_FORMAT_DEFAULT);
     final StringBuilder builder = new StringBuilder();
 
     for (final Command command : this.getSortedCommands()) {
-      if (command.isViewerTriggerable()) {
+      if (command.isTriggerable()) {
         builder.append(String.format(" %s", command.getTrigger()));
       }
     }

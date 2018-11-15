@@ -30,7 +30,7 @@ public class RestrictToPrivilegedMethodInterceptorUnitTests {
   public final void invoke_isPrivilegedViewer_invokesCommand() throws Throwable {
     final CommandUtils commandUtils = mock(CommandUtils.class);
     final RestrictToPrivilegedMethodInterceptor subjectUnderTest = this.givenASubjectToTest(commandUtils);
-    when(commandUtils.isPrivilegedViewer(isA(MessageEvent.class))).thenReturn(true);
+    when(commandUtils.isPrivileged(isA(MessageEvent.class))).thenReturn(true);
     final MethodInvocation methodInvocation = this.methodInterceptorUtils.givenAFakeMethodInvocation();
 
     subjectUnderTest.invoke(methodInvocation);
@@ -42,7 +42,7 @@ public class RestrictToPrivilegedMethodInterceptorUnitTests {
   public final void invoke_isNotPrivilegedViewer_commandIsNotInvoked() throws Throwable {
     final CommandUtils commandUtils = mock(CommandUtils.class);
     final RestrictToPrivilegedMethodInterceptor subjectUnderTest = this.givenASubjectToTest(commandUtils);
-    when(commandUtils.isPrivilegedViewer(isA(MessageEvent.class))).thenReturn(false);
+    when(commandUtils.isPrivileged(isA(MessageEvent.class))).thenReturn(false);
     final MethodInvocation methodInvocation = this.methodInterceptorUtils.givenAFakeMethodInvocation();
 
     subjectUnderTest.invoke(methodInvocation);

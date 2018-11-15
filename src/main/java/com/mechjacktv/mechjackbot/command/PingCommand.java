@@ -18,22 +18,21 @@ public class PingCommand extends AbstractCommand {
 
   @Inject
   public PingCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils) {
-    super(appConfiguration, CommandDescription.of("A simple check to see if the chat bot is running."),
-        CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT),
-        commandUtils);
+    super(new Configuration(appConfiguration, commandUtils,
+        CommandDescription.of("A simple check to see if the chat bot is running."),
+        CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT)));
     this.appConfiguration = appConfiguration;
     this.commandUtils = commandUtils;
   }
 
   @Override
   @RestrictToPrivileged
-  @GlobalCoolDown
   public void handleMessageEvent(MessageEvent messageEvent) {
     final String messageFormat = this.appConfiguration.get(COMMAND_MESSAGE_FORMAT_KEY,
         COMMAND_MESSAGE_FORMAT_DEFAULT);
 
     messageEvent.sendResponse(Message.of(String.format(messageFormat,
-        this.commandUtils.getSanitizedViewerName(messageEvent))));
+        this.commandUtils.sanitizedChatUsername(this, messageEvent))));
   }
 
 }

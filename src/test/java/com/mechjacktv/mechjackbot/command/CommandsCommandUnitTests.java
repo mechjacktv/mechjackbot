@@ -76,7 +76,7 @@ public class CommandsCommandUnitTests extends CommandContractTests {
     final Command command = mock(Command.class);
 
     when(command.getTrigger()).thenReturn(CommandTrigger.of(this.arbitraryDataGenerator.getString()));
-    when(command.isViewerTriggerable()).thenReturn(true);
+    when(command.isTriggerable()).thenReturn(true);
     return command;
   }
 
@@ -127,7 +127,7 @@ public class CommandsCommandUnitTests extends CommandContractTests {
   @Test
   public final void handleMessageEvent_withNonTriggerableCommands_doesNotListNonTriggerableCommands() {
     final Command nonTriggerableCommand = this.givenAFakeCommand();
-    when(nonTriggerableCommand.isViewerTriggerable()).thenReturn(false);
+    when(nonTriggerableCommand.isTriggerable()).thenReturn(false);
     final Set<Command> commands = Sets.newHashSet(nonTriggerableCommand, this.givenAFakeCommand(),
         this.givenAFakeCommand());
     final MessageEvent messageEvent = mock(MessageEvent.class);

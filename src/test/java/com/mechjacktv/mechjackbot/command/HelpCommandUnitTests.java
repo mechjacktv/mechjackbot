@@ -62,7 +62,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
   private Command givenAFakeCommand(final CommandTrigger commandTrigger, final boolean triggerable) {
     final Command command = mock(Command.class);
 
-    when(command.isViewerTriggerable()).thenReturn(triggerable);
+    when(command.isTriggerable()).thenReturn(triggerable);
     when(command.getTrigger()).thenReturn(commandTrigger);
     when(command.getDescription()).thenReturn(CommandDescription.of(this.arbitraryDataGenerator.getString()));
     return command;
@@ -79,9 +79,9 @@ public class HelpCommandUnitTests extends CommandContractTests {
   private CommandUtils givenAFakeCommandUtils(final ChatUsername chatUsername, final CommandTrigger commandTrigger) {
     final CommandUtils commandUtils = mock(CommandUtils.class);
 
-    when(commandUtils.stripTriggerOffMessage(isA(CommandTrigger.class), isA(Message.class)))
+    when(commandUtils.messageWithoutTrigger(isA(CommandTrigger.class), isA(Message.class)))
         .thenReturn(commandTrigger.value);
-    when(commandUtils.getSanitizedViewerName(isA(MessageEvent.class))).thenReturn(chatUsername);
+    when(commandUtils.sanitizedChatUsername(isA(MessageEvent.class))).thenReturn(chatUsername);
     return commandUtils;
   }
 

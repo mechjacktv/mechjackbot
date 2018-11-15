@@ -30,7 +30,7 @@ public class RestrictToRegularMethodInterceptorUnitTests {
   public final void invoke_isRegularViewer_invokesCommand() throws Throwable {
     final CommandUtils commandUtils = mock(CommandUtils.class);
     final RestrictToRegularMethodInterceptor subjectUnderTest = this.givenASubjectToTest(commandUtils);
-    when(commandUtils.isRegularViewer(isA(MessageEvent.class))).thenReturn(true);
+    when(commandUtils.isRegular(isA(MessageEvent.class))).thenReturn(true);
     final MethodInvocation methodInvocation = this.methodInterceptorUtils.givenAFakeMethodInvocation();
 
     subjectUnderTest.invoke(methodInvocation);
@@ -42,7 +42,7 @@ public class RestrictToRegularMethodInterceptorUnitTests {
   public final void invoke_isNotRegularViewer_commandIsNotInvoked() throws Throwable {
     final CommandUtils commandUtils = mock(CommandUtils.class);
     final RestrictToRegularMethodInterceptor subjectUnderTest = this.givenASubjectToTest(commandUtils);
-    when(commandUtils.isRegularViewer(isA(MessageEvent.class))).thenReturn(false);
+    when(commandUtils.isRegular(isA(MessageEvent.class))).thenReturn(false);
     final MethodInvocation methodInvocation = this.methodInterceptorUtils.givenAFakeMethodInvocation();
 
     subjectUnderTest.invoke(methodInvocation);

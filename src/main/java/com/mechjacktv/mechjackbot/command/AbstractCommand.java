@@ -4,28 +4,56 @@ import com.mechjacktv.mechjackbot.*;
 
 public abstract class AbstractCommand implements Command {
 
-  private final AppConfiguration appConfiguration;
-  private final CommandDescription commandDescription;
-  private final CommandTriggerKey commandTriggerKey;
-  private final CommandTrigger commandTriggerDefault;
-  private final CommandUtils commandUtils;
-  private final boolean viewerTriggerable;
+  protected static final class Configuration {
 
-  protected AbstractCommand(final AppConfiguration appConfiguration, final CommandDescription commandDescription,
-      final CommandTriggerKey commandTriggerKey, final CommandTrigger commandTriggerDefault,
-      final CommandUtils commandUtils) {
-    this(appConfiguration, commandDescription, commandTriggerKey, commandTriggerDefault, commandUtils, true);
+    private final AppConfiguration appConfiguration;
+    private final CommandUtils commandUtils;
+    private final CommandDescription commandDescription;
+    private final CommandTriggerKey commandTriggerKey;
+    private final CommandTrigger commandTriggerDefault;
+    private CommandUsage commandUsage;
+    private boolean triggerable;
+
+    public Configuration(final AppConfiguration appConfiguration, final CommandUtils commandUtils,
+        final CommandDescription commandDescription, final CommandTriggerKey commandTriggerKey,
+        final CommandTrigger commandTriggerDefault) {
+      this.appConfiguration = appConfiguration;
+      this.commandDescription = commandDescription;
+      this.commandTriggerKey = commandTriggerKey;
+      this.commandTriggerDefault = commandTriggerDefault;
+      this.commandUtils = commandUtils;
+      this.commandUsage = CommandUsage.of("");
+      this.triggerable = true;
+    }
+
+    public Configuration setCommandUsage(final CommandUsage commandUsage) {
+      this.commandUsage = commandUsage;
+      return this;
+    }
+
+    public Configuration setTriggerable(final boolean triggerable) {
+      this.triggerable = triggerable;
+      return this;
+    }
+
   }
 
-  protected AbstractCommand(final AppConfiguration appConfiguration, final CommandDescription commandDescription,
-      final CommandTriggerKey commandTriggerKey, final CommandTrigger commandTriggerDefault,
-      final CommandUtils commandUtils, final boolean viewerTriggerable) {
-    this.appConfiguration = appConfiguration;
-    this.commandDescription = commandDescription;
-    this.commandTriggerKey = commandTriggerKey;
-    this.commandTriggerDefault = commandTriggerDefault;
-    this.commandUtils = commandUtils;
-    this.viewerTriggerable = viewerTriggerable;
+  private final AppConfiguration appConfiguration;
+  private final CommandUtils commandUtils;
+  private final CommandDescription commandDescription;
+  private final CommandUsage commandUsage;
+  private final CommandTriggerKey commandTriggerKey;
+  private final CommandTrigger commandTriggerDefault;
+  private final boolean triggerable;
+
+  protected AbstractCommand(final Configuration configuration) {
+    this.appConfiguration = configuration.appConfiguration;
+    this.commandUtils = configuration.commandUtils;
+    this.commandDescription = configuration.commandDescription;
+    this.commandUsage = configuration.commandUsage;
+    this.commandTriggerKey = configuration.commandTriggerKey;
+    this.commandTriggerDefault = configuration.commandTriggerDefault;
+    this.triggerable = configuration.triggerable;
   }
 
   @Override
@@ -39,8 +67,13 @@ public abstract class AbstractCommand implements Command {
   }
 
   @Override
-  public boolean isViewerTriggerable() {
-    return this.viewerTriggerable;
+  public CommandUsage getUsage() {
+    return this.commandUsage;
+  }
+
+  @Override
+  public boolean isTriggerable() {
+    return this.triggerable;
   }
 
   @Override
@@ -50,7 +83,7 @@ public abstract class AbstractCommand implements Command {
 
   @Override
   public boolean isTriggered(MessageEvent messageEvent) {
-    return this.commandUtils.isCommandTrigger(this.getTrigger(), messageEvent);
+    return this.commandUtils.isTriggered(this, messageEvent);
   }
 
 }

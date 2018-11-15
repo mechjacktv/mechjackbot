@@ -20,9 +20,8 @@ public class QuitCommand extends AbstractCommand {
   @Inject
   public QuitCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils,
       final ScheduleService scheduleService) {
-    super(appConfiguration, CommandDescription.of("Shuts the chat bot down."),
-        CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT),
-        commandUtils);
+    super(new Configuration(appConfiguration, commandUtils, CommandDescription.of("Shuts the chat bot down."),
+        CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT)));
     this.appConfiguration = appConfiguration;
     this.scheduleService = scheduleService;
   }
