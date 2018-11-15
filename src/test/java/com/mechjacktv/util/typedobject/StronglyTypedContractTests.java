@@ -1,9 +1,9 @@
 package com.mechjacktv.util.typedobject;
 
-import org.junit.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+
+import org.junit.Test;
 
 public abstract class StronglyTypedContractTests<T> {
 

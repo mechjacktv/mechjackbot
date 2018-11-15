@@ -1,13 +1,13 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
+
 import org.junit.Test;
 import org.pircbotx.User;
 
 import com.mechjacktv.ArbitraryDataGenerator;
 import com.mechjacktv.mechjackbot.ChatUsername;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 public class PircBotXChatUserUnitTests {
 

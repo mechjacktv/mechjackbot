@@ -2,6 +2,7 @@ package com.mechjacktv.mechjackbot.command.interceptor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -13,9 +14,15 @@ import com.mechjacktv.mechjackbot.MessageEvent;
 
 final class LogCommandHandleMessageMethodInterceptor implements MethodInterceptor {
 
+  private final Function<String, Logger> loggerFactory;
   private final Map<String, Logger> loggers;
 
   LogCommandHandleMessageMethodInterceptor() {
+    this(LoggerFactory::getLogger);
+  }
+
+  LogCommandHandleMessageMethodInterceptor(final Function<String, Logger> loggerFactory) {
+    this.loggerFactory = loggerFactory;
     this.loggers = new HashMap<>();
   }
 
@@ -47,7 +54,7 @@ final class LogCommandHandleMessageMethodInterceptor implements MethodIntercepto
       return this.loggers.get(name);
     }
 
-    final Logger logger = LoggerFactory.getLogger(name);
+    final Logger logger = this.loggerFactory.apply(name);
 
     this.loggers.put(name, logger);
     return logger;
