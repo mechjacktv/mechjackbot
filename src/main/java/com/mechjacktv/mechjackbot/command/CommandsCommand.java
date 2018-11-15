@@ -36,7 +36,7 @@ public class CommandsCommand extends AbstractCommand {
 
   @Override
   @GlobalCoolDown
-  public void handleMessage(final MessageEvent messageEvent) {
+  public void handleMessageEvent(final MessageEvent messageEvent) {
     final String messageFormat = this.appConfiguration.get(COMMAND_MESSAGE_FORMAT_KEY, COMMAND_MESSAGE_FORMAT_DEFAULT);
     final StringBuilder builder = new StringBuilder();
 

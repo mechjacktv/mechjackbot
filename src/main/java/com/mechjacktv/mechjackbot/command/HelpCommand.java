@@ -40,7 +40,7 @@ public class HelpCommand extends AbstractCommand {
 
   @Override
   @GlobalCoolDown
-  public void handleMessage(final MessageEvent messageEvent) {
+  public void handleMessageEvent(final MessageEvent messageEvent) {
     final Message message = messageEvent.getMessage();
     final String[] messageParts = message.value.split("\\s+");
 

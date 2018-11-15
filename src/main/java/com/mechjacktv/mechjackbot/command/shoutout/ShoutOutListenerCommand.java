@@ -30,7 +30,7 @@ public class ShoutOutListenerCommand extends AbstractCommand {
   }
 
   @Override
-  public void handleMessage(MessageEvent messageEvent) {
+  public void handleMessageEvent(MessageEvent messageEvent) {
     this.shoutOutService.sendCasterShoutOut(messageEvent, this.commandUtils.getSanitizedViewerName(messageEvent));
   }
 

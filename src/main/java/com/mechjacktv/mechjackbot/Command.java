@@ -8,7 +8,7 @@ public interface Command {
 
   CommandTrigger getTrigger();
 
-  void handleMessage(MessageEvent messageEvent);
+  void handleMessageEvent(MessageEvent messageEvent);
 
   boolean isTriggerable();
 

@@ -11,6 +11,6 @@ public interface MessageEventHandler {
 
   void addCommand(Command command);
 
-  void handleMessage(MessageEvent messageEvent);
+  void handleMessageEvent(MessageEvent messageEvent);
 
 }

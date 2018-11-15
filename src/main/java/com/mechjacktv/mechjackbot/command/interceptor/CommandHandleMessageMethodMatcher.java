@@ -8,7 +8,7 @@ final class CommandHandleMessageMethodMatcher extends AbstractMatcher<Method> {
 
   @Override
   public final boolean matches(final Method method) {
-    return "handleMessage".equals(method.getName());
+    return "handleMessageEvent".equals(method.getName());
   }
 
 }

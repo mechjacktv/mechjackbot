@@ -32,7 +32,7 @@ public class PingCommand extends AbstractCommand {
   @Override
   @RestrictToPrivileged
   @GlobalCoolDown
-  public void handleMessage(MessageEvent messageEvent) {
+  public void handleMessageEvent(MessageEvent messageEvent) {
     final String messageFormat = this.appConfiguration.get(COMMAND_MESSAGE_FORMAT_KEY,
         COMMAND_MESSAGE_FORMAT_DEFAULT);
 

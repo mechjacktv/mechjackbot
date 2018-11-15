@@ -33,7 +33,7 @@ public class QuitCommand extends AbstractCommand {
 
   @Override
   @RestrictToOwner
-  public void handleMessage(final MessageEvent messageEvent) {
+  public void handleMessageEvent(final MessageEvent messageEvent) {
     final String messageFormat = this.appConfiguration.get(COMMAND_MESSAGE_FORMAT_KEY,
         COMMAND_MESSAGE_FORMAT_DEFAULT);
     final ChatBot chatBot = messageEvent.getChatBot();

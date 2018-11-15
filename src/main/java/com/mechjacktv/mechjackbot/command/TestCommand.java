@@ -27,7 +27,7 @@ public class TestCommand extends AbstractCommand {
   @Override
   @RestrictToOwner
   @GlobalCoolDown
-  public void handleMessage(final MessageEvent messageEvent) {
+  public void handleMessageEvent(final MessageEvent messageEvent) {
     messageEvent.sendResponse(Message.of("Your test is run"));
   }
 

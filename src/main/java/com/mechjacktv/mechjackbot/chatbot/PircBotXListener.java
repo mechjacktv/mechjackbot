@@ -21,14 +21,13 @@ final class PircBotXListener extends ListenerAdapter {
 
   @Inject
   public PircBotXListener(final Set<Command> commands, final AppConfiguration appConfiguration,
-      final ExecutionUtils executionUtils,
-      final MessageEventHandler messageEventHandler) {
-    for (final Command command : commands) {
-      messageEventHandler.addCommand(command);
-    }
+      final ExecutionUtils executionUtils, final MessageEventHandler messageEventHandler) {
     this.appConfiguration = appConfiguration;
     this.executionUtils = executionUtils;
     this.messageEventHandler = messageEventHandler;
+    for (final Command command : commands) {
+      this.messageEventHandler.addCommand(command);
+    }
   }
 
   @Override
@@ -38,7 +37,8 @@ final class PircBotXListener extends ListenerAdapter {
 
   @Override
   public final void onGenericMessage(final GenericMessageEvent event) {
-    this.messageEventHandler.handleMessage(new PircBotXMessageEvent(this.appConfiguration, this.executionUtils, event));
+    this.messageEventHandler
+        .handleMessageEvent(new PircBotXMessageEvent(this.appConfiguration, this.executionUtils, event));
   }
 
 }
