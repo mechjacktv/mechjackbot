@@ -1,5 +1,9 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.Mockito.*;
+
 import java.util.Collection;
 import java.util.Optional;
 
@@ -12,10 +16,6 @@ import com.mechjacktv.mechjackbot.CommandTrigger;
 import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.Mockito.*;
 
 public class PircBotXMessageEventHandlerUnitTests {
 

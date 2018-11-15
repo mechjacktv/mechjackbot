@@ -56,31 +56,6 @@ public abstract class ExecutionUtilsContractTests {
     assertThat(thrown).isInstanceOf(TestableException.class).hasMessage(EXCEPTION_MESSAGE);
   }
 
-  @Test
-  public final void softenException_onlyThrowableConstructor_throwsTestableWithoutMessageException() {
-    final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
-
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.softenException(
-        () -> {
-          throw new Exception(EXCEPTION_MESSAGE);
-        }, TestableWithoutMessageException.class));
-
-    assertThat(thrown).isInstanceOf(TestableWithoutMessageException.class)
-        .hasMessage(EXCEPTION_MESSAGE);
-  }
-
-  @Test
-  public final void softenException_onlyDefaultConstructor_throwsSoftenedException() {
-    final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
-
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.softenException(
-        () -> {
-          throw new Exception(EXCEPTION_MESSAGE);
-        }, TestableWithoutMessageAndCauseException.class));
-
-    assertThat(thrown).isInstanceOf(SoftenedException.class).hasMessage(EXCEPTION_MESSAGE);
-  }
-
   private SupplierWithException<Object> supplierThrowsException() throws Exception {
     throw new Exception(EXCEPTION_MESSAGE);
   }
@@ -92,22 +67,6 @@ public abstract class ExecutionUtilsContractTests {
     public TestableException(String message, Throwable cause) {
       super(message, cause);
     }
-
-  }
-
-  private static final class TestableWithoutMessageException extends RuntimeException {
-
-    private static final long serialVersionUID = -6422897678875431696L;
-
-    public TestableWithoutMessageException(Throwable cause) {
-      super(cause.getMessage(), cause);
-    }
-
-  }
-
-  private static final class TestableWithoutMessageAndCauseException extends RuntimeException {
-
-    private static final long serialVersionUID = 6823124773904965273L;
 
   }
 
