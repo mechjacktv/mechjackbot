@@ -2,7 +2,7 @@ package com.mechjacktv.keyvaluestore;
 
 import com.google.inject.AbstractModule;
 
-public final class MapDbKeyValueStoreModule extends AbstractModule {
+public final class KeyValueStoreModule extends AbstractModule {
 
   @Override
   protected void configure() {

@@ -2,7 +2,7 @@ package com.mechjacktv.util.scheduleservice;
 
 import com.google.inject.AbstractModule;
 
-public final class DefaultScheduleServiceModule extends AbstractModule {
+public final class ScheduleServiceModule extends AbstractModule {
 
   @Override
   protected final void configure() {

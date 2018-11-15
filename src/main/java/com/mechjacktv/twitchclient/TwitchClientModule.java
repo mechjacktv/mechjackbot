@@ -8,7 +8,7 @@ import com.mechjacktv.twitchclient.endpoint.DefaultTwitchUsersEndpoint;
 import com.mechjacktv.twitchclient.endpoint.DefaultTwitchUsersFollowsEndpoint;
 import com.mechjacktv.twitchclient.messageadapter.MessageTypeAdapterRegistrar;
 
-public final class DefaultTwitchClientModule extends AbstractModule {
+public final class TwitchClientModule extends AbstractModule {
 
   @Override
   protected final void configure() {

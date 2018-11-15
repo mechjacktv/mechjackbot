@@ -6,7 +6,7 @@ import com.mechjacktv.mechjackbot.AppConfiguration;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.twitchclient.TwitchClientConfiguration;
 
-public final class DefaultConfigurationModule extends AbstractModule {
+public final class ConfigurationModule extends AbstractModule {
 
   @Override
   protected void configure() {

@@ -5,14 +5,14 @@ import com.google.inject.multibindings.Multibinder;
 
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.CommandUtils;
-import com.mechjacktv.mechjackbot.command.interceptor.DefaultCommandInterceptorsModule;
+import com.mechjacktv.mechjackbot.command.interceptor.CommandInterceptorsModule;
 import com.mechjacktv.mechjackbot.command.shoutout.ShoutOutModule;
 
-public final class DefaultCommandsModule extends AbstractModule {
+public final class CommandsModule extends AbstractModule {
 
   @Override
   protected final void configure() {
-    this.install(new DefaultCommandInterceptorsModule());
+    this.install(new CommandInterceptorsModule());
     this.install(new ShoutOutModule());
 
     this.bind(CommandUtils.class).to(DefaultCommandUtils.class).asEagerSingleton();

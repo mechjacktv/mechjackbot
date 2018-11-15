@@ -5,7 +5,7 @@ import com.google.inject.matcher.Matchers;
 
 import com.mechjacktv.mechjackbot.*;
 
-public final class DefaultCommandInterceptorsModule extends AbstractModule {
+public final class CommandInterceptorsModule extends AbstractModule {
 
   @Override
   protected final void configure() {
