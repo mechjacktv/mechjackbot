@@ -9,8 +9,8 @@ import com.mechjacktv.util.ExecutionUtils;
 
 public final class PircBotXMessageEvent implements MessageEvent {
 
-  public static final String RESPONSE_MESSAGE_FORMAT_KEY = "chat_bot.message_event.message_format";
-  public static final String RESPONSE_MESSAGE_FORMAT_DEFAULT = "/me MrDestructoid > %s";
+  static final String RESPONSE_MESSAGE_FORMAT_KEY = PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_KEY;
+  static final String RESPONSE_MESSAGE_FORMAT_DEFAULT = PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_DEFAULT;
 
   private final AppConfiguration appConfiguration;
   private final ExecutionUtils executionUtils;

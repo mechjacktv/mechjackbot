@@ -116,6 +116,46 @@ public class PircBotXChatBotUnitTests {
   }
 
   @Test
+  public final void sendMessage_nullChannel_throwsNullPointerExceptionWithMessage() {
+    final PircBotXChatBot subjectUnderTest = this.givenIHaveASubjectToTest(mock(PircBotX.class));
+
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.sendMessage(null,
+        this.arbitraryDataGenerator.getString()));
+
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.executionUtils.nullMessageForName("channel"));
+  }
+
+  @Test
+  public final void sendMessage_nullMessage_throwsNullPointerExceptionWithMessage() {
+    final PircBotXChatBot subjectUnderTest = this.givenIHaveASubjectToTest(mock(PircBotX.class));
+
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.sendMessage(
+        this.arbitraryDataGenerator.getString(), null));
+
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.executionUtils.nullMessageForName("message"));
+  }
+
+  @Test
+  public final void sendMessage_isCalled_sendsTheFormattedMessage() {
+    final String messageFormat = "Formatted %s";
+    final AppConfiguration appConfiguration = mock(AppConfiguration.class);
+    when(appConfiguration.get(eq(PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_KEY),
+        eq(PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_DEFAULT))).thenReturn(messageFormat);
+    final PircBotX pircBotX = mock(PircBotX.class);
+    final OutputIRC outputIRC = mock(OutputIRC.class);
+    when(pircBotX.sendIRC()).thenReturn(outputIRC);
+    final PircBotXChatBot subjectUnderTest = this.givenIHaveASubjectToTest(appConfiguration, pircBotX);
+    final String channel = this.arbitraryDataGenerator.getString();
+    final String message = this.arbitraryDataGenerator.getString();
+
+    subjectUnderTest.sendMessage(channel, message);
+
+    verify(outputIRC).message(eq(channel), eq(String.format(messageFormat, message)));
+  }
+
+  @Test
   public final void stop_whenCalled_callsStopOnPircBotX() {
     final String shutdownMessage = this.arbitraryDataGenerator.getString();
     final AppConfiguration appConfiguration = mock(AppConfiguration.class);

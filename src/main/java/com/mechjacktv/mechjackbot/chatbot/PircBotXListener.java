@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.pircbotx.hooks.ListenerAdapter;
+import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.PingEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
@@ -15,6 +16,9 @@ import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.util.ExecutionUtils;
 
 final class PircBotXListener extends ListenerAdapter {
+
+  public static final String JOIN_EVENT_MESSAGE_KEY = "chat_bot.join_event.message";
+  public static final String JOIN_EVENT_MESSAGE_DEFAULT = "Present and ready for action";
 
   private final AppConfiguration appConfiguration;
   private final ExecutionUtils executionUtils;
@@ -37,9 +41,9 @@ final class PircBotXListener extends ListenerAdapter {
   }
 
   @Override
-  public final void onGenericMessage(final GenericMessageEvent genericMessageEvent) {
+  public final void onGenericMessage(final GenericMessageEvent event) {
     final MessageEvent messageEvent = new PircBotXMessageEvent(this.appConfiguration,
-        this.executionUtils, genericMessageEvent);
+        this.executionUtils, event);
 
     for (final Command command : this.commandRegistry.getCommands()) {
       if (command.isTriggered(messageEvent)) {
@@ -48,4 +52,11 @@ final class PircBotXListener extends ListenerAdapter {
     }
   }
 
+  @Override
+  public void onJoin(final JoinEvent event) {
+    final PircBotXChatBot chatBot = new PircBotXChatBot(this.appConfiguration, this.executionUtils, event.getBot());
+
+    chatBot.sendMessage(event.getChannel().getName(), this.appConfiguration.get(JOIN_EVENT_MESSAGE_KEY,
+        JOIN_EVENT_MESSAGE_DEFAULT));
+  }
 }

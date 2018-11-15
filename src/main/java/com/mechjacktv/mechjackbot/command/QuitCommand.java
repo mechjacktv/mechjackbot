@@ -12,7 +12,7 @@ public class QuitCommand extends AbstractCommand {
   private static final String COMMAND_TRIGGER_DEFAULT = "!quit";
 
   private static final String COMMAND_MESSAGE_FORMAT_KEY = "command.quit.message_format";
-  private static final String COMMAND_MESSAGE_FORMAT_DEFAULT = "MechJackBot powering down";
+  private static final String COMMAND_MESSAGE_FORMAT_DEFAULT = "Powering down";
 
   private final AppConfiguration appConfiguration;
   private final ScheduleService scheduleService;

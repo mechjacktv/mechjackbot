@@ -1,5 +1,6 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 import javax.inject.Inject;
@@ -15,11 +16,14 @@ import com.mechjacktv.util.ExecutionUtils;
 
 public final class PircBotXChatBot implements ChatBot {
 
-  public static final String TWITCH_IRC_SERVER_HOST = "irc.chat.twitch.tv";
-  public static final Integer TWITCH_IRC_SERVER_PORT = 6667;
+  static final String TWITCH_IRC_SERVER_HOST = "irc.chat.twitch.tv";
+  static final Integer TWITCH_IRC_SERVER_PORT = 6667;
 
-  public static final String SHUTDOWN_MESSAGE_KEY = "chat_bot.shutdown.message";
-  public static final String SHUTDOWN_MESSAGE_DEFAULT = "Shutdown";
+  static final String SHUTDOWN_MESSAGE_KEY = "chat_bot.shutdown.message";
+  private static final String SHUTDOWN_MESSAGE_DEFAULT = "Shutdown";
+
+  static final String CHAT_BOT_MESSAGE_FORMAT_KEY = "chat_bot.message_format";
+  static final String CHAT_BOT_MESSAGE_FORMAT_DEFAULT = "/me MrDestructoid > %s";
 
   private final AppConfiguration appConfiguration;
   private final ExecutionUtils executionUtils;
@@ -53,6 +57,13 @@ public final class PircBotXChatBot implements ChatBot {
     this.appConfiguration = appConfiguration;
     this.executionUtils = executionUtils;
     this.pircBotX = pircBotX;
+  }
+
+  void sendMessage(final String channel, final String message) {
+    Objects.requireNonNull(channel, this.executionUtils.nullMessageForName("channel"));
+    Objects.requireNonNull(message, this.executionUtils.nullMessageForName("message"));
+    this.pircBotX.sendIRC().message(channel, String.format(this.appConfiguration.get(CHAT_BOT_MESSAGE_FORMAT_KEY,
+        CHAT_BOT_MESSAGE_FORMAT_DEFAULT), message));
   }
 
   @Override
