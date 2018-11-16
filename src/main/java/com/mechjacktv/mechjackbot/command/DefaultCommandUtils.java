@@ -136,7 +136,7 @@ public final class DefaultCommandUtils implements CommandUtils {
     }
 
     final String commandTriggerRegex = commandTrigger + "(\\s+.+)?";
-    final Pattern commandTriggerPattern = Pattern.compile(commandTriggerRegex);
+    final Pattern commandTriggerPattern = Pattern.compile(commandTriggerRegex, Pattern.CASE_INSENSITIVE);
 
     this.commandTriggerPatterns.put(commandTrigger, commandTriggerPattern);
     return commandTriggerPattern;

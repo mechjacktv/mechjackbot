@@ -364,6 +364,18 @@ public abstract class CommandUtilsContractTests {
   }
 
   @Test
+  public final void isTriggered_triggerIsWrongCase_returnsTrue() {
+    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
+    final Command command = new RestrictedCommand(this, subjectUnderTest);
+    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
+    when(messageEvent.getMessage()).thenReturn(Message.of(command.getTrigger().value.toUpperCase()));
+
+    final boolean result = subjectUnderTest.isTriggered(command, messageEvent);
+
+    assertThat(result).isTrue();
+  }
+
+  @Test
   public final void sendUsage_nullCommand_throwsNullPointerException() {
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
