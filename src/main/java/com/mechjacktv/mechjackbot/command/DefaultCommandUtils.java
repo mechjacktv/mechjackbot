@@ -10,16 +10,11 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.TimeUtils;
 
 public final class DefaultCommandUtils implements CommandUtils {
-
-  final Logger log = LoggerFactory.getLogger(DefaultCommandUtils.class);
 
   private final AppConfiguration appConfiguration;
   private final ExecutionUtils executionUtils;
@@ -52,11 +47,11 @@ public final class DefaultCommandUtils implements CommandUtils {
       if (Objects.isNull(roles)) {
         return true;
       }
-      return this.hasRole(command, messageEvent, roles.value());
+      return this.hasRole(messageEvent, roles.value());
     }, CommandException.class);
   }
 
-  private boolean hasRole(final Command command, final MessageEvent messageEvent, ViewerRole[] roles) {
+  private boolean hasRole(final MessageEvent messageEvent, ViewerRole[] roles) {
     final ChatUser chatUser = messageEvent.getChatUser();
     final ChatUsername chatUsername = this.sanitizeChatUsername(chatUser.getUsername());
 
@@ -82,7 +77,7 @@ public final class DefaultCommandUtils implements CommandUtils {
       final NoCoolDown noCoolDown = method.getAnnotation(NoCoolDown.class);
 
       if (Objects.nonNull(noCoolDown)
-          || this.hasRole(command, messageEvent, new ViewerRole[] { ViewerRole.OWNER, ViewerRole.MODERATOR })) {
+          || this.hasRole(messageEvent, new ViewerRole[] { ViewerRole.OWNER, ViewerRole.MODERATOR })) {
         return true;
       } else if (this.isCooledDown(command.getTrigger(), messageEvent.getChatUser().getUsername(), now)) {
         this.commandLastTrigger.put(command.getTrigger(), LastTrigger.of(now));
