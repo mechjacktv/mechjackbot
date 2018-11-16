@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.MessageEvent;
-import com.mechjacktv.test.ArbitraryDataGenerator;
+import com.mechjacktv.util.ArbitraryDataGenerator;
 
 public class CommandHandleMessageMethodMatcherUnitTests {
 

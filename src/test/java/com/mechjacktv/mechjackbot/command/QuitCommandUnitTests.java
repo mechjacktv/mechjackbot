@@ -8,7 +8,7 @@ import static org.mockito.Mockito.*;
 import org.junit.Test;
 
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.test.ArbitraryDataGenerator;
+import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 public class QuitCommandUnitTests extends CommandContractTests {

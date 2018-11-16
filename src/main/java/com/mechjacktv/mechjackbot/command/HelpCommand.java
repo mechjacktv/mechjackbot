@@ -59,7 +59,7 @@ public class HelpCommand extends AbstractCommand {
         COMMAND_MESSAGE_FORMAT_DEFAULT);
 
     messageEvent.sendResponse(Message.of(String.format(messageFormat,
-        this.commandUtils.sanitizedChatUsername(this, messageEvent),
+        this.commandUtils.sanitizeChatUsername(messageEvent.getChatUser().getUsername()),
         command.getTrigger(), command.getDescription())));
   }
 
@@ -68,7 +68,7 @@ public class HelpCommand extends AbstractCommand {
         COMMAND_MISSING_MESSAGE_FORMAT_DEFAULT);
 
     messageEvent.sendResponse(Message.of(String.format(messageFormat,
-        this.commandUtils.sanitizedChatUsername(this, messageEvent), commandTrigger)));
+        this.commandUtils.sanitizeChatUsername(messageEvent.getChatUser().getUsername()), commandTrigger)));
   }
 
 }

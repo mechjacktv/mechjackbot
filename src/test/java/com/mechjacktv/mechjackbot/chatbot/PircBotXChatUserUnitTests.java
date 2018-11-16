@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.pircbotx.User;
 
 import com.mechjacktv.mechjackbot.ChatUsername;
-import com.mechjacktv.test.ArbitraryDataGenerator;
+import com.mechjacktv.util.ArbitraryDataGenerator;
 
 public class PircBotXChatUserUnitTests {
 

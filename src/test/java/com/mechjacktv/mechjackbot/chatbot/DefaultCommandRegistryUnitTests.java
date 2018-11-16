@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.CommandTrigger;
-import com.mechjacktv.test.ArbitraryDataGenerator;
+import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
 

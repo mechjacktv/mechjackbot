@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.test.ArbitraryDataGenerator;
+import com.mechjacktv.util.ArbitraryDataGenerator;
 
 public class HelpCommandUnitTests extends CommandContractTests {
 
@@ -81,7 +81,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
 
     when(commandUtils.messageWithoutTrigger(isA(Command.class), isA(MessageEvent.class)))
         .thenReturn(Message.of(commandTrigger.value));
-    when(commandUtils.sanitizedChatUsername(isA(Command.class), isA(MessageEvent.class))).thenReturn(chatUsername);
+    when(commandUtils.sanitizeChatUsername(isA(ChatUsername.class))).thenReturn(chatUsername);
     return commandUtils;
   }
 
@@ -92,10 +92,13 @@ public class HelpCommandUnitTests extends CommandContractTests {
   private MessageEvent givenAFakeMessageEvent(final Command command, final CommandTrigger commandTrigger,
       final ArgumentCaptor<Message> argumentCaptor) {
     final MessageEvent messageEvent = mock(MessageEvent.class);
+    final ChatUser chatUser = mock(ChatUser.class);
     final Message message = Message.of(String.format("%s %s", command.getTrigger(), commandTrigger));
 
     when(messageEvent.getMessage()).thenReturn(message);
+    when(messageEvent.getChatUser()).thenReturn(chatUser);
     doNothing().when(messageEvent).sendResponse(argumentCaptor.capture());
+    when(chatUser.getUsername()).thenReturn(ChatUsername.of(this.arbitraryDataGenerator.getString()));
     return messageEvent;
   }
 

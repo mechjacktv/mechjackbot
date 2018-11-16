@@ -6,10 +6,10 @@ import java.util.Optional;
 
 import org.mockito.Mockito;
 
-import com.mechjacktv.test.ArbitraryDataGenerator;
-import com.mechjacktv.test.PropertiesUtils;
 import com.mechjacktv.twitchclient.TwitchClientConfiguration;
 import com.mechjacktv.twitchclient.TwitchClientConfigurationContractTests;
+import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.util.PropertiesUtils;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 public class PropertiesChatBotConfiguration_TwitchClientConfigurationUnitTests extends

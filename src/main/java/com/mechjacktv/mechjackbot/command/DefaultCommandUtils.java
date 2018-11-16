@@ -10,18 +10,16 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.TimeUtils;
 
 public final class DefaultCommandUtils implements CommandUtils {
 
-  private static final String COMMAND_COMMAND_COOL_DOWN_KEY = "command.command_cool_down.seconds";
-  private static final String COMMAND_COMMAND_COOL_DOWN_DEFAULT = "5";
-  private static final String COMMAND_VIEWER_COOL_DOWN_KEY = "command.viewer_cool_down.seconds";
-  private static final String COMMAND_VIEWER_COOL_DOWN_DEFAULT = "15";
-  private static final String COMMAND_USAGE_MESSAGE_FORMAT_KEY = "command.usage_message_format";
-  private static final String COMMAND_USAGE_MESSAGE_FORMAT_DEFAULT = "@%s, usage: %s %s";
+  final Logger log = LoggerFactory.getLogger(DefaultCommandUtils.class);
 
   private final AppConfiguration appConfiguration;
   private final ExecutionUtils executionUtils;
@@ -45,6 +43,8 @@ public final class DefaultCommandUtils implements CommandUtils {
 
   @Override
   public boolean hasRole(final Command command, final MessageEvent messageEvent) {
+    Objects.requireNonNull(command, this.executionUtils.nullMessageForName("command"));
+    Objects.requireNonNull(messageEvent, this.executionUtils.nullMessageForName("messageEvent"));
     return this.executionUtils.softenException(() -> {
       final Method method = command.getClass().getMethod("handleMessageEvent", MessageEvent.class);
       final RestrictToRoles roles = method.getAnnotation(RestrictToRoles.class);
@@ -60,31 +60,49 @@ public final class DefaultCommandUtils implements CommandUtils {
     final ChatUser chatUser = messageEvent.getChatUser();
     final ChatUsername chatUsername = this.sanitizeChatUsername(chatUser.getUsername());
 
-    return this.botOwner.equals(chatUsername);
+    if (this.botOwner.equals(chatUsername)) {
+      return true;
+    } else {
+      for (final ViewerRole role : roles) {
+        if (chatUser.hasRole(role)) {
+          return true;
+        }
+      }
+      return false;
+    }
   }
 
   @Override
   public final boolean isCooledDown(final Command command, final MessageEvent messageEvent) {
-    if (this.hasRole(command, messageEvent, new ViewerRole[] { ViewerRole.OWNER, ViewerRole.MODERATOR })
-        || this.isCooledDown(command.getTrigger(), messageEvent.getChatUser().getUsername())) {
-      this.commandLastTrigger.put(command.getTrigger(), LastTrigger.of(this.timeUtils.currentTime()));
-      this.viewerLastTrigger.put(messageEvent.getChatUser().getUsername(),
-          LastTrigger.of(this.timeUtils.currentTime()));
-      return true;
-    }
-    return false;
+    Objects.requireNonNull(command, this.executionUtils.nullMessageForName("command"));
+    Objects.requireNonNull(messageEvent, this.executionUtils.nullMessageForName("messageEvent"));
+    return this.executionUtils.softenException(() -> {
+      final long now = this.timeUtils.currentTime();
+      final Method method = command.getClass().getMethod("handleMessageEvent", MessageEvent.class);
+      final NoCoolDown noCoolDown = method.getAnnotation(NoCoolDown.class);
+
+      if (Objects.nonNull(noCoolDown)
+          || this.hasRole(command, messageEvent, new ViewerRole[] { ViewerRole.OWNER, ViewerRole.MODERATOR })) {
+        return true;
+      } else if (this.isCooledDown(command.getTrigger(), messageEvent.getChatUser().getUsername(), now)) {
+        this.commandLastTrigger.put(command.getTrigger(), LastTrigger.of(now));
+        this.viewerLastTrigger.put(messageEvent.getChatUser().getUsername(), LastTrigger.of(now));
+        return true;
+      }
+      return false;
+    }, CommandException.class);
   }
 
-  private boolean isCooledDown(final CommandTrigger commandTrigger, final ChatUsername chatUsername) {
-    return this.isCooledDown(() -> this.commandLastTrigger.get(commandTrigger), this::getCommandCoolDown)
-        && this.isCooledDown(() -> this.viewerLastTrigger.get(chatUsername), this::getViewerCoolDown);
+  private boolean isCooledDown(final CommandTrigger commandTrigger, final ChatUsername chatUsername, final long now) {
+    return this.isCooledDown(() -> this.commandLastTrigger.get(commandTrigger), this::getCommandCoolDown, now)
+        && this.isCooledDown(() -> this.viewerLastTrigger.get(chatUsername), this::getViewerCoolDown, now);
   }
 
   private boolean isCooledDown(final Supplier<LastTrigger> lastTriggerSupplier,
-      final Supplier<CoolDownPeriodMs> coolDownSupplier) {
+      final Supplier<CoolDownPeriodMs> coolDownSupplier, final long now) {
     final LastTrigger lastTrigger = lastTriggerSupplier.get();
 
-    return lastTrigger == null || (this.timeUtils.currentTime() - lastTrigger.value > coolDownSupplier.get().value);
+    return lastTrigger == null || (now - lastTrigger.value > coolDownSupplier.get().value);
   }
 
   private CoolDownPeriodMs getCommandCoolDown() {
@@ -101,6 +119,9 @@ public final class DefaultCommandUtils implements CommandUtils {
 
   @Override
   public final boolean isTriggered(final Command command, final MessageEvent messageEvent) {
+    Objects.requireNonNull(command, this.executionUtils.nullMessageForName("command"));
+    Objects.requireNonNull(messageEvent, this.executionUtils.nullMessageForName("messageEvent"));
+
     final Message message = messageEvent.getMessage();
     final Pattern commandTriggerPattern = this.getCommandTriggerPattern(command.getTrigger());
     final Matcher commandTriggerMatcher = commandTriggerPattern.matcher(message.value);
@@ -110,6 +131,7 @@ public final class DefaultCommandUtils implements CommandUtils {
 
   private Pattern getCommandTriggerPattern(final CommandTrigger commandTrigger) {
     if (this.commandTriggerPatterns.containsKey(commandTrigger)) {
+      // can't test because fully encapsulated
       return this.commandTriggerPatterns.get(commandTrigger);
     }
 
@@ -122,15 +144,22 @@ public final class DefaultCommandUtils implements CommandUtils {
 
   @Override
   public final void sendUsage(final Command command, final MessageEvent messageEvent) {
+    Objects.requireNonNull(command, this.executionUtils.nullMessageForName("command"));
+    Objects.requireNonNull(messageEvent, this.executionUtils.nullMessageForName("messageEvent"));
+
     final String messageFormat = this.appConfiguration.get(COMMAND_USAGE_MESSAGE_FORMAT_KEY,
         COMMAND_USAGE_MESSAGE_FORMAT_DEFAULT);
 
     messageEvent.sendResponse(Message.of(String.format(messageFormat,
-        this.sanitizedChatUsername(command, messageEvent), command.getTrigger(), command.getUsage())));
+        this.sanitizeChatUsername(messageEvent.getChatUser().getUsername()), command.getTrigger(),
+        command.getUsage())));
   }
 
   @Override
   public Message messageWithoutTrigger(final Command command, final MessageEvent messageEvent) {
+    Objects.requireNonNull(command, this.executionUtils.nullMessageForName("command"));
+    Objects.requireNonNull(messageEvent, this.executionUtils.nullMessageForName("messageEvent"));
+
     final CommandTrigger commandTrigger = command.getTrigger();
     final Message message = messageEvent.getMessage();
 
@@ -138,12 +167,10 @@ public final class DefaultCommandUtils implements CommandUtils {
   }
 
   @Override
-  public final ChatUsername sanitizedChatUsername(final Command command, final MessageEvent messageEvent) {
-    return this.sanitizeChatUsername(messageEvent.getChatUser().getUsername());
-  }
+  public final ChatUsername sanitizeChatUsername(ChatUsername chatUsername) {
+    Objects.requireNonNull(chatUsername, this.executionUtils.nullMessageForName("chatUsername"));
 
-  private ChatUsername sanitizeChatUsername(final ChatUsername username) {
-    String sanitizedValue = username.value.trim().toLowerCase();
+    String sanitizedValue = chatUsername.value.trim().toLowerCase();
 
     if (sanitizedValue.startsWith("@")) {
       sanitizedValue = sanitizedValue.substring(1);

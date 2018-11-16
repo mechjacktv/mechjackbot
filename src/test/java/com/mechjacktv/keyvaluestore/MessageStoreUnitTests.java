@@ -8,7 +8,7 @@ import org.mapdb.DBMaker;
 import org.mapdb.Serializer;
 
 import com.mechjacktv.proto.util.UtilsMessage.TestMessage;
-import com.mechjacktv.test.ArbitraryDataGenerator;
+import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.DefaultProtobufUtils;
 import com.mechjacktv.util.ExecutionUtils;

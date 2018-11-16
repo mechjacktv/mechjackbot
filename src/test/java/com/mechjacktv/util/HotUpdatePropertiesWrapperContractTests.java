@@ -14,7 +14,6 @@ import java.util.function.Supplier;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 
-import com.mechjacktv.test.PropertiesUtils;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 public abstract class HotUpdatePropertiesWrapperContractTests {

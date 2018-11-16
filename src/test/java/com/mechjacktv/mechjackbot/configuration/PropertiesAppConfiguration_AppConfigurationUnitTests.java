@@ -8,8 +8,8 @@ import java.util.function.Supplier;
 
 import com.mechjacktv.mechjackbot.AppConfiguration;
 import com.mechjacktv.mechjackbot.AppConfigurationContractTests;
-import com.mechjacktv.test.PropertiesUtils;
 import com.mechjacktv.util.DefaultExecutionUtils;
+import com.mechjacktv.util.PropertiesUtils;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 public class PropertiesAppConfiguration_AppConfigurationUnitTests extends AppConfigurationContractTests {

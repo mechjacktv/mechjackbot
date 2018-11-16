@@ -11,7 +11,7 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.junit.Test;
 
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.test.ArbitraryDataGenerator;
+import com.mechjacktv.util.ArbitraryDataGenerator;
 
 public class RestrictToRolesMethodInterceptorUnitTests {
 

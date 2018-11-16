@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 
-import com.mechjacktv.test.ArbitraryDataGenerator;
+import com.mechjacktv.util.ArbitraryDataGenerator;
 
 public abstract class CommandContractTests {
 

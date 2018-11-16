@@ -17,7 +17,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.test.ArbitraryDataGenerator;
+import com.mechjacktv.util.ArbitraryDataGenerator;
 
 public class CommandsCommandUnitTests extends CommandContractTests {
 

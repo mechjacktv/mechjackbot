@@ -1,15 +1,15 @@
 package com.mechjacktv.mechjackbot.command.interceptor;
 
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
+
 import java.util.function.Function;
 
 import org.aopalliance.intercept.MethodInvocation;
 import org.junit.Test;
 import org.slf4j.Logger;
 
-import com.mechjacktv.test.ArbitraryDataGenerator;
-
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
+import com.mechjacktv.util.ArbitraryDataGenerator;
 
 public class LogCommandHandleMessageMethodInterceptorUnitTests {
 

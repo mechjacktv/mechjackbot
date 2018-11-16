@@ -7,8 +7,8 @@ import org.mockito.Mockito;
 
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.ChatBotConfigurationContractTests;
-import com.mechjacktv.test.ArbitraryDataGenerator;
-import com.mechjacktv.test.PropertiesUtils;
+import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.util.PropertiesUtils;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 public class PropertiesChatBotConfiguration_ChatBotConfigurationUnitTests extends ChatBotConfigurationContractTests {

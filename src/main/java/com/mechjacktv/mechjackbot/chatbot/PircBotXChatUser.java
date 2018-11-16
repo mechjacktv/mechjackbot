@@ -4,6 +4,7 @@ import org.pircbotx.User;
 
 import com.mechjacktv.mechjackbot.ChatUser;
 import com.mechjacktv.mechjackbot.ChatUsername;
+import com.mechjacktv.mechjackbot.ViewerRole;
 
 final class PircBotXChatUser implements ChatUser {
 
@@ -16,6 +17,11 @@ final class PircBotXChatUser implements ChatUser {
   @Override
   public ChatUsername getUsername() {
     return ChatUsername.of(this.user.getNick());
+  }
+
+  @Override
+  public boolean hasRole(ViewerRole viewerRole) {
+    return false;
   }
 
 }

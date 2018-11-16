@@ -3,7 +3,6 @@ package com.mechjacktv.mechjackbot.command.shoutout;
 import javax.inject.Inject;
 
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.AbstractCommand;
 
 @SuppressWarnings("CanBeFinal")
 public class ShoutOutListenerCommand extends AbstractCommand {
@@ -26,12 +25,14 @@ public class ShoutOutListenerCommand extends AbstractCommand {
 
   @Override
   public final boolean isTriggered(final MessageEvent messageEvent) {
-    return this.shoutOutService.isCasterDue(this.commandUtils.sanitizedChatUsername(this, messageEvent));
+    return this.shoutOutService
+        .isCasterDue(this.commandUtils.sanitizeChatUsername(messageEvent.getChatUser().getUsername()));
   }
 
   @Override
   public void handleMessageEvent(final MessageEvent messageEvent) {
-    this.shoutOutService.sendCasterShoutOut(messageEvent, this.commandUtils.sanitizedChatUsername(this, messageEvent));
+    this.shoutOutService.sendCasterShoutOut(messageEvent,
+        this.commandUtils.sanitizeChatUsername(messageEvent.getChatUser().getUsername()));
   }
 
 }

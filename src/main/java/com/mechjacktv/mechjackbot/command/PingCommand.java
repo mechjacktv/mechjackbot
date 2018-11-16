@@ -32,7 +32,7 @@ public class PingCommand extends AbstractCommand {
         COMMAND_MESSAGE_FORMAT_DEFAULT);
 
     messageEvent.sendResponse(Message.of(String.format(messageFormat,
-        this.commandUtils.sanitizedChatUsername(this, messageEvent))));
+        this.commandUtils.sanitizeChatUsername(messageEvent.getChatUser().getUsername()))));
   }
 
 }

@@ -8,7 +8,7 @@ import static org.mockito.Mockito.*;
 import org.junit.Test;
 
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.test.ArbitraryDataGenerator;
+import com.mechjacktv.util.ArbitraryDataGenerator;
 
 public class PingCommandUnitTests extends CommandContractTests {
 
@@ -24,7 +24,7 @@ public class PingCommandUnitTests extends CommandContractTests {
   private Command givenASubjectToTest(final String messageFormat, final ChatUsername chatUsername) {
     final AppConfiguration appConfiguration = this.givenAFakeAppConfiguration(messageFormat);
     final CommandUtils commandUtils = mock(CommandUtils.class);
-    when(commandUtils.sanitizedChatUsername(isA(Command.class), isA(MessageEvent.class))).thenReturn(chatUsername);
+    when(commandUtils.sanitizeChatUsername(isA(ChatUsername.class))).thenReturn(chatUsername);
 
     return this.givenASubjectToTest(appConfiguration, commandUtils);
   }
@@ -50,11 +50,20 @@ public class PingCommandUnitTests extends CommandContractTests {
     return appConfiguration;
   }
 
+  private MessageEvent givenAFakeMessageEvent() {
+    final MessageEvent messageEvent = mock(MessageEvent.class);
+    final ChatUser chatUser = mock(ChatUser.class);
+
+    when(messageEvent.getChatUser()).thenReturn(chatUser);
+    when(chatUser.getUsername()).thenReturn(ChatUsername.of(this.arbitraryDataGenerator.getString()));
+    return messageEvent;
+  }
+
   @Test
   public final void handleMessageEvent_defaultFormat_sendsDefaultMessage() {
     final String messageFormat = COMMAND_MESSAGE_FORMAT_DEFAULT;
     final ChatUsername chatUsername = ChatUsername.of(this.arbitraryDataGenerator.getString());
-    final MessageEvent messageEvent = mock(MessageEvent.class);
+    final MessageEvent messageEvent = givenAFakeMessageEvent();
     final Command subjectUnderTest = this.givenASubjectToTest(messageFormat, chatUsername);
 
     subjectUnderTest.handleMessageEvent(messageEvent);
@@ -66,7 +75,7 @@ public class PingCommandUnitTests extends CommandContractTests {
   public final void handleMessageEvent_customFormat_sendsCustomMessage() {
     final String messageFormat = this.arbitraryDataGenerator.getString() + ", %s";
     final ChatUsername chatUsername = ChatUsername.of(this.arbitraryDataGenerator.getString());
-    final MessageEvent messageEvent = mock(MessageEvent.class);
+    final MessageEvent messageEvent = givenAFakeMessageEvent();
     final Command subjectUnderTest = this.givenASubjectToTest(messageFormat, chatUsername);
 
     subjectUnderTest.handleMessageEvent(messageEvent);
