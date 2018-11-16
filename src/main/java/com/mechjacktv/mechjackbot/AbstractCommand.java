@@ -2,40 +2,6 @@ package com.mechjacktv.mechjackbot;
 
 public abstract class AbstractCommand implements Command {
 
-  protected static final class Configuration {
-
-    private final AppConfiguration appConfiguration;
-    private final CommandUtils commandUtils;
-    private final CommandDescription commandDescription;
-    private final CommandTriggerKey commandTriggerKey;
-    private final CommandTrigger commandTriggerDefault;
-    private CommandUsage commandUsage;
-    private boolean triggerable;
-
-    public Configuration(final AppConfiguration appConfiguration, final CommandUtils commandUtils,
-        final CommandDescription commandDescription, final CommandTriggerKey commandTriggerKey,
-        final CommandTrigger commandTriggerDefault) {
-      this.appConfiguration = appConfiguration;
-      this.commandDescription = commandDescription;
-      this.commandTriggerKey = commandTriggerKey;
-      this.commandTriggerDefault = commandTriggerDefault;
-      this.commandUtils = commandUtils;
-      this.commandUsage = CommandUsage.of("");
-      this.triggerable = true;
-    }
-
-    public Configuration setCommandUsage(final CommandUsage commandUsage) {
-      this.commandUsage = commandUsage;
-      return this;
-    }
-
-    public Configuration setTriggerable(final boolean triggerable) {
-      this.triggerable = triggerable;
-      return this;
-    }
-
-  }
-
   private final AppConfiguration appConfiguration;
   private final CommandUtils commandUtils;
   private final CommandDescription commandDescription;
@@ -82,6 +48,40 @@ public abstract class AbstractCommand implements Command {
   @Override
   public boolean isTriggered(MessageEvent messageEvent) {
     return this.commandUtils.isTriggered(this, messageEvent);
+  }
+
+  protected static final class Configuration {
+
+    private final AppConfiguration appConfiguration;
+    private final CommandUtils commandUtils;
+    private final CommandDescription commandDescription;
+    private final CommandTriggerKey commandTriggerKey;
+    private final CommandTrigger commandTriggerDefault;
+    private CommandUsage commandUsage;
+    private boolean triggerable;
+
+    public Configuration(final AppConfiguration appConfiguration, final CommandUtils commandUtils,
+        final CommandDescription commandDescription, final CommandTriggerKey commandTriggerKey,
+        final CommandTrigger commandTriggerDefault) {
+      this.appConfiguration = appConfiguration;
+      this.commandDescription = commandDescription;
+      this.commandTriggerKey = commandTriggerKey;
+      this.commandTriggerDefault = commandTriggerDefault;
+      this.commandUtils = commandUtils;
+      this.commandUsage = CommandUsage.of("");
+      this.triggerable = true;
+    }
+
+    public Configuration setCommandUsage(final CommandUsage commandUsage) {
+      this.commandUsage = commandUsage;
+      return this;
+    }
+
+    public Configuration setTriggerable(final boolean triggerable) {
+      this.triggerable = triggerable;
+      return this;
+    }
+
   }
 
 }
