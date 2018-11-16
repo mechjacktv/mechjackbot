@@ -3,7 +3,7 @@ package com.mechjacktv.mechjackbot.command.shoutout;
 import javax.inject.Inject;
 
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.AbstractCommand;
+import com.mechjacktv.mechjackbot.AbstractCommand;
 
 @SuppressWarnings("CanBeFinal")
 public class ShoutOutListenerCommand extends AbstractCommand {

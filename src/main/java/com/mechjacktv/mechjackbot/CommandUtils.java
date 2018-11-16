@@ -2,9 +2,7 @@ package com.mechjacktv.mechjackbot;
 
 public interface CommandUtils {
 
-  boolean hasRole(Command command, MessageEvent messageEvent, ViewerRole viewerRole);
-
-  boolean hasRole(Command command, MessageEvent messageEvent, ViewerRole[] viewerRoles);
+  boolean hasRole(Command command, MessageEvent messageEvent);
 
   boolean isCooledDown(Command command, MessageEvent messageEvent);
 

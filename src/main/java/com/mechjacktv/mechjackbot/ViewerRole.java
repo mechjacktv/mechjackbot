@@ -2,6 +2,6 @@ package com.mechjacktv.mechjackbot;
 
 public enum ViewerRole {
 
-  OWNER, MODERATOR, SUBSCRIBER, VIP, REGULAR
+  OWNER, MODERATOR, SUBSCRIBER, VIP, FOLLOWER
 
 }

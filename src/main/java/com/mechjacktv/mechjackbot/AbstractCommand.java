@@ -1,6 +1,4 @@
-package com.mechjacktv.mechjackbot.command;
-
-import com.mechjacktv.mechjackbot.*;
+package com.mechjacktv.mechjackbot;
 
 public abstract class AbstractCommand implements Command {
 

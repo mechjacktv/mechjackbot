@@ -33,8 +33,7 @@ public class RestrictToRolesMethodInterceptorUnitTests {
     final CommandUtils commandUtils = mock(CommandUtils.class);
     final RestrictToRolesMethodInterceptor subjectUnderTest = this.givenASubjectToTest(commandUtils);
     final Method method = this.getClass().getMethod("invoke_hasRole_invokesCommand");
-    when(commandUtils.hasRole(isA(Command.class), isA(MessageEvent.class),
-        eq(method.getAnnotation(RestrictToRoles.class).value()))).thenReturn(true);
+    when(commandUtils.hasRole(isA(Command.class), isA(MessageEvent.class))).thenReturn(true);
     final MethodInvocation methodInvocation = this.methodInterceptorUtils.givenAFakeMethodInvocation(method);
 
     subjectUnderTest.invoke(methodInvocation);
@@ -48,8 +47,7 @@ public class RestrictToRolesMethodInterceptorUnitTests {
     final CommandUtils commandUtils = mock(CommandUtils.class);
     final RestrictToRolesMethodInterceptor subjectUnderTest = this.givenASubjectToTest(commandUtils);
     final Method method = this.getClass().getMethod("invoke_hasRole_invokesCommand");
-    when(commandUtils.hasRole(isA(Command.class), isA(MessageEvent.class),
-        eq(method.getAnnotation(RestrictToRoles.class).value()))).thenReturn(false);
+    when(commandUtils.hasRole(isA(Command.class), isA(MessageEvent.class))).thenReturn(false);
     final MethodInvocation methodInvocation = this.methodInterceptorUtils.givenAFakeMethodInvocation(method);
 
     subjectUnderTest.invoke(methodInvocation);

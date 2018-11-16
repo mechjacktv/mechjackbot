@@ -1,7 +1,9 @@
 package com.mechjacktv.mechjackbot.command;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,6 +11,7 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.TimeUtils;
 
 public final class DefaultCommandUtils implements CommandUtils {
@@ -21,6 +24,7 @@ public final class DefaultCommandUtils implements CommandUtils {
   private static final String COMMAND_USAGE_MESSAGE_FORMAT_DEFAULT = "@%s, usage: %s %s";
 
   private final AppConfiguration appConfiguration;
+  private final ExecutionUtils executionUtils;
   private final TimeUtils timeUtils;
   private final ChatUsername botOwner;
   private final Map<CommandTrigger, Pattern> commandTriggerPatterns;
@@ -29,8 +33,9 @@ public final class DefaultCommandUtils implements CommandUtils {
 
   @Inject
   public DefaultCommandUtils(final AppConfiguration appConfiguration, final ChatBotConfiguration botConfiguration,
-      final TimeUtils timeUtils) {
+      final ExecutionUtils executionUtils, final TimeUtils timeUtils) {
     this.appConfiguration = appConfiguration;
+    this.executionUtils = executionUtils;
     this.timeUtils = timeUtils;
     this.botOwner = this.sanitizeChatUsername(ChatUsername.of(botConfiguration.getTwitchChannel().value));
     this.commandTriggerPatterns = new HashMap<>();
@@ -39,12 +44,19 @@ public final class DefaultCommandUtils implements CommandUtils {
   }
 
   @Override
-  public boolean hasRole(final Command command, final MessageEvent messageEvent, final ViewerRole viewerRole) {
-    return this.hasRole(command, messageEvent, new ViewerRole[] { viewerRole });
+  public boolean hasRole(final Command command, final MessageEvent messageEvent) {
+    return this.executionUtils.softenException(() -> {
+      final Method method = command.getClass().getMethod("handleMessageEvent", MessageEvent.class);
+      final RestrictToRoles roles = method.getAnnotation(RestrictToRoles.class);
+
+      if (Objects.isNull(roles)) {
+        return true;
+      }
+      return this.hasRole(command, messageEvent, roles.value());
+    }, CommandException.class);
   }
 
-  @Override
-  public boolean hasRole(final Command command, final MessageEvent messageEvent, final ViewerRole[] viewerRoles) {
+  private boolean hasRole(final Command command, final MessageEvent messageEvent, ViewerRole[] roles) {
     final ChatUser chatUser = messageEvent.getChatUser();
     final ChatUsername chatUsername = this.sanitizeChatUsername(chatUser.getUsername());
 

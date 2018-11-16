@@ -8,7 +8,9 @@ import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.CommandUtils;
 import com.mechjacktv.mechjackbot.TwitchChannel;
 import com.mechjacktv.test.ArbitraryDataGenerator;
+import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.DefaultTimeUtils;
+import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.TimeUtils;
 
 public class AbstractCommandTestUtils {
@@ -21,9 +23,10 @@ public class AbstractCommandTestUtils {
 
   public final CommandUtils givenACommandUtils(final AppConfiguration appConfiguration) {
     final ChatBotConfiguration chatBotConfiguration = this.givenAFakeChatBotConfiguration();
+    final ExecutionUtils executionUtils = new DefaultExecutionUtils();
     final TimeUtils timeUtils = new DefaultTimeUtils();
 
-    return new DefaultCommandUtils(appConfiguration, chatBotConfiguration, timeUtils);
+    return new DefaultCommandUtils(appConfiguration, chatBotConfiguration, executionUtils, timeUtils);
   }
 
   private ChatBotConfiguration givenAFakeChatBotConfiguration() {
