@@ -2,12 +2,12 @@ package com.mechjacktv.mechjackbot.command;
 
 import static com.mechjacktv.mechjackbot.command.QuitCommand.*;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 
 import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.configuration.MapAppConfiguration;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
@@ -27,7 +27,7 @@ public class QuitCommandUnitTests extends CommandContractTests {
   }
 
   private Command givenASubjectToTest(final String message, final ScheduleService scheduleService) {
-    return this.givenASubjectToTest(this.givenAFakeAppConfiguration(message), scheduleService);
+    return this.givenASubjectToTest(this.givenAnAppConfiguration(message), scheduleService);
   }
 
   private Command givenASubjectToTest(final AppConfiguration appConfiguration, final ScheduleService scheduleService) {
@@ -45,10 +45,10 @@ public class QuitCommandUnitTests extends CommandContractTests {
     return CommandTrigger.of(COMMAND_TRIGGER_DEFAULT);
   }
 
-  private AppConfiguration givenAFakeAppConfiguration(final String messageFormat) {
-    final AppConfiguration appConfiguration = this.givenAFakeAppConfiguration();
+  private MapAppConfiguration givenAnAppConfiguration(final String message) {
+    final MapAppConfiguration appConfiguration = this.givenAnAppConfiguration();
 
-    when(appConfiguration.get(eq(COMMAND_MESSAGE_KEY), isA(String.class))).thenReturn(messageFormat);
+    appConfiguration.set(COMMAND_MESSAGE_KEY, message);
     return appConfiguration;
   }
 

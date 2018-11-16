@@ -12,7 +12,11 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
 import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.chatbot.DefaultCommandRegistry;
+import com.mechjacktv.mechjackbot.configuration.ArbitraryChatBotConfiguration;
+import com.mechjacktv.mechjackbot.configuration.MapAppConfiguration;
 import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.util.DefaultTimeUtils;
 
 public class HelpCommandUnitTests extends CommandContractTests {
 
@@ -27,7 +31,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
   }
 
   private Command givenASubjectToTest(final CommandUtils commandUtils) {
-    return this.givenASubjectToTest(this.givenAFakeAppConfiguration(), commandUtils);
+    return this.givenASubjectToTest(this.givenAnAppConfiguration(), commandUtils);
   }
 
   private Command givenASubjectToTest(final AppConfiguration appConfiguration, final CommandUtils commandUtils) {
@@ -49,13 +53,11 @@ public class HelpCommandUnitTests extends CommandContractTests {
     return CommandTrigger.of(COMMAND_TRIGGER_DEFAULT);
   }
 
-  private AppConfiguration givenAFakeAppConfiguration(final String messageFormat) {
-    final AppConfiguration appConfiguration = this.givenAFakeAppConfiguration();
+  private MapAppConfiguration givenAnAppConfiguration(final String messageFormat) {
+    final MapAppConfiguration appConfiguration = this.givenAnAppConfiguration();
 
-    when(appConfiguration.get(eq(COMMAND_MESSAGE_FORMAT_KEY), eq(COMMAND_MESSAGE_FORMAT_DEFAULT)))
-        .thenReturn(messageFormat);
-    when(appConfiguration.get(eq(COMMAND_MISSING_MESSAGE_FORMAT_KEY), eq(COMMAND_MISSING_MESSAGE_FORMAT_DEFAULT)))
-        .thenReturn(messageFormat);
+    appConfiguration.set(COMMAND_MESSAGE_FORMAT_KEY, messageFormat);
+    appConfiguration.set(COMMAND_MISSING_MESSAGE_FORMAT_KEY, messageFormat);
     return appConfiguration;
   }
 
@@ -119,7 +121,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
 
   @Test
   public final void handleMessageEvent_missingCommandAndDefaultFormat_sendsDefaultMissingCommandMessage() {
-    final AppConfiguration appConfiguration = this.givenAFakeAppConfiguration(COMMAND_MISSING_MESSAGE_FORMAT_DEFAULT);
+    final AppConfiguration appConfiguration = this.givenAnAppConfiguration(COMMAND_MISSING_MESSAGE_FORMAT_DEFAULT);
     final ChatUsername chatUsername = ChatUsername.of(this.arbitraryDataGenerator.getString());
     final CommandTrigger commandTrigger = CommandTrigger.of(this.arbitraryDataGenerator.getString());
     final CommandUtils commandUtils = this.givenAFakeCommandUtils(chatUsername, commandTrigger);
@@ -137,7 +139,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
   @Test
   public final void handleMessageEvent_missingCommandAndCustomFormat_sendsCustomMissingCommandMessage() {
     final String customFormat = this.arbitraryDataGenerator.getString() + " %s %s";
-    final AppConfiguration appConfiguration = this.givenAFakeAppConfiguration(customFormat);
+    final AppConfiguration appConfiguration = this.givenAnAppConfiguration(customFormat);
     final ChatUsername chatUsername = ChatUsername.of(this.arbitraryDataGenerator.getString());
     final CommandTrigger commandTrigger = CommandTrigger.of(this.arbitraryDataGenerator.getString());
     final CommandUtils commandUtils = this.givenAFakeCommandUtils(chatUsername, commandTrigger);
@@ -153,7 +155,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
 
   @Test
   public final void handleMessageEvent_forTriggerableCommandAndDefaultFormat_sendsDefaultMessage() {
-    final AppConfiguration appConfiguration = this.givenAFakeAppConfiguration(COMMAND_MESSAGE_FORMAT_DEFAULT);
+    final AppConfiguration appConfiguration = this.givenAnAppConfiguration(COMMAND_MESSAGE_FORMAT_DEFAULT);
     final ChatUsername chatUsername = ChatUsername.of(this.arbitraryDataGenerator.getString());
     final CommandTrigger commandTrigger = CommandTrigger.of(this.arbitraryDataGenerator.getString());
     final CommandUtils commandUtils = this.givenAFakeCommandUtils(chatUsername, commandTrigger);
@@ -172,7 +174,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
 
   @Test
   public final void handleMessageEvent_forNonTriggerableCommand_sendsMissingMessage() {
-    final AppConfiguration appConfiguration = this.givenAFakeAppConfiguration(COMMAND_MISSING_MESSAGE_FORMAT_DEFAULT);
+    final AppConfiguration appConfiguration = this.givenAnAppConfiguration(COMMAND_MISSING_MESSAGE_FORMAT_DEFAULT);
     final ChatUsername chatUsername = ChatUsername.of(this.arbitraryDataGenerator.getString());
     final CommandTrigger commandTrigger = CommandTrigger.of(this.arbitraryDataGenerator.getString());
     final CommandUtils commandUtils = this.givenAFakeCommandUtils(chatUsername, commandTrigger);
@@ -192,20 +194,21 @@ public class HelpCommandUnitTests extends CommandContractTests {
   @Test
   public final void handleMessageEvent_forTriggerableCommandAndCustomFormat_sendsCustomMessage() {
     final String customFormat = this.arbitraryDataGenerator.getString() + " %s %s %s";
-    final AppConfiguration appConfiguration = this.givenAFakeAppConfiguration(customFormat);
-    final ChatUsername chatUsername = ChatUsername.of(this.arbitraryDataGenerator.getString());
-    final CommandTrigger commandTrigger = CommandTrigger.of(this.arbitraryDataGenerator.getString());
-    final CommandUtils commandUtils = this.givenAFakeCommandUtils(chatUsername, commandTrigger);
-    final Command command = this.givenAFakeCommand(commandTrigger, true);
-    final CommandRegistry commandRegistry = this.givenAFakeCommandRegistry(command);
+    final MapAppConfiguration appConfiguration = this.givenAnAppConfiguration();
+    final CommandUtils commandUtils = new DefaultCommandUtils(appConfiguration,
+        new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator), this.executionUtils, new DefaultTimeUtils());
+    final CommandRegistry commandRegistry = new DefaultCommandRegistry(this.executionUtils);
+    final Command command = new ArbitraryCommand(appConfiguration, commandUtils, this.arbitraryDataGenerator);
+    final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, commandUtils, commandRegistry);
-    final ArgumentCaptor<Message> argumentCaptor = ArgumentCaptor.forClass(Message.class);
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent(subjectUnderTest, commandTrigger, argumentCaptor);
+    appConfiguration.set(COMMAND_MESSAGE_FORMAT_KEY, customFormat);
+    commandRegistry.addCommand(command);
+    messageEvent.setMessage(Message.of(String.format("%s %s", subjectUnderTest.getTrigger(), command.getTrigger())));
 
     subjectUnderTest.handleMessageEvent(messageEvent);
-    final Message result = argumentCaptor.getValue();
 
-    assertThat(result.value).isEqualTo(String.format(customFormat, chatUsername, commandTrigger,
+    assertThat(messageEvent.getResponseMessage().value).isEqualTo(String.format(customFormat,
+        commandUtils.sanitizeChatUsername(messageEvent.getChatUser().getUsername()), command.getTrigger(),
         command.getDescription()));
   }
 

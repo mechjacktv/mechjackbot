@@ -8,6 +8,7 @@ import static org.mockito.Mockito.*;
 import org.junit.Test;
 
 import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.configuration.MapAppConfiguration;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 
 public class PingCommandUnitTests extends CommandContractTests {
@@ -22,7 +23,7 @@ public class PingCommandUnitTests extends CommandContractTests {
   }
 
   private Command givenASubjectToTest(final String messageFormat, final ChatUsername chatUsername) {
-    final AppConfiguration appConfiguration = this.givenAFakeAppConfiguration(messageFormat);
+    final AppConfiguration appConfiguration = this.givenAnAppConfiguration(messageFormat);
     final CommandUtils commandUtils = mock(CommandUtils.class);
     when(commandUtils.sanitizeChatUsername(isA(ChatUsername.class))).thenReturn(chatUsername);
 
@@ -43,10 +44,10 @@ public class PingCommandUnitTests extends CommandContractTests {
     return CommandTrigger.of(COMMAND_TRIGGER_DEFAULT);
   }
 
-  private AppConfiguration givenAFakeAppConfiguration(final String messageFormat) {
-    final AppConfiguration appConfiguration = this.givenAFakeAppConfiguration();
+  private MapAppConfiguration givenAnAppConfiguration(final String messageFormat) {
+    final MapAppConfiguration appConfiguration = this.givenAnAppConfiguration();
 
-    when(appConfiguration.get(eq(COMMAND_MESSAGE_FORMAT_KEY), isA(String.class))).thenReturn(messageFormat);
+    appConfiguration.set(COMMAND_MESSAGE_FORMAT_KEY, messageFormat);
     return appConfiguration;
   }
 

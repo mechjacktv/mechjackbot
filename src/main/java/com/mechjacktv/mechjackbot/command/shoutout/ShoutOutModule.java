@@ -9,8 +9,7 @@ public final class ShoutOutModule extends AbstractModule {
 
   @Override
   protected final void configure() {
-    this.bind(ShoutOutDataStore.class).asEagerSingleton();
-    this.bind(ShoutOutService.class).asEagerSingleton();
+    this.bind(ShoutOutDataStore.class).to(DefaultShoutOutDataStore.class).asEagerSingleton();
 
     Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(ShoutOutListenerCommand.class)
         .asEagerSingleton();

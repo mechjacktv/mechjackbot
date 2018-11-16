@@ -35,15 +35,15 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
 
   abstract V givenAValue();
 
-  private MessageStore<K, V> givenASubjectToTest() {
+  private AbstractMessageStore<K, V> givenASubjectToTest() {
     return this.givenASubjectToTest(Maps.newHashMap());
   }
 
-  abstract MessageStore<K, V> givenASubjectToTest(Map<K, V> data);
+  abstract AbstractMessageStore<K, V> givenASubjectToTest(Map<K, V> data);
 
   @Test
   public final void containsKey_nullKey_throwsNullPointerExceptionWithMessage() {
-    final MessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
+    final AbstractMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.containsKey(null));
 
@@ -52,7 +52,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
 
   @Test
   public final void containsKey_noData_returnsFalse() {
-    final MessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
+    final AbstractMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
 
     final boolean result = subjectUnderTest.containsKey(this.givenAKey());
 
@@ -64,7 +64,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
     final Map<K, V> data = Maps.newHashMap();
     final K key = this.givenAKey();
     data.put(key, this.givenAValue());
-    final MessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
+    final AbstractMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
 
     final boolean result = subjectUnderTest.containsKey(key);
 
@@ -76,7 +76,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
     final Map<K, V> data = Maps.newHashMap();
     final K key = this.givenAKey();
     data.put(key, this.givenAValue());
-    final MessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
+    final AbstractMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
 
     final boolean result = subjectUnderTest.containsKey(this.givenAKey());
 
@@ -112,7 +112,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
 
   @Test
   public final void get_nullKey_throwsNullPointerExceptionWithMessage() {
-    final MessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
+    final AbstractMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.get(null));
 
@@ -122,7 +122,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
   @Test
   public final void get_noData_returnsEmptyOptional() {
     final K key = this.givenAKey();
-    final MessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
+    final AbstractMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
 
     final Optional<V> result = subjectUnderTest.get(key);
 
@@ -135,7 +135,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
     final K key = this.givenAKey();
     final V value = this.givenAValue();
     data.put(key, value);
-    final MessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
+    final AbstractMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
 
     final Optional<V> result = subjectUnderTest.get(key);
 
@@ -151,7 +151,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
     final K key = this.givenAKey();
     final V value = this.givenAValue();
     data.put(key, value);
-    final MessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
+    final AbstractMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
 
     final Optional<V> result = subjectUnderTest.get(this.givenAKey());
 
@@ -160,7 +160,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
 
   @Test
   public final void put_withNullKey_throwsNullPointerExceptionWithMessage() {
-    final MessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
+    final AbstractMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.put(null, this.givenAValue()));
 
@@ -169,7 +169,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
 
   @Test
   public final void put_withNullValue_throwsNullPointerExceptionWithMessage() {
-    final MessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
+    final AbstractMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.put(this.givenAKey(), null));
 
@@ -180,7 +180,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
   public final void put_noData_putsValueForKey() {
     final K key = this.givenAKey();
     final V value = this.givenAValue();
-    final MessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
+    final AbstractMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.put(key, value);
     final Optional<V> result = subjectUnderTest.get(key);
@@ -198,7 +198,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
     final V value1 = this.givenAValue();
     final V value2 = this.givenAValue();
     data.put(key, value1);
-    final MessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
+    final AbstractMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
 
     subjectUnderTest.put(key, value2);
     final Optional<V> result = subjectUnderTest.get(key);
@@ -211,7 +211,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
 
   @Test
   public final void remove_withNullKey_throwsNullPointerExceptionWithMessage() {
-    final MessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
+    final AbstractMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.remove(null));
 
@@ -220,7 +220,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
 
   @Test
   public final void remove_noData_returnsSilently() {
-    final MessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
+    final AbstractMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.remove(this.givenAKey()));
 
@@ -233,7 +233,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
     final K key = this.givenAKey();
     final V value = this.givenAValue();
     data.put(key, value);
-    final MessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
+    final AbstractMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
 
     subjectUnderTest.remove(key);
     final Optional<V> result = subjectUnderTest.get(key);
@@ -248,7 +248,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
     for (final K key : keys) {
       data.put(key, this.givenAValue());
     }
-    final MessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
+    final AbstractMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
 
     subjectUnderTest.remove(this.givenAKey());
     final Collection<K> result = subjectUnderTest.getKeys();

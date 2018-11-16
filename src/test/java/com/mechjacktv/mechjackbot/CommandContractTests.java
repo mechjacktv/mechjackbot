@@ -2,21 +2,24 @@ package com.mechjacktv.mechjackbot;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assume.assumeTrue;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 
+import com.mechjacktv.mechjackbot.configuration.MapAppConfiguration;
 import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.util.DefaultExecutionUtils;
+import com.mechjacktv.util.ExecutionUtils;
 
 public abstract class CommandContractTests {
 
-  private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
+  protected final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
+
+  protected final ExecutionUtils executionUtils = new DefaultExecutionUtils();
 
   protected final Command givenASubjectToTest() {
-    return this.givenASubjectToTest(this.givenAFakeAppConfiguration());
+    return this.givenASubjectToTest(this.givenAnAppConfiguration());
   }
 
   protected abstract Command givenASubjectToTest(final AppConfiguration appConfiguration);
@@ -25,15 +28,14 @@ public abstract class CommandContractTests {
 
   protected abstract CommandTrigger getCommandTriggerDefault();
 
-  protected final AppConfiguration givenAFakeAppConfiguration() {
-    return this.givenAFakeAppConfiguration(this.getCommandTriggerDefault());
+  protected final MapAppConfiguration givenAnAppConfiguration() {
+    return new MapAppConfiguration(this.executionUtils);
   }
 
-  protected final AppConfiguration givenAFakeAppConfiguration(final CommandTrigger commandTrigger) {
-    final AppConfiguration appConfiguration = mock(AppConfiguration.class);
+  private MapAppConfiguration givenAnAppConfiguration(final CommandTrigger commandTrigger) {
+    final MapAppConfiguration appConfiguration = this.givenAnAppConfiguration();
 
-    when(appConfiguration.get(eq(this.getCommandTriggerKey().value), isA(String.class)))
-        .thenReturn(commandTrigger.value);
+    appConfiguration.set(this.getCommandTriggerKey().value, commandTrigger.value);
     return appConfiguration;
   }
 
@@ -58,7 +60,7 @@ public abstract class CommandContractTests {
   @Test
   public final void getTrigger_nothingConfigured_returnsDefaultTrigger() {
     final CommandTrigger commandTrigger = this.getCommandTriggerDefault();
-    final AppConfiguration appConfiguration = this.givenAFakeAppConfiguration(commandTrigger);
+    final AppConfiguration appConfiguration = this.givenAnAppConfiguration(commandTrigger);
     final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration);
 
     final CommandTrigger result = subjectUnderTest.getTrigger();
@@ -69,7 +71,7 @@ public abstract class CommandContractTests {
   @Test
   public final void getTrigger_overrideConfigured_returnsOverrideTrigger() {
     final CommandTrigger commandTrigger = CommandTrigger.of(this.arbitraryDataGenerator.getString());
-    final AppConfiguration appConfiguration = this.givenAFakeAppConfiguration(commandTrigger);
+    final AppConfiguration appConfiguration = this.givenAnAppConfiguration(commandTrigger);
     final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration);
 
     final CommandTrigger result = subjectUnderTest.getTrigger();

@@ -10,12 +10,12 @@ import com.mechjacktv.util.ExecutionUtils;
 public class MapAppConfiguration implements AppConfiguration {
 
   private final ExecutionUtils executionUtils;
-  private final Map<String, String> configuration;
+  private final Map<String, String> data;
 
   @Inject
   public MapAppConfiguration(final ExecutionUtils executionUtils) {
     this.executionUtils = executionUtils;
-    this.configuration = new HashMap<>();
+    this.data = new HashMap<>();
   }
 
   @Override
@@ -24,23 +24,23 @@ public class MapAppConfiguration implements AppConfiguration {
   }
 
   @Override
-  public String get(String key, String defaultValue) {
+  public String get(final String key, final String defaultValue) {
     Objects.requireNonNull(key, this.executionUtils.nullMessageForName("key"));
 
-    final Object value = this.configuration.get(key);
+    final String value = this.data.get(key);
 
-    return value != null ? value.toString() : defaultValue;
+    return value != null ? value : defaultValue;
   }
 
-  public void set(String key, String value) {
+  public void set(final String key, final String value) {
     Objects.requireNonNull(key, this.executionUtils.nullMessageForName("key"));
     Objects.requireNonNull(value, this.executionUtils.nullMessageForName("value"));
-    this.configuration.put(key, value);
+    this.data.put(key, value);
   }
 
   @Override
   public Collection<String> getKeys() {
-    return Collections.unmodifiableSet(this.configuration.keySet());
+    return Collections.unmodifiableSet(this.data.keySet());
   }
 
 }

@@ -31,7 +31,7 @@ public class MessageStoreUnitTests extends MessageStoreContractTest<TestMessage,
   }
 
   @Override
-  MessageStore<TestMessage, TestMessage> givenASubjectToTest(final Map<TestMessage, TestMessage> data) {
+  AbstractMessageStore<TestMessage, TestMessage> givenASubjectToTest(final Map<TestMessage, TestMessage> data) {
     final DB db = DBMaker.memoryDB().closeOnJvmShutdown().make();
     final ConcurrentMap<byte[], byte[]> concurrentMap = db.hashMap(DB_NAME, Serializer.BYTE_ARRAY,
         Serializer.BYTE_ARRAY).createOrOpen();
@@ -40,11 +40,11 @@ public class MessageStoreUnitTests extends MessageStoreContractTest<TestMessage,
     for (final TestMessage key : data.keySet()) {
       concurrentMap.put(key.toByteArray(), data.get(key).toByteArray());
     }
-    return new TestMessageStore(new MapDbKeyValueStore(concurrentMap),
+    return new TestMessageStore(new MapKeyValueStore(concurrentMap),
         executionUtils, new DefaultProtobufUtils(executionUtils));
   }
 
-  private static final class TestMessageStore extends MessageStore<TestMessage, TestMessage> {
+  private static final class TestMessageStore extends AbstractMessageStore<TestMessage, TestMessage> {
 
     TestMessageStore(final KeyValueStore keyValueStore, final ExecutionUtils executionUtils,
         final ProtobufUtils protobufUtils) {

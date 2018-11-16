@@ -10,10 +10,6 @@ public class ArbitraryChatBotConfiguration implements ChatBotConfiguration {
   private final TwitchPassword twitchPassword;
   private final TwitchUsername twitchUsername;
 
-  public ArbitraryChatBotConfiguration() {
-    this(new ArbitraryDataGenerator());
-  }
-
   public ArbitraryChatBotConfiguration(final ArbitraryDataGenerator arbitraryDataGenerator) {
     this.dataLocation = DataLocation.of(arbitraryDataGenerator.getString());
     this.twitchChannel = TwitchChannel.of(arbitraryDataGenerator.getString());
