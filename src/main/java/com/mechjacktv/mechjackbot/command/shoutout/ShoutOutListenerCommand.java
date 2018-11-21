@@ -2,17 +2,12 @@ package com.mechjacktv.mechjackbot.command.shoutout;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.CasterKey;
 import com.mechjacktv.util.TimeUtils;
 
 @SuppressWarnings("CanBeFinal")
 public class ShoutOutListenerCommand extends AbstractCommand {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(ShoutOutListenerCommand.class);
 
   static final String COMMAND_TRIGGER_KEY = "com.mechjacktv.mechjackbot.command.shoutout.trigger";
   static final String COMMAND_TRIGGER_DEFAULT = "!shoutout";
