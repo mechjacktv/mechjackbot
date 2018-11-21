@@ -37,12 +37,9 @@ public final class DefaultShoutOutDataStore extends AbstractMessageStore<CasterK
   private static final String KEY_VALUE_STORE_NAME = DefaultShoutOutDataStore.class.getCanonicalName();
 
   @Inject
-  DefaultShoutOutDataStore(final AppConfiguration appConfiguration,
-      final ChatBotConfiguration chatBotConfiguration,
-      final KeyValueStoreFactory keyValueStoreFactory,
-      final ExecutionUtils executionUtils,
-      final ProtobufUtils protobufUtils,
-      final ScheduleService scheduleService,
+  DefaultShoutOutDataStore(final AppConfiguration appConfiguration, final ChatBotConfiguration chatBotConfiguration,
+      final KeyValueStoreFactory keyValueStoreFactory, final ExecutionUtils executionUtils,
+      final ProtobufUtils protobufUtils, final ScheduleService scheduleService,
       final TwitchClient twitchClient) {
     super(keyValueStoreFactory.createOrOpenKeyValueStore(KEY_VALUE_STORE_NAME), executionUtils, protobufUtils);
     scheduleService.schedule(() -> this.updateCasters(chatBotConfiguration, twitchClient),

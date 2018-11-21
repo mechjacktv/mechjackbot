@@ -28,10 +28,10 @@ final class PropertiesChatBotConfiguration extends HotUpdatePropertiesWrapper
   private static final String DATA_LOCATION_DEFAULT = System.getProperty("user.home") + "/.mechjackbot";
   private static final String CONFIG_PROPERTIES_FILE_NAME = "chat_bot.config";
 
-  public static final String TWITCH_CHANNEL_KEY = "twitch.channel";
-  public static final String TWITCH_CLIENT_ID_KEY = "twitch.client_id";
-  public static final String TWITCH_PASSWORD_KEY = "twitch.password";
-  public static final String TWITCH_USERNAME_KEY = "twitch.username";
+  static final String TWITCH_CHANNEL_KEY = "twitch.channel";
+  static final String TWITCH_CLIENT_ID_KEY = "twitch.client_id";
+  static final String TWITCH_PASSWORD_KEY = "twitch.password";
+  static final String TWITCH_USERNAME_KEY = "twitch.username";
 
   private final DataLocation dataLocation;
 

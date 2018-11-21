@@ -1,6 +1,5 @@
 package com.mechjacktv.util;
 
-import static com.mechjacktv.proto.util.UtilsMessage.TestMessage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
@@ -13,6 +12,8 @@ import com.google.common.collect.Sets;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 
+import com.mechjacktv.proto.util.UtilsMessage.TestKeyMessage;
+
 public abstract class ProtobufUtilsContractTests {
 
   private static final String TEST_VALUE = "TEST_VALUE";
@@ -22,10 +23,10 @@ public abstract class ProtobufUtilsContractTests {
   @Test
   public final void parseMessage_forMessageBytes_returnsMessage() {
     final ProtobufUtils subjectUnderTest = this.givenASubjectToTest();
-    final TestMessage testMessage = TestMessage.newBuilder().setValue(TEST_VALUE).build();
+    final TestKeyMessage testMessage = TestKeyMessage.newBuilder().setValue(TEST_VALUE).build();
 
-    final TestMessage result = subjectUnderTest.parseMessage(
-        TestMessage.class, testMessage.toByteArray());
+    final TestKeyMessage result = subjectUnderTest.parseMessage(
+        TestKeyMessage.class, testMessage.toByteArray());
 
     assertThat(result).isEqualTo(testMessage);
   }
@@ -36,7 +37,7 @@ public abstract class ProtobufUtilsContractTests {
     final byte[] badMessageBytes = new byte[1024];
     new Random().nextBytes(badMessageBytes);
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.parseMessage(TestMessage.class,
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.parseMessage(TestKeyMessage.class,
         badMessageBytes));
 
     assertThat(thrown).isInstanceOf(MessageParsingException.class);
@@ -45,10 +46,10 @@ public abstract class ProtobufUtilsContractTests {
   @Test
   public final void parseAllMessage_forMessageBytes_returnsMessage() {
     final ProtobufUtils subjectUnderTest = this.givenASubjectToTest();
-    final TestMessage testMessage = TestMessage.newBuilder().setValue(TEST_VALUE).build();
+    final TestKeyMessage testMessage = TestKeyMessage.newBuilder().setValue(TEST_VALUE).build();
     final Set<byte[]> messageBytesSet = Sets.newHashSet(testMessage.toByteArray());
 
-    final Collection<TestMessage> result = subjectUnderTest.parseAllMessages(TestMessage.class, messageBytesSet);
+    final Collection<TestKeyMessage> result = subjectUnderTest.parseAllMessages(TestKeyMessage.class, messageBytesSet);
 
     final SoftAssertions softly = new SoftAssertions();
     softly.assertThat(result).hasSize(1);
@@ -63,7 +64,7 @@ public abstract class ProtobufUtilsContractTests {
     final Set<byte[]> messageBytesSet = Sets.newHashSet(badMessageBytes);
     new Random().nextBytes(badMessageBytes);
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.parseAllMessages(TestMessage.class,
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.parseAllMessages(TestKeyMessage.class,
         messageBytesSet));
 
     assertThat(thrown).isInstanceOf(MessageParsingException.class);

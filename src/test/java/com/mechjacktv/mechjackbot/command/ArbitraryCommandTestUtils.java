@@ -7,17 +7,13 @@ import com.mechjacktv.mechjackbot.AppConfiguration;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.CommandUtils;
 import com.mechjacktv.mechjackbot.TwitchChannel;
-import com.mechjacktv.util.ArbitraryDataGenerator;
-import com.mechjacktv.util.DefaultExecutionUtils;
-import com.mechjacktv.util.DefaultTimeUtils;
-import com.mechjacktv.util.ExecutionUtils;
-import com.mechjacktv.util.TimeUtils;
+import com.mechjacktv.util.*;
 
-public class AbstractCommandTestUtils {
+public class ArbitraryCommandTestUtils {
 
   private final ArbitraryDataGenerator arbitraryDataGenerator;
 
-  public AbstractCommandTestUtils(final ArbitraryDataGenerator arbitraryDataGenerator) {
+  public ArbitraryCommandTestUtils(final ArbitraryDataGenerator arbitraryDataGenerator) {
     this.arbitraryDataGenerator = arbitraryDataGenerator;
   }
 

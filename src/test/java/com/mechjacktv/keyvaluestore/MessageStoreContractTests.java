@@ -18,11 +18,11 @@ import org.junit.Test;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
 
-public abstract class MessageStoreContractTest<K extends Message, V extends Message> {
+public abstract class MessageStoreContractTests<K extends Message, V extends Message> {
 
-  private static final ExecutionUtils EXECUTION_UTILS = new DefaultExecutionUtils();
+  public final ExecutionUtils executionUtils = new DefaultExecutionUtils();
 
-  abstract K givenAKey();
+  protected abstract K givenAKey();
 
   private Set<K> givenAKeySet(final int size) {
     final Set<K> keys = Sets.newHashSet();
@@ -33,13 +33,13 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
     return keys;
   }
 
-  abstract V givenAValue();
+  protected abstract V givenAValue();
 
   private AbstractMessageStore<K, V> givenASubjectToTest() {
     return this.givenASubjectToTest(Maps.newHashMap());
   }
 
-  abstract AbstractMessageStore<K, V> givenASubjectToTest(Map<K, V> data);
+  protected abstract AbstractMessageStore<K, V> givenASubjectToTest(Map<K, V> data);
 
   @Test
   public final void containsKey_nullKey_throwsNullPointerExceptionWithMessage() {
@@ -47,7 +47,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.containsKey(null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(EXECUTION_UTILS.nullMessageForName("key"));
+    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(executionUtils.nullMessageForName("key"));
   }
 
   @Test
@@ -116,7 +116,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.get(null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(EXECUTION_UTILS.nullMessageForName("key"));
+    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(executionUtils.nullMessageForName("key"));
   }
 
   @Test
@@ -164,7 +164,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.put(null, this.givenAValue()));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(EXECUTION_UTILS.nullMessageForName("key"));
+    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(executionUtils.nullMessageForName("key"));
   }
 
   @Test
@@ -173,7 +173,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.put(this.givenAKey(), null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(EXECUTION_UTILS.nullMessageForName("value"));
+    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(executionUtils.nullMessageForName("value"));
   }
 
   @Test
@@ -215,7 +215,7 @@ public abstract class MessageStoreContractTest<K extends Message, V extends Mess
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.remove(null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(EXECUTION_UTILS.nullMessageForName("key"));
+    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(executionUtils.nullMessageForName("key"));
   }
 
   @Test

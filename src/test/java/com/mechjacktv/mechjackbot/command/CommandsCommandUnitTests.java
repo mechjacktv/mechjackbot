@@ -24,7 +24,7 @@ public class CommandsCommandUnitTests extends CommandContractTests {
 
   private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
 
-  private final AbstractCommandTestUtils commandTestUtils = new AbstractCommandTestUtils(this.arbitraryDataGenerator);
+  private final ArbitraryCommandTestUtils commandTestUtils = new ArbitraryCommandTestUtils(this.arbitraryDataGenerator);
 
   @Override
   protected Command givenASubjectToTest(final AppConfiguration appConfiguration) {
