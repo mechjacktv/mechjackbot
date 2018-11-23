@@ -1,5 +1,12 @@
 package com.mechjacktv.mechjackbot.command.shoutout;
 
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerCommand.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
+
 import org.junit.Test;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
@@ -17,13 +24,6 @@ import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.
 import com.mechjacktv.twitchclient.TwitchClient;
 import com.mechjacktv.util.*;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
-
-import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerCommand.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
 
 public final class ShoutOutListenerCommandUnitTests extends CommandContractTests {
 
