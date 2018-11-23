@@ -13,8 +13,8 @@ public final class ArbitraryDataGenerator {
     this.atomicLong = new AtomicLong();
   }
 
-  public final byte[] getByteArray() {
-    return this.getString().getBytes();
+  public final int getInteger() {
+    return (int) this.getLong();
   }
 
   public final long getLong() {

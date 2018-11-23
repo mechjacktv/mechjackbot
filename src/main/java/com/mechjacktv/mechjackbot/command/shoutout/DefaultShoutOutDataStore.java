@@ -1,9 +1,6 @@
 package com.mechjacktv.mechjackbot.command.shoutout;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -30,11 +27,13 @@ import com.mechjacktv.util.scheduleservice.ScheduleService;
 public final class DefaultShoutOutDataStore extends AbstractMessageStore<CasterKey, Caster>
     implements ShoutOutDataStore {
 
-  static final String UPDATE_PERIOD_KEY = "com.mechjacktv.mechjackbot.command.shoutout.update_period.minutes";
+  static final String UPDATE_PERIOD_KEY = "command.shoutout.update_period.minutes";
   static final String UPDATE_PERIOD_DEFAULT = "10";
 
   private static final Logger log = LoggerFactory.getLogger(DefaultShoutOutDataStore.class);
   private static final String KEY_VALUE_STORE_NAME = DefaultShoutOutDataStore.class.getCanonicalName();
+
+  private final ExecutionUtils executionUtils;
 
   @Inject
   DefaultShoutOutDataStore(final AppConfiguration appConfiguration, final ChatBotConfiguration chatBotConfiguration,
@@ -42,6 +41,7 @@ public final class DefaultShoutOutDataStore extends AbstractMessageStore<CasterK
       final ProtobufUtils protobufUtils, final ScheduleService scheduleService,
       final TwitchClient twitchClient) {
     super(keyValueStoreFactory.createOrOpenKeyValueStore(KEY_VALUE_STORE_NAME), executionUtils, protobufUtils);
+    this.executionUtils = executionUtils;
     scheduleService.schedule(() -> this.updateCasters(chatBotConfiguration, twitchClient),
         Integer.parseInt(appConfiguration.get(UPDATE_PERIOD_KEY, UPDATE_PERIOD_DEFAULT)), TimeUnit.MINUTES);
   }
@@ -111,19 +111,15 @@ public final class DefaultShoutOutDataStore extends AbstractMessageStore<CasterK
 
   @Override
   public final CasterKey createCasterKey(final String casterName) {
-    final CasterKey.Builder builder = CasterKey.newBuilder();
-
-    return builder.setName(casterName.toLowerCase())
-        .build();
+    Objects.requireNonNull(casterName, this.executionUtils.nullMessageForName("casterName"));
+    return CasterKey.newBuilder().setName(casterName.toLowerCase()).build();
   }
 
   @Override
   public final Caster createCaster(final String casterName, final Long lastShoutOut) {
-    final Caster.Builder builder = Caster.newBuilder();
-
-    return builder.setName(casterName)
-        .setLastShoutOut(lastShoutOut)
-        .build();
+    Objects.requireNonNull(casterName, this.executionUtils.nullMessageForName("casterName"));
+    Objects.requireNonNull(lastShoutOut, this.executionUtils.nullMessageForName("lastShoutOut"));
+    return Caster.newBuilder().setName(casterName).setLastShoutOut(lastShoutOut).build();
   }
 
   @Override
