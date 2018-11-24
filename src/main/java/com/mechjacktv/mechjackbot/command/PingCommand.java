@@ -26,7 +26,7 @@ public class PingCommand extends AbstractCommand {
   }
 
   @Override
-  @RestrictToRoles({ ViewerRole.MODERATOR })
+  @RestrictToAccessLevel(AccessLevel.MODERATOR)
   public void handleMessageEvent(MessageEvent messageEvent) {
     final String messageFormat = this.appConfiguration.get(COMMAND_MESSAGE_FORMAT_KEY,
         COMMAND_MESSAGE_FORMAT_DEFAULT);

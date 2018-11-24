@@ -59,65 +59,66 @@ public abstract class CommandUtilsContractTests {
   }
 
   @Test
-  public final void hasRole_nullCommand_throwsNullPointerException() {
+  public final void hasAccessLevel_nullCommand_throwsNullPointerException() {
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.hasRole(null, mock(MessageEvent.class)));
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.hasAccessLevel(null, mock(MessageEvent.class)));
 
     assertThat(thrown).isInstanceOf(NullPointerException.class)
         .hasMessage(this.executionUtils.nullMessageForName("command"));
   }
 
   @Test
-  public final void hasRole_nullMessageEvent_throwsNullPointerException() {
+  public final void hasAccessLevel_nullMessageEvent_throwsNullPointerException() {
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.hasRole(mock(Command.class), null));
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.hasAccessLevel(mock(Command.class), null));
 
     assertThat(thrown).isInstanceOf(NullPointerException.class)
         .hasMessage(this.executionUtils.nullMessageForName("messageEvent"));
   }
 
   @Test
-  public final void hasRole_commandHasNoRestrictions_returnsTrue() {
+  public final void hasAccessLevel_commandHasNoRestrictions_returnsTrue() {
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final boolean result = subjectUnderTest.hasRole(mock(Command.class), mock(MessageEvent.class));
+    final boolean result = subjectUnderTest.hasAccessLevel(mock(Command.class), mock(MessageEvent.class));
 
     assertThat(result).isTrue();
   }
 
   @Test
-  public final void hasRole_userIsOwner_returnsTrue() {
+  public final void hasAccessLevel_userIsOwner_returnsTrue() {
     final ChatUser chatUser = mock(ChatUser.class);
     final MessageEvent messageEvent = mock(MessageEvent.class);
     when(messageEvent.getChatUser()).thenReturn(chatUser);
     when(chatUser.getUsername()).thenReturn(ChatUsername.of(this.chatBotConfiguration.getTwitchChannel().value));
+    when(chatUser.hasAccessLevel(isA(AccessLevel.class))).thenReturn(true);
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
     final Command command = new RestrictedCommand(this, subjectUnderTest);
 
-    final boolean result = subjectUnderTest.hasRole(command, messageEvent);
+    final boolean result = subjectUnderTest.hasAccessLevel(command, messageEvent);
 
     assertThat(result).isTrue();
   }
 
   @Test
-  public final void hasRole_userHasRoles_returnsTrue() {
+  public final void hasAccessLevel_userHasRoles_returnsTrue() {
     final ChatUser chatUser = mock(ChatUser.class);
     final MessageEvent messageEvent = mock(MessageEvent.class);
     when(messageEvent.getChatUser()).thenReturn(chatUser);
     when(chatUser.getUsername()).thenReturn(ChatUsername.of(this.arbitraryDataGenerator.getString()));
-    when(chatUser.hasRole(eq(ViewerRole.SUBSCRIBER))).thenReturn(true);
+    when(chatUser.hasAccessLevel(eq(AccessLevel.SUBSCRIBER))).thenReturn(true);
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
     final Command command = new RestrictedCommand(this, subjectUnderTest);
 
-    final boolean result = subjectUnderTest.hasRole(command, messageEvent);
+    final boolean result = subjectUnderTest.hasAccessLevel(command, messageEvent);
 
     assertThat(result).isTrue();
   }
 
   @Test
-  public final void hasRole_userDoesNotHaveRoles_returnsFalse() {
+  public final void hasAccessLevel_userDoesNotHaveRoles_returnsFalse() {
     final ChatUser chatUser = mock(ChatUser.class);
     final MessageEvent messageEvent = mock(MessageEvent.class);
     when(messageEvent.getChatUser()).thenReturn(chatUser);
@@ -125,7 +126,7 @@ public abstract class CommandUtilsContractTests {
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
     final Command command = new RestrictedCommand(this, subjectUnderTest);
 
-    final boolean result = subjectUnderTest.hasRole(command, messageEvent);
+    final boolean result = subjectUnderTest.hasAccessLevel(command, messageEvent);
 
     assertThat(result).isFalse();
   }
@@ -231,7 +232,7 @@ public abstract class CommandUtilsContractTests {
     when(timeUtils.currentTime()).thenReturn(originTime, originTime + 1);
     final CommandUtils subjectUnderTest = this.givenASubjectToTest(timeUtils);
     final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    when(messageEvent.getChatUser().hasRole(eq(ViewerRole.MODERATOR))).thenReturn(true);
+    when(messageEvent.getChatUser().hasAccessLevel(eq(AccessLevel.MODERATOR))).thenReturn(true);
     final Command command = new RestrictedCommand(this, subjectUnderTest);
     // set lastTriggers
     subjectUnderTest.isCooledDown(command, messageEvent);
@@ -542,7 +543,7 @@ public abstract class CommandUtilsContractTests {
     }
 
     @Override
-    @RestrictToRoles({ ViewerRole.MODERATOR, ViewerRole.SUBSCRIBER })
+    @RestrictToAccessLevel(AccessLevel.SUBSCRIBER)
     public void handleMessageEvent(MessageEvent messageEvent) {
       // empty
     }

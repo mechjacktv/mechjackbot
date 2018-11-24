@@ -99,7 +99,10 @@ public abstract class CommandContractTests {
     final Command subjectUnderTest = this.givenASubjectToTest();
     assumeTrue(subjectUnderTest.isTriggerable());
     final MessageEvent messageEvent = mock(MessageEvent.class);
+    final ChatUser chatUser = mock(ChatUser.class);
     final Message message = Message.of(this.arbitraryDataGenerator.getString());
+    when(messageEvent.getChatUser()).thenReturn(chatUser);
+    when(chatUser.getUsername()).thenReturn(ChatUsername.of(this.arbitraryDataGenerator.getString()));
     when(messageEvent.getMessage()).thenReturn(message);
 
     final boolean result = subjectUnderTest.isTriggered(messageEvent);

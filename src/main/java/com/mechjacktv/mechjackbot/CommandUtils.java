@@ -9,7 +9,7 @@ public interface CommandUtils {
   String COMMAND_USAGE_MESSAGE_FORMAT_KEY = "command.usage_message_format";
   String COMMAND_USAGE_MESSAGE_FORMAT_DEFAULT = "@%s, usage: %s %s";
 
-  boolean hasRole(Command command, MessageEvent messageEvent);
+  boolean hasAccessLevel(Command command, MessageEvent messageEvent);
 
   boolean isCooledDown(Command command, MessageEvent messageEvent);
 

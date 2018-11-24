@@ -29,7 +29,7 @@ public class ShoutOutListenerCommand extends AbstractCommand {
       final TimeUtils timeUtils, final ShoutOutDataStore shoutOutDataStore) {
     super(new Configuration(appConfiguration, commandUtils,
         CommandDescription.of("Monitors chat looking for casters who are due for a shout out."),
-        CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT)).setTriggerable(false));
+        CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT)));
     this.appConfiguration = appConfiguration;
     this.commandUtils = commandUtils;
     this.timeUtils = timeUtils;
@@ -38,6 +38,10 @@ public class ShoutOutListenerCommand extends AbstractCommand {
 
   @Override
   public final boolean isTriggered(final MessageEvent messageEvent) {
+    return super.isTriggered(messageEvent) || this.isCasterDue(messageEvent);
+  }
+
+  private boolean isCasterDue(final MessageEvent messageEvent) {
     final Long frequency = this.timeUtils.hoursAsMs(
         Integer.parseInt(this.appConfiguration.get(COMMAND_FREQUENCY_KEY, COMMAND_FREQUENCY_DEFAULT)));
     final ChatUsername chatUsername = this.sanitizeChatUsername(messageEvent);
