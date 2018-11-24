@@ -1,5 +1,7 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
+import javax.inject.Inject;
+
 import org.pircbotx.User;
 
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
@@ -11,6 +13,7 @@ class PircBotXChatUserFactory implements ChatUserFactory<User> {
   private final ChatBotConfiguration chatBotConfiguration;
   private final CommandUtils commandUtils;
 
+  @Inject
   PircBotXChatUserFactory(final ChatBotConfiguration chatBotConfiguration, final CommandUtils commandUtils) {
     this.chatBotConfiguration = chatBotConfiguration;
     this.commandUtils = commandUtils;
