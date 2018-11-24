@@ -6,15 +6,26 @@ import static org.mockito.Mockito.*;
 import org.junit.Test;
 import org.pircbotx.User;
 
+import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.ChatUsername;
+import com.mechjacktv.mechjackbot.command.DefaultCommandUtils;
+import com.mechjacktv.mechjackbot.configuration.ArbitraryChatBotConfiguration;
+import com.mechjacktv.mechjackbot.configuration.MapAppConfiguration;
 import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.util.DefaultExecutionUtils;
+import com.mechjacktv.util.DefaultTimeUtils;
+import com.mechjacktv.util.ExecutionUtils;
 
 public class PircBotXChatUserUnitTests {
 
   private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
 
   private PircBotXChatUser givenIHaveASubjectToTest(final User user) {
-    return new PircBotXChatUser(user);
+    final ChatBotConfiguration chatBotConfiguration = new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator);
+    final ExecutionUtils executionUtils = new DefaultExecutionUtils();
+
+    return new PircBotXChatUser(chatBotConfiguration, new DefaultCommandUtils(new MapAppConfiguration(executionUtils),
+        chatBotConfiguration, executionUtils, new DefaultTimeUtils()), user);
   }
 
   private User givenIHaveAUser() {

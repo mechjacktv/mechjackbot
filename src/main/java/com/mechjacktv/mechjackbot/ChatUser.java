@@ -4,6 +4,6 @@ public interface ChatUser {
 
   ChatUsername getUsername();
 
-  boolean hasRole(ViewerRole viewerRole);
+  boolean hasAccessLevel(AccessLevel accessLevel);
 
 }

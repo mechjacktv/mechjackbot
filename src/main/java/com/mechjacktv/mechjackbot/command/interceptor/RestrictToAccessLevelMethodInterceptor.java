@@ -9,11 +9,11 @@ import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.CommandUtils;
 import com.mechjacktv.mechjackbot.MessageEvent;
 
-public class RestrictToRolesMethodInterceptor implements MethodInterceptor {
+public class RestrictToAccessLevelMethodInterceptor implements MethodInterceptor {
 
   private final Provider<CommandUtils> commandUtils;
 
-  RestrictToRolesMethodInterceptor(final Provider<CommandUtils> commandUtils) {
+  RestrictToAccessLevelMethodInterceptor(final Provider<CommandUtils> commandUtils) {
     this.commandUtils = commandUtils;
   }
 
@@ -22,7 +22,7 @@ public class RestrictToRolesMethodInterceptor implements MethodInterceptor {
     final Command thisCommand = (Command) invocation.getThis();
     final MessageEvent messageEvent = (MessageEvent) invocation.getArguments()[0];
 
-    if (this.commandUtils.get().hasRole(thisCommand, messageEvent)) {
+    if (this.commandUtils.get().hasAccessLevel(thisCommand, messageEvent)) {
       return invocation.proceed();
     }
     return null;

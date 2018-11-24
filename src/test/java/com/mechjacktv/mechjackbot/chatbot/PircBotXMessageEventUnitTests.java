@@ -8,12 +8,12 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
-import com.mechjacktv.mechjackbot.AppConfiguration;
-import com.mechjacktv.mechjackbot.ChatBot;
-import com.mechjacktv.mechjackbot.ChatUser;
-import com.mechjacktv.mechjackbot.Message;
+import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.command.DefaultCommandUtils;
+import com.mechjacktv.mechjackbot.configuration.ArbitraryChatBotConfiguration;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
+import com.mechjacktv.util.DefaultTimeUtils;
 import com.mechjacktv.util.ExecutionUtils;
 
 public class PircBotXMessageEventUnitTests {
@@ -31,7 +31,13 @@ public class PircBotXMessageEventUnitTests {
 
   private PircBotXMessageEvent givenASubjectToTest(final AppConfiguration appConfiguration,
       final GenericMessageEvent genericMessageEvent) {
-    return new PircBotXMessageEvent(appConfiguration, this.executionUtils, genericMessageEvent);
+    final PircBotXChatBotFactory chatBotFactory = new PircBotXChatBotFactory(appConfiguration, this.executionUtils);
+    final ChatBotConfiguration chatBotConfiguration = new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator);
+    final CommandUtils commandUtils = new DefaultCommandUtils(appConfiguration, chatBotConfiguration,
+        this.executionUtils, new DefaultTimeUtils());
+
+    return new PircBotXMessageEvent(appConfiguration, chatBotConfiguration, chatBotFactory, commandUtils,
+        this.executionUtils, genericMessageEvent);
   }
 
   private AppConfiguration givenAnAppConfiguration() {
