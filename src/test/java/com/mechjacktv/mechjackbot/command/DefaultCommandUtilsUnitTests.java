@@ -12,7 +12,7 @@ public class DefaultCommandUtilsUnitTests extends CommandUtilsContractTests {
   @Override
   protected CommandUtils givenASubjectToTest(final AppConfiguration appConfiguration,
       final ChatBotConfiguration chatBotConfiguration, final TimeUtils timeUtils) {
-    return new DefaultCommandUtils(appConfiguration, chatBotConfiguration, new DefaultExecutionUtils(), timeUtils);
+    return new DefaultCommandUtils(appConfiguration, new DefaultExecutionUtils(), timeUtils);
   }
 
 }

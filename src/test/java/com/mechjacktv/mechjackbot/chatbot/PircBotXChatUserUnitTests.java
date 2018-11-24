@@ -25,7 +25,7 @@ public class PircBotXChatUserUnitTests {
     final ExecutionUtils executionUtils = new DefaultExecutionUtils();
 
     return new PircBotXChatUser(chatBotConfiguration, new DefaultCommandUtils(new MapAppConfiguration(executionUtils),
-        chatBotConfiguration, executionUtils, new DefaultTimeUtils()), user);
+        executionUtils, new DefaultTimeUtils()), user);
   }
 
   private User givenIHaveAUser() {

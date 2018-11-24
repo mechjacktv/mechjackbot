@@ -1,12 +1,22 @@
 package com.mechjacktv.keyvaluestore;
 
+import java.nio.charset.Charset;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public final class MapKeyValueStore implements KeyValueStore {
 
-  private final Map<byte[], byte[]> dataMap;
+  private static final Base64.Decoder DECODER = Base64.getDecoder();
+  private static final Base64.Encoder ENCODER = Base64.getEncoder();
+  private static final Charset UTF_8_CHARSET = Charset.forName("UTF-8");
 
-  public MapKeyValueStore(final Map<byte[], byte[]> dataMap) {
+  private final Map<String, String> dataMap;
+
+  public MapKeyValueStore() {
+    this(new HashMap<>());
+  }
+
+  public MapKeyValueStore(final Map<String, String> dataMap) {
     this.dataMap = dataMap;
   }
 
@@ -14,19 +24,20 @@ public final class MapKeyValueStore implements KeyValueStore {
   public boolean containsKey(final byte[] key) {
     Objects.requireNonNull(key, "`key` **MUST** not be `null`");
 
-    return this.dataMap.containsKey(key);
+    return this.dataMap.containsKey(this.encode(key));
   }
 
   @Override
   public Collection<byte[]> getKeys() {
-    return Collections.unmodifiableSet(this.dataMap.keySet());
+    return Collections.unmodifiableSet(this.dataMap.keySet().stream()
+        .map(this::decode).collect(Collectors.toSet()));
   }
 
   @Override
   public Optional<byte[]> get(byte[] key) {
     Objects.requireNonNull(key, "`key` **MUST** not be `null`");
 
-    return Optional.ofNullable(this.dataMap.get(key));
+    return Optional.ofNullable(this.decode(this.dataMap.get(this.encode(key))));
   }
 
   @Override
@@ -34,10 +45,10 @@ public final class MapKeyValueStore implements KeyValueStore {
     Objects.requireNonNull(key, "`key` **MUST** not be `null`");
     Objects.requireNonNull(value, "`value` **MUST** not be `null`");
 
-    if (this.dataMap.containsKey(key)) {
-      this.dataMap.replace(key, value);
+    if (this.dataMap.containsKey(this.encode(key))) {
+      this.dataMap.replace(this.encode(key), this.encode(value));
     } else {
-      this.dataMap.put(key, value);
+      this.dataMap.put(this.encode(key), this.encode(value));
     }
   }
 
@@ -45,6 +56,21 @@ public final class MapKeyValueStore implements KeyValueStore {
   public void remove(byte[] key) {
     Objects.requireNonNull(key, "`key` **MUST** not be `null`");
 
-    this.dataMap.remove(key);
+    this.dataMap.remove(this.encode(key));
   }
+
+  private byte[] decode(final String data) {
+    if (Objects.isNull(data)) {
+      return null;
+    }
+    return DECODER.decode(data.getBytes(UTF_8_CHARSET));
+  }
+
+  private String encode(final byte[] data) {
+    if (Objects.isNull(data)) {
+      return null;
+    }
+    return new String(ENCODER.encode(data), UTF_8_CHARSET);
+  }
+
 }

@@ -1,19 +1,5 @@
 package com.mechjacktv.mechjackbot.command.shoutout;
 
-import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerCommand.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
-
-import org.junit.Test;
-import org.mapdb.DB;
-import org.mapdb.DBMaker;
-import org.mapdb.Serializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mechjacktv.keyvaluestore.MapKeyValueStore;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
@@ -25,9 +11,14 @@ import com.mechjacktv.twitchclient.TwitchClient;
 import com.mechjacktv.util.*;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
-public final class ShoutOutListenerCommandUnitTests extends CommandContractTests {
+import org.junit.Test;
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ShoutOutListenerCommandUnitTests.class);
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerCommand.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+public final class ShoutOutListenerCommandUnitTests extends CommandContractTests {
 
   private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
 
@@ -55,14 +46,10 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
   }
 
   private ShoutOutDataStore givenAShoutOutDataStore(final AppConfiguration appConfiguration) {
-    final DB db = DBMaker.memoryDB().closeOnJvmShutdown().make();
-
     return new DefaultShoutOutDataStore(appConfiguration,
-        new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator),
-        (name) -> new MapKeyValueStore(db.hashMap(name, Serializer.BYTE_ARRAY,
-            Serializer.BYTE_ARRAY).createOrOpen()),
-        this.executionUtils,
-        new DefaultProtobufUtils(this.executionUtils), mock(ScheduleService.class), mock(TwitchClient.class));
+        new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator), (name) -> new MapKeyValueStore(),
+        this.executionUtils, new DefaultProtobufUtils(this.executionUtils), mock(ScheduleService.class),
+        mock(TwitchClient.class));
   }
 
   private TimeUtils givenAFakeTimeUtils() {

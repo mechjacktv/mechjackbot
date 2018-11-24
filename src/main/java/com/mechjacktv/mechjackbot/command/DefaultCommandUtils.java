@@ -24,8 +24,8 @@ public final class DefaultCommandUtils implements CommandUtils {
   private final Map<ChatUsername, LastTrigger> viewerLastTrigger;
 
   @Inject
-  public DefaultCommandUtils(final AppConfiguration appConfiguration, final ChatBotConfiguration botConfiguration,
-      final ExecutionUtils executionUtils, final TimeUtils timeUtils) {
+  public DefaultCommandUtils(final AppConfiguration appConfiguration, final ExecutionUtils executionUtils,
+      final TimeUtils timeUtils) {
     this.appConfiguration = appConfiguration;
     this.executionUtils = executionUtils;
     this.timeUtils = timeUtils;

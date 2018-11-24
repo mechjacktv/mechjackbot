@@ -1,8 +1,5 @@
 package com.mechjacktv.keyvaluestore;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -11,12 +8,13 @@ import java.util.Set;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.protobuf.Message;
-
-import org.assertj.core.api.SoftAssertions;
-import org.junit.Test;
-
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
+
+import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 public abstract class MessageStoreContractTests<K extends Message, V extends Message> {
 
@@ -24,16 +22,16 @@ public abstract class MessageStoreContractTests<K extends Message, V extends Mes
 
   protected abstract K givenAKey();
 
-  private Set<K> givenAKeySet(final int size) {
+  protected abstract V givenAValue();
+
+  private Set<K> givenAKeySet() {
     final Set<K> keys = Sets.newHashSet();
 
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < 10; i++) {
       keys.add(this.givenAKey());
     }
     return keys;
   }
-
-  protected abstract V givenAValue();
 
   private AbstractMessageStore<K, V> givenASubjectToTest() {
     return this.givenASubjectToTest(Maps.newHashMap());
@@ -47,7 +45,8 @@ public abstract class MessageStoreContractTests<K extends Message, V extends Mes
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.containsKey(null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(executionUtils.nullMessageForName("key"));
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.executionUtils.nullMessageForName("key"));
   }
 
   @Test
@@ -93,10 +92,9 @@ public abstract class MessageStoreContractTests<K extends Message, V extends Mes
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public final void getKeys_withData_returnsCollectionOfKeys() {
     final Map<K, V> data = Maps.newHashMap();
-    final Set<K> keys = this.givenAKeySet(3);
+    final Set<K> keys = this.givenAKeySet();
     for (final K key : keys) {
       data.put(key, this.givenAValue());
     }
@@ -104,10 +102,7 @@ public abstract class MessageStoreContractTests<K extends Message, V extends Mes
 
     final Collection<K> result = subjectUnderTest.getKeys();
 
-    final SoftAssertions softly = new SoftAssertions();
-    softly.assertThat(result).hasSize(keys.size());
-    softly.assertThat(result).containsAll(keys);
-    softly.assertAll();
+    assertThat(result).containsExactlyInAnyOrderElementsOf(keys);
   }
 
   @Test
@@ -116,7 +111,8 @@ public abstract class MessageStoreContractTests<K extends Message, V extends Mes
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.get(null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(executionUtils.nullMessageForName("key"));
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.executionUtils.nullMessageForName("key"));
   }
 
   @Test
@@ -139,10 +135,7 @@ public abstract class MessageStoreContractTests<K extends Message, V extends Mes
 
     final Optional<V> result = subjectUnderTest.get(key);
 
-    final SoftAssertions softly = new SoftAssertions();
-    softly.assertThat(result).isNotEmpty();
-    result.ifPresent((resultValue) -> softly.assertThat(resultValue).isEqualTo(value));
-    softly.assertAll();
+    assertThat(result).hasValue(value);
   }
 
   @Test
@@ -164,7 +157,8 @@ public abstract class MessageStoreContractTests<K extends Message, V extends Mes
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.put(null, this.givenAValue()));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(executionUtils.nullMessageForName("key"));
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.executionUtils.nullMessageForName("key"));
   }
 
   @Test
@@ -173,7 +167,8 @@ public abstract class MessageStoreContractTests<K extends Message, V extends Mes
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.put(this.givenAKey(), null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(executionUtils.nullMessageForName("value"));
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.executionUtils.nullMessageForName("value"));
   }
 
   @Test
@@ -185,28 +180,21 @@ public abstract class MessageStoreContractTests<K extends Message, V extends Mes
     subjectUnderTest.put(key, value);
     final Optional<V> result = subjectUnderTest.get(key);
 
-    final SoftAssertions softly = new SoftAssertions();
-    softly.assertThat(result).isNotEmpty();
-    result.ifPresent((resultValue) -> softly.assertThat(resultValue).isEqualTo(value));
-    softly.assertAll();
+    assertThat(result).hasValue(value);
   }
 
   @Test
   public final void put_withDataForKey_replacesExistingValue() {
     final Map<K, V> data = Maps.newHashMap();
     final K key = this.givenAKey();
-    final V value1 = this.givenAValue();
-    final V value2 = this.givenAValue();
-    data.put(key, value1);
+    final V value = this.givenAValue();
+    data.put(key, this.givenAValue());
     final AbstractMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
 
-    subjectUnderTest.put(key, value2);
+    subjectUnderTest.put(key, value);
     final Optional<V> result = subjectUnderTest.get(key);
 
-    final SoftAssertions softly = new SoftAssertions();
-    softly.assertThat(result).isNotEmpty();
-    result.ifPresent((resultValue) -> softly.assertThat(resultValue).isEqualTo(value2));
-    softly.assertAll();
+    assertThat(result).hasValue(value);
   }
 
   @Test
@@ -215,7 +203,8 @@ public abstract class MessageStoreContractTests<K extends Message, V extends Mes
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.remove(null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(executionUtils.nullMessageForName("key"));
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.executionUtils.nullMessageForName("key"));
   }
 
   @Test
@@ -244,7 +233,7 @@ public abstract class MessageStoreContractTests<K extends Message, V extends Mes
   @Test
   public final void remove_withDataButNotForKey_makesNoChanges() {
     final Map<K, V> data = Maps.newHashMap();
-    final Set<K> keys = this.givenAKeySet(3);
+    final Set<K> keys = this.givenAKeySet();
     for (final K key : keys) {
       data.put(key, this.givenAValue());
     }
@@ -253,10 +242,7 @@ public abstract class MessageStoreContractTests<K extends Message, V extends Mes
     subjectUnderTest.remove(this.givenAKey());
     final Collection<K> result = subjectUnderTest.getKeys();
 
-    final SoftAssertions softly = new SoftAssertions();
-    softly.assertThat(result).hasSize(keys.size());
-    softly.assertThat(result).containsAll(keys);
-    softly.assertAll();
+    assertThat(result).containsExactlyInAnyOrderElementsOf(keys);
   }
 
 }

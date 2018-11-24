@@ -33,8 +33,8 @@ public class PircBotXMessageEventUnitTests {
       final GenericMessageEvent genericMessageEvent) {
     final PircBotXChatBotFactory chatBotFactory = new PircBotXChatBotFactory(appConfiguration, this.executionUtils);
     final ChatBotConfiguration chatBotConfiguration = new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator);
-    final CommandUtils commandUtils = new DefaultCommandUtils(appConfiguration, chatBotConfiguration,
-        this.executionUtils, new DefaultTimeUtils());
+    final CommandUtils commandUtils = new DefaultCommandUtils(appConfiguration, this.executionUtils,
+        new DefaultTimeUtils());
 
     return new PircBotXMessageEvent(appConfiguration, chatBotConfiguration, chatBotFactory, commandUtils,
         this.executionUtils, genericMessageEvent);

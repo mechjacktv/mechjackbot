@@ -1,24 +1,9 @@
 package com.mechjacktv.mechjackbot.command.shoutout;
 
-import static com.mechjacktv.mechjackbot.command.shoutout.DefaultShoutOutDataStore.UPDATE_PERIOD_DEFAULT;
-import static com.mechjacktv.mechjackbot.command.shoutout.DefaultShoutOutDataStore.UPDATE_PERIOD_KEY;
-import static com.mechjacktv.proto.twitchclient.TwitchClientMessage.UserFollows;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
-
-import org.assertj.core.api.SoftAssertions;
-import org.junit.Test;
-import org.mapdb.DB;
-import org.mapdb.DBMaker;
-import org.mapdb.Serializer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.mechjacktv.keyvaluestore.MapKeyValueStore;
 import com.mechjacktv.keyvaluestore.MessageStoreContractTests;
@@ -36,6 +21,17 @@ import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultProtobufUtils;
 import com.mechjacktv.util.IORuntimeException;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
+
+import org.junit.Test;
+
+import static com.mechjacktv.mechjackbot.command.shoutout.DefaultShoutOutDataStore.UPDATE_PERIOD_DEFAULT;
+import static com.mechjacktv.mechjackbot.command.shoutout.DefaultShoutOutDataStore.UPDATE_PERIOD_KEY;
+import static com.mechjacktv.proto.twitchclient.TwitchClientMessage.UserFollows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
 
 public class DefaultShoutOutDataStoreUnitTests extends MessageStoreContractTests<CasterKey, Caster> {
 
@@ -73,9 +69,7 @@ public class DefaultShoutOutDataStoreUnitTests extends MessageStoreContractTests
 
   private DefaultShoutOutDataStore givenASubjectToTest(final Map<CasterKey, Caster> data,
       final ScheduleService scheduleService, final AppConfiguration appConfiguration, final TwitchClient twitchClient) {
-    final DB db = DBMaker.memoryDB().closeOnJvmShutdown().make();
-    final MapKeyValueStore dataStore = new MapKeyValueStore(db.hashMap(this.arbitraryDataGenerator.getString(),
-        Serializer.BYTE_ARRAY, Serializer.BYTE_ARRAY).createOrOpen());
+    final MapKeyValueStore dataStore = new MapKeyValueStore();
 
     for (final CasterKey key : data.keySet()) {
       dataStore.put(key.toByteArray(), data.get(key).toByteArray());
@@ -186,10 +180,7 @@ public class DefaultShoutOutDataStoreUnitTests extends MessageStoreContractTests
 
     final Caster result = subjectUnderTest.createCaster(casterName, lastShoutOut);
 
-    final SoftAssertions softly = new SoftAssertions();
-    softly.assertThat(result.getName()).isEqualTo(casterName);
-    softly.assertThat(result.getLastShoutOut()).isEqualTo(lastShoutOut);
-    softly.assertAll();
+    assertThat(result).isEqualTo(Caster.newBuilder().setName(casterName).setLastShoutOut(lastShoutOut).build());
   }
 
   @Test
@@ -259,12 +250,8 @@ public class DefaultShoutOutDataStoreUnitTests extends MessageStoreContractTests
 
     final DefaultShoutOutDataStore result = this.givenASubjectToTest(new HashMap<>(), scheduleService, twitchClient);
 
-    final SoftAssertions softly = new SoftAssertions();
-    for (final UserFollow userFollow : userFollows.getUserFollowList()) {
-      final CasterKey key = result.createCasterKey(userFollow.getToName());
-      softly.assertThat(result.containsKey(key)).isTrue();
-    }
-    softly.assertAll();
+    assertThat(result.getKeys()).containsExactlyInAnyOrderElementsOf(userFollows.getUserFollowList().stream()
+        .map(userFollow -> result.createCasterKey(userFollow.getToName())).collect(Collectors.toSet()));
   }
 
   @Test
@@ -313,16 +300,10 @@ public class DefaultShoutOutDataStoreUnitTests extends MessageStoreContractTests
     final DefaultShoutOutDataStore result = this.givenASubjectToTest(new HashMap<>(),
         this.givenAFakeScheduleService(), twitchClient);
 
-    final SoftAssertions softly = new SoftAssertions();
-    for (final UserFollow userFollow : userFollows1.getUserFollowList()) {
-      final CasterKey key = result.createCasterKey(userFollow.getToName());
-      softly.assertThat(result.containsKey(key)).isTrue();
-    }
-    for (final UserFollow userFollow : userFollows2.getUserFollowList()) {
-      final CasterKey key = result.createCasterKey(userFollow.getToName());
-      softly.assertThat(result.containsKey(key)).isTrue();
-    }
-    softly.assertAll();
+    final Set<UserFollow> allUserFollow = Stream.of(userFollows1.getUserFollowList(), userFollows2.getUserFollowList())
+        .flatMap(Collection::stream).collect(Collectors.toSet());
+    assertThat(result.getKeys()).containsExactlyInAnyOrderElementsOf(allUserFollow.stream()
+        .map(userFollow -> result.createCasterKey(userFollow.getToName())).collect(Collectors.toSet()));
   }
 
   @Test
@@ -339,12 +320,8 @@ public class DefaultShoutOutDataStoreUnitTests extends MessageStoreContractTests
     final DefaultShoutOutDataStore result = this.givenASubjectToTest(new HashMap<>(),
         this.givenAFakeScheduleService(), twitchClient);
 
-    final SoftAssertions softly = new SoftAssertions();
-    for (final UserFollow userFollow : userFollows1.getUserFollowList()) {
-      final CasterKey key = result.createCasterKey(userFollow.getToName());
-      softly.assertThat(result.containsKey(key)).isTrue();
-    }
-    softly.assertAll();
+    assertThat(result.getKeys()).containsExactlyInAnyOrderElementsOf(userFollows1.getUserFollowList().stream()
+        .map(userFollow -> result.createCasterKey(userFollow.getToName())).collect(Collectors.toSet()));
   }
 
 }

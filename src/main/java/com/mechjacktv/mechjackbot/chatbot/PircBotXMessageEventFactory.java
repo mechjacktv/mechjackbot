@@ -2,14 +2,14 @@ package com.mechjacktv.mechjackbot.chatbot;
 
 import javax.inject.Inject;
 
+import org.pircbotx.PircBotX;
+import org.pircbotx.hooks.types.GenericMessageEvent;
+
 import com.mechjacktv.mechjackbot.AppConfiguration;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.CommandUtils;
 import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.util.ExecutionUtils;
-
-import org.pircbotx.PircBotX;
-import org.pircbotx.hooks.types.GenericMessageEvent;
 
 class PircBotXMessageEventFactory implements MessageEventFactory<GenericMessageEvent> {
 

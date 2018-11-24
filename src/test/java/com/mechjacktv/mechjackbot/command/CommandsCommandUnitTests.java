@@ -15,7 +15,6 @@ import org.junit.Test;
 
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.chatbot.DefaultCommandRegistry;
-import com.mechjacktv.mechjackbot.configuration.ArbitraryChatBotConfiguration;
 import com.mechjacktv.mechjackbot.configuration.MapAppConfiguration;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultTimeUtils;
@@ -47,8 +46,7 @@ public class CommandsCommandUnitTests extends CommandContractTests {
   }
 
   private CommandUtils givenACommandUtils(final AppConfiguration appConfiguration) {
-    return new DefaultCommandUtils(appConfiguration,
-        new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator), this.executionUtils, new DefaultTimeUtils());
+    return new DefaultCommandUtils(appConfiguration, this.executionUtils, new DefaultTimeUtils());
   }
 
   private Set<Command> givenASetOfCommands(final AppConfiguration appConfiguration,

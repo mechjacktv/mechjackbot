@@ -22,7 +22,7 @@ public class ArbitraryCommandTestUtils {
     final ExecutionUtils executionUtils = new DefaultExecutionUtils();
     final TimeUtils timeUtils = new DefaultTimeUtils();
 
-    return new DefaultCommandUtils(appConfiguration, chatBotConfiguration, executionUtils, timeUtils);
+    return new DefaultCommandUtils(appConfiguration, executionUtils, timeUtils);
   }
 
   private ChatBotConfiguration givenAFakeChatBotConfiguration() {

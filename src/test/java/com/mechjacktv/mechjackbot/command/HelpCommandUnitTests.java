@@ -13,7 +13,6 @@ import org.mockito.ArgumentCaptor;
 
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.chatbot.DefaultCommandRegistry;
-import com.mechjacktv.mechjackbot.configuration.ArbitraryChatBotConfiguration;
 import com.mechjacktv.mechjackbot.configuration.MapAppConfiguration;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultTimeUtils;
@@ -195,8 +194,8 @@ public class HelpCommandUnitTests extends CommandContractTests {
   public final void handleMessageEvent_forTriggerableCommandAndCustomFormat_sendsCustomMessage() {
     final String customFormat = this.arbitraryDataGenerator.getString() + " %s %s %s";
     final MapAppConfiguration appConfiguration = this.givenAnAppConfiguration();
-    final CommandUtils commandUtils = new DefaultCommandUtils(appConfiguration,
-        new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator), this.executionUtils, new DefaultTimeUtils());
+    final CommandUtils commandUtils = new DefaultCommandUtils(appConfiguration, this.executionUtils,
+        new DefaultTimeUtils());
     final CommandRegistry commandRegistry = new DefaultCommandRegistry(this.executionUtils);
     final Command command = new ArbitraryCommand(appConfiguration, commandUtils, this.arbitraryDataGenerator);
     final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);

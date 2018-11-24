@@ -23,6 +23,6 @@ final class MapDbKeyValueStoreFactory implements KeyValueStoreFactory {
 
   @Override
   public KeyValueStore createOrOpenKeyValueStore(String name) {
-    return new MapKeyValueStore(this.db.hashMap(name, Serializer.BYTE_ARRAY, Serializer.BYTE_ARRAY).createOrOpen());
+    return new MapKeyValueStore(this.db.hashMap(name, Serializer.STRING, Serializer.STRING).createOrOpen());
   }
 }

@@ -1,15 +1,15 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
-import static com.mechjacktv.mechjackbot.chatbot.PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_DEFAULT;
-import static com.mechjacktv.mechjackbot.chatbot.PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_KEY;
-import static com.mechjacktv.mechjackbot.chatbot.PircBotXListener.JOIN_EVENT_MESSAGE_DEFAULT;
-import static com.mechjacktv.mechjackbot.chatbot.PircBotXListener.JOIN_EVENT_MESSAGE_KEY;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-
 import java.util.Set;
 
 import com.google.common.collect.Sets;
+import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.command.DefaultCommandUtils;
+import com.mechjacktv.mechjackbot.configuration.ArbitraryChatBotConfiguration;
+import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.util.DefaultExecutionUtils;
+import com.mechjacktv.util.DefaultTimeUtils;
+import com.mechjacktv.util.ExecutionUtils;
 
 import org.junit.Test;
 import org.pircbotx.Channel;
@@ -19,13 +19,12 @@ import org.pircbotx.hooks.events.PingEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.pircbotx.output.OutputIRC;
 
-import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.DefaultCommandUtils;
-import com.mechjacktv.mechjackbot.configuration.ArbitraryChatBotConfiguration;
-import com.mechjacktv.util.ArbitraryDataGenerator;
-import com.mechjacktv.util.DefaultExecutionUtils;
-import com.mechjacktv.util.DefaultTimeUtils;
-import com.mechjacktv.util.ExecutionUtils;
+import static com.mechjacktv.mechjackbot.chatbot.PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_DEFAULT;
+import static com.mechjacktv.mechjackbot.chatbot.PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_KEY;
+import static com.mechjacktv.mechjackbot.chatbot.PircBotXListener.JOIN_EVENT_MESSAGE_DEFAULT;
+import static com.mechjacktv.mechjackbot.chatbot.PircBotXListener.JOIN_EVENT_MESSAGE_KEY;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 public class PircBotXListenerUnitTests {
 
@@ -47,8 +46,8 @@ public class PircBotXListenerUnitTests {
   private PircBotXListener givenASubjectToTest(final Set<Command> commands, final AppConfiguration appConfiguration) {
     final PircBotXChatBotFactory chatBotFactory = new PircBotXChatBotFactory(appConfiguration, this.executionUtils);
     final ChatBotConfiguration chatBotConfiguration = new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator);
-    final CommandUtils commandUtils = new DefaultCommandUtils(appConfiguration, chatBotConfiguration,
-        this.executionUtils, new DefaultTimeUtils());
+    final CommandUtils commandUtils = new DefaultCommandUtils(appConfiguration, this.executionUtils,
+        new DefaultTimeUtils());
     final PircBotXMessageEventFactory messageEventFactory = new PircBotXMessageEventFactory(appConfiguration,
         chatBotConfiguration, chatBotFactory,
         commandUtils, this.executionUtils);

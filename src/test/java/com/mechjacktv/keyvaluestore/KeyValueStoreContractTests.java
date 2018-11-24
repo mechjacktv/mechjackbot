@@ -1,34 +1,42 @@
 package com.mechjacktv.keyvaluestore;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.util.DefaultExecutionUtils;
+import com.mechjacktv.util.ExecutionUtils;
+import com.mechjacktv.util.OptionalByteArrayEqualsExpected;
+
+import org.junit.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-import java.util.*;
-
-import com.google.common.collect.Maps;
-
-import org.assertj.core.api.SoftAssertions;
-import org.junit.Test;
-
-import com.mechjacktv.util.DefaultExecutionUtils;
-import com.mechjacktv.util.ExecutionUtils;
-
 public abstract class KeyValueStoreContractTests {
 
-  private static final ExecutionUtils EXECUTION_UTILS = new DefaultExecutionUtils();
-  private static final Random RANDOM = new Random();
+  private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
+  private final ExecutionUtils executionUtils = new DefaultExecutionUtils();
 
   private KeyValueStore givenASubjectToTest() {
-    return this.givenASubjectToTest(Maps.newHashMap());
+    return this.givenASubjectToTest(this.givenData());
   }
 
   abstract KeyValueStore givenASubjectToTest(Map<byte[], byte[]> data);
 
-  private byte[] givenAByteArray() {
-    final byte[] byteArray = new byte[64];
-    RANDOM.nextBytes(byteArray);
+  private Map<byte[], byte[]> givenData() {
+    final Map<byte[], byte[]> data = new HashMap<>();
 
-    return byteArray;
+    for (int i = 0; i < 10; i++) {
+      data.put(this.givenAByteArray(), this.givenAByteArray());
+    }
+    return data;
+  }
+
+  private byte[] givenAByteArray() {
+    return this.arbitraryDataGenerator.getByteArray();
   }
 
   @Test
@@ -37,12 +45,13 @@ public abstract class KeyValueStoreContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.containsKey(null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(EXECUTION_UTILS.nullMessageForName("key"));
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.executionUtils.nullMessageForName("key"));
   }
 
   @Test
   public final void containsKey_keyPresent_returnsTrue() {
-    final Map<byte[], byte[]> data = Maps.newHashMap();
+    final Map<byte[], byte[]> data = this.givenData();
     final byte[] key = this.givenAByteArray();
     data.put(key, this.givenAByteArray());
     final KeyValueStore subjectUnderTest = this.givenASubjectToTest(data);
@@ -63,23 +72,17 @@ public abstract class KeyValueStoreContractTests {
 
   @Test
   public final void getKeys_forSuppliedData_returnCollectionWithAllKeys() {
-    final Map<byte[], byte[]> data = Maps.newHashMap();
-    final byte[] key1 = this.givenAByteArray();
-    final byte[] key2 = this.givenAByteArray();
-    final byte[] key3 = this.givenAByteArray();
-    data.put(key1, this.givenAByteArray());
-    data.put(key2, this.givenAByteArray());
-    data.put(key3, this.givenAByteArray());
+    final Map<byte[], byte[]> data = this.givenData();
     final KeyValueStore subjectUnderTest = this.givenASubjectToTest(data);
 
     final Collection<byte[]> result = subjectUnderTest.getKeys();
 
-    assertThat(result).contains(key1, key2, key3);
+    assertThat(result).containsExactlyInAnyOrderElementsOf(data.keySet());
   }
 
   @Test
   public final void getKeys_noData_returnsEmptySet() {
-    final KeyValueStore subjectUnderTest = this.givenASubjectToTest();
+    final KeyValueStore subjectUnderTest = this.givenASubjectToTest(new HashMap<>());
 
     final Collection<byte[]> result = subjectUnderTest.getKeys();
 
@@ -92,7 +95,8 @@ public abstract class KeyValueStoreContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.get(null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(EXECUTION_UTILS.nullMessageForName("key"));
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.executionUtils.nullMessageForName("key"));
   }
 
   @Test
@@ -106,7 +110,7 @@ public abstract class KeyValueStoreContractTests {
 
   @Test
   public final void get_withData_returnsOptionalWithValue() {
-    final Map<byte[], byte[]> data = Maps.newHashMap();
+    final Map<byte[], byte[]> data = this.givenData();
     final byte[] key = this.givenAByteArray();
     final byte[] value = this.givenAByteArray();
     data.put(key, value);
@@ -114,10 +118,7 @@ public abstract class KeyValueStoreContractTests {
 
     final Optional<byte[]> result = subjectUnderTest.get(key);
 
-    final SoftAssertions softly = new SoftAssertions();
-    softly.assertThat(result).isNotEmpty();
-    result.ifPresent((resultValue) -> softly.assertThat(Arrays.equals(resultValue, value)));
-    softly.assertAll();
+    assertThat(result).is(new OptionalByteArrayEqualsExpected(value));
   }
 
   @Test
@@ -126,7 +127,8 @@ public abstract class KeyValueStoreContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.put(null, this.givenAByteArray()));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(EXECUTION_UTILS.nullMessageForName("key"));
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.executionUtils.nullMessageForName("key"));
   }
 
   @Test
@@ -135,7 +137,8 @@ public abstract class KeyValueStoreContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.put(this.givenAByteArray(), null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(EXECUTION_UTILS.nullMessageForName("value"));
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.executionUtils.nullMessageForName("value"));
   }
 
   @Test
@@ -147,28 +150,21 @@ public abstract class KeyValueStoreContractTests {
     subjectUnderTest.put(key, value);
     final Optional<byte[]> result = subjectUnderTest.get(key);
 
-    final SoftAssertions softly = new SoftAssertions();
-    softly.assertThat(result).isNotEmpty();
-    result.ifPresent((resultValue) -> softly.assertThat(Arrays.equals(resultValue, value)));
-    softly.assertAll();
+    assertThat(result).is(new OptionalByteArrayEqualsExpected(value));
   }
 
   @Test
   public final void put_withExistingValueForKey_newValueIsPut() {
-    final Map<byte[], byte[]> data = Maps.newHashMap();
+    final Map<byte[], byte[]> data = this.givenData();
     final byte[] key = this.givenAByteArray();
-    final byte[] value1 = this.givenAByteArray();
-    final byte[] value2 = this.givenAByteArray();
-    data.put(key, value1);
+    final byte[] value = this.givenAByteArray();
+    data.put(key, this.givenAByteArray());
     final KeyValueStore subjectUnderTest = this.givenASubjectToTest(data);
 
-    subjectUnderTest.put(key, value2);
+    subjectUnderTest.put(key, value);
     final Optional<byte[]> result = subjectUnderTest.get(key);
 
-    final SoftAssertions softly = new SoftAssertions();
-    softly.assertThat(result).isNotEmpty();
-    result.ifPresent((resultValue) -> softly.assertThat(Arrays.equals(resultValue, value2)));
-    softly.assertAll();
+    assertThat(result).is(new OptionalByteArrayEqualsExpected(value));
   }
 
   @Test
@@ -177,7 +173,8 @@ public abstract class KeyValueStoreContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.remove(null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(EXECUTION_UTILS.nullMessageForName("key"));
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.executionUtils.nullMessageForName("key"));
   }
 
   @Test
@@ -191,16 +188,14 @@ public abstract class KeyValueStoreContractTests {
 
   @Test
   public final void remove_withExistingValueForKey_removesValue() {
-    final Map<byte[], byte[]> data = Maps.newHashMap();
+    final Map<byte[], byte[]> data = this.givenData();
     final byte[] key = this.givenAByteArray();
-    final byte[] value = this.givenAByteArray();
-    data.put(key, value);
+    data.put(key, this.givenAByteArray());
     final KeyValueStore subjectUnderTest = this.givenASubjectToTest(data);
 
     subjectUnderTest.remove(key);
-    final Optional<byte[]> result = subjectUnderTest.get(key);
 
-    assertThat(result).isEmpty();
+    assertThat(subjectUnderTest.get(key)).isEmpty();
   }
 
 }
