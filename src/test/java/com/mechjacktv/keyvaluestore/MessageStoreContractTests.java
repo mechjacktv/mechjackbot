@@ -1,5 +1,8 @@
 package com.mechjacktv.keyvaluestore;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -8,13 +11,11 @@ import java.util.Set;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.protobuf.Message;
-import com.mechjacktv.util.DefaultExecutionUtils;
-import com.mechjacktv.util.ExecutionUtils;
 
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
+import com.mechjacktv.util.DefaultExecutionUtils;
+import com.mechjacktv.util.ExecutionUtils;
 
 public abstract class MessageStoreContractTests<K extends Message, V extends Message> {
 

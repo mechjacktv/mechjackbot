@@ -1,15 +1,15 @@
 package com.mechjacktv.util;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.mechjacktv.proto.util.UtilsMessage.TestKeyMessage;
-
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
+import com.mechjacktv.proto.util.UtilsMessage.TestKeyMessage;
 
 public abstract class ProtobufUtilsContractTests {
 
