@@ -120,7 +120,7 @@ public class PircBotXChatBotUnitTests {
     final PircBotXChatBot subjectUnderTest = this.givenIHaveASubjectToTest(mock(PircBotX.class));
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.sendMessage(null,
-        this.arbitraryDataGenerator.getString()));
+        Message.of(this.arbitraryDataGenerator.getString())));
 
     assertThat(thrown).isInstanceOf(NullPointerException.class)
         .hasMessage(this.executionUtils.nullMessageForName("channel"));
@@ -131,7 +131,7 @@ public class PircBotXChatBotUnitTests {
     final PircBotXChatBot subjectUnderTest = this.givenIHaveASubjectToTest(mock(PircBotX.class));
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.sendMessage(
-        this.arbitraryDataGenerator.getString(), null));
+        TwitchChannel.of(this.arbitraryDataGenerator.getString()), null));
 
     assertThat(thrown).isInstanceOf(NullPointerException.class)
         .hasMessage(this.executionUtils.nullMessageForName("message"));
@@ -147,12 +147,12 @@ public class PircBotXChatBotUnitTests {
     final OutputIRC outputIRC = mock(OutputIRC.class);
     when(pircBotX.sendIRC()).thenReturn(outputIRC);
     final PircBotXChatBot subjectUnderTest = this.givenIHaveASubjectToTest(appConfiguration, pircBotX);
-    final String channel = this.arbitraryDataGenerator.getString();
-    final String message = this.arbitraryDataGenerator.getString();
+    final TwitchChannel channel = TwitchChannel.of(this.arbitraryDataGenerator.getString());
+    final Message message = Message.of(this.arbitraryDataGenerator.getString());
 
     subjectUnderTest.sendMessage(channel, message);
 
-    verify(outputIRC).message(eq(channel), eq(String.format(messageFormat, message)));
+    verify(outputIRC).message(eq(channel.value), eq(String.format(messageFormat, message)));
   }
 
   @Test

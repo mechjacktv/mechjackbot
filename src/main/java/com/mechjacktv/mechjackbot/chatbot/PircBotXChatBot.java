@@ -9,9 +9,7 @@ import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.Listener;
 
-import com.mechjacktv.mechjackbot.AppConfiguration;
-import com.mechjacktv.mechjackbot.ChatBot;
-import com.mechjacktv.mechjackbot.ChatBotConfiguration;
+import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.util.ExecutionUtils;
 
 public final class PircBotXChatBot implements ChatBot {
@@ -32,8 +30,7 @@ public final class PircBotXChatBot implements ChatBot {
   @Inject
   public PircBotXChatBot(final AppConfiguration appConfiguration, final ChatBotConfiguration chatBotConfiguration,
       final ExecutionUtils executionUtils, final Listener listener) {
-    this(appConfiguration, chatBotConfiguration, executionUtils, listener,
-        (configuration -> new PircBotX(configuration)));
+    this(appConfiguration, chatBotConfiguration, executionUtils, listener, PircBotX::new);
   }
 
   PircBotXChatBot(final AppConfiguration appConfiguration, final ChatBotConfiguration chatBotConfiguration,
@@ -59,10 +56,11 @@ public final class PircBotXChatBot implements ChatBot {
     this.pircBotX = pircBotX;
   }
 
-  void sendMessage(final String channel, final String message) {
+  @Override
+  public void sendMessage(final TwitchChannel channel, final Message message) {
     Objects.requireNonNull(channel, this.executionUtils.nullMessageForName("channel"));
     Objects.requireNonNull(message, this.executionUtils.nullMessageForName("message"));
-    this.pircBotX.sendIRC().message(channel, String.format(this.appConfiguration.get(CHAT_BOT_MESSAGE_FORMAT_KEY,
+    this.pircBotX.sendIRC().message(channel.value, String.format(this.appConfiguration.get(CHAT_BOT_MESSAGE_FORMAT_KEY,
         CHAT_BOT_MESSAGE_FORMAT_DEFAULT), message));
   }
 

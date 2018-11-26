@@ -19,7 +19,6 @@ public final class DefaultCommandUtils implements CommandUtils {
   private final AppConfiguration appConfiguration;
   private final ExecutionUtils executionUtils;
   private final TimeUtils timeUtils;
-  private final ChatUsername botOwner;
   private final Map<CommandTrigger, Pattern> commandTriggerPatterns;
   private final Map<CommandTrigger, LastTrigger> commandLastTrigger;
   private final Map<ChatUsername, LastTrigger> viewerLastTrigger;
@@ -30,41 +29,28 @@ public final class DefaultCommandUtils implements CommandUtils {
     this.appConfiguration = appConfiguration;
     this.executionUtils = executionUtils;
     this.timeUtils = timeUtils;
-    this.botOwner = this.sanitizeChatUsername(ChatUsername.of(botConfiguration.getTwitchChannel().value));
     this.commandTriggerPatterns = new HashMap<>();
     this.commandLastTrigger = new HashMap<>();
     this.viewerLastTrigger = new HashMap<>();
   }
 
   @Override
-  public boolean hasRole(final Command command, final MessageEvent messageEvent) {
+  public boolean hasAccessLevel(final Command command, final MessageEvent messageEvent) {
     Objects.requireNonNull(command, this.executionUtils.nullMessageForName("command"));
     Objects.requireNonNull(messageEvent, this.executionUtils.nullMessageForName("messageEvent"));
     return this.executionUtils.softenException(() -> {
       final Method method = command.getClass().getMethod("handleMessageEvent", MessageEvent.class);
-      final RestrictToRoles roles = method.getAnnotation(RestrictToRoles.class);
+      final RestrictToAccessLevel roles = method.getAnnotation(RestrictToAccessLevel.class);
 
       if (Objects.isNull(roles)) {
         return true;
       }
-      return this.hasRole(messageEvent, roles.value());
+      return this.hasAccessLevel(messageEvent, roles.value());
     }, CommandException.class);
   }
 
-  private boolean hasRole(final MessageEvent messageEvent, ViewerRole[] roles) {
-    final ChatUser chatUser = messageEvent.getChatUser();
-    final ChatUsername chatUsername = this.sanitizeChatUsername(chatUser.getUsername());
-
-    if (this.botOwner.equals(chatUsername)) {
-      return true;
-    } else {
-      for (final ViewerRole role : roles) {
-        if (chatUser.hasRole(role)) {
-          return true;
-        }
-      }
-      return false;
-    }
+  private boolean hasAccessLevel(final MessageEvent messageEvent, final AccessLevel accessLevel) {
+    return messageEvent.getChatUser().hasAccessLevel(accessLevel);
   }
 
   @Override
@@ -77,7 +63,7 @@ public final class DefaultCommandUtils implements CommandUtils {
       final NoCoolDown noCoolDown = method.getAnnotation(NoCoolDown.class);
 
       if (Objects.nonNull(noCoolDown)
-          || this.hasRole(messageEvent, new ViewerRole[] { ViewerRole.OWNER, ViewerRole.MODERATOR })) {
+          || this.hasAccessLevel(messageEvent, AccessLevel.MODERATOR)) {
         return true;
       } else if (this.isCooledDown(command.getTrigger(), messageEvent.getChatUser().getUsername(), now)) {
         this.commandLastTrigger.put(command.getTrigger(), LastTrigger.of(now));

@@ -2,15 +2,17 @@ package com.mechjacktv.mechjackbot.chatbot;
 
 import org.pircbotx.User;
 
-import com.mechjacktv.mechjackbot.ChatUser;
-import com.mechjacktv.mechjackbot.ChatUsername;
-import com.mechjacktv.mechjackbot.ViewerRole;
+import com.mechjacktv.mechjackbot.*;
 
 final class PircBotXChatUser implements ChatUser {
 
+  private final ChatBotConfiguration chatBotConfiguration;
+  private final CommandUtils commandUtils;
   private final User user;
 
-  PircBotXChatUser(final User user) {
+  PircBotXChatUser(final ChatBotConfiguration chatBotConfiguration, final CommandUtils commandUtils, final User user) {
+    this.chatBotConfiguration = chatBotConfiguration;
+    this.commandUtils = commandUtils;
     this.user = user;
   }
 
@@ -20,8 +22,9 @@ final class PircBotXChatUser implements ChatUser {
   }
 
   @Override
-  public boolean hasRole(ViewerRole viewerRole) {
-    return false;
+  public boolean hasAccessLevel(AccessLevel accessLevel) {
+    return this.chatBotConfiguration.getTwitchChannel().value
+        .equalsIgnoreCase(this.commandUtils.sanitizeChatUsername(this.getUsername()).value);
   }
 
 }

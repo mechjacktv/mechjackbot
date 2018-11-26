@@ -11,29 +11,41 @@ public abstract class ExecutionUtilsContractTests {
 
   private static final String EXCEPTION_MESSAGE = "EXCEPTION_MESSAGE";
 
+  abstract ExecutionUtils givenASubjectToTest();
+
   @Test
   public final void softenException_withRunnableNoException_completesNormally() {
     final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.softenException(() -> {
       // do nothing
-    }, TestableException.class));
+    }, WrappingException.class));
 
     assertThat(thrown).isNull();
   }
 
-  abstract ExecutionUtils givenASubjectToTest();
-
   @Test
-  public final void softenException_withRunnableThrowsException_throwsTestableException() {
+  public final void softenException_withRunnableThrowsException_throwsWrappingException() {
     final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.softenException(
         () -> {
           throw new Exception(EXCEPTION_MESSAGE);
-        }, TestableException.class));
+        }, WrappingException.class));
 
-    assertThat(thrown).isInstanceOf(TestableException.class).hasMessage(EXCEPTION_MESSAGE);
+    assertThat(thrown).isInstanceOf(WrappingException.class).hasMessage(EXCEPTION_MESSAGE);
+  }
+
+  @Test
+  public final void softenException_withRunnableThrowsExceptionNonWrappingException_throwsSoftenedException() {
+    final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
+
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.softenException(
+        () -> {
+          throw new Exception(EXCEPTION_MESSAGE);
+        }, NonWrappingException.class));
+
+    assertThat(thrown).isInstanceOf(SoftenedException.class).hasMessage(EXCEPTION_MESSAGE);
   }
 
   @Test
@@ -41,31 +53,51 @@ public abstract class ExecutionUtilsContractTests {
     final Object suppliedObject = new Object();
     final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Object result = subjectUnderTest.softenException(() -> suppliedObject, TestableException.class);
+    final Object result = subjectUnderTest.softenException(() -> suppliedObject, WrappingException.class);
 
     assertThat(result).isEqualTo(suppliedObject);
   }
 
   @Test
-  public final void softenException_withSupplierThrowsException_throwsTestableException() {
+  public final void softenException_withSupplierThrowsException_throwsWrappingException() {
     final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.softenException(this::supplierThrowsException,
-        TestableException.class));
+        WrappingException.class));
 
-    assertThat(thrown).isInstanceOf(TestableException.class).hasMessage(EXCEPTION_MESSAGE);
+    assertThat(thrown).isInstanceOf(WrappingException.class).hasMessage(EXCEPTION_MESSAGE);
+  }
+
+  @Test
+  public final void softenException_withSupplierThrowsExceptionNonWrappingException_throwsSoftenedException() {
+    final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
+
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.softenException(this::supplierThrowsException,
+        NonWrappingException.class));
+
+    assertThat(thrown).isInstanceOf(SoftenedException.class).hasMessage(EXCEPTION_MESSAGE);
   }
 
   private SupplierWithException<Object> supplierThrowsException() throws Exception {
     throw new Exception(EXCEPTION_MESSAGE);
   }
 
-  private static final class TestableException extends RuntimeException {
+  private static final class WrappingException extends RuntimeException {
 
     private static final long serialVersionUID = -2149332864017817028L;
 
-    public TestableException(String message, Throwable cause) {
+    public WrappingException(final String message, final Throwable cause) {
       super(message, cause);
+    }
+
+  }
+
+  private static final class NonWrappingException extends RuntimeException {
+
+    private static final long serialVersionUID = 5785191548998147302L;
+
+    public NonWrappingException(final Throwable cause) {
+      super(cause);
     }
 
   }

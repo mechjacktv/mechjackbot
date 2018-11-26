@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface RestrictToRoles {
-  ViewerRole[] value();
+public @interface RestrictToAccessLevel {
+  AccessLevel value();
 }

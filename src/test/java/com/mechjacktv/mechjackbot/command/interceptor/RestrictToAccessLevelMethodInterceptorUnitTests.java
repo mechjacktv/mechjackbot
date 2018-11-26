@@ -13,27 +13,27 @@ import org.junit.Test;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 
-public class RestrictToRolesMethodInterceptorUnitTests {
+public class RestrictToAccessLevelMethodInterceptorUnitTests {
 
   private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
   private final CommandMethodInterceptorUnitTestUtils methodInterceptorUtils = new CommandMethodInterceptorUnitTestUtils(
       this.arbitraryDataGenerator);
 
   @SuppressWarnings("unchecked")
-  private RestrictToRolesMethodInterceptor givenASubjectToTest(final CommandUtils commandUtils) {
+  private RestrictToAccessLevelMethodInterceptor givenASubjectToTest(final CommandUtils commandUtils) {
     final Provider<CommandUtils> provider = mock(Provider.class);
 
     when(provider.get()).thenReturn(commandUtils);
-    return new RestrictToRolesMethodInterceptor(provider);
+    return new RestrictToAccessLevelMethodInterceptor(provider);
   }
 
   @Test
-  @RestrictToRoles({ ViewerRole.SUBSCRIBER })
+  @RestrictToAccessLevel(AccessLevel.SUBSCRIBER)
   public final void invoke_hasRole_invokesCommand() throws Throwable {
     final CommandUtils commandUtils = mock(CommandUtils.class);
-    final RestrictToRolesMethodInterceptor subjectUnderTest = this.givenASubjectToTest(commandUtils);
+    final RestrictToAccessLevelMethodInterceptor subjectUnderTest = this.givenASubjectToTest(commandUtils);
     final Method method = this.getClass().getMethod("invoke_hasRole_invokesCommand");
-    when(commandUtils.hasRole(isA(Command.class), isA(MessageEvent.class))).thenReturn(true);
+    when(commandUtils.hasAccessLevel(isA(Command.class), isA(MessageEvent.class))).thenReturn(true);
     final MethodInvocation methodInvocation = this.methodInterceptorUtils.givenAFakeMethodInvocation(method);
 
     subjectUnderTest.invoke(methodInvocation);
@@ -42,12 +42,12 @@ public class RestrictToRolesMethodInterceptorUnitTests {
   }
 
   @Test
-  @RestrictToRoles({ ViewerRole.SUBSCRIBER })
+  @RestrictToAccessLevel(AccessLevel.SUBSCRIBER)
   public final void invoke_doesNotHaveRole_commandIsNotInvoked() throws Throwable {
     final CommandUtils commandUtils = mock(CommandUtils.class);
-    final RestrictToRolesMethodInterceptor subjectUnderTest = this.givenASubjectToTest(commandUtils);
+    final RestrictToAccessLevelMethodInterceptor subjectUnderTest = this.givenASubjectToTest(commandUtils);
     final Method method = this.getClass().getMethod("invoke_hasRole_invokesCommand");
-    when(commandUtils.hasRole(isA(Command.class), isA(MessageEvent.class))).thenReturn(false);
+    when(commandUtils.hasAccessLevel(isA(Command.class), isA(MessageEvent.class))).thenReturn(false);
     final MethodInvocation methodInvocation = this.methodInterceptorUtils.givenAFakeMethodInvocation(method);
 
     subjectUnderTest.invoke(methodInvocation);
