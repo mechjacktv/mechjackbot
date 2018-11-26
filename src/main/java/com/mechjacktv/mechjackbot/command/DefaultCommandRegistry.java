@@ -1,16 +1,16 @@
-package com.mechjacktv.mechjackbot.chatbot;
+package com.mechjacktv.mechjackbot.command;
 
 import java.util.*;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.CommandRegistry;
 import com.mechjacktv.mechjackbot.CommandTrigger;
 import com.mechjacktv.util.ExecutionUtils;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class DefaultCommandRegistry implements CommandRegistry {
 

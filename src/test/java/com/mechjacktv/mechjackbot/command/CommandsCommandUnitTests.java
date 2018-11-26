@@ -16,7 +16,6 @@ import org.junit.Test;
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.chatbot.DefaultCommandRegistry;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultTimeUtils;
 

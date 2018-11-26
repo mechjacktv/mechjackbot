@@ -42,7 +42,8 @@ public abstract class AbstractCommand implements Command {
 
   @Override
   public final CommandTrigger getTrigger() {
-    return CommandTrigger.of(this.configuration.get(this.commandTriggerKey.value, this.commandTriggerDefault.value));
+    return CommandTrigger.of(this.configuration.get(this.commandTriggerKey.value,
+        this.commandTriggerDefault.value));
   }
 
   @Override

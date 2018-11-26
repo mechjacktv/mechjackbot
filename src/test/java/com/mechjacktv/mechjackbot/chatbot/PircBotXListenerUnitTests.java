@@ -7,10 +7,6 @@ import static com.mechjacktv.mechjackbot.chatbot.PircBotXListener.JOIN_EVENT_MES
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-import java.util.Set;
-
-import com.google.common.collect.Sets;
-
 import org.junit.Test;
 import org.pircbotx.Channel;
 import org.pircbotx.PircBotX;
@@ -33,35 +29,27 @@ public class PircBotXListenerUnitTests {
   private final ExecutionUtils executionUtils = new DefaultExecutionUtils();
 
   private PircBotXListener givenASubjectToTest() {
-    return this.givenASubjectToTest(Sets.newHashSet(), mock(Configuration.class));
+    return this.givenASubjectToTest(mock(Configuration.class), mock(MessageEventHandler.class));
   }
 
-  private PircBotXListener givenASubjectToTest(final Set<Command> commands) {
-    return this.givenASubjectToTest(commands, mock(Configuration.class));
+  private PircBotXListener givenASubjectToTest(final MessageEventHandler messageEventHandler) {
+    return this.givenASubjectToTest(mock(Configuration.class), messageEventHandler);
   }
 
   private PircBotXListener givenASubjectToTest(final Configuration configuration) {
-    return this.givenASubjectToTest(Sets.newHashSet(), configuration);
+    return this.givenASubjectToTest(configuration, mock(MessageEventHandler.class));
   }
 
-  private PircBotXListener givenASubjectToTest(final Set<Command> commands, final Configuration configuration) {
+  private PircBotXListener givenASubjectToTest(final Configuration configuration,
+      final MessageEventHandler messageEventHandler) {
     final PircBotXChatBotFactory chatBotFactory = new PircBotXChatBotFactory(configuration, this.executionUtils);
     final ChatBotConfiguration chatBotConfiguration = new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator);
     final CommandUtils commandUtils = new DefaultCommandUtils(configuration, this.executionUtils,
         new DefaultTimeUtils());
     final PircBotXMessageEventFactory messageEventFactory = new PircBotXMessageEventFactory(configuration,
-        chatBotConfiguration, chatBotFactory,
-        commandUtils, this.executionUtils);
+        chatBotConfiguration, chatBotFactory, commandUtils, this.executionUtils);
 
-    return new PircBotXListener(commands, configuration, new DefaultCommandRegistry(this.executionUtils),
-        chatBotFactory, messageEventFactory);
-  }
-
-  private Command givenAFakeCommand() {
-    final Command command = mock(Command.class);
-
-    when(command.getTrigger()).thenReturn(CommandTrigger.of(this.arbitraryDataGenerator.getString()));
-    return command;
+    return new PircBotXListener(configuration, chatBotFactory, messageEventFactory, messageEventHandler);
   }
 
   @Test
@@ -77,42 +65,13 @@ public class PircBotXListenerUnitTests {
   }
 
   @Test
-  public final void onGenericMessage_noCommandIsTriggered_noCommandHandlesMessageEvent() {
-    final Command command = this.givenAFakeCommand();
-    when(command.isTriggered(isA(MessageEvent.class))).thenReturn(false);
-    final PircBotXListener subjectUnderTest = this.givenASubjectToTest(Sets.newHashSet(command));
-    final GenericMessageEvent genericMessageEvent = mock(GenericMessageEvent.class);
+  public final void onGenericMessageEvent_forEvent_callsMessageEventHandler() {
+    final MessageEventHandler messageEventHandler = mock(MessageEventHandler.class);
+    final PircBotXListener subjectUnderTest = this.givenASubjectToTest(messageEventHandler);
 
-    subjectUnderTest.onGenericMessage(genericMessageEvent);
+    subjectUnderTest.onGenericMessage(mock(GenericMessageEvent.class));
 
-    verify(command, never()).handleMessageEvent(isA(MessageEvent.class));
-  }
-
-  @Test
-  public final void onGenericMessage_commandIsTriggered_commandHandlesMessageEvent() {
-    final Command command = this.givenAFakeCommand();
-    when(command.isTriggered(isA(MessageEvent.class))).thenReturn(true);
-    final PircBotXListener subjectUnderTest = this.givenASubjectToTest(Sets.newHashSet(command));
-    final GenericMessageEvent genericMessageEvent = mock(GenericMessageEvent.class);
-
-    subjectUnderTest.onGenericMessage(genericMessageEvent);
-
-    verify(command).handleMessageEvent(isA(MessageEvent.class));
-  }
-
-  @Test
-  public final void onGenericMessage_oneCommandIsTriggered_triggeredCommandHandlesMessageEvent() {
-    final Command goodCommand = this.givenAFakeCommand();
-    when(goodCommand.isTriggered(isA(MessageEvent.class))).thenReturn(true);
-    final Command badCommand = this.givenAFakeCommand();
-    when(badCommand.isTriggered(isA(MessageEvent.class))).thenReturn(false);
-    final PircBotXListener subjectUnderTest = this.givenASubjectToTest(Sets.newHashSet(goodCommand, badCommand));
-    final GenericMessageEvent genericMessageEvent = mock(GenericMessageEvent.class);
-
-    subjectUnderTest.onGenericMessage(genericMessageEvent);
-
-    verify(goodCommand).handleMessageEvent(isA(MessageEvent.class));
-    verify(badCommand, never()).handleMessageEvent(isA(MessageEvent.class));
+    verify(messageEventHandler).handleMessageEvent(isA(MessageEvent.class));
   }
 
   @Test

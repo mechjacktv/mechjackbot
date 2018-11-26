@@ -1,8 +1,11 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
-import java.util.Set;
-
 import javax.inject.Inject;
+
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.mechjackbot.Message;
+import com.mechjacktv.mechjackbot.MessageEventHandler;
+import com.mechjacktv.mechjackbot.TwitchChannel;
 
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -10,30 +13,24 @@ import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.PingEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
-import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.mechjackbot.*;
-
 final class PircBotXListener extends ListenerAdapter {
 
   static final String JOIN_EVENT_MESSAGE_KEY = "chat_bot.join_event.message";
   static final String JOIN_EVENT_MESSAGE_DEFAULT = "Present and ready for action";
 
   private final Configuration configuration;
-  private final CommandRegistry commandRegistry;
   private final ChatBotFactory<PircBotX> chatBotFactory;
   private final MessageEventFactory<GenericMessageEvent> messageEventFactory;
+  private final MessageEventHandler messageEventHandler;
 
   @Inject
-  public PircBotXListener(final Set<Command> commands, final Configuration configuration,
-      final CommandRegistry commandRegistry, final ChatBotFactory<PircBotX> chatBotFactory,
-      final MessageEventFactory<GenericMessageEvent> messageEventFactory) {
+  public PircBotXListener(final Configuration configuration, final ChatBotFactory<PircBotX> chatBotFactory,
+      final MessageEventFactory<GenericMessageEvent> messageEventFactory,
+      final MessageEventHandler messageEventHandler) {
     this.configuration = configuration;
-    this.commandRegistry = commandRegistry;
     this.chatBotFactory = chatBotFactory;
     this.messageEventFactory = messageEventFactory;
-    for (final Command command : commands) {
-      this.commandRegistry.addCommand(command);
-    }
+    this.messageEventHandler = messageEventHandler;
   }
 
   @Override
@@ -43,13 +40,7 @@ final class PircBotXListener extends ListenerAdapter {
 
   @Override
   public final void onGenericMessage(final GenericMessageEvent event) {
-    final MessageEvent messageEvent = this.messageEventFactory.create(event);
-
-    for (final Command command : this.commandRegistry.getCommands()) {
-      if (command.isTriggered(messageEvent)) {
-        command.handleMessageEvent(messageEvent);
-      }
-    }
+    this.messageEventHandler.handleMessageEvent(this.messageEventFactory.create(event));
   }
 
   @Override

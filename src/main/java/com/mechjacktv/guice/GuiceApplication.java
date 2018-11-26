@@ -17,7 +17,7 @@ public abstract class GuiceApplication {
 
   protected GuiceApplication(final Collection<Module> modules) {
     this.injector = Guice.createInjector(modules);
-    InjectorBridge.INSTANCE = new InjectorBridge(this.injector);
+    InjectorBridge.getBridge().setInjector(this.injector);
   }
 
   public final void start() {

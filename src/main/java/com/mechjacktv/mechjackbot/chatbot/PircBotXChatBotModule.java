@@ -11,7 +11,6 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.ChatBot;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
-import com.mechjacktv.mechjackbot.CommandRegistry;
 import com.mechjacktv.twitchclient.TwitchClientConfiguration;
 
 public final class PircBotXChatBotModule extends AbstractModule {
@@ -31,8 +30,6 @@ public final class PircBotXChatBotModule extends AbstractModule {
 
     this.bind(new TypeLiteral<ChatUserFactory<User>>() {
     }).to(PircBotXChatUserFactory.class).asEagerSingleton();
-
-    this.bind(CommandRegistry.class).to(DefaultCommandRegistry.class).asEagerSingleton();
 
     this.bind(Listener.class).to(PircBotXListener.class).asEagerSingleton();
 
