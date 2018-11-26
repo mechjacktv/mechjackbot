@@ -9,14 +9,14 @@ public class InjectorBridge {
 
   static InjectorBridge INSTANCE = null;
 
+  private final Injector injector;
+
   public static InjectorBridge getInstance() {
     if (Objects.isNull(INSTANCE)) {
       throw new IllegalStateException("No InjectorBridge instance has been set.");
     }
     return INSTANCE;
   }
-
-  private final Injector injector;
 
   InjectorBridge(final Injector injector) {
     this.injector = injector;
