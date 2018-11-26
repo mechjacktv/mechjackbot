@@ -14,15 +14,15 @@ public class QuitCommand extends AbstractCommand {
   static final String COMMAND_MESSAGE_KEY = "command.quit.message";
   static final String COMMAND_MESSAGE_DEFAULT = "Powering down";
 
-  private final AppConfiguration appConfiguration;
+  private final com.mechjacktv.configuration.Configuration configuration;
   private final ScheduleService scheduleService;
 
   @Inject
-  public QuitCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils,
+  public QuitCommand(final com.mechjacktv.configuration.Configuration configuration, final CommandUtils commandUtils,
       final ScheduleService scheduleService) {
-    super(new Configuration(appConfiguration, commandUtils, CommandDescription.of("Shuts the chat bot down."),
+    super(new Configuration(configuration, commandUtils, CommandDescription.of("Shuts the chat bot down."),
         CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT)));
-    this.appConfiguration = appConfiguration;
+    this.configuration = configuration;
     this.scheduleService = scheduleService;
   }
 
@@ -31,7 +31,7 @@ public class QuitCommand extends AbstractCommand {
   public void handleMessageEvent(final MessageEvent messageEvent) {
     final ChatBot chatBot = messageEvent.getChatBot();
 
-    messageEvent.sendResponse(Message.of(this.appConfiguration.get(COMMAND_MESSAGE_KEY, COMMAND_MESSAGE_DEFAULT)));
+    messageEvent.sendResponse(Message.of(this.configuration.get(COMMAND_MESSAGE_KEY, COMMAND_MESSAGE_DEFAULT)));
     this.scheduleService.stop();
     chatBot.stop();
   }

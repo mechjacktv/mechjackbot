@@ -13,9 +13,10 @@ import com.google.common.collect.Sets;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.chatbot.DefaultCommandRegistry;
-import com.mechjacktv.mechjackbot.configuration.MapAppConfiguration;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultTimeUtils;
 
@@ -26,12 +27,12 @@ public class CommandsCommandUnitTests extends CommandContractTests {
   private final ArbitraryCommandTestUtils commandTestUtils = new ArbitraryCommandTestUtils(this.arbitraryDataGenerator);
 
   @Override
-  protected Command givenASubjectToTest(final AppConfiguration appConfiguration) {
-    return this.givenASubjectToTest(appConfiguration, mock(CommandRegistry.class));
+  protected Command givenASubjectToTest(final Configuration configuration) {
+    return this.givenASubjectToTest(configuration, mock(CommandRegistry.class));
   }
 
-  private Command givenASubjectToTest(final AppConfiguration appConfiguration, final CommandRegistry commandRegistry) {
-    return new CommandsCommand(appConfiguration, this.commandTestUtils.givenACommandUtils(appConfiguration),
+  private Command givenASubjectToTest(final Configuration configuration, final CommandRegistry commandRegistry) {
+    return new CommandsCommand(configuration, this.commandTestUtils.givenACommandUtils(configuration),
         commandRegistry);
   }
 
@@ -45,16 +46,16 @@ public class CommandsCommandUnitTests extends CommandContractTests {
     return CommandTrigger.of(CommandsCommand.COMMAND_TRIGGER_DEFAULT);
   }
 
-  private CommandUtils givenACommandUtils(final AppConfiguration appConfiguration) {
-    return new DefaultCommandUtils(appConfiguration, this.executionUtils, new DefaultTimeUtils());
+  private CommandUtils givenACommandUtils(final Configuration configuration) {
+    return new DefaultCommandUtils(configuration, this.executionUtils, new DefaultTimeUtils());
   }
 
-  private Set<Command> givenASetOfCommands(final AppConfiguration appConfiguration,
+  private Set<Command> givenASetOfCommands(final Configuration configuration,
       final CommandUtils commandUtils) {
     final Set<Command> commands = new HashSet<>();
 
     for (int i = 0; i < 3; i++) {
-      commands.add(new ArbitraryCommand(appConfiguration, commandUtils, this.arbitraryDataGenerator));
+      commands.add(new ArbitraryCommand(configuration, commandUtils, this.arbitraryDataGenerator));
     }
     return commands;
   }
@@ -70,7 +71,7 @@ public class CommandsCommandUnitTests extends CommandContractTests {
 
   @Test
   public final void handleMessageEvent_defaultFormat_sendsDefaultListOfCommands() {
-    final MapAppConfiguration appConfiguration = this.givenAnAppConfiguration();
+    final MapConfiguration appConfiguration = this.givenAnAppConfiguration();
     final CommandUtils commandUtils = this.givenACommandUtils(appConfiguration);
     final Set<Command> commands = this.givenASetOfCommands(appConfiguration, commandUtils);
     final CommandRegistry commandRegistry = this.givenACommandRegistry(commands);
@@ -91,7 +92,7 @@ public class CommandsCommandUnitTests extends CommandContractTests {
   @Test
   public final void handleMessageEvent_customFormat_sendsCustomListOfCommands() {
     final String messageFormat = this.arbitraryDataGenerator.getString() + ": %s";
-    final MapAppConfiguration appConfiguration = this.givenAnAppConfiguration();
+    final MapConfiguration appConfiguration = this.givenAnAppConfiguration();
     final CommandUtils commandUtils = this.givenACommandUtils(appConfiguration);
     final Set<Command> commands = this.givenASetOfCommands(appConfiguration, commandUtils);
     final CommandRegistry commandRegistry = this.givenACommandRegistry(commands);
@@ -116,7 +117,7 @@ public class CommandsCommandUnitTests extends CommandContractTests {
 
   @Test
   public final void handleMessageEvent_withNonTriggerableCommands_doesNotListNonTriggerableCommands() {
-    final MapAppConfiguration appConfiguration = this.givenAnAppConfiguration();
+    final MapConfiguration appConfiguration = this.givenAnAppConfiguration();
     final CommandUtils commandUtils = this.givenACommandUtils(appConfiguration);
     final Command nonTriggerableCommand = new ArbitraryCommand(appConfiguration, commandUtils,
         this.arbitraryDataGenerator, false);

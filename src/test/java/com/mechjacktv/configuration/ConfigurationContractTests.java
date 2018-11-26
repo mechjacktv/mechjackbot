@@ -1,32 +1,32 @@
-package com.mechjacktv.mechjackbot;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
+package com.mechjacktv.configuration;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.assertj.core.api.SoftAssertions;
-import org.junit.Test;
-
 import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
 
-public abstract class AppConfigurationContractTests {
+import org.assertj.core.api.SoftAssertions;
+import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
+public abstract class ConfigurationContractTests {
 
   private static final Integer NUMBER_OF_PROPERTIES = 3;
   private static final ExecutionUtils EXECUTION_UTILS = new DefaultExecutionUtils();
 
   private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
 
-  private AppConfiguration givenASubjectToTest() {
+  private Configuration givenASubjectToTest() throws Exception {
     return this.givenASubjectToTest(this.givenAPropertiesMap());
   }
 
-  protected abstract AppConfiguration givenASubjectToTest(final Map<String, String> properties);
+  protected abstract Configuration givenASubjectToTest(final Map<String, String> properties) throws Exception;
 
   private Map<String, String> givenAPropertiesMap() {
     final Map<String, String> properties = new HashMap<>();
@@ -38,8 +38,8 @@ public abstract class AppConfigurationContractTests {
   }
 
   @Test
-  public final void get_nullKey_throwsNullPointerExceptionWithMessage() {
-    final AppConfiguration subjectUnderTest = this.givenASubjectToTest();
+  public final void get_nullKey_throwsNullPointerExceptionWithMessage() throws Exception {
+    final Configuration subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.get(null));
 
@@ -47,8 +47,8 @@ public abstract class AppConfigurationContractTests {
   }
 
   @Test
-  public final void get_noValueForKey_returnsEmptyOptional() {
-    final AppConfiguration subjectUnderTest = this.givenASubjectToTest();
+  public final void get_noValueForKey_returnsEmptyOptional() throws Exception {
+    final Configuration subjectUnderTest = this.givenASubjectToTest();
 
     final Optional<String> result = subjectUnderTest.get(this.arbitraryDataGenerator.getString());
 
@@ -56,12 +56,12 @@ public abstract class AppConfigurationContractTests {
   }
 
   @Test
-  public final void get_withData_returnsOptionalWithValue() {
+  public final void get_withData_returnsOptionalWithValue() throws Exception {
     final String key = this.arbitraryDataGenerator.getString();
     final String value = this.arbitraryDataGenerator.getString();
     final Map<String, String> properties = new HashMap<>();
     properties.put(key, value);
-    final AppConfiguration subjectUnderTest = this.givenASubjectToTest(properties);
+    final Configuration subjectUnderTest = this.givenASubjectToTest(properties);
 
     final Optional<String> result = subjectUnderTest.get(key);
 
@@ -72,8 +72,8 @@ public abstract class AppConfigurationContractTests {
   }
 
   @Test
-  public final void get_nullKeyWithDefaultValue_throwsNullPointerExceptionWithMessage() {
-    final AppConfiguration subjectUnderTest = this.givenASubjectToTest();
+  public final void get_nullKeyWithDefaultValue_throwsNullPointerExceptionWithMessage() throws Exception {
+    final Configuration subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.get(null, this.arbitraryDataGenerator.getString()));
 
@@ -81,9 +81,9 @@ public abstract class AppConfigurationContractTests {
   }
 
   @Test
-  public final void get_forKeyWithNoValueAndDefaultValue_returnsDefaultValue() {
+  public final void get_forKeyWithNoValueAndDefaultValue_returnsDefaultValue() throws Exception {
     final String defaultValue = this.arbitraryDataGenerator.getString();
-    final AppConfiguration subjectUnderTest = this.givenASubjectToTest();
+    final Configuration subjectUnderTest = this.givenASubjectToTest();
 
     final String result = subjectUnderTest.get(this.arbitraryDataGenerator.getString(), defaultValue);
 
@@ -91,8 +91,8 @@ public abstract class AppConfigurationContractTests {
   }
 
   @Test
-  public final void get_forKeyWithNoValueAndNullDefaultValue_returnsNull() {
-    final AppConfiguration subjectUnderTest = this.givenASubjectToTest();
+  public final void get_forKeyWithNoValueAndNullDefaultValue_returnsNull() throws Exception {
+    final Configuration subjectUnderTest = this.givenASubjectToTest();
 
     final String result = subjectUnderTest.get(this.arbitraryDataGenerator.getString(), null);
 
@@ -100,12 +100,12 @@ public abstract class AppConfigurationContractTests {
   }
 
   @Test
-  public final void get_forKeyWithValueAndDefaultValue_returnsKeyValue() {
+  public final void get_forKeyWithValueAndDefaultValue_returnsKeyValue() throws Exception {
     final String key = this.arbitraryDataGenerator.getString();
     final String value = this.arbitraryDataGenerator.getString();
     final Map<String, String> properties = new HashMap<>();
     properties.put(key, value);
-    final AppConfiguration subjectUnderTest = this.givenASubjectToTest(properties);
+    final Configuration subjectUnderTest = this.givenASubjectToTest(properties);
 
     final String result = subjectUnderTest.get(key, this.arbitraryDataGenerator.getString());
 
@@ -113,12 +113,12 @@ public abstract class AppConfigurationContractTests {
   }
 
   @Test
-  public final void get_forKeyWithValueAndNullDefaultValue_returnsKeyValue() {
+  public final void get_forKeyWithValueAndNullDefaultValue_returnsKeyValue() throws Exception {
     final String key = this.arbitraryDataGenerator.getString();
     final String value = this.arbitraryDataGenerator.getString();
     final Map<String, String> properties = new HashMap<>();
     properties.put(key, value);
-    final AppConfiguration subjectUnderTest = this.givenASubjectToTest(properties);
+    final Configuration subjectUnderTest = this.givenASubjectToTest(properties);
 
     final String result = subjectUnderTest.get(key, null);
 
@@ -126,9 +126,9 @@ public abstract class AppConfigurationContractTests {
   }
 
   @Test
-  public final void getKeys_whenDataPresent_returnsCollectionOfKeys() {
+  public final void getKeys_whenDataPresent_returnsCollectionOfKeys() throws Exception {
     final Map<String, String> properties = this.givenAPropertiesMap();
-    final AppConfiguration subjectUnderTest = this.givenASubjectToTest(properties);
+    final Configuration subjectUnderTest = this.givenASubjectToTest(properties);
 
     final Collection<String> result = subjectUnderTest.getKeys();
 
@@ -136,8 +136,8 @@ public abstract class AppConfigurationContractTests {
   }
 
   @Test
-  public final void getKeys_noData_returnsEmptyCollection() {
-    final AppConfiguration subjectUnderTest = this.givenASubjectToTest(new HashMap<>());
+  public final void getKeys_noData_returnsEmptyCollection() throws Exception {
+    final Configuration subjectUnderTest = this.givenASubjectToTest(new HashMap<>());
 
     final Collection<String> result = subjectUnderTest.getKeys();
 

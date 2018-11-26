@@ -16,11 +16,11 @@ import java.util.stream.Stream;
 
 import org.junit.Test;
 
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.keyvaluestore.MapKeyValueStore;
 import com.mechjacktv.keyvaluestore.MessageStoreContractTests;
-import com.mechjacktv.mechjackbot.AppConfiguration;
-import com.mechjacktv.mechjackbot.configuration.ArbitraryChatBotConfiguration;
-import com.mechjacktv.mechjackbot.configuration.MapAppConfiguration;
+import com.mechjacktv.mechjackbot.chatbot.ArbitraryChatBotConfiguration;
 import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.Caster;
 import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.CasterKey;
 import com.mechjacktv.proto.twitchclient.TwitchClientMessage.UserFollow;
@@ -54,28 +54,28 @@ public class DefaultShoutOutDataStoreUnitTests extends MessageStoreContractTests
 
   private DefaultShoutOutDataStore givenASubjectToTest(final Map<CasterKey, Caster> data,
       final ScheduleService scheduleService) {
-    return this.givenASubjectToTest(data, scheduleService, new MapAppConfiguration(this.executionUtils));
+    return this.givenASubjectToTest(data, scheduleService, new MapConfiguration(this.executionUtils));
   }
 
   private DefaultShoutOutDataStore givenASubjectToTest(final Map<CasterKey, Caster> data,
-      final ScheduleService scheduleService, final AppConfiguration appConfiguration) {
-    return this.givenASubjectToTest(data, scheduleService, appConfiguration, mock(TwitchClient.class));
+      final ScheduleService scheduleService, final Configuration configuration) {
+    return this.givenASubjectToTest(data, scheduleService, configuration, mock(TwitchClient.class));
   }
 
   private DefaultShoutOutDataStore givenASubjectToTest(final Map<CasterKey, Caster> data,
       final ScheduleService scheduleService, final TwitchClient twitchClient) {
-    return this.givenASubjectToTest(data, scheduleService, new MapAppConfiguration(this.executionUtils), twitchClient);
+    return this.givenASubjectToTest(data, scheduleService, new MapConfiguration(this.executionUtils), twitchClient);
   }
 
   private DefaultShoutOutDataStore givenASubjectToTest(final Map<CasterKey, Caster> data,
-      final ScheduleService scheduleService, final AppConfiguration appConfiguration, final TwitchClient twitchClient) {
+      final ScheduleService scheduleService, final Configuration configuration, final TwitchClient twitchClient) {
     final MapKeyValueStore dataStore = new MapKeyValueStore();
 
     for (final CasterKey key : data.keySet()) {
       dataStore.put(key.toByteArray(), data.get(key).toByteArray());
     }
 
-    return new DefaultShoutOutDataStore(appConfiguration,
+    return new DefaultShoutOutDataStore(configuration,
         new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator), (name) -> dataStore, this.executionUtils,
         new DefaultProtobufUtils(this.executionUtils), scheduleService, twitchClient);
   }
@@ -196,7 +196,7 @@ public class DefaultShoutOutDataStoreUnitTests extends MessageStoreContractTests
   @Test
   public final void new_whenCreatedWithCustomPeriod_schedulesUpdate() {
     final int period = this.arbitraryDataGenerator.getInteger();
-    final MapAppConfiguration appConfiguration = new MapAppConfiguration(this.executionUtils);
+    final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
     final ScheduleService scheduleService = mock(ScheduleService.class);
     appConfiguration.set(UPDATE_PERIOD_KEY, Integer.toString(period));
 

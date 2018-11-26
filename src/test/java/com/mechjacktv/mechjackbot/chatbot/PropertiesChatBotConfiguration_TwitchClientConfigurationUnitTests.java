@@ -1,22 +1,21 @@
-package com.mechjacktv.mechjackbot.configuration;
+package com.mechjacktv.mechjackbot.chatbot;
+
+import static org.mockito.Mockito.mock;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.mockito.Mockito;
-
 import com.mechjacktv.twitchclient.TwitchClientConfiguration;
 import com.mechjacktv.twitchclient.TwitchClientConfigurationContractTests;
 import com.mechjacktv.util.ArbitraryDataGenerator;
-import com.mechjacktv.util.PropertiesUtils;
+import com.mechjacktv.util.MapPropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 public class PropertiesChatBotConfiguration_TwitchClientConfigurationUnitTests extends
     TwitchClientConfigurationContractTests {
 
   private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
-  private final PropertiesUtils propertiesUtils = new PropertiesUtils();
 
   @Override
   protected TwitchClientConfiguration givenASubjectToTest(Optional<String> clientId) {
@@ -27,8 +26,7 @@ public class PropertiesChatBotConfiguration_TwitchClientConfigurationUnitTests e
     properties.put(PropertiesChatBotConfiguration.TWITCH_PASSWORD_KEY, this.arbitraryDataGenerator.getString());
     properties.put(PropertiesChatBotConfiguration.TWITCH_USERNAME_KEY, this.arbitraryDataGenerator.getString());
     return new PropertiesChatBotConfiguration(this.arbitraryDataGenerator.getString(),
-        () -> this.propertiesUtils.propertiesMapAsInputStream(properties),
-        Mockito.mock(ScheduleService.class));
+        new MapPropertiesSource(properties), mock(ScheduleService.class));
   }
 
 }

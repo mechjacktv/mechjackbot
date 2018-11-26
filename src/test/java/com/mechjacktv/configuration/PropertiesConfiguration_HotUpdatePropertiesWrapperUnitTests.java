@@ -1,16 +1,15 @@
-package com.mechjacktv.mechjackbot.configuration;
+package com.mechjacktv.configuration;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.HotUpdatePropertiesWrapperContractTests;
+import com.mechjacktv.util.PropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
-public class PropertiesAppConfiguration_HotUpdatePropertiesWrapperUnitTests
+public class PropertiesConfiguration_HotUpdatePropertiesWrapperUnitTests
     extends HotUpdatePropertiesWrapperContractTests {
 
   private static final Integer NUMBER_OF_PROPERTIES = 3;
@@ -18,9 +17,9 @@ public class PropertiesAppConfiguration_HotUpdatePropertiesWrapperUnitTests
   private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
 
   @Override
-  protected PropertiesAppConfiguration givenASubjectToTest(final Supplier<InputStream> propertiesSupplier,
+  protected PropertiesConfiguration givenASubjectToTest(final PropertiesSource propertiesSource,
       final ScheduleService scheduleService) {
-    return new PropertiesAppConfiguration(propertiesSupplier, new DefaultExecutionUtils(), scheduleService);
+    return new PropertiesConfiguration(propertiesSource, new DefaultExecutionUtils(), scheduleService);
   }
 
   @Override

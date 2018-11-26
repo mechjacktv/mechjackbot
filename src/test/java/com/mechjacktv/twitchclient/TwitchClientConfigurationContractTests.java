@@ -7,9 +7,11 @@ import java.util.Optional;
 
 import org.junit.Test;
 
+import com.mechjacktv.util.ArbitraryDataGenerator;
+
 public abstract class TwitchClientConfigurationContractTests {
 
-  private static final String TWITCH_CLIENT_ID = "TWITCH_CLIENT_ID";
+  protected final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
 
   protected abstract TwitchClientConfiguration givenASubjectToTest(Optional<String> clientId);
 
@@ -24,11 +26,12 @@ public abstract class TwitchClientConfigurationContractTests {
 
   @Test
   public final void getTwitchClientId_isPresent_returnsTwitchClientId() {
-    final TwitchClientConfiguration subjectUnderTest = this.givenASubjectToTest(Optional.of(TWITCH_CLIENT_ID));
+    final String clientId = this.arbitraryDataGenerator.getString();
+    final TwitchClientConfiguration subjectUnderTest = this.givenASubjectToTest(Optional.of(clientId));
 
     final TwitchClientId result = subjectUnderTest.getTwitchClientId();
 
-    assertThat(result.value).isEqualTo(TWITCH_CLIENT_ID);
+    assertThat(result.value).isEqualTo(clientId);
   }
 
 }

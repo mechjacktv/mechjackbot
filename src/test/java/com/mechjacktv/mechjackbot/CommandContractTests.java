@@ -7,7 +7,8 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 
-import com.mechjacktv.mechjackbot.configuration.MapAppConfiguration;
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
@@ -22,18 +23,18 @@ public abstract class CommandContractTests {
     return this.givenASubjectToTest(this.givenAnAppConfiguration());
   }
 
-  protected abstract Command givenASubjectToTest(final AppConfiguration appConfiguration);
+  protected abstract Command givenASubjectToTest(final Configuration configuration);
 
   protected abstract CommandTriggerKey getCommandTriggerKey();
 
   protected abstract CommandTrigger getCommandTriggerDefault();
 
-  protected final MapAppConfiguration givenAnAppConfiguration() {
-    return new MapAppConfiguration(this.executionUtils);
+  protected final MapConfiguration givenAnAppConfiguration() {
+    return new MapConfiguration(this.executionUtils);
   }
 
-  private MapAppConfiguration givenAnAppConfiguration(final CommandTrigger commandTrigger) {
-    final MapAppConfiguration appConfiguration = this.givenAnAppConfiguration();
+  private MapConfiguration givenAnAppConfiguration(final CommandTrigger commandTrigger) {
+    final MapConfiguration appConfiguration = this.givenAnAppConfiguration();
 
     appConfiguration.set(this.getCommandTriggerKey().value, commandTrigger.value);
     return appConfiguration;
@@ -60,8 +61,8 @@ public abstract class CommandContractTests {
   @Test
   public final void getTrigger_nothingConfigured_returnsDefaultTrigger() {
     final CommandTrigger commandTrigger = this.getCommandTriggerDefault();
-    final AppConfiguration appConfiguration = this.givenAnAppConfiguration(commandTrigger);
-    final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration);
+    final Configuration configuration = this.givenAnAppConfiguration(commandTrigger);
+    final Command subjectUnderTest = this.givenASubjectToTest(configuration);
 
     final CommandTrigger result = subjectUnderTest.getTrigger();
 
@@ -71,8 +72,8 @@ public abstract class CommandContractTests {
   @Test
   public final void getTrigger_overrideConfigured_returnsOverrideTrigger() {
     final CommandTrigger commandTrigger = CommandTrigger.of(this.arbitraryDataGenerator.getString());
-    final AppConfiguration appConfiguration = this.givenAnAppConfiguration(commandTrigger);
-    final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration);
+    final Configuration configuration = this.givenAnAppConfiguration(commandTrigger);
+    final Command subjectUnderTest = this.givenASubjectToTest(configuration);
 
     final CommandTrigger result = subjectUnderTest.getTrigger();
 

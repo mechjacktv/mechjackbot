@@ -10,6 +10,7 @@ import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.PingEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
+import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.*;
 
 final class PircBotXListener extends ListenerAdapter {
@@ -17,16 +18,16 @@ final class PircBotXListener extends ListenerAdapter {
   static final String JOIN_EVENT_MESSAGE_KEY = "chat_bot.join_event.message";
   static final String JOIN_EVENT_MESSAGE_DEFAULT = "Present and ready for action";
 
-  private final AppConfiguration appConfiguration;
+  private final Configuration configuration;
   private final CommandRegistry commandRegistry;
   private final ChatBotFactory<PircBotX> chatBotFactory;
   private final MessageEventFactory<GenericMessageEvent> messageEventFactory;
 
   @Inject
-  public PircBotXListener(final Set<Command> commands, final AppConfiguration appConfiguration,
+  public PircBotXListener(final Set<Command> commands, final Configuration configuration,
       final CommandRegistry commandRegistry, final ChatBotFactory<PircBotX> chatBotFactory,
       final MessageEventFactory<GenericMessageEvent> messageEventFactory) {
-    this.appConfiguration = appConfiguration;
+    this.configuration = configuration;
     this.commandRegistry = commandRegistry;
     this.chatBotFactory = chatBotFactory;
     this.messageEventFactory = messageEventFactory;
@@ -54,6 +55,6 @@ final class PircBotXListener extends ListenerAdapter {
   @Override
   public void onJoin(final JoinEvent event) {
     this.chatBotFactory.create(event.getBot()).sendMessage(TwitchChannel.of(event.getChannel().getName()),
-        Message.of(this.appConfiguration.get(JOIN_EVENT_MESSAGE_KEY, JOIN_EVENT_MESSAGE_DEFAULT)));
+        Message.of(this.configuration.get(JOIN_EVENT_MESSAGE_KEY, JOIN_EVENT_MESSAGE_DEFAULT)));
   }
 }

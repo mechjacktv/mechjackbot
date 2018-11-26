@@ -6,8 +6,9 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.configuration.MapAppConfiguration;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
@@ -18,8 +19,8 @@ public class QuitCommandUnitTests extends CommandContractTests {
   private final ArbitraryCommandTestUtils commandTestUtils = new ArbitraryCommandTestUtils(this.arbitraryDataGenerator);
 
   @Override
-  protected Command givenASubjectToTest(final AppConfiguration appConfiguration) {
-    return this.givenASubjectToTest(appConfiguration, mock(ScheduleService.class));
+  protected Command givenASubjectToTest(final Configuration configuration) {
+    return this.givenASubjectToTest(configuration, mock(ScheduleService.class));
   }
 
   private Command givenASubjectToTest(final String message) {
@@ -30,8 +31,8 @@ public class QuitCommandUnitTests extends CommandContractTests {
     return this.givenASubjectToTest(this.givenAnAppConfiguration(message), scheduleService);
   }
 
-  private Command givenASubjectToTest(final AppConfiguration appConfiguration, final ScheduleService scheduleService) {
-    return new QuitCommand(appConfiguration, this.commandTestUtils.givenACommandUtils(appConfiguration),
+  private Command givenASubjectToTest(final Configuration configuration, final ScheduleService scheduleService) {
+    return new QuitCommand(configuration, this.commandTestUtils.givenACommandUtils(configuration),
         scheduleService);
   }
 
@@ -45,8 +46,8 @@ public class QuitCommandUnitTests extends CommandContractTests {
     return CommandTrigger.of(COMMAND_TRIGGER_DEFAULT);
   }
 
-  private MapAppConfiguration givenAnAppConfiguration(final String message) {
-    final MapAppConfiguration appConfiguration = this.givenAnAppConfiguration();
+  private MapConfiguration givenAnAppConfiguration(final String message) {
+    final MapConfiguration appConfiguration = this.givenAnAppConfiguration();
 
     appConfiguration.set(COMMAND_MESSAGE_KEY, message);
     return appConfiguration;

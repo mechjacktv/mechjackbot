@@ -6,14 +6,16 @@ public class ArbitraryCommand extends AbstractCommand {
 
   private MessageEvent handledMessageEvent;
 
-  public ArbitraryCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils,
+  public ArbitraryCommand(final com.mechjacktv.configuration.Configuration configuration,
+      final CommandUtils commandUtils,
       final ArbitraryDataGenerator arbitraryDataGenerator) {
-    this(appConfiguration, commandUtils, arbitraryDataGenerator, true);
+    this(configuration, commandUtils, arbitraryDataGenerator, true);
   }
 
-  public ArbitraryCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils,
+  public ArbitraryCommand(final com.mechjacktv.configuration.Configuration configuration,
+      final CommandUtils commandUtils,
       final ArbitraryDataGenerator arbitraryDataGenerator, final boolean triggerable) {
-    super(new Configuration(appConfiguration, commandUtils, CommandDescription.of(arbitraryDataGenerator.getString()),
+    super(new Configuration(configuration, commandUtils, CommandDescription.of(arbitraryDataGenerator.getString()),
         CommandTriggerKey.of(arbitraryDataGenerator.getString()), CommandTrigger.of(arbitraryDataGenerator.getString()))
             .setTriggerable(triggerable));
     this.handledMessageEvent = null;

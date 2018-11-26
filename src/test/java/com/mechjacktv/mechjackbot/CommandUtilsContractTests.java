@@ -10,8 +10,9 @@ import static org.mockito.Mockito.*;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
-import com.mechjacktv.mechjackbot.configuration.ArbitraryChatBotConfiguration;
-import com.mechjacktv.mechjackbot.configuration.MapAppConfiguration;
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.mechjackbot.chatbot.ArbitraryChatBotConfiguration;
 import com.mechjacktv.util.*;
 
 public abstract class CommandUtilsContractTests {
@@ -23,7 +24,7 @@ public abstract class CommandUtilsContractTests {
 
   private final ExecutionUtils executionUtils = new DefaultExecutionUtils();
 
-  private final MapAppConfiguration appConfiguration = new MapAppConfiguration(this.executionUtils);
+  private final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
 
   private final TimeUtils timeUtils = new DefaultTimeUtils();
 
@@ -35,7 +36,7 @@ public abstract class CommandUtilsContractTests {
     return this.givenASubjectToTest(this.appConfiguration, this.chatBotConfiguration, timeUtils);
   }
 
-  protected abstract CommandUtils givenASubjectToTest(final AppConfiguration appConfiguration,
+  protected abstract CommandUtils givenASubjectToTest(final Configuration configuration,
       final ChatBotConfiguration chatBotConfiguration, final TimeUtils timeUtils);
 
   private MessageEvent givenAFakeMessageEvent() {

@@ -7,8 +7,9 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.configuration.MapAppConfiguration;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 
 public class PingCommandUnitTests extends CommandContractTests {
@@ -18,20 +19,20 @@ public class PingCommandUnitTests extends CommandContractTests {
   private final ArbitraryCommandTestUtils commandTestUtils = new ArbitraryCommandTestUtils(this.arbitraryDataGenerator);
 
   @Override
-  protected Command givenASubjectToTest(final AppConfiguration appConfiguration) {
-    return this.givenASubjectToTest(appConfiguration, this.commandTestUtils.givenACommandUtils(appConfiguration));
+  protected Command givenASubjectToTest(final Configuration configuration) {
+    return this.givenASubjectToTest(configuration, this.commandTestUtils.givenACommandUtils(configuration));
   }
 
   private Command givenASubjectToTest(final String messageFormat, final ChatUsername chatUsername) {
-    final AppConfiguration appConfiguration = this.givenAnAppConfiguration(messageFormat);
+    final Configuration configuration = this.givenAnAppConfiguration(messageFormat);
     final CommandUtils commandUtils = mock(CommandUtils.class);
     when(commandUtils.sanitizeChatUsername(isA(ChatUsername.class))).thenReturn(chatUsername);
 
-    return this.givenASubjectToTest(appConfiguration, commandUtils);
+    return this.givenASubjectToTest(configuration, commandUtils);
   }
 
-  private Command givenASubjectToTest(final AppConfiguration appConfiguration, final CommandUtils commandUtils) {
-    return new PingCommand(appConfiguration, commandUtils);
+  private Command givenASubjectToTest(final Configuration configuration, final CommandUtils commandUtils) {
+    return new PingCommand(configuration, commandUtils);
   }
 
   @Override
@@ -44,8 +45,8 @@ public class PingCommandUnitTests extends CommandContractTests {
     return CommandTrigger.of(COMMAND_TRIGGER_DEFAULT);
   }
 
-  private MapAppConfiguration givenAnAppConfiguration(final String messageFormat) {
-    final MapAppConfiguration appConfiguration = this.givenAnAppConfiguration();
+  private MapConfiguration givenAnAppConfiguration(final String messageFormat) {
+    final MapConfiguration appConfiguration = this.givenAnAppConfiguration();
 
     appConfiguration.set(COMMAND_MESSAGE_FORMAT_KEY, messageFormat);
     return appConfiguration;

@@ -1,6 +1,6 @@
 package com.mechjacktv.mechjackbot.command;
 
-import com.mechjacktv.mechjackbot.AppConfiguration;
+import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.CommandUtils;
 import com.mechjacktv.mechjackbot.CommandUtilsContractTests;
@@ -10,9 +10,9 @@ import com.mechjacktv.util.TimeUtils;
 public class DefaultCommandUtilsUnitTests extends CommandUtilsContractTests {
 
   @Override
-  protected CommandUtils givenASubjectToTest(final AppConfiguration appConfiguration,
+  protected CommandUtils givenASubjectToTest(final Configuration configuration,
       final ChatBotConfiguration chatBotConfiguration, final TimeUtils timeUtils) {
-    return new DefaultCommandUtils(appConfiguration, new DefaultExecutionUtils(), timeUtils);
+    return new DefaultCommandUtils(configuration, new DefaultExecutionUtils(), timeUtils);
   }
 
 }

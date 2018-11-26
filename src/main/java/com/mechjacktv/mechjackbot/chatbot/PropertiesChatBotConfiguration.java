@@ -1,8 +1,6 @@
-package com.mechjacktv.mechjackbot.configuration;
+package com.mechjacktv.mechjackbot.chatbot;
 
 import java.io.File;
-import java.io.InputStream;
-import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
@@ -15,8 +13,9 @@ import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.twitchclient.TwitchClientConfiguration;
 import com.mechjacktv.twitchclient.TwitchClientId;
 import com.mechjacktv.util.ExecutionUtils;
-import com.mechjacktv.util.FileInputStreamSupplier;
+import com.mechjacktv.util.FilePropertiesSource;
 import com.mechjacktv.util.HotUpdatePropertiesWrapper;
+import com.mechjacktv.util.PropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 final class PropertiesChatBotConfiguration extends HotUpdatePropertiesWrapper
@@ -37,15 +36,14 @@ final class PropertiesChatBotConfiguration extends HotUpdatePropertiesWrapper
 
   @Inject
   public PropertiesChatBotConfiguration(final ExecutionUtils executionUtils, final ScheduleService scheduleService) {
-    this(System.getProperty(DATA_LOCATION_KEY, DATA_LOCATION_DEFAULT),
-        new FileInputStreamSupplier(executionUtils,
-            new File(System.getProperty(DATA_LOCATION_KEY, DATA_LOCATION_DEFAULT), CONFIG_PROPERTIES_FILE_NAME)),
+    this(System.getProperty(DATA_LOCATION_KEY, DATA_LOCATION_DEFAULT), new FilePropertiesSource(
+        new File(System.getProperty(DATA_LOCATION_KEY, DATA_LOCATION_DEFAULT), CONFIG_PROPERTIES_FILE_NAME)),
         scheduleService);
   }
 
-  PropertiesChatBotConfiguration(final String dataLocation, final Supplier<InputStream> inputStreamSupplier,
+  PropertiesChatBotConfiguration(final String dataLocation, final PropertiesSource propertiesSource,
       final ScheduleService scheduleService) {
-    super(inputStreamSupplier, scheduleService, log);
+    super(propertiesSource, scheduleService, log);
     if (this.isMissingRequiredValues()) {
       throw new IllegalStateException(String.format("Please complete your chat bot configuration (%s)",
           new File(new File(dataLocation), CONFIG_PROPERTIES_FILE_NAME).getPath()));

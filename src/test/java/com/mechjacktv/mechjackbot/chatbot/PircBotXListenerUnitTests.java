@@ -19,9 +19,9 @@ import org.pircbotx.hooks.events.PingEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.pircbotx.output.OutputIRC;
 
+import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.command.DefaultCommandUtils;
-import com.mechjacktv.mechjackbot.configuration.ArbitraryChatBotConfiguration;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.DefaultTimeUtils;
@@ -33,27 +33,27 @@ public class PircBotXListenerUnitTests {
   private final ExecutionUtils executionUtils = new DefaultExecutionUtils();
 
   private PircBotXListener givenASubjectToTest() {
-    return this.givenASubjectToTest(Sets.newHashSet(), mock(AppConfiguration.class));
+    return this.givenASubjectToTest(Sets.newHashSet(), mock(Configuration.class));
   }
 
   private PircBotXListener givenASubjectToTest(final Set<Command> commands) {
-    return this.givenASubjectToTest(commands, mock(AppConfiguration.class));
+    return this.givenASubjectToTest(commands, mock(Configuration.class));
   }
 
-  private PircBotXListener givenASubjectToTest(final AppConfiguration appConfiguration) {
-    return this.givenASubjectToTest(Sets.newHashSet(), appConfiguration);
+  private PircBotXListener givenASubjectToTest(final Configuration configuration) {
+    return this.givenASubjectToTest(Sets.newHashSet(), configuration);
   }
 
-  private PircBotXListener givenASubjectToTest(final Set<Command> commands, final AppConfiguration appConfiguration) {
-    final PircBotXChatBotFactory chatBotFactory = new PircBotXChatBotFactory(appConfiguration, this.executionUtils);
+  private PircBotXListener givenASubjectToTest(final Set<Command> commands, final Configuration configuration) {
+    final PircBotXChatBotFactory chatBotFactory = new PircBotXChatBotFactory(configuration, this.executionUtils);
     final ChatBotConfiguration chatBotConfiguration = new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator);
-    final CommandUtils commandUtils = new DefaultCommandUtils(appConfiguration, this.executionUtils,
+    final CommandUtils commandUtils = new DefaultCommandUtils(configuration, this.executionUtils,
         new DefaultTimeUtils());
-    final PircBotXMessageEventFactory messageEventFactory = new PircBotXMessageEventFactory(appConfiguration,
+    final PircBotXMessageEventFactory messageEventFactory = new PircBotXMessageEventFactory(configuration,
         chatBotConfiguration, chatBotFactory,
         commandUtils, this.executionUtils);
 
-    return new PircBotXListener(commands, appConfiguration, new DefaultCommandRegistry(this.executionUtils),
+    return new PircBotXListener(commands, configuration, new DefaultCommandRegistry(this.executionUtils),
         chatBotFactory, messageEventFactory);
   }
 
@@ -117,12 +117,12 @@ public class PircBotXListenerUnitTests {
 
   @Test
   public final void onJoin_isCalled_sendsWithExpectedJoinMessage() {
-    final AppConfiguration appConfiguration = mock(AppConfiguration.class);
+    final Configuration configuration = mock(Configuration.class);
     final String joinMessage = this.arbitraryDataGenerator.getString();
-    when(appConfiguration.get(eq(JOIN_EVENT_MESSAGE_KEY), eq(JOIN_EVENT_MESSAGE_DEFAULT)))
+    when(configuration.get(eq(JOIN_EVENT_MESSAGE_KEY), eq(JOIN_EVENT_MESSAGE_DEFAULT)))
         .thenReturn(joinMessage);
-    when(appConfiguration.get(eq(CHAT_BOT_MESSAGE_FORMAT_KEY), eq(CHAT_BOT_MESSAGE_FORMAT_DEFAULT))).thenReturn("%s");
-    final PircBotXListener subjectUnderTest = this.givenASubjectToTest(appConfiguration);
+    when(configuration.get(eq(CHAT_BOT_MESSAGE_FORMAT_KEY), eq(CHAT_BOT_MESSAGE_FORMAT_DEFAULT))).thenReturn("%s");
+    final PircBotXListener subjectUnderTest = this.givenASubjectToTest(configuration);
     final JoinEvent joinEvent = mock(JoinEvent.class);
     final Channel channel = mock(Channel.class);
     final String channelName = this.arbitraryDataGenerator.getString();

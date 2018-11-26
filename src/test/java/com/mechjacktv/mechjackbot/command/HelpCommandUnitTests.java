@@ -11,9 +11,10 @@ import java.util.Optional;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.chatbot.DefaultCommandRegistry;
-import com.mechjacktv.mechjackbot.configuration.MapAppConfiguration;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultTimeUtils;
 
@@ -24,8 +25,8 @@ public class HelpCommandUnitTests extends CommandContractTests {
   private final ArbitraryCommandTestUtils commandTestUtils = new ArbitraryCommandTestUtils(this.arbitraryDataGenerator);
 
   @Override
-  protected Command givenASubjectToTest(final AppConfiguration appConfiguration) {
-    return this.givenASubjectToTest(appConfiguration, this.commandTestUtils.givenACommandUtils(appConfiguration),
+  protected Command givenASubjectToTest(final Configuration configuration) {
+    return this.givenASubjectToTest(configuration, this.commandTestUtils.givenACommandUtils(configuration),
         mock(CommandRegistry.class));
   }
 
@@ -33,13 +34,13 @@ public class HelpCommandUnitTests extends CommandContractTests {
     return this.givenASubjectToTest(this.givenAnAppConfiguration(), commandUtils);
   }
 
-  private Command givenASubjectToTest(final AppConfiguration appConfiguration, final CommandUtils commandUtils) {
-    return this.givenASubjectToTest(appConfiguration, commandUtils, mock(CommandRegistry.class));
+  private Command givenASubjectToTest(final Configuration configuration, final CommandUtils commandUtils) {
+    return this.givenASubjectToTest(configuration, commandUtils, mock(CommandRegistry.class));
   }
 
-  private Command givenASubjectToTest(final AppConfiguration appConfiguration,
+  private Command givenASubjectToTest(final Configuration configuration,
       final CommandUtils commandUtils, final CommandRegistry commandRegistry) {
-    return new HelpCommand(appConfiguration, commandUtils, commandRegistry);
+    return new HelpCommand(configuration, commandUtils, commandRegistry);
   }
 
   @Override
@@ -52,8 +53,8 @@ public class HelpCommandUnitTests extends CommandContractTests {
     return CommandTrigger.of(COMMAND_TRIGGER_DEFAULT);
   }
 
-  private MapAppConfiguration givenAnAppConfiguration(final String messageFormat) {
-    final MapAppConfiguration appConfiguration = this.givenAnAppConfiguration();
+  private MapConfiguration givenAnAppConfiguration(final String messageFormat) {
+    final MapConfiguration appConfiguration = this.givenAnAppConfiguration();
 
     appConfiguration.set(COMMAND_MESSAGE_FORMAT_KEY, messageFormat);
     appConfiguration.set(COMMAND_MISSING_MESSAGE_FORMAT_KEY, messageFormat);
@@ -120,11 +121,11 @@ public class HelpCommandUnitTests extends CommandContractTests {
 
   @Test
   public final void handleMessageEvent_missingCommandAndDefaultFormat_sendsDefaultMissingCommandMessage() {
-    final AppConfiguration appConfiguration = this.givenAnAppConfiguration(COMMAND_MISSING_MESSAGE_FORMAT_DEFAULT);
+    final Configuration configuration = this.givenAnAppConfiguration(COMMAND_MISSING_MESSAGE_FORMAT_DEFAULT);
     final ChatUsername chatUsername = ChatUsername.of(this.arbitraryDataGenerator.getString());
     final CommandTrigger commandTrigger = CommandTrigger.of(this.arbitraryDataGenerator.getString());
     final CommandUtils commandUtils = this.givenAFakeCommandUtils(chatUsername, commandTrigger);
-    final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, commandUtils);
+    final Command subjectUnderTest = this.givenASubjectToTest(configuration, commandUtils);
     final ArgumentCaptor<Message> argumentCaptor = ArgumentCaptor.forClass(Message.class);
     final MessageEvent messageEvent = this.givenAFakeMessageEvent(subjectUnderTest, commandTrigger, argumentCaptor);
 
@@ -138,11 +139,11 @@ public class HelpCommandUnitTests extends CommandContractTests {
   @Test
   public final void handleMessageEvent_missingCommandAndCustomFormat_sendsCustomMissingCommandMessage() {
     final String customFormat = this.arbitraryDataGenerator.getString() + " %s %s";
-    final AppConfiguration appConfiguration = this.givenAnAppConfiguration(customFormat);
+    final Configuration configuration = this.givenAnAppConfiguration(customFormat);
     final ChatUsername chatUsername = ChatUsername.of(this.arbitraryDataGenerator.getString());
     final CommandTrigger commandTrigger = CommandTrigger.of(this.arbitraryDataGenerator.getString());
     final CommandUtils commandUtils = this.givenAFakeCommandUtils(chatUsername, commandTrigger);
-    final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, commandUtils);
+    final Command subjectUnderTest = this.givenASubjectToTest(configuration, commandUtils);
     final ArgumentCaptor<Message> argumentCaptor = ArgumentCaptor.forClass(Message.class);
     final MessageEvent messageEvent = this.givenAFakeMessageEvent(subjectUnderTest, commandTrigger, argumentCaptor);
 
@@ -154,13 +155,13 @@ public class HelpCommandUnitTests extends CommandContractTests {
 
   @Test
   public final void handleMessageEvent_forTriggerableCommandAndDefaultFormat_sendsDefaultMessage() {
-    final AppConfiguration appConfiguration = this.givenAnAppConfiguration(COMMAND_MESSAGE_FORMAT_DEFAULT);
+    final Configuration configuration = this.givenAnAppConfiguration(COMMAND_MESSAGE_FORMAT_DEFAULT);
     final ChatUsername chatUsername = ChatUsername.of(this.arbitraryDataGenerator.getString());
     final CommandTrigger commandTrigger = CommandTrigger.of(this.arbitraryDataGenerator.getString());
     final CommandUtils commandUtils = this.givenAFakeCommandUtils(chatUsername, commandTrigger);
     final Command command = this.givenAFakeCommand(commandTrigger, true);
     final CommandRegistry commandRegistry = this.givenAFakeCommandRegistry(command);
-    final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, commandUtils, commandRegistry);
+    final Command subjectUnderTest = this.givenASubjectToTest(configuration, commandUtils, commandRegistry);
     final ArgumentCaptor<Message> argumentCaptor = ArgumentCaptor.forClass(Message.class);
     final MessageEvent messageEvent = this.givenAFakeMessageEvent(subjectUnderTest, commandTrigger, argumentCaptor);
 
@@ -173,13 +174,13 @@ public class HelpCommandUnitTests extends CommandContractTests {
 
   @Test
   public final void handleMessageEvent_forNonTriggerableCommand_sendsMissingMessage() {
-    final AppConfiguration appConfiguration = this.givenAnAppConfiguration(COMMAND_MISSING_MESSAGE_FORMAT_DEFAULT);
+    final Configuration configuration = this.givenAnAppConfiguration(COMMAND_MISSING_MESSAGE_FORMAT_DEFAULT);
     final ChatUsername chatUsername = ChatUsername.of(this.arbitraryDataGenerator.getString());
     final CommandTrigger commandTrigger = CommandTrigger.of(this.arbitraryDataGenerator.getString());
     final CommandUtils commandUtils = this.givenAFakeCommandUtils(chatUsername, commandTrigger);
     final Command command = this.givenAFakeCommand(commandTrigger, false);
     final CommandRegistry commandRegistry = this.givenAFakeCommandRegistry(command);
-    final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, commandUtils, commandRegistry);
+    final Command subjectUnderTest = this.givenASubjectToTest(configuration, commandUtils, commandRegistry);
     final ArgumentCaptor<Message> argumentCaptor = ArgumentCaptor.forClass(Message.class);
     final MessageEvent messageEvent = this.givenAFakeMessageEvent(subjectUnderTest, commandTrigger, argumentCaptor);
 
@@ -193,7 +194,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
   @Test
   public final void handleMessageEvent_forTriggerableCommandAndCustomFormat_sendsCustomMessage() {
     final String customFormat = this.arbitraryDataGenerator.getString() + " %s %s %s";
-    final MapAppConfiguration appConfiguration = this.givenAnAppConfiguration();
+    final MapConfiguration appConfiguration = this.givenAnAppConfiguration();
     final CommandUtils commandUtils = new DefaultCommandUtils(appConfiguration, this.executionUtils,
         new DefaultTimeUtils());
     final CommandRegistry commandRegistry = new DefaultCommandRegistry(this.executionUtils);

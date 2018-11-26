@@ -10,13 +10,14 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
+import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.TimeUtils;
 
 public final class DefaultCommandUtils implements CommandUtils {
 
-  private final AppConfiguration appConfiguration;
+  private final Configuration configuration;
   private final ExecutionUtils executionUtils;
   private final TimeUtils timeUtils;
   private final Map<CommandTrigger, Pattern> commandTriggerPatterns;
@@ -24,9 +25,9 @@ public final class DefaultCommandUtils implements CommandUtils {
   private final Map<ChatUsername, LastTrigger> viewerLastTrigger;
 
   @Inject
-  public DefaultCommandUtils(final AppConfiguration appConfiguration, final ExecutionUtils executionUtils,
+  public DefaultCommandUtils(final Configuration configuration, final ExecutionUtils executionUtils,
       final TimeUtils timeUtils) {
-    this.appConfiguration = appConfiguration;
+    this.configuration = configuration;
     this.executionUtils = executionUtils;
     this.timeUtils = timeUtils;
     this.commandTriggerPatterns = new HashMap<>();
@@ -88,13 +89,13 @@ public final class DefaultCommandUtils implements CommandUtils {
 
   private CoolDownPeriodMs getCommandCoolDown() {
     return CoolDownPeriodMs.of(this.timeUtils.secondsAsMs(Integer.parseInt(
-        this.appConfiguration.get(COMMAND_COMMAND_COOL_DOWN_KEY,
+        this.configuration.get(COMMAND_COMMAND_COOL_DOWN_KEY,
             COMMAND_COMMAND_COOL_DOWN_DEFAULT))));
   }
 
   private CoolDownPeriodMs getViewerCoolDown() {
     return CoolDownPeriodMs.of(this.timeUtils.secondsAsMs(Integer.parseInt(
-        this.appConfiguration.get(COMMAND_VIEWER_COOL_DOWN_KEY,
+        this.configuration.get(COMMAND_VIEWER_COOL_DOWN_KEY,
             COMMAND_VIEWER_COOL_DOWN_DEFAULT))));
   }
 
@@ -128,7 +129,7 @@ public final class DefaultCommandUtils implements CommandUtils {
     Objects.requireNonNull(command, this.executionUtils.nullMessageForName("command"));
     Objects.requireNonNull(messageEvent, this.executionUtils.nullMessageForName("messageEvent"));
 
-    final String messageFormat = this.appConfiguration.get(COMMAND_USAGE_MESSAGE_FORMAT_KEY,
+    final String messageFormat = this.configuration.get(COMMAND_USAGE_MESSAGE_FORMAT_KEY,
         COMMAND_USAGE_MESSAGE_FORMAT_DEFAULT);
 
     messageEvent.sendResponse(Message.of(String.format(messageFormat,

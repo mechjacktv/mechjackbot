@@ -19,18 +19,19 @@ public class ShoutOutListenerCommand extends AbstractCommand {
   static final String COMMAND_MESSAGE_FORMAT_DEFAULT = "Fellow caster in the stream! Everyone, please give a warm "
       + "welcome to @%1$s. It would be great if you checked them out and gave them a follow. https://twitch.tv/%1$s";
 
-  private final AppConfiguration appConfiguration;
+  private final com.mechjacktv.configuration.Configuration configuration;
   private final CommandUtils commandUtils;
   private final TimeUtils timeUtils;
   private final ShoutOutDataStore shoutOutDataStore;
 
   @Inject
-  public ShoutOutListenerCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils,
+  public ShoutOutListenerCommand(final com.mechjacktv.configuration.Configuration configuration,
+      final CommandUtils commandUtils,
       final TimeUtils timeUtils, final ShoutOutDataStore shoutOutDataStore) {
-    super(new Configuration(appConfiguration, commandUtils,
+    super(new Configuration(configuration, commandUtils,
         CommandDescription.of("Monitors chat looking for casters who are due for a shout out."),
         CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT)));
-    this.appConfiguration = appConfiguration;
+    this.configuration = configuration;
     this.commandUtils = commandUtils;
     this.timeUtils = timeUtils;
     this.shoutOutDataStore = shoutOutDataStore;
@@ -43,7 +44,7 @@ public class ShoutOutListenerCommand extends AbstractCommand {
 
   private boolean isCasterDue(final MessageEvent messageEvent) {
     final Long frequency = this.timeUtils.hoursAsMs(
-        Integer.parseInt(this.appConfiguration.get(COMMAND_FREQUENCY_KEY, COMMAND_FREQUENCY_DEFAULT)));
+        Integer.parseInt(this.configuration.get(COMMAND_FREQUENCY_KEY, COMMAND_FREQUENCY_DEFAULT)));
     final ChatUsername chatUsername = this.sanitizeChatUsername(messageEvent);
     final CasterKey casterKey = this.shoutOutDataStore.createCasterKey(chatUsername.value);
 
@@ -54,7 +55,7 @@ public class ShoutOutListenerCommand extends AbstractCommand {
   @Override
   public void handleMessageEvent(final MessageEvent messageEvent) {
     final ChatUsername chatUsername = this.sanitizeChatUsername(messageEvent);
-    final String messageFormat = this.appConfiguration.get(COMMAND_MESSAGE_FORMAT_KEY, COMMAND_MESSAGE_FORMAT_DEFAULT);
+    final String messageFormat = this.configuration.get(COMMAND_MESSAGE_FORMAT_KEY, COMMAND_MESSAGE_FORMAT_DEFAULT);
 
     messageEvent.sendResponse(Message.of(String.format(messageFormat, chatUsername)));
     this.shoutOutDataStore.put(this.shoutOutDataStore.createCasterKey(chatUsername.value),

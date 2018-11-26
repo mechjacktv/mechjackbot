@@ -20,18 +20,18 @@ public class HelpCommand extends AbstractCommand {
   static final String COMMAND_MISSING_MESSAGE_FORMAT_DEFAULT = "@%s, I don't see a command triggered by %s.";
   private static final String COMMAND_USAGE = "<commandTrigger>";
 
-  private final AppConfiguration appConfiguration;
+  private final com.mechjacktv.configuration.Configuration configuration;
   private final CommandUtils commandUtils;
   private final CommandRegistry commandRegistry;
 
   @Inject
-  public HelpCommand(final AppConfiguration appConfiguration, final CommandUtils commandUtils,
+  public HelpCommand(final com.mechjacktv.configuration.Configuration configuration, final CommandUtils commandUtils,
       final CommandRegistry commandRegistry) {
-    super(new Configuration(appConfiguration, commandUtils,
+    super(new Configuration(configuration, commandUtils,
         CommandDescription.of("Returns the description for a command."),
         CommandTriggerKey.of(COMMAND_TRIGGER_KEY), CommandTrigger.of(COMMAND_TRIGGER_DEFAULT))
             .setCommandUsage(CommandUsage.of(COMMAND_USAGE)));
-    this.appConfiguration = appConfiguration;
+    this.configuration = configuration;
     this.commandUtils = commandUtils;
     this.commandRegistry = commandRegistry;
   }
@@ -55,7 +55,7 @@ public class HelpCommand extends AbstractCommand {
   }
 
   private void sendCommandHelp(final MessageEvent messageEvent, final Command command) {
-    final String messageFormat = this.appConfiguration.get(COMMAND_MESSAGE_FORMAT_KEY,
+    final String messageFormat = this.configuration.get(COMMAND_MESSAGE_FORMAT_KEY,
         COMMAND_MESSAGE_FORMAT_DEFAULT);
 
     messageEvent.sendResponse(Message.of(String.format(messageFormat,
@@ -64,7 +64,7 @@ public class HelpCommand extends AbstractCommand {
   }
 
   private void sendCommandMissing(final MessageEvent messageEvent, final CommandTrigger commandTrigger) {
-    final String messageFormat = this.appConfiguration.get(COMMAND_MISSING_MESSAGE_FORMAT_KEY,
+    final String messageFormat = this.configuration.get(COMMAND_MISSING_MESSAGE_FORMAT_KEY,
         COMMAND_MISSING_MESSAGE_FORMAT_DEFAULT);
 
     messageEvent.sendResponse(Message.of(String.format(messageFormat,

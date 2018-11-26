@@ -2,7 +2,7 @@ package com.mechjacktv.mechjackbot;
 
 public abstract class AbstractCommand implements Command {
 
-  private final AppConfiguration appConfiguration;
+  private final com.mechjacktv.configuration.Configuration configuration;
   private final CommandUtils commandUtils;
   private final CommandDescription commandDescription;
   private final CommandUsage commandUsage;
@@ -11,7 +11,7 @@ public abstract class AbstractCommand implements Command {
   private final boolean triggerable;
 
   protected AbstractCommand(final Configuration configuration) {
-    this.appConfiguration = configuration.appConfiguration;
+    this.configuration = configuration.configuration;
     this.commandUtils = configuration.commandUtils;
     this.commandDescription = configuration.commandDescription;
     this.commandUsage = configuration.commandUsage;
@@ -42,7 +42,7 @@ public abstract class AbstractCommand implements Command {
 
   @Override
   public final CommandTrigger getTrigger() {
-    return CommandTrigger.of(this.appConfiguration.get(this.commandTriggerKey.value, this.commandTriggerDefault.value));
+    return CommandTrigger.of(this.configuration.get(this.commandTriggerKey.value, this.commandTriggerDefault.value));
   }
 
   @Override
@@ -52,7 +52,7 @@ public abstract class AbstractCommand implements Command {
 
   protected static final class Configuration {
 
-    private final AppConfiguration appConfiguration;
+    private final com.mechjacktv.configuration.Configuration configuration;
     private final CommandUtils commandUtils;
     private final CommandDescription commandDescription;
     private final CommandTriggerKey commandTriggerKey;
@@ -60,10 +60,11 @@ public abstract class AbstractCommand implements Command {
     private CommandUsage commandUsage;
     private boolean triggerable;
 
-    public Configuration(final AppConfiguration appConfiguration, final CommandUtils commandUtils,
+    public Configuration(final com.mechjacktv.configuration.Configuration configuration,
+        final CommandUtils commandUtils,
         final CommandDescription commandDescription, final CommandTriggerKey commandTriggerKey,
         final CommandTrigger commandTriggerDefault) {
-      this.appConfiguration = appConfiguration;
+      this.configuration = configuration;
       this.commandDescription = commandDescription;
       this.commandTriggerKey = commandTriggerKey;
       this.commandTriggerDefault = commandTriggerDefault;

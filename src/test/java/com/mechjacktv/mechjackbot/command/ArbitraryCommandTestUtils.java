@@ -3,7 +3,7 @@ package com.mechjacktv.mechjackbot.command;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.mechjacktv.mechjackbot.AppConfiguration;
+import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.CommandUtils;
 import com.mechjacktv.mechjackbot.TwitchChannel;
@@ -17,12 +17,12 @@ public class ArbitraryCommandTestUtils {
     this.arbitraryDataGenerator = arbitraryDataGenerator;
   }
 
-  public final CommandUtils givenACommandUtils(final AppConfiguration appConfiguration) {
+  public final CommandUtils givenACommandUtils(final Configuration configuration) {
     final ChatBotConfiguration chatBotConfiguration = this.givenAFakeChatBotConfiguration();
     final ExecutionUtils executionUtils = new DefaultExecutionUtils();
     final TimeUtils timeUtils = new DefaultTimeUtils();
 
-    return new DefaultCommandUtils(appConfiguration, executionUtils, timeUtils);
+    return new DefaultCommandUtils(configuration, executionUtils, timeUtils);
   }
 
   private ChatBotConfiguration givenAFakeChatBotConfiguration() {

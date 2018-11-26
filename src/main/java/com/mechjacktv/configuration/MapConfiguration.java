@@ -1,21 +1,25 @@
-package com.mechjacktv.mechjackbot.configuration;
+package com.mechjacktv.configuration;
 
 import java.util.*;
 
 import javax.inject.Inject;
 
-import com.mechjacktv.mechjackbot.AppConfiguration;
 import com.mechjacktv.util.ExecutionUtils;
 
-public class MapAppConfiguration implements AppConfiguration {
+public class MapConfiguration implements Configuration {
 
   private final ExecutionUtils executionUtils;
   private final Map<String, String> data;
 
   @Inject
-  public MapAppConfiguration(final ExecutionUtils executionUtils) {
+  public MapConfiguration(final ExecutionUtils executionUtils) {
+    this(executionUtils, new HashMap<>());
+  }
+
+  @Inject
+  public MapConfiguration(final ExecutionUtils executionUtils, final Map<String, String> data) {
     this.executionUtils = executionUtils;
-    this.data = new HashMap<>();
+    this.data = data;
   }
 
   @Override

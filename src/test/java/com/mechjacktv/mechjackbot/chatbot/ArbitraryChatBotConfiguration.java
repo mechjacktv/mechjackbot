@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.configuration;
+package com.mechjacktv.mechjackbot.chatbot;
 
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.util.ArbitraryDataGenerator;

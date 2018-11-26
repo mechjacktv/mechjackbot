@@ -5,6 +5,7 @@ import java.util.Objects;
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
+import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.util.ExecutionUtils;
 
@@ -13,17 +14,17 @@ public final class PircBotXMessageEvent implements MessageEvent {
   static final String RESPONSE_MESSAGE_FORMAT_KEY = PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_KEY;
   static final String RESPONSE_MESSAGE_FORMAT_DEFAULT = PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_DEFAULT;
 
-  private final AppConfiguration appConfiguration;
+  private final Configuration configuration;
   private final ChatBotConfiguration chatBotConfiguration;
   private final ChatBotFactory<PircBotX> chatBotFactory;
   private final CommandUtils commandUtils;
   private final ExecutionUtils executionUtils;
   private final GenericMessageEvent genericMessageEvent;
 
-  PircBotXMessageEvent(final AppConfiguration appConfiguration, final ChatBotConfiguration chatBotConfiguration,
+  PircBotXMessageEvent(final Configuration configuration, final ChatBotConfiguration chatBotConfiguration,
       final ChatBotFactory<PircBotX> chatBotFactory, final CommandUtils commandUtils,
       final ExecutionUtils executionUtils, final GenericMessageEvent genericMessageEvent) {
-    this.appConfiguration = appConfiguration;
+    this.configuration = configuration;
     this.chatBotConfiguration = chatBotConfiguration;
     this.chatBotFactory = chatBotFactory;
     this.commandUtils = commandUtils;
@@ -50,7 +51,7 @@ public final class PircBotXMessageEvent implements MessageEvent {
   public void sendResponse(final Message message) {
     Objects.requireNonNull(message, this.executionUtils.nullMessageForName("message"));
     this.genericMessageEvent.respondWith(String.format(
-        this.appConfiguration.get(RESPONSE_MESSAGE_FORMAT_KEY, RESPONSE_MESSAGE_FORMAT_DEFAULT), message.value));
+        this.configuration.get(RESPONSE_MESSAGE_FORMAT_KEY, RESPONSE_MESSAGE_FORMAT_DEFAULT), message.value));
   }
 
 }

@@ -8,9 +8,9 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
+import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.command.DefaultCommandUtils;
-import com.mechjacktv.mechjackbot.configuration.ArbitraryChatBotConfiguration;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.DefaultTimeUtils;
@@ -25,31 +25,31 @@ public class PircBotXMessageEventUnitTests {
     return this.givenASubjectToTest(this.givenAnAppConfiguration(), genericMessageEvent);
   }
 
-  private PircBotXMessageEvent givenASubjectToTest(final AppConfiguration appConfiguration) {
-    return this.givenASubjectToTest(appConfiguration, mock(GenericMessageEvent.class));
+  private PircBotXMessageEvent givenASubjectToTest(final Configuration configuration) {
+    return this.givenASubjectToTest(configuration, mock(GenericMessageEvent.class));
   }
 
-  private PircBotXMessageEvent givenASubjectToTest(final AppConfiguration appConfiguration,
+  private PircBotXMessageEvent givenASubjectToTest(final Configuration configuration,
       final GenericMessageEvent genericMessageEvent) {
-    final PircBotXChatBotFactory chatBotFactory = new PircBotXChatBotFactory(appConfiguration, this.executionUtils);
+    final PircBotXChatBotFactory chatBotFactory = new PircBotXChatBotFactory(configuration, this.executionUtils);
     final ChatBotConfiguration chatBotConfiguration = new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator);
-    final CommandUtils commandUtils = new DefaultCommandUtils(appConfiguration, this.executionUtils,
+    final CommandUtils commandUtils = new DefaultCommandUtils(configuration, this.executionUtils,
         new DefaultTimeUtils());
 
-    return new PircBotXMessageEvent(appConfiguration, chatBotConfiguration, chatBotFactory, commandUtils,
+    return new PircBotXMessageEvent(configuration, chatBotConfiguration, chatBotFactory, commandUtils,
         this.executionUtils, genericMessageEvent);
   }
 
-  private AppConfiguration givenAnAppConfiguration() {
+  private Configuration givenAnAppConfiguration() {
     return this.givenAnAppConfiguration("%s");
   }
 
-  private AppConfiguration givenAnAppConfiguration(final String format) {
-    final AppConfiguration appConfiguration = mock(AppConfiguration.class);
+  private Configuration givenAnAppConfiguration(final String format) {
+    final Configuration configuration = mock(Configuration.class);
 
-    when(appConfiguration.get(eq(PircBotXMessageEvent.RESPONSE_MESSAGE_FORMAT_KEY),
+    when(configuration.get(eq(PircBotXMessageEvent.RESPONSE_MESSAGE_FORMAT_KEY),
         eq(PircBotXMessageEvent.RESPONSE_MESSAGE_FORMAT_DEFAULT))).thenReturn(format);
-    return appConfiguration;
+    return configuration;
   }
 
   @Test
@@ -142,23 +142,23 @@ public class PircBotXMessageEventUnitTests {
 
   @Test
   public final void sendResponse_forMessage_asksForConfiguredMessageFormat() {
-    final AppConfiguration appConfiguration = this.givenAnAppConfiguration();
+    final Configuration configuration = this.givenAnAppConfiguration();
     final Message message = Message.of(this.arbitraryDataGenerator.getString());
-    final PircBotXMessageEvent subjectUnderTest = this.givenASubjectToTest(appConfiguration);
+    final PircBotXMessageEvent subjectUnderTest = this.givenASubjectToTest(configuration);
 
     subjectUnderTest.sendResponse(message);
 
-    verify(appConfiguration).get(eq(PircBotXMessageEvent.RESPONSE_MESSAGE_FORMAT_KEY),
+    verify(configuration).get(eq(PircBotXMessageEvent.RESPONSE_MESSAGE_FORMAT_KEY),
         eq(PircBotXMessageEvent.RESPONSE_MESSAGE_FORMAT_DEFAULT));
   }
 
   @Test
   public final void sendResponse_forMessage_wrapsMessageInMessageFormat() {
     final Message message = Message.of(this.arbitraryDataGenerator.getString());
-    final AppConfiguration appConfiguration = this.givenAnAppConfiguration(
+    final Configuration configuration = this.givenAnAppConfiguration(
         PircBotXMessageEvent.RESPONSE_MESSAGE_FORMAT_DEFAULT);
     final GenericMessageEvent genericMessageEvent = mock(GenericMessageEvent.class);
-    final PircBotXMessageEvent subjectUnderTest = this.givenASubjectToTest(appConfiguration, genericMessageEvent);
+    final PircBotXMessageEvent subjectUnderTest = this.givenASubjectToTest(configuration, genericMessageEvent);
 
     subjectUnderTest.sendResponse(message);
 

@@ -1,15 +1,14 @@
-package com.mechjacktv.mechjackbot.configuration;
+package com.mechjacktv.mechjackbot.chatbot;
 
-import static com.mechjacktv.mechjackbot.configuration.PropertiesChatBotConfiguration.*;
-
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.HotUpdatePropertiesWrapperContractTests;
+import com.mechjacktv.util.PropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
+
+import static com.mechjacktv.mechjackbot.chatbot.PropertiesChatBotConfiguration.*;
 
 public class PropertiesChatBotConfiguration_HotUpdatePropertiesWrapperUnitTests
     extends HotUpdatePropertiesWrapperContractTests {
@@ -17,9 +16,9 @@ public class PropertiesChatBotConfiguration_HotUpdatePropertiesWrapperUnitTests
   private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
 
   @Override
-  protected PropertiesChatBotConfiguration givenASubjectToTest(final Supplier<InputStream> propertiesSupplier,
+  protected PropertiesChatBotConfiguration givenASubjectToTest(final PropertiesSource propertiesSource,
       final ScheduleService scheduleService) {
-    return new PropertiesChatBotConfiguration(this.arbitraryDataGenerator.getString(), propertiesSupplier,
+    return new PropertiesChatBotConfiguration(this.arbitraryDataGenerator.getString(), propertiesSource,
         scheduleService);
   }
 

@@ -1,9 +1,7 @@
 package com.mechjacktv.util;
 
-import java.io.InputStream;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 
@@ -14,26 +12,24 @@ public abstract class HotUpdatePropertiesWrapper {
   public static final String UPDATE_PERIOD_KEY = "properties_wrapper.update_period.minutes";
   public static final String DEFAULT_UPDATE_PERIOD = "10";
 
-  private final Logger log;
+  private final Logger logger;
   private final Properties properties;
 
-  public HotUpdatePropertiesWrapper(final Supplier<InputStream> propertiesSupplier,
-      final ScheduleService scheduleService, final Logger log) {
-    this.log = log;
+  public HotUpdatePropertiesWrapper(final PropertiesSource propertiesSource,
+      final ScheduleService scheduleService, final Logger logger) {
+    this.logger = logger;
     this.properties = new Properties();
-    this.loadProperties(propertiesSupplier);
-    scheduleService.schedule(() -> this.loadProperties(propertiesSupplier),
+    this.loadProperties(propertiesSource);
+    scheduleService.schedule(() -> this.loadProperties(propertiesSource),
         Integer.parseInt(System.getProperty(UPDATE_PERIOD_KEY, DEFAULT_UPDATE_PERIOD)),
         TimeUnit.MINUTES, true);
   }
 
-  private void loadProperties(final Supplier<InputStream> propertiesSupplier) {
+  private void loadProperties(final PropertiesSource propertiesSource) {
     try {
-      try (final InputStream propertiesInputStream = propertiesSupplier.get()) {
-        this.properties.load(propertiesInputStream);
-      }
+      propertiesSource.read(this.properties::load);
     } catch (final Throwable t) {
-      this.log.error(String.format("Failure while loading properties file: %s", t.getMessage()), t);
+      this.logger.error(String.format("Failure while loading properties file: %s", t.getMessage()), t);
     }
   }
 

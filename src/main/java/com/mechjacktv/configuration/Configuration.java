@@ -1,9 +1,9 @@
-package com.mechjacktv.mechjackbot;
+package com.mechjacktv.configuration;
 
 import java.util.Collection;
 import java.util.Optional;
 
-public interface AppConfiguration {
+public interface Configuration {
 
   Optional<String> get(String key);
 

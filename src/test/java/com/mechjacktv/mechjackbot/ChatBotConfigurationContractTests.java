@@ -16,16 +16,14 @@ public abstract class ChatBotConfigurationContractTests {
   public static final String TWITCH_PASSWORD_KEY = "TWITCH_PASSWORD_KEY";
   public static final String TWITCH_USERNAME_KEY = "TWITCH_USERNAME_KEY";
 
-  private static final String TEST_DATA_LOCATION = "/test/data/location";
-
   private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
 
-  private ChatBotConfiguration givenASubjectToTest() {
-    return this.givenASubjectToTest(this.givenIHaveAPropertiesMap());
+  private ChatBotConfiguration givenASubjectToTest(final String dataLocation) {
+    return this.givenASubjectToTest(dataLocation, this.givenIHaveAPropertiesMap());
   }
 
   private ChatBotConfiguration givenASubjectToTest(final Map<String, String> properties) {
-    return this.givenASubjectToTest(TEST_DATA_LOCATION, properties);
+    return this.givenASubjectToTest(this.arbitraryDataGenerator.getString(), properties);
   }
 
   protected abstract ChatBotConfiguration givenASubjectToTest(String dataLocation, Map<String, String> properties);
@@ -44,7 +42,7 @@ public abstract class ChatBotConfigurationContractTests {
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
     properties.remove(TWITCH_CHANNEL_KEY);
 
-    final Throwable thrown = catchThrowable(() -> this.givenASubjectToTest(TEST_DATA_LOCATION, properties));
+    final Throwable thrown = catchThrowable(() -> this.givenASubjectToTest(properties));
 
     assertThat(thrown).isInstanceOf(IllegalStateException.class);
   }
@@ -54,7 +52,7 @@ public abstract class ChatBotConfigurationContractTests {
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
     properties.remove(TWITCH_PASSWORD_KEY);
 
-    final Throwable thrown = catchThrowable(() -> this.givenASubjectToTest(TEST_DATA_LOCATION, properties));
+    final Throwable thrown = catchThrowable(() -> this.givenASubjectToTest(properties));
 
     assertThat(thrown).isInstanceOf(IllegalStateException.class);
   }
@@ -64,18 +62,19 @@ public abstract class ChatBotConfigurationContractTests {
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
     properties.remove(TWITCH_USERNAME_KEY);
 
-    final Throwable thrown = catchThrowable(() -> this.givenASubjectToTest(TEST_DATA_LOCATION, properties));
+    final Throwable thrown = catchThrowable(() -> this.givenASubjectToTest(properties));
 
     assertThat(thrown).isInstanceOf(IllegalStateException.class);
   }
 
   @Test
   public final void getDataLocation_isPresent_returnsDataLocation() {
-    final ChatBotConfiguration subjectUnderTest = this.givenASubjectToTest();
+    final String dataLocation = this.arbitraryDataGenerator.getString();
+    final ChatBotConfiguration subjectUnderTest = this.givenASubjectToTest(dataLocation);
 
     final DataLocation result = subjectUnderTest.getDataLocation();
 
-    assertThat(result.value).isEqualTo(TEST_DATA_LOCATION);
+    assertThat(result.value).isEqualTo(dataLocation);
   }
 
   @Test

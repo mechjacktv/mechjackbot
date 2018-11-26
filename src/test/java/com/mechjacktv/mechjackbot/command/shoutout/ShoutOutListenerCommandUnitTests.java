@@ -7,11 +7,12 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.keyvaluestore.MapKeyValueStore;
 import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.chatbot.ArbitraryChatBotConfiguration;
 import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
-import com.mechjacktv.mechjackbot.configuration.ArbitraryChatBotConfiguration;
-import com.mechjacktv.mechjackbot.configuration.MapAppConfiguration;
 import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.Caster;
 import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.CasterKey;
 import com.mechjacktv.twitchclient.TwitchClient;
@@ -29,24 +30,24 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
   private final TimeUtils timeUtils = new DefaultTimeUtils();
 
   @Override
-  protected final ShoutOutListenerCommand givenASubjectToTest(final AppConfiguration appConfiguration) {
-    return this.givenASubjectToTest(appConfiguration, this.commandTestUtils.givenACommandUtils(appConfiguration),
-        new DefaultTimeUtils(), this.givenAShoutOutDataStore(appConfiguration));
+  protected final ShoutOutListenerCommand givenASubjectToTest(final Configuration configuration) {
+    return this.givenASubjectToTest(configuration, this.commandTestUtils.givenACommandUtils(configuration),
+        new DefaultTimeUtils(), this.givenAShoutOutDataStore(configuration));
   }
 
-  private ShoutOutListenerCommand givenASubjectToTest(final AppConfiguration appConfiguration,
+  private ShoutOutListenerCommand givenASubjectToTest(final Configuration configuration,
       final TimeUtils timeUtils, final ShoutOutDataStore shoutOutDataStore) {
-    return this.givenASubjectToTest(appConfiguration, this.commandTestUtils.givenACommandUtils(appConfiguration),
+    return this.givenASubjectToTest(configuration, this.commandTestUtils.givenACommandUtils(configuration),
         timeUtils, shoutOutDataStore);
   }
 
-  private ShoutOutListenerCommand givenASubjectToTest(final AppConfiguration appConfiguration,
+  private ShoutOutListenerCommand givenASubjectToTest(final Configuration configuration,
       final CommandUtils commandUtils, final TimeUtils timeUtils, final ShoutOutDataStore shoutOutDataStore) {
-    return new ShoutOutListenerCommand(appConfiguration, commandUtils, timeUtils, shoutOutDataStore);
+    return new ShoutOutListenerCommand(configuration, commandUtils, timeUtils, shoutOutDataStore);
   }
 
-  private ShoutOutDataStore givenAShoutOutDataStore(final AppConfiguration appConfiguration) {
-    return new DefaultShoutOutDataStore(appConfiguration,
+  private ShoutOutDataStore givenAShoutOutDataStore(final Configuration configuration) {
+    return new DefaultShoutOutDataStore(configuration,
         new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator), (name) -> new MapKeyValueStore(),
         this.executionUtils, new DefaultProtobufUtils(this.executionUtils), mock(ScheduleService.class),
         mock(TwitchClient.class));
@@ -85,15 +86,15 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
 
   @Test
   public final void isTriggered_casterIsNotDue_returnsFalse() {
-    final AppConfiguration appConfiguration = new MapAppConfiguration(this.executionUtils);
-    final ShoutOutDataStore shoutOutDataStore = this.givenAShoutOutDataStore(appConfiguration);
+    final Configuration configuration = new MapConfiguration(this.executionUtils);
+    final ShoutOutDataStore shoutOutDataStore = this.givenAShoutOutDataStore(configuration);
     final MessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getUsername().value);
     final Caster caster = shoutOutDataStore.createCaster(casterKey.getName(), 0L);
     shoutOutDataStore.put(casterKey, caster);
     final TimeUtils timeUtils = this.givenAFakeTimeUtils();
     when(timeUtils.currentTime()).thenReturn(0L);
-    final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, timeUtils, shoutOutDataStore);
+    final Command subjectUnderTest = this.givenASubjectToTest(configuration, timeUtils, shoutOutDataStore);
 
     final boolean result = subjectUnderTest.isTriggered(messageEvent);
 
@@ -102,7 +103,7 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
 
   @Test
   public final void isTriggered_casterIsDue_returnsTrue() {
-    final MapAppConfiguration appConfiguration = new MapAppConfiguration(this.executionUtils);
+    final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
     final ShoutOutDataStore shoutOutDataStore = this.givenAShoutOutDataStore(appConfiguration);
     final MessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getUsername().value);
@@ -120,7 +121,7 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
 
   @Test
   public final void isTriggered_casterIsNotDueCustomFrequency_returnsFalse() {
-    final MapAppConfiguration appConfiguration = new MapAppConfiguration(this.executionUtils);
+    final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
     appConfiguration.set(COMMAND_FREQUENCY_KEY, "2");
     final ShoutOutDataStore shoutOutDataStore = this.givenAShoutOutDataStore(appConfiguration);
     final MessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
@@ -139,7 +140,7 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
   @Test
   public final void isTriggered_casterIsDueCustomFrequency_returnsTrue() {
     final String customFrequency = "2";
-    final MapAppConfiguration appConfiguration = new MapAppConfiguration(this.executionUtils);
+    final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
     appConfiguration.set(COMMAND_FREQUENCY_KEY, customFrequency);
     final ShoutOutDataStore shoutOutDataStore = this.givenAShoutOutDataStore(appConfiguration);
     final MessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
@@ -158,7 +159,7 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
 
   @Test
   public final void handleMessageEvent_isCalled_sendsResponse() {
-    final MapAppConfiguration appConfiguration = new MapAppConfiguration(this.executionUtils);
+    final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
     final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, this.givenAFakeTimeUtils(),
         this.givenAShoutOutDataStore(appConfiguration));
@@ -175,7 +176,7 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
   @Test
   public final void handleMessageEvent_isCalledUsesCustomMessage_sendsResponse() {
     final String customMessageFormat = this.arbitraryDataGenerator.getString() + " %s";
-    final MapAppConfiguration appConfiguration = new MapAppConfiguration(this.executionUtils);
+    final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
     appConfiguration.set(COMMAND_MESSAGE_FORMAT_KEY, customMessageFormat);
     final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, this.givenAFakeTimeUtils(),
@@ -191,7 +192,7 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
 
   @Test
   public final void handleMessageEvent_isCalled_updateDataStore() {
-    final MapAppConfiguration appConfiguration = new MapAppConfiguration(this.executionUtils);
+    final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
     final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final CasterKey casterKey = CasterKey.newBuilder()
         .setName(messageEvent.getChatUser().getUsername().value.toLowerCase()).build();
