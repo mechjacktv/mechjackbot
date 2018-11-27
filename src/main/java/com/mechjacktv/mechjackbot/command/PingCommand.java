@@ -31,8 +31,7 @@ public class PingCommand extends AbstractCommand {
     final String messageFormat = this.configuration.get(COMMAND_MESSAGE_FORMAT_KEY,
         COMMAND_MESSAGE_FORMAT_DEFAULT);
 
-    messageEvent.sendResponse(Message.of(String.format(messageFormat,
-        this.commandUtils.sanitizeChatUsername(messageEvent.getChatUser().getUsername()))));
+    messageEvent.sendResponse(Message.of(String.format(messageFormat, messageEvent.getChatUser().getTwitchLogin())));
   }
 
 }

@@ -13,6 +13,7 @@ import org.mockito.ArgumentCaptor;
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.mechjackbot.chatbot.ArbitraryChatBotConfiguration;
+import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.util.*;
 
 public abstract class CommandUtilsContractTests {
@@ -44,7 +45,7 @@ public abstract class CommandUtilsContractTests {
     final ChatUser chatUser = mock(ChatUser.class);
 
     when(messageEvent.getChatUser()).thenReturn(chatUser);
-    when(chatUser.getUsername()).thenReturn(ChatUsername.of(this.arbitraryDataGenerator.getString()));
+    when(chatUser.getTwitchLogin()).thenReturn(TwitchLogin.of(this.arbitraryDataGenerator.getString()));
     return messageEvent;
   }
 
@@ -93,7 +94,7 @@ public abstract class CommandUtilsContractTests {
     final ChatUser chatUser = mock(ChatUser.class);
     final MessageEvent messageEvent = mock(MessageEvent.class);
     when(messageEvent.getChatUser()).thenReturn(chatUser);
-    when(chatUser.getUsername()).thenReturn(ChatUsername.of(this.chatBotConfiguration.getTwitchChannel().value));
+    when(chatUser.getTwitchLogin()).thenReturn(TwitchLogin.of(this.chatBotConfiguration.getTwitchChannel().value));
     when(chatUser.hasAccessLevel(isA(AccessLevel.class))).thenReturn(true);
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
     final Command command = new RestrictedCommand(this, subjectUnderTest);
@@ -108,7 +109,7 @@ public abstract class CommandUtilsContractTests {
     final ChatUser chatUser = mock(ChatUser.class);
     final MessageEvent messageEvent = mock(MessageEvent.class);
     when(messageEvent.getChatUser()).thenReturn(chatUser);
-    when(chatUser.getUsername()).thenReturn(ChatUsername.of(this.arbitraryDataGenerator.getString()));
+    when(chatUser.getTwitchLogin()).thenReturn(TwitchLogin.of(this.arbitraryDataGenerator.getString()));
     when(chatUser.hasAccessLevel(eq(AccessLevel.SUBSCRIBER))).thenReturn(true);
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
     final Command command = new RestrictedCommand(this, subjectUnderTest);
@@ -119,11 +120,8 @@ public abstract class CommandUtilsContractTests {
   }
 
   @Test
-  public final void hasAccessLevel_userDoesNotHaveRoles_returnsFalse() {
-    final ChatUser chatUser = mock(ChatUser.class);
-    final MessageEvent messageEvent = mock(MessageEvent.class);
-    when(messageEvent.getChatUser()).thenReturn(chatUser);
-    when(chatUser.getUsername()).thenReturn(ChatUsername.of(this.arbitraryDataGenerator.getString()));
+  public final void hasAccessLevel_userDoesNotHaveAccessLevel_returnsFalse() {
+    final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
     final Command command = new RestrictedCommand(this, subjectUnderTest);
 
@@ -398,27 +396,13 @@ public abstract class CommandUtilsContractTests {
   }
 
   @Test
-  public final void sendUsage_forCommand_retrievedChatUsername() {
+  public final void sendUsage_forCommand_retrievedTwitchLogin() {
     final MessageEvent messageEvent = this.givenAFakeMessageEvent();
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.sendUsage(mock(Command.class), messageEvent);
 
-    verify(messageEvent.getChatUser()).getUsername();
-  }
-
-  @Test
-  public final void sendUsage_forCommand_sanitizesChatUsername() {
-    final ArgumentCaptor<Message> argumentCaptor = ArgumentCaptor.forClass(Message.class);
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    doNothing().when(messageEvent).sendResponse(argumentCaptor.capture());
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-
-    subjectUnderTest.sendUsage(mock(Command.class), messageEvent);
-    final Message result = argumentCaptor.getValue();
-
-    assertThat(result.value)
-        .contains(subjectUnderTest.sanitizeChatUsername(messageEvent.getChatUser().getUsername()).value);
+    verify(messageEvent.getChatUser()).getTwitchLogin();
   }
 
   @Test
@@ -455,8 +439,7 @@ public abstract class CommandUtilsContractTests {
     final Message result = argumentCaptor.getValue();
 
     assertThat(result).isEqualTo(Message.of(String.format(customMessageFormat,
-        subjectUnderTest.sanitizeChatUsername(messageEvent.getChatUser().getUsername()), command.getTrigger(),
-        command.getUsage())));
+        messageEvent.getChatUser().getTwitchLogin(), command.getTrigger(), command.getUsage())));
   }
 
   @Test
@@ -464,7 +447,7 @@ public abstract class CommandUtilsContractTests {
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.messageWithoutTrigger(null, mock(MessageEvent.class)));
+        () -> subjectUnderTest.stripTriggerFromMessage(null, mock(MessageEvent.class)));
 
     assertThat(thrown).isInstanceOf(NullPointerException.class)
         .hasMessage(this.executionUtils.nullMessageForName("command"));
@@ -474,7 +457,7 @@ public abstract class CommandUtilsContractTests {
   public final void messageWithoutTrigger_nullMessageEvent_throwsNullPointerException() {
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.messageWithoutTrigger(mock(Command.class), null));
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.stripTriggerFromMessage(mock(Command.class), null));
 
     assertThat(thrown).isInstanceOf(NullPointerException.class)
         .hasMessage(this.executionUtils.nullMessageForName("messageEvent"));
@@ -489,49 +472,9 @@ public abstract class CommandUtilsContractTests {
     when(messageEvent.getMessage()).thenReturn(Message.of(String.format("%s %s", command.getTrigger(),
         messageArguments)));
 
-    final Message result = subjectUnderTest.messageWithoutTrigger(command, messageEvent);
+    final Message result = subjectUnderTest.stripTriggerFromMessage(command, messageEvent);
 
     assertThat(result).isEqualTo(Message.of(messageArguments));
-  }
-
-  @Test
-  public final void sanitizeChatUsername_nullChatUsername_throwsNullPointerException() {
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.sanitizeChatUsername(null));
-
-    assertThat(thrown).isInstanceOf(NullPointerException.class)
-        .hasMessage(this.executionUtils.nullMessageForName("chatUsername"));
-  }
-
-  @Test
-  public final void sanitizeChatUsername_noSanitizationNeeded_returnsUnchanged() {
-    final ChatUsername chatUsername = ChatUsername.of(this.arbitraryDataGenerator.getString().toLowerCase());
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-
-    final ChatUsername result = subjectUnderTest.sanitizeChatUsername(chatUsername);
-
-    assertThat(result).isEqualTo(chatUsername);
-  }
-
-  @Test
-  public final void sanitizeChatUsername_needLowerCasing_lowerCases() {
-    final String chatUsername = this.arbitraryDataGenerator.getString();
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-
-    final ChatUsername result = subjectUnderTest.sanitizeChatUsername(ChatUsername.of(chatUsername));
-
-    assertThat(result).isEqualTo(ChatUsername.of(chatUsername.toLowerCase()));
-  }
-
-  @Test
-  public final void sanitizeChatUsername_hasAmpersand_stripsAmpersand() {
-    final String chatUsername = this.arbitraryDataGenerator.getString().toLowerCase();
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-
-    final ChatUsername result = subjectUnderTest.sanitizeChatUsername(ChatUsername.of("@" + chatUsername));
-
-    assertThat(result).isEqualTo(ChatUsername.of(chatUsername));
   }
 
   private static final class RestrictedCommand extends AbstractCommand {

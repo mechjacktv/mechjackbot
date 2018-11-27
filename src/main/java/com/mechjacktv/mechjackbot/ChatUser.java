@@ -1,8 +1,10 @@
 package com.mechjacktv.mechjackbot;
 
+import com.mechjacktv.twitchclient.TwitchLogin;
+
 public interface ChatUser {
 
-  ChatUsername getUsername();
+  TwitchLogin getTwitchLogin();
 
   boolean hasAccessLevel(AccessLevel accessLevel);
 

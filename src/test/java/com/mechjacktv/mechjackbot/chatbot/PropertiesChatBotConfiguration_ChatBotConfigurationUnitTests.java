@@ -1,5 +1,7 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
+import static org.mockito.Mockito.mock;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,8 +10,6 @@ import com.mechjacktv.mechjackbot.ChatBotConfigurationContractTests;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.MapPropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
-
-import static org.mockito.Mockito.mock;
 
 public class PropertiesChatBotConfiguration_ChatBotConfigurationUnitTests extends ChatBotConfigurationContractTests {
 
@@ -35,9 +35,9 @@ public class PropertiesChatBotConfiguration_ChatBotConfigurationUnitTests extend
       realProperties.put(PropertiesChatBotConfiguration.TWITCH_PASSWORD_KEY,
           properties.get(ChatBotConfigurationContractTests.TWITCH_PASSWORD_KEY));
     }
-    if (properties.containsKey(ChatBotConfigurationContractTests.TWITCH_USERNAME_KEY)) {
-      realProperties.put(PropertiesChatBotConfiguration.TWITCH_USERNAME_KEY,
-          properties.get(ChatBotConfigurationContractTests.TWITCH_USERNAME_KEY));
+    if (properties.containsKey(ChatBotConfigurationContractTests.TWITCH_LOGIN_KEY)) {
+      realProperties.put(PropertiesChatBotConfiguration.TWITCH_LOGIN_KEY,
+          properties.get(ChatBotConfigurationContractTests.TWITCH_LOGIN_KEY));
     }
     return realProperties;
   }

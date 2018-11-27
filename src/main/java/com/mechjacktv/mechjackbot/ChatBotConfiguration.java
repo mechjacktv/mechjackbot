@@ -1,5 +1,7 @@
 package com.mechjacktv.mechjackbot;
 
+import com.mechjacktv.twitchclient.TwitchLogin;
+
 public interface ChatBotConfiguration {
 
   DataLocation getDataLocation();
@@ -8,6 +10,6 @@ public interface ChatBotConfiguration {
 
   TwitchPassword getTwitchPassword();
 
-  TwitchUsername getTwitchUsername();
+  TwitchLogin getTwitchLogin();
 
 }

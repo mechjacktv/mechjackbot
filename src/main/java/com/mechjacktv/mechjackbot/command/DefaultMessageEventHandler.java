@@ -43,7 +43,7 @@ final class DefaultMessageEventHandler implements MessageEventHandler {
         this.getLogger(command.getName().value).info(
             String.format("Executed: trigger=%s, user=%s, message=%s",
                 command.getTrigger(),
-                messageEvent.getChatUser().getUsername(),
+                messageEvent.getChatUser().getTwitchLogin(),
                 messageEvent.getMessage()));
         try {
           command.handleMessageEvent(messageEvent);
@@ -51,7 +51,7 @@ final class DefaultMessageEventHandler implements MessageEventHandler {
           this.getLogger(command.getName().value).error(
               String.format("Failed: trigger=%s, user=%s, message=%s",
                   command.getTrigger(),
-                  messageEvent.getChatUser().getUsername(),
+                  messageEvent.getChatUser().getTwitchLogin(),
                   messageEvent.getMessage()),
               t);
         }

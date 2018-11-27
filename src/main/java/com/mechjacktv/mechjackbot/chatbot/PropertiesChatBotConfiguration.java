@@ -9,9 +9,13 @@ import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.ChatBotConfiguration;
+import com.mechjacktv.mechjackbot.DataLocation;
+import com.mechjacktv.mechjackbot.TwitchChannel;
+import com.mechjacktv.mechjackbot.TwitchPassword;
 import com.mechjacktv.twitchclient.TwitchClientConfiguration;
 import com.mechjacktv.twitchclient.TwitchClientId;
+import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.FilePropertiesSource;
 import com.mechjacktv.util.HotUpdatePropertiesWrapper;
@@ -30,7 +34,7 @@ final class PropertiesChatBotConfiguration extends HotUpdatePropertiesWrapper
   static final String TWITCH_CHANNEL_KEY = "twitch.channel";
   static final String TWITCH_CLIENT_ID_KEY = "twitch.client_id";
   static final String TWITCH_PASSWORD_KEY = "twitch.password";
-  static final String TWITCH_USERNAME_KEY = "twitch.username";
+  static final String TWITCH_LOGIN_KEY = "twitch.login";
 
   private final DataLocation dataLocation;
 
@@ -52,7 +56,7 @@ final class PropertiesChatBotConfiguration extends HotUpdatePropertiesWrapper
   }
 
   private boolean isMissingRequiredValues() {
-    return Strings.isNullOrEmpty(this.getProperties().getProperty(TWITCH_USERNAME_KEY))
+    return Strings.isNullOrEmpty(this.getProperties().getProperty(TWITCH_LOGIN_KEY))
         || Strings.isNullOrEmpty(this.getProperties().getProperty(TWITCH_PASSWORD_KEY))
         || Strings.isNullOrEmpty(this.getProperties().getProperty(TWITCH_CHANNEL_KEY))
         || Strings.isNullOrEmpty(this.getProperties().getProperty(TWITCH_CLIENT_ID_KEY));
@@ -79,8 +83,8 @@ final class PropertiesChatBotConfiguration extends HotUpdatePropertiesWrapper
   }
 
   @Override
-  public TwitchUsername getTwitchUsername() {
-    return TwitchUsername.of(this.getProperties().getProperty(TWITCH_USERNAME_KEY));
+  public TwitchLogin getTwitchLogin() {
+    return TwitchLogin.of(this.getProperties().getProperty(TWITCH_LOGIN_KEY));
   }
 
 }

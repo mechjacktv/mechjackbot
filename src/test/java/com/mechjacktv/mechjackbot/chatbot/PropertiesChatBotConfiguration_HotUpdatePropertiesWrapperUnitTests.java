@@ -1,5 +1,7 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
+import static com.mechjacktv.mechjackbot.chatbot.PropertiesChatBotConfiguration.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,8 +9,6 @@ import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.HotUpdatePropertiesWrapperContractTests;
 import com.mechjacktv.util.PropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
-
-import static com.mechjacktv.mechjackbot.chatbot.PropertiesChatBotConfiguration.*;
 
 public class PropertiesChatBotConfiguration_HotUpdatePropertiesWrapperUnitTests
     extends HotUpdatePropertiesWrapperContractTests {
@@ -29,7 +29,7 @@ public class PropertiesChatBotConfiguration_HotUpdatePropertiesWrapperUnitTests
     properties.put(TWITCH_CHANNEL_KEY, this.arbitraryDataGenerator.getString());
     properties.put(TWITCH_CLIENT_ID_KEY, this.arbitraryDataGenerator.getString());
     properties.put(TWITCH_PASSWORD_KEY, this.arbitraryDataGenerator.getString());
-    properties.put(TWITCH_USERNAME_KEY, this.arbitraryDataGenerator.getString());
+    properties.put(TWITCH_LOGIN_KEY, this.arbitraryDataGenerator.getString());
     return properties;
   }
 

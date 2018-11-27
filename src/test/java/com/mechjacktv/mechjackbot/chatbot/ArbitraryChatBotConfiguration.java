@@ -1,6 +1,7 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
 import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 
 public class ArbitraryChatBotConfiguration implements ChatBotConfiguration {
@@ -8,13 +9,13 @@ public class ArbitraryChatBotConfiguration implements ChatBotConfiguration {
   private final DataLocation dataLocation;
   private final TwitchChannel twitchChannel;
   private final TwitchPassword twitchPassword;
-  private final TwitchUsername twitchUsername;
+  private final TwitchLogin twitchLogin;
 
   public ArbitraryChatBotConfiguration(final ArbitraryDataGenerator arbitraryDataGenerator) {
     this.dataLocation = DataLocation.of(arbitraryDataGenerator.getString());
     this.twitchChannel = TwitchChannel.of(arbitraryDataGenerator.getString());
     this.twitchPassword = TwitchPassword.of(arbitraryDataGenerator.getString());
-    this.twitchUsername = TwitchUsername.of(arbitraryDataGenerator.getString());
+    this.twitchLogin = TwitchLogin.of(arbitraryDataGenerator.getString());
   }
 
   @Override
@@ -33,7 +34,7 @@ public class ArbitraryChatBotConfiguration implements ChatBotConfiguration {
   }
 
   @Override
-  public TwitchUsername getTwitchUsername() {
-    return this.twitchUsername;
+  public TwitchLogin getTwitchLogin() {
+    return this.twitchLogin;
   }
 }

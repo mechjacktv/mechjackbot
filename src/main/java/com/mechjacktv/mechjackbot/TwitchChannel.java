@@ -9,7 +9,7 @@ public final class TwitchChannel extends TypedString {
   }
 
   public static TwitchChannel of(final String value) {
-    return new TwitchChannel(value);
+    return new TwitchChannel(value.toLowerCase());
   }
 
 }

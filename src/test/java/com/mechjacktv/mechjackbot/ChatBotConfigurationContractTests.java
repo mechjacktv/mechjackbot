@@ -1,20 +1,21 @@
 package com.mechjacktv.mechjackbot;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mechjacktv.twitchclient.TwitchLogin;
+import com.mechjacktv.util.ArbitraryDataGenerator;
+
 import org.junit.Test;
 
-import com.mechjacktv.util.ArbitraryDataGenerator;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 public abstract class ChatBotConfigurationContractTests {
 
   public static final String TWITCH_CHANNEL_KEY = "TWITCH_CHANNEL_KEY";
   public static final String TWITCH_PASSWORD_KEY = "TWITCH_PASSWORD_KEY";
-  public static final String TWITCH_USERNAME_KEY = "TWITCH_USERNAME_KEY";
+  public static final String TWITCH_LOGIN_KEY = "TWITCH_LOGIN_KEY";
 
   private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
 
@@ -33,7 +34,7 @@ public abstract class ChatBotConfigurationContractTests {
 
     properties.put(TWITCH_CHANNEL_KEY, this.arbitraryDataGenerator.getString());
     properties.put(TWITCH_PASSWORD_KEY, this.arbitraryDataGenerator.getString());
-    properties.put(TWITCH_USERNAME_KEY, this.arbitraryDataGenerator.getString());
+    properties.put(TWITCH_LOGIN_KEY, this.arbitraryDataGenerator.getString());
     return properties;
   }
 
@@ -60,7 +61,7 @@ public abstract class ChatBotConfigurationContractTests {
   @Test
   public final void new_usernameKeyMissing_throwsIllegalStateException() {
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
-    properties.remove(TWITCH_USERNAME_KEY);
+    properties.remove(TWITCH_LOGIN_KEY);
 
     final Throwable thrown = catchThrowable(() -> this.givenASubjectToTest(properties));
 
@@ -74,7 +75,7 @@ public abstract class ChatBotConfigurationContractTests {
 
     final DataLocation result = subjectUnderTest.getDataLocation();
 
-    assertThat(result.value).isEqualTo(dataLocation);
+    assertThat(result).isEqualTo(DataLocation.of(dataLocation));
   }
 
   @Test
@@ -84,7 +85,7 @@ public abstract class ChatBotConfigurationContractTests {
 
     final TwitchChannel result = subjectUnderTest.getTwitchChannel();
 
-    assertThat(result.value).isEqualTo(properties.get(TWITCH_CHANNEL_KEY));
+    assertThat(result).isEqualTo(TwitchChannel.of(properties.get(TWITCH_CHANNEL_KEY)));
   }
 
   @Test
@@ -94,17 +95,17 @@ public abstract class ChatBotConfigurationContractTests {
 
     final TwitchPassword result = subjectUnderTest.getTwitchPassword();
 
-    assertThat(result.value).isEqualTo(properties.get(TWITCH_PASSWORD_KEY));
+    assertThat(result).isEqualTo(TwitchPassword.of(properties.get(TWITCH_PASSWORD_KEY)));
   }
 
   @Test
-  public final void getTwitchUsername_isPresent_returnsTwitchUsername() {
+  public final void getTwitchLogin_isPresent_returnsTwitchLogin() {
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
     final ChatBotConfiguration subjectUnderTest = this.givenASubjectToTest(properties);
 
-    final TwitchUsername result = subjectUnderTest.getTwitchUsername();
+    final TwitchLogin result = subjectUnderTest.getTwitchLogin();
 
-    assertThat(result.value).isEqualTo(properties.get(TWITCH_USERNAME_KEY));
+    assertThat(result).isEqualTo(TwitchLogin.of(properties.get(TWITCH_LOGIN_KEY)));
   }
 
 }

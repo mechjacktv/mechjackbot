@@ -1,20 +1,21 @@
 package com.mechjacktv.mechjackbot.command;
 
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
+
 import java.util.Set;
 import java.util.function.Function;
 
 import com.google.common.collect.Sets;
+
+import org.junit.Test;
+import org.slf4j.Logger;
+
 import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.DefaultTimeUtils;
 import com.mechjacktv.util.ExecutionUtils;
-
-import org.junit.Test;
-import org.slf4j.Logger;
-
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
 
 public class DefaultMessageEventHandlerUnitTests extends MessageEventHandlerContractTests {
 
@@ -46,7 +47,7 @@ public class DefaultMessageEventHandlerUnitTests extends MessageEventHandlerCont
     final Logger logger = mock(Logger.class);
     final DefaultMessageEventHandler subjectUnderTest = this.givenASubjectToTest(Sets.newHashSet(command), logger);
 
-    subjectUnderTest.handleMessageEvent(this.givenAFakeMessageEvent());
+    subjectUnderTest.handleMessageEvent(this.givenAMessageEvent());
 
     verify(logger).info(isA(String.class));
   }
@@ -59,7 +60,7 @@ public class DefaultMessageEventHandlerUnitTests extends MessageEventHandlerCont
     final Logger logger = mock(Logger.class);
     final DefaultMessageEventHandler subjectUnderTest = this.givenASubjectToTest(Sets.newHashSet(command), logger);
 
-    subjectUnderTest.handleMessageEvent(this.givenAFakeMessageEvent());
+    subjectUnderTest.handleMessageEvent(this.givenAMessageEvent());
 
     verify(logger).info(isA(String.class));
     verify(logger).error(isA(String.class), isA(Throwable.class));

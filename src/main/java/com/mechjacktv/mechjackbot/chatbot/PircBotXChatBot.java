@@ -37,7 +37,7 @@ public final class PircBotXChatBot implements ChatBot {
       final ExecutionUtils executionUtils, final Listener listener,
       final Function<org.pircbotx.Configuration, PircBotX> botFactory) {
     final org.pircbotx.Configuration configuration = new org.pircbotx.Configuration.Builder()
-        .setName(chatBotConfiguration.getTwitchUsername().value)
+        .setName(chatBotConfiguration.getTwitchLogin().value)
         .addServer(TWITCH_IRC_SERVER_HOST, TWITCH_IRC_SERVER_PORT)
         .setServerPassword(chatBotConfiguration.getTwitchPassword().value)
         .addListener(listener)

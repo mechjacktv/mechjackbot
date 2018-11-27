@@ -18,7 +18,11 @@ import org.pircbotx.hooks.Listener;
 import org.pircbotx.output.OutputIRC;
 
 import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.ChatBotConfiguration;
+import com.mechjacktv.mechjackbot.Message;
+import com.mechjacktv.mechjackbot.TwitchChannel;
+import com.mechjacktv.mechjackbot.TwitchPassword;
+import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
@@ -50,11 +54,11 @@ public class PircBotXChatBotUnitTests {
 
   private ChatBotConfiguration givenIHaveAFakeChatBotConfiguration() {
     final ChatBotConfiguration chatBotConfiguration = mock(ChatBotConfiguration.class);
-    final TwitchUsername twitchUsername = TwitchUsername.of(this.arbitraryDataGenerator.getString());
+    final TwitchLogin twitchUsername = TwitchLogin.of(this.arbitraryDataGenerator.getString());
     final TwitchPassword twitchPassword = TwitchPassword.of(this.arbitraryDataGenerator.getString());
     final TwitchChannel twitchChannel = TwitchChannel.of(this.arbitraryDataGenerator.getString());
 
-    when(chatBotConfiguration.getTwitchUsername()).thenReturn(twitchUsername);
+    when(chatBotConfiguration.getTwitchLogin()).thenReturn(twitchUsername);
     when(chatBotConfiguration.getTwitchPassword()).thenReturn(twitchPassword);
     when(chatBotConfiguration.getTwitchChannel()).thenReturn(twitchChannel);
     return chatBotConfiguration;
@@ -75,7 +79,7 @@ public class PircBotXChatBotUnitTests {
 
     final SoftAssertions softly = new SoftAssertions();
     final org.pircbotx.Configuration.ServerEntry serverEntry = result.getServers().get(0);
-    softly.assertThat(result.getName()).isEqualTo(chatBotConfiguration.getTwitchUsername().value);
+    softly.assertThat(result.getName()).isEqualTo(chatBotConfiguration.getTwitchLogin().value);
     softly.assertThat(serverEntry.getHostname()).isEqualTo(PircBotXChatBot.TWITCH_IRC_SERVER_HOST);
     softly.assertThat(serverEntry.getPort()).isEqualTo(PircBotXChatBot.TWITCH_IRC_SERVER_PORT);
     softly.assertThat(result.getServerPassword()).isEqualTo(chatBotConfiguration.getTwitchPassword().value);

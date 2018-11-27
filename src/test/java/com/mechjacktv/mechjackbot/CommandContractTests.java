@@ -2,8 +2,6 @@ package com.mechjacktv.mechjackbot;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assume.assumeTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 
@@ -82,13 +80,11 @@ public abstract class CommandContractTests {
 
   @Test
   public final void isTriggered_messageContainsTrigger_returnsTrue() {
+    final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final Command subjectUnderTest = this.givenASubjectToTest();
     assumeTrue(subjectUnderTest.isTriggerable());
-    final CommandTrigger commandTrigger = this.getCommandTriggerDefault();
-    final MessageEvent messageEvent = mock(MessageEvent.class);
-    final Message message = Message.of(String.format("%s %s", commandTrigger.value,
-        this.arbitraryDataGenerator.getString()));
-    when(messageEvent.getMessage()).thenReturn(message);
+    messageEvent.setMessage(Message.of(String.format("%s %s", subjectUnderTest.getTrigger(),
+        this.arbitraryDataGenerator.getString())));
 
     final boolean result = subjectUnderTest.isTriggered(messageEvent);
 
@@ -97,14 +93,9 @@ public abstract class CommandContractTests {
 
   @Test
   public final void isTriggered_messageDoesNotContainTrigger_returnsFalse() {
+    final MessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final Command subjectUnderTest = this.givenASubjectToTest();
     assumeTrue(subjectUnderTest.isTriggerable());
-    final MessageEvent messageEvent = mock(MessageEvent.class);
-    final ChatUser chatUser = mock(ChatUser.class);
-    final Message message = Message.of(this.arbitraryDataGenerator.getString());
-    when(messageEvent.getChatUser()).thenReturn(chatUser);
-    when(chatUser.getUsername()).thenReturn(ChatUsername.of(this.arbitraryDataGenerator.getString()));
-    when(messageEvent.getMessage()).thenReturn(message);
 
     final boolean result = subjectUnderTest.isTriggered(messageEvent);
 

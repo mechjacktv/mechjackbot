@@ -1,11 +1,13 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
-import static com.mechjacktv.mechjackbot.chatbot.PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_DEFAULT;
-import static com.mechjacktv.mechjackbot.chatbot.PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_KEY;
-import static com.mechjacktv.mechjackbot.chatbot.PircBotXListener.JOIN_EVENT_MESSAGE_DEFAULT;
-import static com.mechjacktv.mechjackbot.chatbot.PircBotXListener.JOIN_EVENT_MESSAGE_KEY;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.command.DefaultCommandUtils;
+import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.util.DefaultExecutionUtils;
+import com.mechjacktv.util.DefaultTimeUtils;
+import com.mechjacktv.util.ExecutionUtils;
 
 import org.junit.Test;
 import org.pircbotx.Channel;
@@ -15,13 +17,10 @@ import org.pircbotx.hooks.events.PingEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.pircbotx.output.OutputIRC;
 
-import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.DefaultCommandUtils;
-import com.mechjacktv.util.ArbitraryDataGenerator;
-import com.mechjacktv.util.DefaultExecutionUtils;
-import com.mechjacktv.util.DefaultTimeUtils;
-import com.mechjacktv.util.ExecutionUtils;
+import static com.mechjacktv.mechjackbot.chatbot.PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_KEY;
+import static com.mechjacktv.mechjackbot.chatbot.PircBotXListener.JOIN_EVENT_MESSAGE_KEY;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 public class PircBotXListenerUnitTests {
 
@@ -76,12 +75,10 @@ public class PircBotXListenerUnitTests {
 
   @Test
   public final void onJoin_isCalled_sendsWithExpectedJoinMessage() {
-    final Configuration configuration = mock(Configuration.class);
+    final MapConfiguration configuration = new MapConfiguration(this.executionUtils);
     final String joinMessage = this.arbitraryDataGenerator.getString();
-    when(configuration.get(eq(JOIN_EVENT_MESSAGE_KEY), eq(JOIN_EVENT_MESSAGE_DEFAULT)))
-        .thenReturn(joinMessage);
-    when(configuration.get(eq(CHAT_BOT_MESSAGE_FORMAT_KEY), eq(CHAT_BOT_MESSAGE_FORMAT_DEFAULT))).thenReturn("%s");
-    final PircBotXListener subjectUnderTest = this.givenASubjectToTest(configuration);
+    configuration.set(JOIN_EVENT_MESSAGE_KEY, joinMessage);
+    configuration.set(CHAT_BOT_MESSAGE_FORMAT_KEY, "%s");
     final JoinEvent joinEvent = mock(JoinEvent.class);
     final Channel channel = mock(Channel.class);
     final String channelName = this.arbitraryDataGenerator.getString();
@@ -91,10 +88,11 @@ public class PircBotXListenerUnitTests {
     final OutputIRC outputIRC = mock(OutputIRC.class);
     when(joinEvent.getBot()).thenReturn(pircBotX);
     when(pircBotX.sendIRC()).thenReturn(outputIRC);
+    final PircBotXListener subjectUnderTest = this.givenASubjectToTest(configuration);
 
     subjectUnderTest.onJoin(joinEvent);
 
-    verify(outputIRC).message(eq(channelName), eq(joinMessage));
+    verify(outputIRC).message(eq(TwitchChannel.of(channelName).value), eq(Message.of(joinMessage).value));
   }
 
 }

@@ -18,7 +18,7 @@ public class HelpCommand extends AbstractCommand {
   static final String COMMAND_MESSAGE_FORMAT_DEFAULT = "@%s, %s -> %s";
   static final String COMMAND_MISSING_MESSAGE_FORMAT_KEY = "command.help.missing_message_format";
   static final String COMMAND_MISSING_MESSAGE_FORMAT_DEFAULT = "@%s, I don't see a command triggered by %s.";
-  private static final String COMMAND_USAGE = "<commandTrigger>";
+  static final String COMMAND_USAGE = "<commandTrigger>";
 
   private final com.mechjacktv.configuration.Configuration configuration;
   private final CommandUtils commandUtils;
@@ -38,7 +38,7 @@ public class HelpCommand extends AbstractCommand {
 
   @Override
   public void handleMessageEvent(final MessageEvent messageEvent) {
-    final Message message = this.commandUtils.messageWithoutTrigger(this, messageEvent);
+    final Message message = this.commandUtils.stripTriggerFromMessage(this, messageEvent);
 
     if (!Strings.isNullOrEmpty(message.value)) {
       final CommandTrigger commandTrigger = CommandTrigger.of(message.value);
@@ -58,8 +58,7 @@ public class HelpCommand extends AbstractCommand {
     final String messageFormat = this.configuration.get(COMMAND_MESSAGE_FORMAT_KEY,
         COMMAND_MESSAGE_FORMAT_DEFAULT);
 
-    messageEvent.sendResponse(Message.of(String.format(messageFormat,
-        this.commandUtils.sanitizeChatUsername(messageEvent.getChatUser().getUsername()),
+    messageEvent.sendResponse(Message.of(String.format(messageFormat, messageEvent.getChatUser().getTwitchLogin(),
         command.getTrigger(), command.getDescription())));
   }
 
@@ -67,8 +66,8 @@ public class HelpCommand extends AbstractCommand {
     final String messageFormat = this.configuration.get(COMMAND_MISSING_MESSAGE_FORMAT_KEY,
         COMMAND_MISSING_MESSAGE_FORMAT_DEFAULT);
 
-    messageEvent.sendResponse(Message.of(String.format(messageFormat,
-        this.commandUtils.sanitizeChatUsername(messageEvent.getChatUser().getUsername()), commandTrigger)));
+    messageEvent.sendResponse(Message.of(String.format(messageFormat, messageEvent.getChatUser().getTwitchLogin(),
+        commandTrigger)));
   }
 
 }

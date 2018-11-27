@@ -17,8 +17,6 @@ public interface CommandUtils {
 
   void sendUsage(Command command, MessageEvent messageEvent);
 
-  Message messageWithoutTrigger(Command command, MessageEvent messageEvent);
-
-  ChatUsername sanitizeChatUsername(ChatUsername chatUsername);
+  Message stripTriggerFromMessage(Command command, MessageEvent messageEvent);
 
 }

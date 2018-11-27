@@ -24,7 +24,7 @@ public class PropertiesChatBotConfiguration_TwitchClientConfigurationUnitTests e
     clientId.ifPresent((value) -> properties.put(PropertiesChatBotConfiguration.TWITCH_CLIENT_ID_KEY, value));
     properties.put(PropertiesChatBotConfiguration.TWITCH_CHANNEL_KEY, this.arbitraryDataGenerator.getString());
     properties.put(PropertiesChatBotConfiguration.TWITCH_PASSWORD_KEY, this.arbitraryDataGenerator.getString());
-    properties.put(PropertiesChatBotConfiguration.TWITCH_USERNAME_KEY, this.arbitraryDataGenerator.getString());
+    properties.put(PropertiesChatBotConfiguration.TWITCH_LOGIN_KEY, this.arbitraryDataGenerator.getString());
     return new PropertiesChatBotConfiguration(this.arbitraryDataGenerator.getString(),
         new MapPropertiesSource(properties), mock(ScheduleService.class));
   }

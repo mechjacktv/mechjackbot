@@ -9,7 +9,12 @@ public final class TwitchLogin extends TypedString {
   }
 
   public static TwitchLogin of(final String value) {
-    return new TwitchLogin(value);
+    String sanitizedValue = value.trim().toLowerCase();
+
+    if (sanitizedValue.startsWith("@")) {
+      sanitizedValue = sanitizedValue.substring(1);
+    }
+    return new TwitchLogin(sanitizedValue);
   }
 
 }

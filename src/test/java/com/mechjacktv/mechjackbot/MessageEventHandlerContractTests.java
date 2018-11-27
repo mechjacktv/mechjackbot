@@ -18,11 +18,11 @@ public abstract class MessageEventHandlerContractTests {
 
   protected abstract MessageEventHandler givenASubjectToTest(final Set<Command> commands);
 
-  private final Set<Command> givenASetOfCommands(final boolean triggerable) {
+  private Set<Command> givenASetOfCommands() {
     final Set<Command> commands = new HashSet<>();
 
     for (int i = 0; i < 3; i++) {
-      commands.add(this.givenAFakeCommand(triggerable));
+      commands.add(this.givenAFakeCommand(true));
     }
     return commands;
   }
@@ -36,14 +36,8 @@ public abstract class MessageEventHandlerContractTests {
     return command;
   }
 
-  protected final MessageEvent givenAFakeMessageEvent() {
-    final MessageEvent messageEvent = mock(MessageEvent.class);
-    final ChatUser chatUser = mock(ChatUser.class);
-
-    when(messageEvent.getChatUser()).thenReturn(chatUser);
-    when(messageEvent.getMessage()).thenReturn(Message.of(this.arbitraryDataGenerator.getString()));
-    when(chatUser.getUsername()).thenReturn(ChatUsername.of(this.arbitraryDataGenerator.getString()));
-    return messageEvent;
+  protected final MessageEvent givenAMessageEvent() {
+    return new ArbitraryMessageEvent(this.arbitraryDataGenerator);
   }
 
   @Test
@@ -51,7 +45,7 @@ public abstract class MessageEventHandlerContractTests {
     final Command command = this.givenAFakeCommand(false);
     final MessageEventHandler subjectUnderTest = this.givenASubjectToTest(Sets.newHashSet(command));
 
-    subjectUnderTest.handleMessageEvent(this.givenAFakeMessageEvent());
+    subjectUnderTest.handleMessageEvent(this.givenAMessageEvent());
 
     verify(command, never()).handleMessageEvent(isA(MessageEvent.class));
   }
@@ -61,17 +55,17 @@ public abstract class MessageEventHandlerContractTests {
     final Command command = this.givenAFakeCommand(true);
     final MessageEventHandler subjectUnderTest = this.givenASubjectToTest(Sets.newHashSet(command));
 
-    subjectUnderTest.handleMessageEvent(this.givenAFakeMessageEvent());
+    subjectUnderTest.handleMessageEvent(this.givenAMessageEvent());
 
     verify(command).handleMessageEvent(isA(MessageEvent.class));
   }
 
   @Test
   public final void handleMessageEvent_forMessageEvent_allCommandsAreCheckedForTrigger() {
-    final Set<Command> commands = this.givenASetOfCommands(true);
+    final Set<Command> commands = this.givenASetOfCommands();
     final MessageEventHandler subjectUnderTest = this.givenASubjectToTest(commands);
 
-    subjectUnderTest.handleMessageEvent(this.givenAFakeMessageEvent());
+    subjectUnderTest.handleMessageEvent(this.givenAMessageEvent());
 
     for (final Command command : commands) {
       verify(command).isTriggered(isA(MessageEvent.class));

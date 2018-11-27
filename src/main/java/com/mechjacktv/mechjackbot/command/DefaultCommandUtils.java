@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.TimeUtils;
 
@@ -22,7 +23,7 @@ public final class DefaultCommandUtils implements CommandUtils {
   private final TimeUtils timeUtils;
   private final Map<CommandTrigger, Pattern> commandTriggerPatterns;
   private final Map<CommandTrigger, LastTrigger> commandLastTrigger;
-  private final Map<ChatUsername, LastTrigger> viewerLastTrigger;
+  private final Map<TwitchLogin, LastTrigger> viewerLastTrigger;
 
   @Inject
   public DefaultCommandUtils(final Configuration configuration, final ExecutionUtils executionUtils,
@@ -66,18 +67,18 @@ public final class DefaultCommandUtils implements CommandUtils {
       if (Objects.nonNull(noCoolDown)
           || this.hasAccessLevel(messageEvent, AccessLevel.MODERATOR)) {
         return true;
-      } else if (this.isCooledDown(command.getTrigger(), messageEvent.getChatUser().getUsername(), now)) {
+      } else if (this.isCooledDown(command.getTrigger(), messageEvent.getChatUser().getTwitchLogin(), now)) {
         this.commandLastTrigger.put(command.getTrigger(), LastTrigger.of(now));
-        this.viewerLastTrigger.put(messageEvent.getChatUser().getUsername(), LastTrigger.of(now));
+        this.viewerLastTrigger.put(messageEvent.getChatUser().getTwitchLogin(), LastTrigger.of(now));
         return true;
       }
       return false;
     }, CommandException.class);
   }
 
-  private boolean isCooledDown(final CommandTrigger commandTrigger, final ChatUsername chatUsername, final long now) {
+  private boolean isCooledDown(final CommandTrigger commandTrigger, final TwitchLogin twitchLog, final long now) {
     return this.isCooledDown(() -> this.commandLastTrigger.get(commandTrigger), this::getCommandCoolDown, now)
-        && this.isCooledDown(() -> this.viewerLastTrigger.get(chatUsername), this::getViewerCoolDown, now);
+        && this.isCooledDown(() -> this.viewerLastTrigger.get(twitchLog), this::getViewerCoolDown, now);
   }
 
   private boolean isCooledDown(final Supplier<LastTrigger> lastTriggerSupplier,
@@ -132,13 +133,12 @@ public final class DefaultCommandUtils implements CommandUtils {
     final String messageFormat = this.configuration.get(COMMAND_USAGE_MESSAGE_FORMAT_KEY,
         COMMAND_USAGE_MESSAGE_FORMAT_DEFAULT);
 
-    messageEvent.sendResponse(Message.of(String.format(messageFormat,
-        this.sanitizeChatUsername(messageEvent.getChatUser().getUsername()), command.getTrigger(),
-        command.getUsage())));
+    messageEvent.sendResponse(Message.of(String.format(messageFormat, messageEvent.getChatUser().getTwitchLogin(),
+        command.getTrigger(), command.getUsage())));
   }
 
   @Override
-  public Message messageWithoutTrigger(final Command command, final MessageEvent messageEvent) {
+  public Message stripTriggerFromMessage(final Command command, final MessageEvent messageEvent) {
     Objects.requireNonNull(command, this.executionUtils.nullMessageForName("command"));
     Objects.requireNonNull(messageEvent, this.executionUtils.nullMessageForName("messageEvent"));
 
@@ -146,18 +146,6 @@ public final class DefaultCommandUtils implements CommandUtils {
     final Message message = messageEvent.getMessage();
 
     return Message.of(message.value.substring(commandTrigger.value.length()).trim());
-  }
-
-  @Override
-  public final ChatUsername sanitizeChatUsername(ChatUsername chatUsername) {
-    Objects.requireNonNull(chatUsername, this.executionUtils.nullMessageForName("chatUsername"));
-
-    String sanitizedValue = chatUsername.value.trim().toLowerCase();
-
-    if (sanitizedValue.startsWith("@")) {
-      sanitizedValue = sanitizedValue.substring(1);
-    }
-    return ChatUsername.of(sanitizedValue);
   }
 
 }

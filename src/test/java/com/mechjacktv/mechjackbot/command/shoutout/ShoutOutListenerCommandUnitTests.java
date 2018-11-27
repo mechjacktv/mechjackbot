@@ -89,7 +89,7 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
     final Configuration configuration = new MapConfiguration(this.executionUtils);
     final ShoutOutDataStore shoutOutDataStore = this.givenAShoutOutDataStore(configuration);
     final MessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
-    final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getUsername().value);
+    final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getTwitchLogin().value);
     final Caster caster = shoutOutDataStore.createCaster(casterKey.getName(), 0L);
     shoutOutDataStore.put(casterKey, caster);
     final TimeUtils timeUtils = this.givenAFakeTimeUtils();
@@ -106,7 +106,7 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
     final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
     final ShoutOutDataStore shoutOutDataStore = this.givenAShoutOutDataStore(appConfiguration);
     final MessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
-    final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getUsername().value);
+    final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getTwitchLogin().value);
     final Caster caster = shoutOutDataStore.createCaster(casterKey.getName(), 0L);
     shoutOutDataStore.put(casterKey, caster);
     final TimeUtils timeUtils = this.givenAFakeTimeUtils();
@@ -125,7 +125,7 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
     appConfiguration.set(COMMAND_FREQUENCY_KEY, "2");
     final ShoutOutDataStore shoutOutDataStore = this.givenAShoutOutDataStore(appConfiguration);
     final MessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
-    final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getUsername().value);
+    final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getTwitchLogin().value);
     final Caster caster = shoutOutDataStore.createCaster(casterKey.getName(), 0L);
     shoutOutDataStore.put(casterKey, caster);
     final TimeUtils timeUtils = this.givenAFakeTimeUtils();
@@ -144,7 +144,7 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
     appConfiguration.set(COMMAND_FREQUENCY_KEY, customFrequency);
     final ShoutOutDataStore shoutOutDataStore = this.givenAShoutOutDataStore(appConfiguration);
     final MessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
-    final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getUsername().value);
+    final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getTwitchLogin().value);
     final Caster caster = shoutOutDataStore.createCaster(casterKey.getName(), 0L);
     shoutOutDataStore.put(casterKey, caster);
     final TimeUtils timeUtils = this.givenAFakeTimeUtils();
@@ -166,11 +166,9 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
 
     subjectUnderTest.handleMessageEvent(messageEvent);
 
-    final ChatUsername chatUsername = this.commandTestUtils.givenACommandUtils(appConfiguration)
-        .sanitizeChatUsername(messageEvent.getChatUser().getUsername());
     assertThat(messageEvent.getResponseMessage()).isNotNull();
     assertThat(messageEvent.getResponseMessage().value).isEqualTo(String.format(COMMAND_MESSAGE_FORMAT_DEFAULT,
-        chatUsername));
+        messageEvent.getChatUser().getTwitchLogin()));
   }
 
   @Test
@@ -184,10 +182,9 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
 
     subjectUnderTest.handleMessageEvent(messageEvent);
 
-    final ChatUsername chatUsername = this.commandTestUtils.givenACommandUtils(appConfiguration)
-        .sanitizeChatUsername(messageEvent.getChatUser().getUsername());
     assertThat(messageEvent.getResponseMessage()).isNotNull();
-    assertThat(messageEvent.getResponseMessage().value).isEqualTo(String.format(customMessageFormat, chatUsername));
+    assertThat(messageEvent.getResponseMessage().value).isEqualTo(String.format(customMessageFormat,
+        messageEvent.getChatUser().getTwitchLogin()));
   }
 
   @Test
@@ -195,7 +192,7 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
     final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
     final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final CasterKey casterKey = CasterKey.newBuilder()
-        .setName(messageEvent.getChatUser().getUsername().value.toLowerCase()).build();
+        .setName(messageEvent.getChatUser().getTwitchLogin().value.toLowerCase()).build();
     final Caster caster = Caster.newBuilder().setName(casterKey.getName()).setLastShoutOut(0L).build();
     final ShoutOutDataStore shoutOutDataStore = mock(ShoutOutDataStore.class);
     when(shoutOutDataStore.createCasterKey(isA(String.class))).thenReturn(casterKey);

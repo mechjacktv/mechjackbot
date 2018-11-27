@@ -2,7 +2,6 @@ package com.mechjacktv.mechjackbot.command;
 
 import static com.mechjacktv.mechjackbot.command.PingCommand.*;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
 import org.junit.Test;
@@ -10,6 +9,7 @@ import org.junit.Test;
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 
 public class PingCommandUnitTests extends CommandContractTests {
@@ -23,12 +23,10 @@ public class PingCommandUnitTests extends CommandContractTests {
     return this.givenASubjectToTest(configuration, this.commandTestUtils.givenACommandUtils(configuration));
   }
 
-  private Command givenASubjectToTest(final String messageFormat, final ChatUsername chatUsername) {
+  private Command givenASubjectToTest(final String messageFormat) {
     final Configuration configuration = this.givenAnAppConfiguration(messageFormat);
-    final CommandUtils commandUtils = mock(CommandUtils.class);
-    when(commandUtils.sanitizeChatUsername(isA(ChatUsername.class))).thenReturn(chatUsername);
 
-    return this.givenASubjectToTest(configuration, commandUtils);
+    return this.givenASubjectToTest(configuration, mock(CommandUtils.class));
   }
 
   private Command givenASubjectToTest(final Configuration configuration, final CommandUtils commandUtils) {
@@ -52,37 +50,37 @@ public class PingCommandUnitTests extends CommandContractTests {
     return appConfiguration;
   }
 
-  private MessageEvent givenAFakeMessageEvent() {
+  private MessageEvent givenAFakeMessageEvent(final TwitchLogin twitchLogin) {
     final MessageEvent messageEvent = mock(MessageEvent.class);
     final ChatUser chatUser = mock(ChatUser.class);
 
     when(messageEvent.getChatUser()).thenReturn(chatUser);
-    when(chatUser.getUsername()).thenReturn(ChatUsername.of(this.arbitraryDataGenerator.getString()));
+    when(chatUser.getTwitchLogin()).thenReturn(twitchLogin);
     return messageEvent;
   }
 
   @Test
   public final void handleMessageEvent_defaultFormat_sendsDefaultMessage() {
     final String messageFormat = COMMAND_MESSAGE_FORMAT_DEFAULT;
-    final ChatUsername chatUsername = ChatUsername.of(this.arbitraryDataGenerator.getString());
-    final MessageEvent messageEvent = givenAFakeMessageEvent();
-    final Command subjectUnderTest = this.givenASubjectToTest(messageFormat, chatUsername);
+    final TwitchLogin twitchLogin = TwitchLogin.of(this.arbitraryDataGenerator.getString());
+    final MessageEvent messageEvent = this.givenAFakeMessageEvent(twitchLogin);
+    final Command subjectUnderTest = this.givenASubjectToTest(messageFormat);
 
     subjectUnderTest.handleMessageEvent(messageEvent);
 
-    verify(messageEvent).sendResponse(eq(Message.of(String.format(messageFormat, chatUsername))));
+    verify(messageEvent).sendResponse(eq(Message.of(String.format(messageFormat, twitchLogin))));
   }
 
   @Test
   public final void handleMessageEvent_customFormat_sendsCustomMessage() {
     final String messageFormat = this.arbitraryDataGenerator.getString() + ", %s";
-    final ChatUsername chatUsername = ChatUsername.of(this.arbitraryDataGenerator.getString());
-    final MessageEvent messageEvent = givenAFakeMessageEvent();
-    final Command subjectUnderTest = this.givenASubjectToTest(messageFormat, chatUsername);
+    final TwitchLogin twitchLogin = TwitchLogin.of(this.arbitraryDataGenerator.getString());
+    final MessageEvent messageEvent = this.givenAFakeMessageEvent(twitchLogin);
+    final Command subjectUnderTest = this.givenASubjectToTest(messageFormat);
 
     subjectUnderTest.handleMessageEvent(messageEvent);
 
-    verify(messageEvent).sendResponse(eq(Message.of(String.format(messageFormat, chatUsername))));
+    verify(messageEvent).sendResponse(eq(Message.of(String.format(messageFormat, twitchLogin))));
   }
 
 }
