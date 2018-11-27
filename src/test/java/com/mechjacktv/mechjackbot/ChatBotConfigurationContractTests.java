@@ -1,15 +1,15 @@
 package com.mechjacktv.mechjackbot;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mechjacktv.twitchclient.TwitchLogin;
-import com.mechjacktv.util.ArbitraryDataGenerator;
-
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
+import com.mechjacktv.twitchclient.TwitchLogin;
+import com.mechjacktv.util.ArbitraryDataGenerator;
 
 public abstract class ChatBotConfigurationContractTests {
 
