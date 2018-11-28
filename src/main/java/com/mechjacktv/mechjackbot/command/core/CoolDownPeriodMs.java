@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.command;
+package com.mechjacktv.mechjackbot.command.core;
 
 import com.mechjacktv.util.typedobject.TypedInteger;
 

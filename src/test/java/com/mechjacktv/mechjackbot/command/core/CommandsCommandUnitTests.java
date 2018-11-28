@@ -1,23 +1,26 @@
-package com.mechjacktv.mechjackbot.command;
-
-import static com.mechjacktv.mechjackbot.command.CommandsCommand.COMMAND_MESSAGE_FORMAT_DEFAULT;
-import static com.mechjacktv.mechjackbot.command.CommandsCommand.COMMAND_MESSAGE_FORMAT_KEY;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+package com.mechjacktv.mechjackbot.command.core;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.configuration.SettingKey;
+import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.command.AbstractCommand;
+import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
+import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
+import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.util.DefaultTimeUtils;
 
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 
-import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.util.ArbitraryDataGenerator;
-import com.mechjacktv.util.DefaultTimeUtils;
+import static com.mechjacktv.mechjackbot.command.AbstractCommand.MESSAGE_FORMAT_KEY;
+import static com.mechjacktv.mechjackbot.command.core.CommandsCommand.MESSAGE_FORMAT_DEFAULT;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 public class CommandsCommandUnitTests extends CommandContractTests {
 
@@ -31,18 +34,21 @@ public class CommandsCommandUnitTests extends CommandContractTests {
   }
 
   private Command givenASubjectToTest(final Configuration configuration, final CommandRegistry commandRegistry) {
-    return new CommandsCommand(configuration, this.commandTestUtils.givenACommandUtils(configuration),
-        commandRegistry);
+    final DefaultCommandConfigurationBuilder builder = new DefaultCommandConfigurationBuilder(
+        this.commandTestUtils.givenACommandUtils(configuration),
+        configuration);
+
+    return new CommandsCommand(builder, commandRegistry);
   }
 
   @Override
-  protected CommandTriggerKey getCommandTriggerKey() {
-    return CommandTriggerKey.of(CommandsCommand.COMMAND_TRIGGER_KEY);
+  protected SettingKey getCommandTriggerKey() {
+    return SettingKey.of(CommandsCommand.class, AbstractCommand.TRIGGER_KEY);
   }
 
   @Override
   protected CommandTrigger getCommandTriggerDefault() {
-    return CommandTrigger.of(CommandsCommand.COMMAND_TRIGGER_DEFAULT);
+    return CommandTrigger.of(CommandsCommand.TRIGGER_DEFAULT);
   }
 
   private CommandUtils givenACommandUtils(final Configuration configuration) {
@@ -81,7 +87,7 @@ public class CommandsCommandUnitTests extends CommandContractTests {
 
     final SoftAssertions softly = new SoftAssertions();
     final Message message = messageEvent.getResponseMessage();
-    softly.assertThat(message.value).contains(this.stripFormat(COMMAND_MESSAGE_FORMAT_DEFAULT));
+    softly.assertThat(message.value).contains(this.stripFormat(MESSAGE_FORMAT_DEFAULT));
     for (final Command command : commands) {
       softly.assertThat(message.value).contains(command.getTrigger().value);
     }
@@ -90,14 +96,14 @@ public class CommandsCommandUnitTests extends CommandContractTests {
 
   @Test
   public final void handleMessageEvent_customFormat_sendsCustomListOfCommands() {
-    final String messageFormat = this.arbitraryDataGenerator.getString() + ": %s";
+    final String messageFormat = this.arbitraryDataGenerator.getString() + ": %2$s";
     final MapConfiguration appConfiguration = this.givenAnAppConfiguration();
     final CommandUtils commandUtils = this.givenACommandUtils(appConfiguration);
     final Set<Command> commands = this.givenASetOfCommands(appConfiguration, commandUtils);
     final CommandRegistry commandRegistry = this.givenACommandRegistry(commands);
     final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, commandRegistry);
-    appConfiguration.set(COMMAND_MESSAGE_FORMAT_KEY, messageFormat);
+    appConfiguration.set(SettingKey.of(CommandsCommand.class, MESSAGE_FORMAT_KEY).value, messageFormat);
 
     subjectUnderTest.handleMessageEvent(messageEvent);
 
@@ -111,7 +117,7 @@ public class CommandsCommandUnitTests extends CommandContractTests {
   }
 
   private String stripFormat(final String messageFormat) {
-    return messageFormat.replace("%s", "").trim();
+    return messageFormat.replace("%2$s", "").trim();
   }
 
   @Test

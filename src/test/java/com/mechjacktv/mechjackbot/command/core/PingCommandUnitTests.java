@@ -1,16 +1,21 @@
-package com.mechjacktv.mechjackbot.command;
-
-import static com.mechjacktv.mechjackbot.command.PingCommand.*;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-
-import org.junit.Test;
+package com.mechjacktv.mechjackbot.command.core;
 
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.command.AbstractCommand;
+import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
+import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
 import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.util.ArbitraryDataGenerator;
+
+import org.junit.Test;
+
+import static com.mechjacktv.mechjackbot.command.core.PingCommand.MESSAGE_FORMAT_DEFAULT;
+import static com.mechjacktv.mechjackbot.command.core.PingCommand.TRIGGER_DEFAULT;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 public class PingCommandUnitTests extends CommandContractTests {
 
@@ -30,23 +35,23 @@ public class PingCommandUnitTests extends CommandContractTests {
   }
 
   private Command givenASubjectToTest(final Configuration configuration, final CommandUtils commandUtils) {
-    return new PingCommand(configuration, commandUtils);
+    return new PingCommand(new DefaultCommandConfigurationBuilder(commandUtils, configuration));
   }
 
   @Override
-  protected CommandTriggerKey getCommandTriggerKey() {
-    return CommandTriggerKey.of(COMMAND_TRIGGER_KEY);
+  protected SettingKey getCommandTriggerKey() {
+    return SettingKey.of(PingCommand.class, AbstractCommand.TRIGGER_KEY);
   }
 
   @Override
   protected CommandTrigger getCommandTriggerDefault() {
-    return CommandTrigger.of(COMMAND_TRIGGER_DEFAULT);
+    return CommandTrigger.of(TRIGGER_DEFAULT);
   }
 
   private MapConfiguration givenAnAppConfiguration(final String messageFormat) {
     final MapConfiguration appConfiguration = this.givenAnAppConfiguration();
 
-    appConfiguration.set(COMMAND_MESSAGE_FORMAT_KEY, messageFormat);
+    appConfiguration.set(SettingKey.of(PingCommand.class, AbstractCommand.MESSAGE_FORMAT_KEY).value, messageFormat);
     return appConfiguration;
   }
 
@@ -61,7 +66,7 @@ public class PingCommandUnitTests extends CommandContractTests {
 
   @Test
   public final void handleMessageEvent_defaultFormat_sendsDefaultMessage() {
-    final String messageFormat = COMMAND_MESSAGE_FORMAT_DEFAULT;
+    final String messageFormat = MESSAGE_FORMAT_DEFAULT;
     final TwitchLogin twitchLogin = TwitchLogin.of(this.arbitraryDataGenerator.getString());
     final MessageEvent messageEvent = this.givenAFakeMessageEvent(twitchLogin);
     final Command subjectUnderTest = this.givenASubjectToTest(messageFormat);

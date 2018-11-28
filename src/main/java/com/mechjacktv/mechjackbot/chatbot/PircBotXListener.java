@@ -2,16 +2,16 @@ package com.mechjacktv.mechjackbot.chatbot;
 
 import javax.inject.Inject;
 
-import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.mechjackbot.Message;
-import com.mechjacktv.mechjackbot.MessageEventHandler;
-import com.mechjacktv.mechjackbot.TwitchChannel;
-
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.PingEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
+
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.mechjackbot.Message;
+import com.mechjacktv.mechjackbot.MessageEventHandler;
+import com.mechjacktv.mechjackbot.TwitchChannel;
 
 final class PircBotXListener extends ListenerAdapter {
 

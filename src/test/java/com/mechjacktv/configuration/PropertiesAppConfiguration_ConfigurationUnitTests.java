@@ -1,13 +1,13 @@
 package com.mechjacktv.configuration;
 
+import static org.mockito.Mockito.mock;
+
 import java.util.Map;
 
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.MapPropertiesSource;
 import com.mechjacktv.util.PropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
-
-import static org.mockito.Mockito.mock;
 
 public class PropertiesAppConfiguration_ConfigurationUnitTests extends ConfigurationContractTests {
 

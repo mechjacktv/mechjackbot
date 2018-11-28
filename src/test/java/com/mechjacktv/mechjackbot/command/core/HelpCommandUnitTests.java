@@ -1,17 +1,22 @@
-package com.mechjacktv.mechjackbot.command;
+package com.mechjacktv.mechjackbot.command.core;
 
-import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.util.ArbitraryDataGenerator;
-import com.mechjacktv.util.DefaultTimeUtils;
+import static com.mechjacktv.mechjackbot.CommandUtils.COMMAND_USAGE_MESSAGE_FORMAT_DEFAULT;
+import static com.mechjacktv.mechjackbot.command.AbstractCommand.MESSAGE_FORMAT_KEY;
+import static com.mechjacktv.mechjackbot.command.core.HelpCommand.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 
-import static com.mechjacktv.mechjackbot.CommandUtils.COMMAND_USAGE_MESSAGE_FORMAT_DEFAULT;
-import static com.mechjacktv.mechjackbot.command.HelpCommand.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.configuration.SettingKey;
+import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.command.AbstractCommand;
+import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
+import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
+import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.util.DefaultTimeUtils;
 
 public class HelpCommandUnitTests extends CommandContractTests {
 
@@ -27,17 +32,20 @@ public class HelpCommandUnitTests extends CommandContractTests {
 
   private Command givenASubjectToTest(final Configuration configuration, final CommandUtils commandUtils,
       final CommandRegistry commandRegistry) {
-    return new HelpCommand(configuration, commandUtils, commandRegistry);
+    final DefaultCommandConfigurationBuilder builder = new DefaultCommandConfigurationBuilder(commandUtils,
+        configuration);
+
+    return new HelpCommand(builder, commandRegistry, commandUtils, configuration);
   }
 
   @Override
-  protected CommandTriggerKey getCommandTriggerKey() {
-    return CommandTriggerKey.of(COMMAND_TRIGGER_KEY);
+  protected SettingKey getCommandTriggerKey() {
+    return SettingKey.of(HelpCommand.class, AbstractCommand.TRIGGER_KEY);
   }
 
   @Override
   protected CommandTrigger getCommandTriggerDefault() {
-    return CommandTrigger.of(COMMAND_TRIGGER_DEFAULT);
+    return CommandTrigger.of(TRIGGER_DEFAULT);
   }
 
   private CommandRegistry givenACommandRegistry(final Command command) {
@@ -65,7 +73,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
     final Message result = messageEvent.getResponseMessage();
 
     assertThat(result.value).isEqualTo(String.format(COMMAND_USAGE_MESSAGE_FORMAT_DEFAULT,
-        messageEvent.getChatUser().getTwitchLogin(), subjectUnderTest.getTrigger(), COMMAND_USAGE));
+        messageEvent.getChatUser().getTwitchLogin(), subjectUnderTest.getTrigger(), USAGE));
   }
 
   @Test
@@ -81,7 +89,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
     subjectUnderTest.handleMessageEvent(messageEvent);
     final Message result = messageEvent.getResponseMessage();
 
-    assertThat(result.value).isEqualTo(String.format(COMMAND_MESSAGE_FORMAT_DEFAULT,
+    assertThat(result.value).isEqualTo(String.format(MESSAGE_FORMAT_DEFAULT,
         messageEvent.getChatUser().getTwitchLogin(), command.getTrigger(), command.getDescription()));
   }
 
@@ -89,7 +97,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
   public final void handleMessageEvent_forTriggerableCommandAndCustomFormat_sendsCustomMessage() {
     final String customFormat = this.arbitraryDataGenerator.getString() + " %s %s %s";
     final MapConfiguration configuration = this.givenAnAppConfiguration();
-    configuration.set(COMMAND_MESSAGE_FORMAT_KEY, customFormat);
+    configuration.set(SettingKey.of(HelpCommand.class, MESSAGE_FORMAT_KEY).value, customFormat);
     final CommandUtils commandUtils = this.givenACommandUtils(configuration);
     final Command command = new ArbitraryCommand(configuration, commandUtils, this.arbitraryDataGenerator);
     final CommandRegistry commandRegistry = this.givenACommandRegistry(command);
@@ -118,7 +126,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
     subjectUnderTest.handleMessageEvent(messageEvent);
     final Message result = messageEvent.getResponseMessage();
 
-    assertThat(result.value).isEqualTo(String.format(COMMAND_MISSING_MESSAGE_FORMAT_DEFAULT,
+    assertThat(result.value).isEqualTo(String.format(MISSING_MESSAGE_FORMAT_DEFAULT,
         messageEvent.getChatUser().getTwitchLogin(), command.getTrigger()));
   }
 
@@ -126,7 +134,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
   public final void handleMessageEvent_missingCommandAndCustomFormat_sendsCustomMissingMessage() {
     final String customFormat = this.arbitraryDataGenerator.getString() + " %s %s";
     final MapConfiguration configuration = this.givenAnAppConfiguration();
-    configuration.set(COMMAND_MISSING_MESSAGE_FORMAT_KEY, customFormat);
+    configuration.set(SettingKey.of(HelpCommand.class, MISSING_MESSAGE_FORMAT_KEY).value, customFormat);
     final CommandUtils commandUtils = this.givenACommandUtils(configuration);
     final Command command = new ArbitraryCommand(configuration, commandUtils, this.arbitraryDataGenerator);
     final CommandRegistry commandRegistry = this.givenACommandRegistry(
@@ -155,7 +163,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
     subjectUnderTest.handleMessageEvent(messageEvent);
     final Message result = messageEvent.getResponseMessage();
 
-    assertThat(result.value).isEqualTo(String.format(COMMAND_MISSING_MESSAGE_FORMAT_DEFAULT,
+    assertThat(result.value).isEqualTo(String.format(MISSING_MESSAGE_FORMAT_DEFAULT,
         messageEvent.getChatUser().getTwitchLogin(), command.getTrigger()));
   }
 

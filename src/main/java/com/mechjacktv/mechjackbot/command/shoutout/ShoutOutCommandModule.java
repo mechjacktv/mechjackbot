@@ -5,7 +5,7 @@ import com.google.inject.multibindings.Multibinder;
 
 import com.mechjacktv.mechjackbot.Command;
 
-public final class ShoutOutModule extends AbstractModule {
+public final class ShoutOutCommandModule extends AbstractModule {
 
   @Override
   protected final void configure() {

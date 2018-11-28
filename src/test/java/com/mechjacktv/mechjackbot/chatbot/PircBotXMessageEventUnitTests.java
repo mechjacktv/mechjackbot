@@ -10,7 +10,7 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.DefaultCommandUtils;
+import com.mechjacktv.mechjackbot.command.core.DefaultCommandUtils;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.DefaultTimeUtils;

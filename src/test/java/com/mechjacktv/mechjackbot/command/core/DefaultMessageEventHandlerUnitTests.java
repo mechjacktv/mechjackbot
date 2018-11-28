@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.command;
+package com.mechjacktv.mechjackbot.command.core;
 
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;

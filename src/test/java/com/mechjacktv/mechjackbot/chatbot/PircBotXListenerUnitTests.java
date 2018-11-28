@@ -1,13 +1,9 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
-import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.DefaultCommandUtils;
-import com.mechjacktv.util.ArbitraryDataGenerator;
-import com.mechjacktv.util.DefaultExecutionUtils;
-import com.mechjacktv.util.DefaultTimeUtils;
-import com.mechjacktv.util.ExecutionUtils;
+import static com.mechjacktv.mechjackbot.chatbot.PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_KEY;
+import static com.mechjacktv.mechjackbot.chatbot.PircBotXListener.JOIN_EVENT_MESSAGE_KEY;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 import org.pircbotx.Channel;
@@ -17,10 +13,14 @@ import org.pircbotx.hooks.events.PingEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.pircbotx.output.OutputIRC;
 
-import static com.mechjacktv.mechjackbot.chatbot.PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_KEY;
-import static com.mechjacktv.mechjackbot.chatbot.PircBotXListener.JOIN_EVENT_MESSAGE_KEY;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.command.core.DefaultCommandUtils;
+import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.util.DefaultExecutionUtils;
+import com.mechjacktv.util.DefaultTimeUtils;
+import com.mechjacktv.util.ExecutionUtils;
 
 public class PircBotXListenerUnitTests {
 

@@ -1,19 +1,19 @@
 package com.mechjacktv.configuration;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import com.mechjacktv.util.ArbitraryDataGenerator;
-import com.mechjacktv.util.DefaultExecutionUtils;
-import com.mechjacktv.util.ExecutionUtils;
-
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
+import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.util.DefaultExecutionUtils;
+import com.mechjacktv.util.ExecutionUtils;
 
 public abstract class ConfigurationContractTests {
 

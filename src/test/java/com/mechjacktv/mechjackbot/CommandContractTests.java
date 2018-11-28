@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
@@ -23,7 +24,7 @@ public abstract class CommandContractTests {
 
   protected abstract Command givenASubjectToTest(final Configuration configuration);
 
-  protected abstract CommandTriggerKey getCommandTriggerKey();
+  protected abstract SettingKey getCommandTriggerKey();
 
   protected abstract CommandTrigger getCommandTriggerDefault();
 

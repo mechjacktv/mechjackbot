@@ -477,13 +477,10 @@ public abstract class CommandUtilsContractTests {
     assertThat(result).isEqualTo(Message.of(messageArguments));
   }
 
-  private static final class RestrictedCommand extends AbstractCommand {
+  private static final class RestrictedCommand extends ArbitraryCommand {
 
     private RestrictedCommand(final CommandUtilsContractTests testSuite, final CommandUtils commandUtils) {
-      super(new Configuration(testSuite.appConfiguration, commandUtils,
-          CommandDescription.of(testSuite.arbitraryDataGenerator.getString()),
-          CommandTriggerKey.of(testSuite.arbitraryDataGenerator.getString()),
-          CommandTrigger.of(testSuite.arbitraryDataGenerator.getString())));
+      super(testSuite.appConfiguration, commandUtils, testSuite.arbitraryDataGenerator);
     }
 
     @Override
@@ -493,13 +490,10 @@ public abstract class CommandUtilsContractTests {
     }
   }
 
-  private static final class NoCoolDownCommand extends AbstractCommand {
+  private static final class NoCoolDownCommand extends ArbitraryCommand {
 
     private NoCoolDownCommand(final CommandUtilsContractTests testSuite, final CommandUtils commandUtils) {
-      super(new Configuration(testSuite.appConfiguration, commandUtils,
-          CommandDescription.of(testSuite.arbitraryDataGenerator.getString()),
-          CommandTriggerKey.of(testSuite.arbitraryDataGenerator.getString()),
-          CommandTrigger.of(testSuite.arbitraryDataGenerator.getString())));
+      super(testSuite.appConfiguration, commandUtils, testSuite.arbitraryDataGenerator);
     }
 
     @Override

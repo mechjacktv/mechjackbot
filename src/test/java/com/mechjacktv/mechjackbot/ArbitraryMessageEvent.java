@@ -1,10 +1,10 @@
 package com.mechjacktv.mechjackbot;
 
-import com.mechjacktv.twitchclient.TwitchLogin;
-import com.mechjacktv.util.ArbitraryDataGenerator;
-
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import com.mechjacktv.twitchclient.TwitchLogin;
+import com.mechjacktv.util.ArbitraryDataGenerator;
 
 public class ArbitraryMessageEvent implements MessageEvent {
 
