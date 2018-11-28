@@ -1,5 +1,13 @@
 package com.mechjacktv.mechjackbot.command.shoutout;
 
+import static com.mechjacktv.mechjackbot.command.AbstractCommand.MESSAGE_FORMAT_KEY;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerCommand.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+import org.junit.Test;
+
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.configuration.SettingKey;
@@ -14,14 +22,6 @@ import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.
 import com.mechjacktv.twitchclient.TwitchClient;
 import com.mechjacktv.util.*;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
-
-import org.junit.Test;
-
-import static com.mechjacktv.mechjackbot.command.AbstractCommand.MESSAGE_FORMAT_KEY;
-import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerCommand.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
 
 public final class ShoutOutListenerCommandUnitTests extends CommandContractTests {
 
@@ -129,7 +129,7 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
   @Test
   public final void isTriggered_casterIsNotDueCustomFrequency_returnsFalse() {
     final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
-    appConfiguration.set(FREQUENCY_KEY, "2");
+    appConfiguration.set(SettingKey.of(ShoutOutListenerCommand.class, FREQUENCY_KEY).value, "2");
     final ShoutOutDataStore shoutOutDataStore = this.givenAShoutOutDataStore(appConfiguration);
     final MessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getTwitchLogin().value);
@@ -148,7 +148,7 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
   public final void isTriggered_casterIsDueCustomFrequency_returnsTrue() {
     final String customFrequency = "2";
     final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
-    appConfiguration.set(FREQUENCY_KEY, customFrequency);
+    appConfiguration.set(SettingKey.of(ShoutOutListenerCommand.class, FREQUENCY_KEY).value, customFrequency);
     final ShoutOutDataStore shoutOutDataStore = this.givenAShoutOutDataStore(appConfiguration);
     final MessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getTwitchLogin().value);
