@@ -1,8 +1,12 @@
 package com.mechjacktv.util.typedobject;
 
-abstract class TypedFloat extends StronglyTyped<Float> {
+public abstract class TypedFloat extends StronglyTyped<Float> {
 
-  TypedFloat(final Float value) {
+  public static <W extends TypedFloat> W of(final Class<W> wrapper, final Float value) {
+    return StronglyTyped.of(wrapper, value);
+  }
+
+  protected TypedFloat(final Float value) {
     super(value);
   }
 

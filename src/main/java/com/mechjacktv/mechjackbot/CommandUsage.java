@@ -4,12 +4,12 @@ import com.mechjacktv.util.typedobject.TypedString;
 
 public final class CommandUsage extends TypedString {
 
-  private CommandUsage(final String value) {
-    super(value);
+  public static CommandUsage of(final String value) {
+    return TypedString.of(CommandUsage.class, value);
   }
 
-  public static CommandUsage of(final String value) {
-    return new CommandUsage(value);
+  private CommandUsage(final String value) {
+    super(value);
   }
 
 }

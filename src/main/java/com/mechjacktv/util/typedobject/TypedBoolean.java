@@ -1,8 +1,12 @@
 package com.mechjacktv.util.typedobject;
 
-abstract class TypedBoolean extends StronglyTyped<Boolean> {
+public abstract class TypedBoolean extends StronglyTyped<Boolean> {
 
-  TypedBoolean(final Boolean value) {
+  public static <W extends TypedBoolean> W of(final Class<W> wrapper, final Boolean value) {
+    return StronglyTyped.of(wrapper, value);
+  }
+
+  protected TypedBoolean(final Boolean value) {
     super(value);
   }
 

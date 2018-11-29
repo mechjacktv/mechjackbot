@@ -2,13 +2,14 @@ package com.mechjacktv.mechjackbot.chatbot;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
-import com.mechjacktv.mechjackbot.ChatBot;
-import com.mechjacktv.mechjackbot.CommandRegistry;
 
 import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.Listener;
 import org.pircbotx.hooks.types.GenericMessageEvent;
+
+import com.mechjacktv.mechjackbot.ChatBot;
+import com.mechjacktv.mechjackbot.CommandRegistry;
 
 public final class PircBotXChatBotModule extends AbstractModule {
 

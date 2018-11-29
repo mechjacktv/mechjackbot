@@ -4,12 +4,12 @@ import com.mechjacktv.util.typedobject.TypedString;
 
 public final class TwitchChannel extends TypedString {
 
-  private TwitchChannel(final String value) {
-    super(value);
+  public static TwitchChannel of(final String value) {
+    return TypedString.of(TwitchChannel.class, value);
   }
 
-  public static TwitchChannel of(final String value) {
-    return new TwitchChannel(value);
+  private TwitchChannel(final String value) {
+    super(value);
   }
 
 }

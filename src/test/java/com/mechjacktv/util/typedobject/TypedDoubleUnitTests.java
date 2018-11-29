@@ -14,10 +14,14 @@ public class TypedDoubleUnitTests extends StronglyTypedContractTests<Double> {
 
   @Override
   protected StronglyTyped<Double> givenIHaveAStronglyTypedValue(final Double value) {
-    return new TestTypedDouble(value);
+    return TestTypedDouble.of(value);
   }
 
   private static final class TestTypedDouble extends TypedDouble {
+
+    public static TestTypedDouble of(final Double value) {
+      return TypedDouble.of(TestTypedDouble.class, value);
+    }
 
     private TestTypedDouble(final Double value) {
       super(value);

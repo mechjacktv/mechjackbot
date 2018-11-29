@@ -4,12 +4,12 @@ import com.mechjacktv.util.typedobject.TypedString;
 
 public final class TwitchLogin extends TypedString {
 
-  private TwitchLogin(final String value) {
-    super(value);
+  public static TwitchLogin of(final String value) {
+    return TypedString.of(TwitchLogin.class, value);
   }
 
-  public static TwitchLogin of(final String value) {
-    return new TwitchLogin(value);
+  private TwitchLogin(final String value) {
+    super(value);
   }
 
 }
