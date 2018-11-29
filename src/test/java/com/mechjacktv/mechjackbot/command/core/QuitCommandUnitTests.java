@@ -12,8 +12,8 @@ import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.BaseCommand;
 import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
+import com.mechjacktv.mechjackbot.command.BaseCommand;
 import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
 import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.util.ArbitraryDataGenerator;
@@ -48,7 +48,7 @@ public class QuitCommandUnitTests extends CommandContractTests {
 
   @Override
   protected SettingKey getCommandTriggerKey() {
-    return SettingKey.of(QuitCommand.class, BaseCommand.TRIGGER_KEY);
+    return SettingKey.of(BaseCommand.TRIGGER_KEY, QuitCommand.class);
   }
 
   @Override
@@ -59,7 +59,7 @@ public class QuitCommandUnitTests extends CommandContractTests {
   private MapConfiguration givenAnAppConfiguration(final String message) {
     final MapConfiguration appConfiguration = this.givenAnAppConfiguration();
 
-    appConfiguration.set(SettingKey.of(QuitCommand.class, MESSAGE_FORMAT_KEY).value, message);
+    appConfiguration.set(SettingKey.of(MESSAGE_FORMAT_KEY, QuitCommand.class).value, message);
     return appConfiguration;
   }
 

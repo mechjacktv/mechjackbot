@@ -1,26 +1,27 @@
 package com.mechjacktv.mechjackbot.command.core;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import com.google.common.collect.Sets;
-import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.configuration.SettingKey;
-import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.BaseCommand;
-import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
-import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
-import com.mechjacktv.util.ArbitraryDataGenerator;
-import com.mechjacktv.util.DefaultTimeUtils;
-
-import org.assertj.core.api.SoftAssertions;
-import org.junit.Test;
-
 import static com.mechjacktv.mechjackbot.command.BaseCommand.MESSAGE_FORMAT_KEY;
 import static com.mechjacktv.mechjackbot.command.core.CommandsCommand.MESSAGE_FORMAT_DEFAULT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import com.google.common.collect.Sets;
+
+import org.assertj.core.api.SoftAssertions;
+import org.junit.Test;
+
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.configuration.SettingKey;
+import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
+import com.mechjacktv.mechjackbot.command.BaseCommand;
+import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
+import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.util.DefaultTimeUtils;
 
 public class CommandsCommandUnitTests extends CommandContractTests {
 
@@ -43,7 +44,7 @@ public class CommandsCommandUnitTests extends CommandContractTests {
 
   @Override
   protected SettingKey getCommandTriggerKey() {
-    return SettingKey.of(CommandsCommand.class, BaseCommand.TRIGGER_KEY);
+    return SettingKey.of(BaseCommand.TRIGGER_KEY, CommandsCommand.class);
   }
 
   @Override
@@ -103,7 +104,7 @@ public class CommandsCommandUnitTests extends CommandContractTests {
     final CommandRegistry commandRegistry = this.givenACommandRegistry(commands);
     final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, commandRegistry);
-    appConfiguration.set(SettingKey.of(CommandsCommand.class, MESSAGE_FORMAT_KEY).value, messageFormat);
+    appConfiguration.set(SettingKey.of(MESSAGE_FORMAT_KEY, CommandsCommand.class).value, messageFormat);
 
     subjectUnderTest.handleMessageEvent(messageEvent);
 

@@ -4,12 +4,12 @@ import com.mechjacktv.util.typedobject.TypedString;
 
 public class SettingKey extends TypedString {
 
-  private SettingKey(final String value) {
-    super(value);
+  public static SettingKey of(final String value, final Class<?> scope) {
+    return TypedString.of(SettingKey.class, String.format("%s.%s", scope.getCanonicalName(), value).toLowerCase());
   }
 
-  public static SettingKey of(final Class<?> scope, final String value) {
-    return new SettingKey(String.format("%s.%s", scope.getCanonicalName().toLowerCase(), value));
+  private SettingKey(final String value) {
+    super(value);
   }
 
 }

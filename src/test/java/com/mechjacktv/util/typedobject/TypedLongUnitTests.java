@@ -14,10 +14,14 @@ public class TypedLongUnitTests extends StronglyTypedContractTests<Long> {
 
   @Override
   protected StronglyTyped<Long> givenIHaveAStronglyTypedValue(final Long value) {
-    return new TestTypedLong(value);
+    return TestTypedLong.of(value);
   }
 
   private static final class TestTypedLong extends TypedLong {
+
+    public static TestTypedLong of(final Long value) {
+      return TypedLong.of(TestTypedLong.class, value);
+    }
 
     private TestTypedLong(final Long value) {
       super(value);

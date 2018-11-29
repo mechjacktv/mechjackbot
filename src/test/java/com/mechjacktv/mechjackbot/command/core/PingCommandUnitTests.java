@@ -1,21 +1,21 @@
 package com.mechjacktv.mechjackbot.command.core;
 
-import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.configuration.SettingKey;
-import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.BaseCommand;
-import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
-import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
-import com.mechjacktv.twitchclient.TwitchLogin;
-import com.mechjacktv.util.ArbitraryDataGenerator;
-
-import org.junit.Test;
-
 import static com.mechjacktv.mechjackbot.command.core.PingCommand.MESSAGE_FORMAT_DEFAULT;
 import static com.mechjacktv.mechjackbot.command.core.PingCommand.TRIGGER_DEFAULT;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
+
+import org.junit.Test;
+
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.configuration.SettingKey;
+import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
+import com.mechjacktv.mechjackbot.command.BaseCommand;
+import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
+import com.mechjacktv.twitchclient.TwitchLogin;
+import com.mechjacktv.util.ArbitraryDataGenerator;
 
 public class PingCommandUnitTests extends CommandContractTests {
 
@@ -40,7 +40,7 @@ public class PingCommandUnitTests extends CommandContractTests {
 
   @Override
   protected SettingKey getCommandTriggerKey() {
-    return SettingKey.of(PingCommand.class, BaseCommand.TRIGGER_KEY);
+    return SettingKey.of(BaseCommand.TRIGGER_KEY, PingCommand.class);
   }
 
   @Override
@@ -51,7 +51,7 @@ public class PingCommandUnitTests extends CommandContractTests {
   private MapConfiguration givenAnAppConfiguration(final String messageFormat) {
     final MapConfiguration appConfiguration = this.givenAnAppConfiguration();
 
-    appConfiguration.set(SettingKey.of(PingCommand.class, BaseCommand.MESSAGE_FORMAT_KEY).value, messageFormat);
+    appConfiguration.set(SettingKey.of(BaseCommand.MESSAGE_FORMAT_KEY, PingCommand.class).value, messageFormat);
     return appConfiguration;
   }
 

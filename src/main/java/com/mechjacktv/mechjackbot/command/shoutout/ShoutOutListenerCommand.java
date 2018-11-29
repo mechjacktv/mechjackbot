@@ -35,7 +35,7 @@ public class ShoutOutListenerCommand extends BaseCommand {
     this.configuration = configuration;
     this.shoutOutDataStore = shoutOutDataStore;
     this.timeUtils = timeUtils;
-    this.frequencyKey = SettingKey.of(this.getClass(), FREQUENCY_KEY);
+    this.frequencyKey = SettingKey.of(FREQUENCY_KEY, this.getClass());
   }
 
   @Override

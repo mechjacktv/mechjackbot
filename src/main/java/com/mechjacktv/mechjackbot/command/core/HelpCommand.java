@@ -38,7 +38,7 @@ public final class HelpCommand extends BaseCommand {
     this.commandUtils = commandUtils;
     this.configuration = configuration;
     this.missingMessageFormatDefault = CommandMessageFormat.of(MISSING_MESSAGE_FORMAT_DEFAULT);
-    this.missingMessageFormatKey = SettingKey.of(this.getClass(), MISSING_MESSAGE_FORMAT_KEY);
+    this.missingMessageFormatKey = SettingKey.of(MISSING_MESSAGE_FORMAT_KEY, this.getClass());
   }
 
   @Override

@@ -32,9 +32,9 @@ public abstract class BaseCommand implements Command {
     this.configuration = commandConfiguration.getConfiguration();
     this.description = commandConfiguration.getDescription();
     this.messageFormatDefault = commandConfiguration.getMessageFormat();
-    this.messageFormatKey = SettingKey.of(this.getClass(), MESSAGE_FORMAT_KEY);
+    this.messageFormatKey = SettingKey.of(MESSAGE_FORMAT_KEY, this.getClass());
     this.triggerDefault = commandConfiguration.getTrigger();
-    this.triggerKey = SettingKey.of(this.getClass(), TRIGGER_KEY);
+    this.triggerKey = SettingKey.of(TRIGGER_KEY, this.getClass());
     this.triggerable = commandConfiguration.isTriggerable();
     this.usage = commandConfiguration.getUsage();
   }

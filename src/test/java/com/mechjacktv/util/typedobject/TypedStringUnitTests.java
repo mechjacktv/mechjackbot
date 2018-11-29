@@ -14,10 +14,14 @@ public class TypedStringUnitTests extends StronglyTypedContractTests<String> {
 
   @Override
   protected StronglyTyped<String> givenIHaveAStronglyTypedValue(final String value) {
-    return new TestTypedString(value);
+    return TestTypedString.of(value);
   }
 
   private static final class TestTypedString extends TypedString {
+
+    public static TestTypedString of(final String value) {
+      return TypedString.of(TestTypedString.class, value);
+    }
 
     private TestTypedString(final String value) {
       super(value);

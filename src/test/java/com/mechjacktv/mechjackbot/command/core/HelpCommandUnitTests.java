@@ -12,8 +12,8 @@ import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.BaseCommand;
 import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
+import com.mechjacktv.mechjackbot.command.BaseCommand;
 import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultTimeUtils;
@@ -40,7 +40,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
 
   @Override
   protected SettingKey getCommandTriggerKey() {
-    return SettingKey.of(HelpCommand.class, BaseCommand.TRIGGER_KEY);
+    return SettingKey.of(BaseCommand.TRIGGER_KEY, HelpCommand.class);
   }
 
   @Override
@@ -97,7 +97,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
   public final void handleMessageEvent_forTriggerableCommandAndCustomFormat_sendsCustomMessage() {
     final String customFormat = this.arbitraryDataGenerator.getString() + " %s %s %s";
     final MapConfiguration configuration = this.givenAnAppConfiguration();
-    configuration.set(SettingKey.of(HelpCommand.class, MESSAGE_FORMAT_KEY).value, customFormat);
+    configuration.set(SettingKey.of(MESSAGE_FORMAT_KEY, HelpCommand.class).value, customFormat);
     final CommandUtils commandUtils = this.givenACommandUtils(configuration);
     final Command command = new ArbitraryCommand(configuration, commandUtils, this.arbitraryDataGenerator);
     final CommandRegistry commandRegistry = this.givenACommandRegistry(command);
@@ -134,7 +134,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
   public final void handleMessageEvent_missingCommandAndCustomFormat_sendsCustomMissingMessage() {
     final String customFormat = this.arbitraryDataGenerator.getString() + " %s %s";
     final MapConfiguration configuration = this.givenAnAppConfiguration();
-    configuration.set(SettingKey.of(HelpCommand.class, MISSING_MESSAGE_FORMAT_KEY).value, customFormat);
+    configuration.set(SettingKey.of(MISSING_MESSAGE_FORMAT_KEY, HelpCommand.class).value, customFormat);
     final CommandUtils commandUtils = this.givenACommandUtils(configuration);
     final Command command = new ArbitraryCommand(configuration, commandUtils, this.arbitraryDataGenerator);
     final CommandRegistry commandRegistry = this.givenACommandRegistry(
