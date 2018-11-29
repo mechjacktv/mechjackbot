@@ -8,7 +8,7 @@ import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.mechjackbot.*;
 
-public abstract class AbstractCommand implements Command {
+public abstract class BaseCommand implements Command {
 
   public static final String MESSAGE_FORMAT_KEY = "message_format";
   public static final String TRIGGER_KEY = "trigger";
@@ -23,11 +23,11 @@ public abstract class AbstractCommand implements Command {
   private final CommandUsage usage;
   private final boolean triggerable;
 
-  protected AbstractCommand(CommandConfigurationBuilder commandConfigurationBuilder) {
+  protected BaseCommand(CommandConfigurationBuilder commandConfigurationBuilder) {
     this(commandConfigurationBuilder.build());
   }
 
-  protected AbstractCommand(CommandConfiguration commandConfiguration) {
+  protected BaseCommand(CommandConfiguration commandConfiguration) {
     this.commandUtils = commandConfiguration.getCommandUtils();
     this.configuration = commandConfiguration.getConfiguration();
     this.description = commandConfiguration.getDescription();

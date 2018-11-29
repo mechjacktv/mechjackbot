@@ -5,14 +5,14 @@ import javax.inject.Inject;
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.mechjackbot.MessageEvent;
-import com.mechjacktv.mechjackbot.command.AbstractCommand;
+import com.mechjacktv.mechjackbot.command.BaseCommand;
 import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.CasterKey;
 import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.util.TimeUtils;
 
 @SuppressWarnings("CanBeFinal")
-public class ShoutOutListenerCommand extends AbstractCommand {
+public class ShoutOutListenerCommand extends BaseCommand {
 
   public static final String FREQUENCY_DEFAULT = "1";
   public static final String FREQUENCY_KEY = "frequency.hours";

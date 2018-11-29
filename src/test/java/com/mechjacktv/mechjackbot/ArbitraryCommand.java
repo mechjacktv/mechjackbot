@@ -1,11 +1,11 @@
 package com.mechjacktv.mechjackbot;
 
 import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.mechjackbot.command.AbstractCommand;
+import com.mechjacktv.mechjackbot.command.BaseCommand;
 import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
 import com.mechjacktv.util.ArbitraryDataGenerator;
 
-public class ArbitraryCommand extends AbstractCommand {
+public class ArbitraryCommand extends BaseCommand {
 
   public ArbitraryCommand(final Configuration configuration, final CommandUtils commandUtils,
       final ArbitraryDataGenerator arbitraryDataGenerator) {

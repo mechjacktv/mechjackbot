@@ -4,7 +4,7 @@ import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.AbstractCommand;
+import com.mechjacktv.mechjackbot.command.BaseCommand;
 import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
 import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
 import com.mechjacktv.twitchclient.TwitchLogin;
@@ -40,7 +40,7 @@ public class PingCommandUnitTests extends CommandContractTests {
 
   @Override
   protected SettingKey getCommandTriggerKey() {
-    return SettingKey.of(PingCommand.class, AbstractCommand.TRIGGER_KEY);
+    return SettingKey.of(PingCommand.class, BaseCommand.TRIGGER_KEY);
   }
 
   @Override
@@ -51,7 +51,7 @@ public class PingCommandUnitTests extends CommandContractTests {
   private MapConfiguration givenAnAppConfiguration(final String messageFormat) {
     final MapConfiguration appConfiguration = this.givenAnAppConfiguration();
 
-    appConfiguration.set(SettingKey.of(PingCommand.class, AbstractCommand.MESSAGE_FORMAT_KEY).value, messageFormat);
+    appConfiguration.set(SettingKey.of(PingCommand.class, BaseCommand.MESSAGE_FORMAT_KEY).value, messageFormat);
     return appConfiguration;
   }
 

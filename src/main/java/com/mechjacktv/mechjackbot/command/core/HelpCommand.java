@@ -9,11 +9,11 @@ import com.google.common.base.Strings;
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.AbstractCommand;
+import com.mechjacktv.mechjackbot.command.BaseCommand;
 import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
 
-public final class HelpCommand extends AbstractCommand {
+public final class HelpCommand extends BaseCommand {
 
   public static final String MESSAGE_FORMAT_DEFAULT = "@%s, %s -> %s";
   public static final String MISSING_MESSAGE_FORMAT_KEY = "missing_message_format";

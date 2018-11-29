@@ -1,27 +1,27 @@
 package com.mechjacktv.mechjackbot.command.shoutout;
 
-import static com.mechjacktv.mechjackbot.command.AbstractCommand.MESSAGE_FORMAT_KEY;
-import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerCommand.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-
-import org.junit.Test;
-
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.keyvaluestore.MapKeyValueStore;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.chatbot.ArbitraryChatBotConfiguration;
-import com.mechjacktv.mechjackbot.command.AbstractCommand;
 import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
+import com.mechjacktv.mechjackbot.command.BaseCommand;
 import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
 import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.Caster;
 import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.CasterKey;
 import com.mechjacktv.twitchclient.TwitchClient;
 import com.mechjacktv.util.*;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
+
+import org.junit.Test;
+
+import static com.mechjacktv.mechjackbot.command.BaseCommand.MESSAGE_FORMAT_KEY;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerCommand.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 public final class ShoutOutListenerCommandUnitTests extends CommandContractTests {
 
@@ -73,7 +73,7 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
 
   @Override
   protected SettingKey getCommandTriggerKey() {
-    return SettingKey.of(ShoutOutListenerCommand.class, AbstractCommand.TRIGGER_KEY);
+    return SettingKey.of(ShoutOutListenerCommand.class, BaseCommand.TRIGGER_KEY);
   }
 
   @Override

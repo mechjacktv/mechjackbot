@@ -1,6 +1,6 @@
 package com.mechjacktv.mechjackbot.command.core;
 
-import static com.mechjacktv.mechjackbot.command.AbstractCommand.MESSAGE_FORMAT_KEY;
+import static com.mechjacktv.mechjackbot.command.BaseCommand.MESSAGE_FORMAT_KEY;
 import static com.mechjacktv.mechjackbot.command.core.QuitCommand.MESSAGE_FORMAT_DEFAULT;
 import static com.mechjacktv.mechjackbot.command.core.QuitCommand.TRIGGER_DEFAULT;
 import static org.mockito.ArgumentMatchers.eq;
@@ -12,7 +12,7 @@ import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.AbstractCommand;
+import com.mechjacktv.mechjackbot.command.BaseCommand;
 import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
 import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
 import com.mechjacktv.twitchclient.TwitchLogin;
@@ -48,7 +48,7 @@ public class QuitCommandUnitTests extends CommandContractTests {
 
   @Override
   protected SettingKey getCommandTriggerKey() {
-    return SettingKey.of(QuitCommand.class, AbstractCommand.TRIGGER_KEY);
+    return SettingKey.of(QuitCommand.class, BaseCommand.TRIGGER_KEY);
   }
 
   @Override

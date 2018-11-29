@@ -3,11 +3,11 @@ package com.mechjacktv.mechjackbot.command.core;
 import javax.inject.Inject;
 
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.AbstractCommand;
+import com.mechjacktv.mechjackbot.command.BaseCommand;
 import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
-public final class QuitCommand extends AbstractCommand {
+public final class QuitCommand extends BaseCommand {
 
   public static final String MESSAGE_FORMAT_DEFAULT = "Powering down";
   public static final String TRIGGER_DEFAULT = "!quit";

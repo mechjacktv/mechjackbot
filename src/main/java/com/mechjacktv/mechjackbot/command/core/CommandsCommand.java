@@ -9,10 +9,10 @@ import javax.inject.Inject;
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.CommandRegistry;
 import com.mechjacktv.mechjackbot.MessageEvent;
-import com.mechjacktv.mechjackbot.command.AbstractCommand;
+import com.mechjacktv.mechjackbot.command.BaseCommand;
 import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 
-public final class CommandsCommand extends AbstractCommand {
+public final class CommandsCommand extends BaseCommand {
 
   public static final String MESSAGE_FORMAT_DEFAULT = "Channel Commands: %2$s";
   public static final String TRIGGER_DEFAULT = "!commands";

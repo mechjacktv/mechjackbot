@@ -1,7 +1,7 @@
 package com.mechjacktv.mechjackbot.command.core;
 
 import static com.mechjacktv.mechjackbot.CommandUtils.COMMAND_USAGE_MESSAGE_FORMAT_DEFAULT;
-import static com.mechjacktv.mechjackbot.command.AbstractCommand.MESSAGE_FORMAT_KEY;
+import static com.mechjacktv.mechjackbot.command.BaseCommand.MESSAGE_FORMAT_KEY;
 import static com.mechjacktv.mechjackbot.command.core.HelpCommand.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -12,7 +12,7 @@ import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.AbstractCommand;
+import com.mechjacktv.mechjackbot.command.BaseCommand;
 import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
 import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
 import com.mechjacktv.util.ArbitraryDataGenerator;
@@ -40,7 +40,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
 
   @Override
   protected SettingKey getCommandTriggerKey() {
-    return SettingKey.of(HelpCommand.class, AbstractCommand.TRIGGER_KEY);
+    return SettingKey.of(HelpCommand.class, BaseCommand.TRIGGER_KEY);
   }
 
   @Override
