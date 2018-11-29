@@ -1,5 +1,9 @@
 package com.mechjacktv.util.typedobject;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -51,6 +55,8 @@ import java.util.Objects;
  */
 public abstract class StronglyTyped<T> {
 
+  private static final Map<Class<?>, Map<Object, StronglyTyped<?>>> EXISTING_WRAPPERS = new HashMap<>();
+
   /**
    * The wrapped `value`.
    * <p>
@@ -62,11 +68,51 @@ public abstract class StronglyTyped<T> {
   public final T value;
 
   /**
+   * Wraps the specified `value` in an instance of the specified `wrapperClass`.
+   * It will reuse a previous instance of `wrapperClass` for previously supplied
+   * equal `value`s.
+   * <p>
+   * The `wrapperClass` class must provide a constructor which take a single
+   * argument of the value.
+   *
+   * @param wrapperClass the `wrapperClass` class definition
+   * @param value the `value` to wrap
+   * @param <W> the `wrapperClass` type
+   * @return a wrapped value
+   */
+  public static <W extends StronglyTyped<T>, T> W of(final Class<W> wrapperClass, final T value) {
+    synchronized (EXISTING_WRAPPERS) {
+      if (!EXISTING_WRAPPERS.containsKey(wrapperClass)) {
+        EXISTING_WRAPPERS.put(wrapperClass, new HashMap<>());
+      }
+    }
+
+    final Map<Object, StronglyTyped<?>> wrappersForType = EXISTING_WRAPPERS.get(wrapperClass);
+
+    // noinspection SynchronizationOnLocalVariableOrMethodParameter
+    synchronized (wrappersForType) {
+      if (!wrappersForType.containsKey(value)) {
+        try {
+          final Constructor<W> constructor = wrapperClass.getDeclaredConstructor(value.getClass());
+
+          constructor.setAccessible(true);
+          wrappersForType.put(value, constructor.newInstance(value));
+        } catch (final NoSuchMethodException e) {
+          throw new NoValidStronglyTypedConstructorException(e);
+        } catch (final IllegalAccessException | InstantiationException | InvocationTargetException e) {
+          throw new StronglyTypedInstantiationException(e);
+        }
+      }
+    }
+    return wrapperClass.cast(wrappersForType.get(value));
+  }
+
+  /**
    * Constructs a new wrapper for the passed in `value`.
    *
    * @param value the `value` to wrap
    */
-  StronglyTyped(final T value) {
+  protected StronglyTyped(final T value) {
     Objects.requireNonNull(value, "A `StronglyTyped` `value` **MUST NOT** be `null`");
     this.value = value;
   }

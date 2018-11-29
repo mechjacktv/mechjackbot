@@ -4,12 +4,12 @@ import com.mechjacktv.util.typedobject.TypedString;
 
 public final class TwitchClientId extends TypedString {
 
-  private TwitchClientId(final String value) {
-    super(value);
+  public static TwitchClientId of(final String value) {
+    return TypedString.of(TwitchClientId.class, value);
   }
 
-  public static TwitchClientId of(final String value) {
-    return new TwitchClientId(value);
+  private TwitchClientId(final String value) {
+    super(value);
   }
 
 }

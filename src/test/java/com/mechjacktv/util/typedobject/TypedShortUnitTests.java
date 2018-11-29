@@ -14,10 +14,14 @@ public class TypedShortUnitTests extends StronglyTypedContractTests<Short> {
 
   @Override
   protected StronglyTyped<Short> givenIHaveAStronglyTypedValue(final Short value) {
-    return new TestTypedShort(value);
+    return TestTypedShort.of(value);
   }
 
   private static final class TestTypedShort extends TypedShort {
+
+    public static TestTypedShort of(final Short value) {
+      return TypedShort.of(TestTypedShort.class, value);
+    }
 
     private TestTypedShort(final Short value) {
       super(value);

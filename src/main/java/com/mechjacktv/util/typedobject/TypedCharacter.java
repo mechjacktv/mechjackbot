@@ -1,8 +1,12 @@
 package com.mechjacktv.util.typedobject;
 
-abstract class TypedCharacter extends StronglyTyped<Character> {
+public abstract class TypedCharacter extends StronglyTyped<Character> {
 
-  TypedCharacter(final Character value) {
+  public static <W extends TypedCharacter> W of(final Class<W> wrapper, final Character value) {
+    return StronglyTyped.of(wrapper, value);
+  }
+
+  protected TypedCharacter(final Character value) {
     super(value);
   }
 

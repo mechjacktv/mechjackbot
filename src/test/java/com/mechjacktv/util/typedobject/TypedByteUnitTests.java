@@ -14,10 +14,14 @@ public class TypedByteUnitTests extends StronglyTypedContractTests<Byte> {
 
   @Override
   protected StronglyTyped<Byte> givenIHaveAStronglyTypedValue(final Byte value) {
-    return new TestTypedByte(value);
+    return TestTypedByte.of(value);
   }
 
   private static final class TestTypedByte extends TypedByte {
+
+    public static TestTypedByte of(final Byte value) {
+      return TypedByte.of(TestTypedByte.class, value);
+    }
 
     private TestTypedByte(final Byte value) {
       super(value);
