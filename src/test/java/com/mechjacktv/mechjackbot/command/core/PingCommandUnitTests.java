@@ -1,7 +1,6 @@
 package com.mechjacktv.mechjackbot.command.core;
 
-import static com.mechjacktv.mechjackbot.command.core.PingCommand.MESSAGE_FORMAT_DEFAULT;
-import static com.mechjacktv.mechjackbot.command.core.PingCommand.TRIGGER_DEFAULT;
+import static com.mechjacktv.mechjackbot.command.core.PingCommand.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
@@ -13,15 +12,20 @@ import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
 import com.mechjacktv.mechjackbot.command.BaseCommand;
+import com.mechjacktv.mechjackbot.command.BaseCommandContractTests;
 import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
 import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.util.DefaultExecutionUtils;
+import com.mechjacktv.util.ExecutionUtils;
 
-public class PingCommandUnitTests extends CommandContractTests {
+public class PingCommandUnitTests extends BaseCommandContractTests {
 
   private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
 
   private final ArbitraryCommandTestUtils commandTestUtils = new ArbitraryCommandTestUtils(this.arbitraryDataGenerator);
+
+  private final ExecutionUtils executionUtils = new DefaultExecutionUtils();
 
   @Override
   protected Command givenASubjectToTest(final Configuration configuration) {
@@ -35,21 +39,31 @@ public class PingCommandUnitTests extends CommandContractTests {
   }
 
   private Command givenASubjectToTest(final Configuration configuration, final CommandUtils commandUtils) {
-    return new PingCommand(new DefaultCommandConfigurationBuilder(commandUtils, configuration));
+    return new PingCommand(new DefaultCommandConfigurationBuilder(commandUtils, configuration, this.executionUtils));
   }
 
   @Override
-  protected SettingKey getCommandTriggerKey() {
+  protected CommandDescription getDescriptionDefault() {
+    return CommandDescription.of(DESCRIPTION_DEFAULT);
+  }
+
+  @Override
+  protected SettingKey getDescriptionKey() {
+    return SettingKey.of(BaseCommand.DESCRIPTION_KEY, PingCommand.class);
+  }
+
+  @Override
+  protected SettingKey getTriggerKey() {
     return SettingKey.of(BaseCommand.TRIGGER_KEY, PingCommand.class);
   }
 
   @Override
-  protected CommandTrigger getCommandTriggerDefault() {
+  protected CommandTrigger getTriggerDefault() {
     return CommandTrigger.of(TRIGGER_DEFAULT);
   }
 
   private MapConfiguration givenAnAppConfiguration(final String messageFormat) {
-    final MapConfiguration appConfiguration = this.givenAnAppConfiguration();
+    final MapConfiguration appConfiguration = this.givenAConfiguration();
 
     appConfiguration.set(SettingKey.of(BaseCommand.MESSAGE_FORMAT_KEY, PingCommand.class).value, messageFormat);
     return appConfiguration;

@@ -15,7 +15,7 @@ public interface CommandUtils {
 
   boolean isTriggered(Command command, MessageEvent messageEvent);
 
-  void sendUsage(Command command, MessageEvent messageEvent);
+  Message createUsageMessage(Command command, MessageEvent messageEvent);
 
   Message stripTriggerFromMessage(Command command, MessageEvent messageEvent);
 

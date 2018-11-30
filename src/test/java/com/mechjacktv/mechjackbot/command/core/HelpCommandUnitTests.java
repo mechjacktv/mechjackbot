@@ -14,15 +14,20 @@ import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
 import com.mechjacktv.mechjackbot.command.BaseCommand;
+import com.mechjacktv.mechjackbot.command.BaseCommandContractTests;
 import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
 import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.DefaultTimeUtils;
+import com.mechjacktv.util.ExecutionUtils;
 
-public class HelpCommandUnitTests extends CommandContractTests {
+public class HelpCommandUnitTests extends BaseCommandContractTests {
 
   private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
 
   private final ArbitraryCommandTestUtils commandTestUtils = new ArbitraryCommandTestUtils(this.arbitraryDataGenerator);
+
+  private final ExecutionUtils executionUtils = new DefaultExecutionUtils();
 
   @Override
   protected Command givenASubjectToTest(final Configuration configuration) {
@@ -33,18 +38,28 @@ public class HelpCommandUnitTests extends CommandContractTests {
   private Command givenASubjectToTest(final Configuration configuration, final CommandUtils commandUtils,
       final CommandRegistry commandRegistry) {
     final DefaultCommandConfigurationBuilder builder = new DefaultCommandConfigurationBuilder(commandUtils,
-        configuration);
+        configuration, this.executionUtils);
 
     return new HelpCommand(builder, commandRegistry, commandUtils, configuration);
   }
 
   @Override
-  protected SettingKey getCommandTriggerKey() {
+  protected CommandDescription getDescriptionDefault() {
+    return CommandDescription.of(DESCRIPTION_DEFAULT);
+  }
+
+  @Override
+  protected SettingKey getDescriptionKey() {
+    return SettingKey.of(BaseCommand.DESCRIPTION_KEY, HelpCommand.class);
+  }
+
+  @Override
+  protected SettingKey getTriggerKey() {
     return SettingKey.of(BaseCommand.TRIGGER_KEY, HelpCommand.class);
   }
 
   @Override
-  protected CommandTrigger getCommandTriggerDefault() {
+  protected CommandTrigger getTriggerDefault() {
     return CommandTrigger.of(TRIGGER_DEFAULT);
   }
 
@@ -61,7 +76,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
 
   @Test
   public final void handleMessageEvent_notProperlyFormatted_sendsUsageMessage() {
-    final MapConfiguration configuration = this.givenAnAppConfiguration();
+    final MapConfiguration configuration = this.givenAConfiguration();
     final CommandUtils commandUtils = this.givenACommandUtils(configuration);
     final Command command = new ArbitraryCommand(configuration, commandUtils, this.arbitraryDataGenerator);
     final CommandRegistry commandRegistry = this.givenACommandRegistry(command);
@@ -78,7 +93,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
 
   @Test
   public final void handleMessageEvent_forTriggerableCommandAndDefaultFormat_sendsDefaultMessage() {
-    final MapConfiguration configuration = this.givenAnAppConfiguration();
+    final MapConfiguration configuration = this.givenAConfiguration();
     final CommandUtils commandUtils = this.givenACommandUtils(configuration);
     final Command command = new ArbitraryCommand(configuration, commandUtils, this.arbitraryDataGenerator);
     final CommandRegistry commandRegistry = this.givenACommandRegistry(command);
@@ -96,7 +111,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
   @Test
   public final void handleMessageEvent_forTriggerableCommandAndCustomFormat_sendsCustomMessage() {
     final String customFormat = this.arbitraryDataGenerator.getString() + " %s %s %s";
-    final MapConfiguration configuration = this.givenAnAppConfiguration();
+    final MapConfiguration configuration = this.givenAConfiguration();
     configuration.set(SettingKey.of(MESSAGE_FORMAT_KEY, HelpCommand.class).value, customFormat);
     final CommandUtils commandUtils = this.givenACommandUtils(configuration);
     final Command command = new ArbitraryCommand(configuration, commandUtils, this.arbitraryDataGenerator);
@@ -114,7 +129,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
 
   @Test
   public final void handleMessageEvent_missingCommandAndDefaultFormat_sendsDefaultMissingMessage() {
-    final MapConfiguration configuration = this.givenAnAppConfiguration();
+    final MapConfiguration configuration = this.givenAConfiguration();
     final CommandUtils commandUtils = this.givenACommandUtils(configuration);
     final Command command = new ArbitraryCommand(configuration, commandUtils, this.arbitraryDataGenerator);
     final CommandRegistry commandRegistry = this.givenACommandRegistry(
@@ -133,7 +148,7 @@ public class HelpCommandUnitTests extends CommandContractTests {
   @Test
   public final void handleMessageEvent_missingCommandAndCustomFormat_sendsCustomMissingMessage() {
     final String customFormat = this.arbitraryDataGenerator.getString() + " %s %s";
-    final MapConfiguration configuration = this.givenAnAppConfiguration();
+    final MapConfiguration configuration = this.givenAConfiguration();
     configuration.set(SettingKey.of(MISSING_MESSAGE_FORMAT_KEY, HelpCommand.class).value, customFormat);
     final CommandUtils commandUtils = this.givenACommandUtils(configuration);
     final Command command = new ArbitraryCommand(configuration, commandUtils, this.arbitraryDataGenerator);
@@ -152,9 +167,10 @@ public class HelpCommandUnitTests extends CommandContractTests {
 
   @Test
   public final void handleMessageEvent_forNonTriggerableCommand_sendsDefaultMissingMessage() {
-    final Configuration configuration = this.givenAnAppConfiguration();
+    final Configuration configuration = this.givenAConfiguration();
     final CommandUtils commandUtils = this.givenACommandUtils(configuration);
-    final Command command = new ArbitraryCommand(configuration, commandUtils, this.arbitraryDataGenerator, false);
+    final Command command = new ArbitraryCommand(configuration, commandUtils, this.executionUtils,
+        this.arbitraryDataGenerator, false);
     final CommandRegistry commandRegistry = this.givenACommandRegistry(command);
     final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final Command subjectUnderTest = this.givenASubjectToTest(configuration, commandUtils, commandRegistry);

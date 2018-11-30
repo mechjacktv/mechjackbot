@@ -12,15 +12,13 @@ public final class TestCommand extends BaseCommand {
 
   @Inject
   protected TestCommand(final CommandConfigurationBuilder commandConfigurationBuilder) {
-    super(commandConfigurationBuilder.setTrigger("!test")
-        .setDescription("This is a test command.")
-        .setMessageFormat("key: %2$s, default: %3$s, value: %4$s"));
+    super(commandConfigurationBuilder.setTrigger("!test"));
   }
 
   @Override
-  @RestrictToAccessLevel(AccessLevel.OWNER)
+  @RestrictToAccessLevel(AccessLevel.MODERATOR)
   public void handleMessageEvent(final MessageEvent messageEvent) {
-    this.sendResponse(messageEvent, this.getTriggerKey(), this.getTriggerDefault(), this.getTrigger());
+    this.sendResponse(messageEvent, this.getTrigger());
   }
 
 }

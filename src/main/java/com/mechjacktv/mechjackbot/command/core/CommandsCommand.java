@@ -14,6 +14,7 @@ import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 
 public final class CommandsCommand extends BaseCommand {
 
+  public static final String DESCRIPTION_DEFAULT = "Lists all the commands available to users.";
   public static final String MESSAGE_FORMAT_DEFAULT = "Channel Commands: %2$s";
   public static final String TRIGGER_DEFAULT = "!commands";
 
@@ -23,7 +24,7 @@ public final class CommandsCommand extends BaseCommand {
   protected CommandsCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
       final CommandRegistry commandRegistry) {
     super(commandConfigurationBuilder.setTrigger(TRIGGER_DEFAULT)
-        .setDescription("Lists all the commands available to users.")
+        .setDescription(DESCRIPTION_DEFAULT)
         .setMessageFormat(MESSAGE_FORMAT_DEFAULT));
     this.commandRegistry = commandRegistry;
   }

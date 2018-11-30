@@ -2,20 +2,24 @@ package com.mechjacktv.mechjackbot.command;
 
 import java.util.Objects;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.util.ExecutionUtils;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 public abstract class BaseCommand implements Command {
 
+  public static final String DESCRIPTION_KEY = "description";
   public static final String MESSAGE_FORMAT_KEY = "message_format";
   public static final String TRIGGER_KEY = "trigger";
 
   private final Configuration configuration;
   private final CommandUtils commandUtils;
-  private final CommandDescription description;
+  private final ExecutionUtils executionUtils;
+  private final CommandDescription descriptionDefault;
+  private final SettingKey descriptionKey;
   private final CommandMessageFormat messageFormatDefault;
   private final SettingKey messageFormatKey;
   private final CommandTrigger triggerDefault;
@@ -30,7 +34,9 @@ public abstract class BaseCommand implements Command {
   protected BaseCommand(CommandConfiguration commandConfiguration) {
     this.commandUtils = commandConfiguration.getCommandUtils();
     this.configuration = commandConfiguration.getConfiguration();
-    this.description = commandConfiguration.getDescription();
+    this.executionUtils = commandConfiguration.getExecutionUtils();
+    this.descriptionDefault = commandConfiguration.getDescription();
+    this.descriptionKey = SettingKey.of(DESCRIPTION_KEY, this.getClass());
     this.messageFormatDefault = commandConfiguration.getMessageFormat();
     this.messageFormatKey = SettingKey.of(MESSAGE_FORMAT_KEY, this.getClass());
     this.triggerDefault = commandConfiguration.getTrigger();
@@ -46,7 +52,7 @@ public abstract class BaseCommand implements Command {
 
   @Override
   public CommandDescription getDescription() {
-    return this.description;
+    return CommandDescription.of(this.configuration.get(this.descriptionKey.value, this.descriptionDefault.value));
   }
 
   @Override
@@ -76,30 +82,18 @@ public abstract class BaseCommand implements Command {
     this.sendResponse(messageEvent, messageFormat, args);
   }
 
-  protected final void sendResponse(final MessageEvent messageEvent, CommandMessageFormat messageFormat,
-      Object... args) {
-    Objects.requireNonNull(messageEvent, "messageEvent");
-    Objects.requireNonNull(messageFormat, "messageFormat");
-    if (Objects.nonNull(args)) {
-      messageEvent.sendResponse(Message.of(String.format(messageFormat.value,
-          ArrayUtils.addAll(new Object[] { messageEvent.getChatUser().getTwitchLogin() }, args))));
-    } else {
-      messageEvent.sendResponse(Message.of(String.format(messageFormat.value,
-          messageEvent.getChatUser().getTwitchLogin())));
-    }
+  protected final void sendResponse(final MessageEvent messageEvent, final CommandMessageFormat messageFormat,
+      final Object... args) {
+    Objects.requireNonNull(messageEvent, this.executionUtils.nullMessageForName("messageEvent"));
+    Objects.requireNonNull(messageFormat, this.executionUtils.nullMessageForName("messageFormat"));
+
+    messageEvent.sendResponse(Message.of(String.format(messageFormat.value,
+        ArrayUtils.addAll(new Object[] { messageEvent.getChatUser().getTwitchLogin() }, args))));
   }
 
   protected final void sendUsage(final MessageEvent messageEvent) {
-    this.commandUtils.sendUsage(this, messageEvent);
-  }
-
-  // MECHJACK
-  protected final SettingKey getTriggerKey() {
-    return this.triggerKey;
-  }
-
-  protected final CommandTrigger getTriggerDefault() {
-    return this.triggerDefault;
+    this.sendResponse(messageEvent, CommandMessageFormat.of(
+        this.commandUtils.createUsageMessage(this, messageEvent).value));
   }
 
 }

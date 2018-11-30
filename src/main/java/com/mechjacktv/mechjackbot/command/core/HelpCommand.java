@@ -15,6 +15,7 @@ import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
 
 public final class HelpCommand extends BaseCommand {
 
+  public static final String DESCRIPTION_DEFAULT = "Returns the description for a command.";
   public static final String MESSAGE_FORMAT_DEFAULT = "@%s, %s -> %s";
   public static final String MISSING_MESSAGE_FORMAT_KEY = "missing_message_format";
   public static final String MISSING_MESSAGE_FORMAT_DEFAULT = "@%s, I don't see a command triggered by %s.";
@@ -31,7 +32,7 @@ public final class HelpCommand extends BaseCommand {
   protected HelpCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
       final CommandRegistry commandRegistry, final CommandUtils commandUtils, final Configuration configuration) {
     super(commandConfigurationBuilder.setTrigger(TRIGGER_DEFAULT)
-        .setDescription("Returns the description for a command.")
+        .setDescription(DESCRIPTION_DEFAULT)
         .setMessageFormat(MESSAGE_FORMAT_DEFAULT)
         .setUsage(USAGE));
     this.commandRegistry = commandRegistry;

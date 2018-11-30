@@ -11,14 +11,13 @@ import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.
 import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.util.TimeUtils;
 
-@SuppressWarnings("CanBeFinal")
-public class ShoutOutListenerCommand extends BaseCommand {
+public final class ShoutOutListenerCommand extends BaseCommand {
 
+  public static final String DESCRIPTION_DEFAULT = "Monitors chat looking for casters who are due for a shout out.";
   public static final String FREQUENCY_DEFAULT = "1";
   public static final String FREQUENCY_KEY = "frequency.hours";
   public static final String MESSAGE_FORMAT_DEFAULT = "Fellow streamer in the stream! Everyone, please give a warm "
       + "welcome to @%1$s. It would be great if you checked them out and gave them a follow. https://twitch.tv/%1$s";
-  public static final String TRIGGER_DEFAULT = "!shoutout";
 
   private final Configuration configuration;
   private final ShoutOutDataStore shoutOutDataStore;
@@ -28,10 +27,8 @@ public class ShoutOutListenerCommand extends BaseCommand {
   @Inject
   protected ShoutOutListenerCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
       final Configuration configuration, final ShoutOutDataStore shoutOutDataStore, final TimeUtils timeUtils) {
-    super(commandConfigurationBuilder.setTrigger(TRIGGER_DEFAULT)
-        .setDescription("Monitors chat looking for casters who are due for a shout out.")
-        .setMessageFormat(MESSAGE_FORMAT_DEFAULT)
-        .setTriggerable(false));
+    super(commandConfigurationBuilder.setDescription(DESCRIPTION_DEFAULT)
+        .setMessageFormat(MESSAGE_FORMAT_DEFAULT));
     this.configuration = configuration;
     this.shoutOutDataStore = shoutOutDataStore;
     this.timeUtils = timeUtils;

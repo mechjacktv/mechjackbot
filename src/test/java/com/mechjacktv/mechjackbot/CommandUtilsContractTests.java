@@ -1,20 +1,20 @@
 package com.mechjacktv.mechjackbot;
 
-import static com.mechjacktv.mechjackbot.CommandUtils.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
-
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.mechjackbot.chatbot.ArbitraryChatBotConfiguration;
 import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.util.*;
+
+import org.junit.Test;
+
+import static com.mechjacktv.mechjackbot.CommandUtils.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public abstract class CommandUtilsContractTests {
 
@@ -376,67 +376,48 @@ public abstract class CommandUtilsContractTests {
   }
 
   @Test
-  public final void sendUsage_nullCommand_throwsNullPointerException() {
+  public final void createUsageMessage_nullCommand_throwsNullPointerException() {
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.sendUsage(null, mock(MessageEvent.class)));
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.createUsageMessage(null, mock(MessageEvent.class)));
 
     assertThat(thrown).isInstanceOf(NullPointerException.class)
         .hasMessage(this.executionUtils.nullMessageForName("command"));
   }
 
   @Test
-  public final void sendUsage_nullMessageEvent_throwsNullPointerException() {
+  public final void createUsageMessage_nullMessageEvent_throwsNullPointerException() {
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.sendUsage(mock(Command.class), null));
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.createUsageMessage(mock(Command.class), null));
 
     assertThat(thrown).isInstanceOf(NullPointerException.class)
         .hasMessage(this.executionUtils.nullMessageForName("messageEvent"));
   }
 
   @Test
-  public final void sendUsage_forCommand_retrievedTwitchLogin() {
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
+  public final void createUsageMessage_forCommand_returnsExpectedUsageMessage() {
+    final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
+    final ArbitraryCommand command = new ArbitraryCommand(this.appConfiguration, subjectUnderTest,
+        this.arbitraryDataGenerator);
 
-    subjectUnderTest.sendUsage(mock(Command.class), messageEvent);
+    final Message result = subjectUnderTest.createUsageMessage(command, messageEvent);
 
-    verify(messageEvent.getChatUser()).getTwitchLogin();
+    assertThat(result).isEqualTo(Message.of(String.format(COMMAND_USAGE_MESSAGE_FORMAT_DEFAULT,
+        messageEvent.getChatUser().getTwitchLogin(), command.getTrigger(), command.getUsage())));
   }
 
   @Test
-  public final void sendUsage_forCommand_retrievedTrigger() {
-    final Command command = mock(Command.class);
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-
-    subjectUnderTest.sendUsage(command, this.givenAFakeMessageEvent());
-
-    verify(command).getTrigger();
-  }
-
-  @Test
-  public final void sendUsage_forCommand_retrievedUsage() {
-    final Command command = mock(Command.class);
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-
-    subjectUnderTest.sendUsage(command, this.givenAFakeMessageEvent());
-
-    verify(command).getUsage();
-  }
-
-  @Test
-  public final void sendUsage_customMessageFormat_sendsCustomMessageFormat() {
+  public final void createUsageMessage_customMessageFormat_createsCustomFormattedMessage() {
     final String customMessageFormat = "%s, %s takes %s";
     this.appConfiguration.set(COMMAND_USAGE_MESSAGE_FORMAT_KEY, customMessageFormat);
-    final ArgumentCaptor<Message> argumentCaptor = ArgumentCaptor.forClass(Message.class);
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    doNothing().when(messageEvent).sendResponse(argumentCaptor.capture());
+    final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-    final Command command = new RestrictedCommand(this, subjectUnderTest);
+    final ArbitraryCommand command = new ArbitraryCommand(this.appConfiguration, subjectUnderTest,
+        this.arbitraryDataGenerator);
 
-    subjectUnderTest.sendUsage(command, messageEvent);
-    final Message result = argumentCaptor.getValue();
+    final Message result = subjectUnderTest.createUsageMessage(command, messageEvent);
 
     assertThat(result).isEqualTo(Message.of(String.format(customMessageFormat,
         messageEvent.getChatUser().getTwitchLogin(), command.getTrigger(), command.getUsage())));

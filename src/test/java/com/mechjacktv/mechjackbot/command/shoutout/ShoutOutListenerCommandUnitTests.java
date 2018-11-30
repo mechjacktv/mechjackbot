@@ -6,6 +6,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.UUID;
+
 import org.junit.Test;
 
 import com.mechjacktv.configuration.Configuration;
@@ -16,6 +18,7 @@ import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.chatbot.ArbitraryChatBotConfiguration;
 import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
 import com.mechjacktv.mechjackbot.command.BaseCommand;
+import com.mechjacktv.mechjackbot.command.BaseCommandContractTests;
 import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
 import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.Caster;
 import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.CasterKey;
@@ -23,7 +26,7 @@ import com.mechjacktv.twitchclient.TwitchClient;
 import com.mechjacktv.util.*;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
-public final class ShoutOutListenerCommandUnitTests extends CommandContractTests {
+public final class ShoutOutListenerCommandUnitTests extends BaseCommandContractTests {
 
   private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
 
@@ -48,7 +51,7 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
   private ShoutOutListenerCommand givenASubjectToTest(final Configuration configuration,
       final CommandUtils commandUtils, final TimeUtils timeUtils, final ShoutOutDataStore shoutOutDataStore) {
     final DefaultCommandConfigurationBuilder builder = new DefaultCommandConfigurationBuilder(commandUtils,
-        configuration);
+        configuration, this.executionUtils);
 
     return new ShoutOutListenerCommand(builder, configuration, shoutOutDataStore, timeUtils);
   }
@@ -72,13 +75,23 @@ public final class ShoutOutListenerCommandUnitTests extends CommandContractTests
   }
 
   @Override
-  protected SettingKey getCommandTriggerKey() {
-    return SettingKey.of(BaseCommand.TRIGGER_KEY, ShoutOutListenerCommand.class);
+  protected CommandDescription getDescriptionDefault() {
+    return CommandDescription.of(DESCRIPTION_DEFAULT);
   }
 
   @Override
-  protected CommandTrigger getCommandTriggerDefault() {
-    return CommandTrigger.of(TRIGGER_DEFAULT);
+  protected SettingKey getDescriptionKey() {
+    return SettingKey.of(BaseCommand.DESCRIPTION_KEY, ShoutOutListenerCommand.class);
+  }
+
+  @Override
+  protected CommandTrigger getTriggerDefault() {
+    return CommandTrigger.of(UUID.randomUUID().toString());
+  }
+
+  @Override
+  protected SettingKey getTriggerKey() {
+    return SettingKey.of(BaseCommand.TRIGGER_KEY, ShoutOutListenerCommand.class);
   }
 
   @Test

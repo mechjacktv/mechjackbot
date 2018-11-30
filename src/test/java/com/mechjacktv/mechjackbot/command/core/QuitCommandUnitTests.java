@@ -14,16 +14,21 @@ import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
 import com.mechjacktv.mechjackbot.command.BaseCommand;
+import com.mechjacktv.mechjackbot.command.BaseCommandContractTests;
 import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
 import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.util.DefaultExecutionUtils;
+import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
-public class QuitCommandUnitTests extends CommandContractTests {
+public class QuitCommandUnitTests extends BaseCommandContractTests {
 
   private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
 
   private final ArbitraryCommandTestUtils commandTestUtils = new ArbitraryCommandTestUtils(this.arbitraryDataGenerator);
+
+  private final ExecutionUtils executionUtils = new DefaultExecutionUtils();
 
   @Override
   protected Command givenASubjectToTest(final Configuration configuration) {
@@ -40,24 +45,33 @@ public class QuitCommandUnitTests extends CommandContractTests {
 
   private Command givenASubjectToTest(final Configuration configuration, final ScheduleService scheduleService) {
     final DefaultCommandConfigurationBuilder builder = new DefaultCommandConfigurationBuilder(
-        this.commandTestUtils.givenACommandUtils(configuration),
-        configuration);
+        this.commandTestUtils.givenACommandUtils(configuration), configuration, this.executionUtils);
 
     return new QuitCommand(builder, scheduleService);
   }
 
   @Override
-  protected SettingKey getCommandTriggerKey() {
+  protected SettingKey getDescriptionKey() {
+    return SettingKey.of(BaseCommand.DESCRIPTION_KEY, QuitCommand.class);
+  }
+
+  @Override
+  protected CommandDescription getDescriptionDefault() {
+    return CommandDescription.of(QuitCommand.DESCRIPTION_DEFAULT);
+  }
+
+  @Override
+  protected SettingKey getTriggerKey() {
     return SettingKey.of(BaseCommand.TRIGGER_KEY, QuitCommand.class);
   }
 
   @Override
-  protected CommandTrigger getCommandTriggerDefault() {
+  protected CommandTrigger getTriggerDefault() {
     return CommandTrigger.of(TRIGGER_DEFAULT);
   }
 
   private MapConfiguration givenAnAppConfiguration(final String message) {
-    final MapConfiguration appConfiguration = this.givenAnAppConfiguration();
+    final MapConfiguration appConfiguration = this.givenAConfiguration();
 
     appConfiguration.set(SettingKey.of(MESSAGE_FORMAT_KEY, QuitCommand.class).value, message);
     return appConfiguration;

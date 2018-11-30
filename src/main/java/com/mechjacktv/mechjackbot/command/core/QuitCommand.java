@@ -9,6 +9,7 @@ import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 public final class QuitCommand extends BaseCommand {
 
+  public static final String DESCRIPTION_DEFAULT = "Shuts the chat bot down.";
   public static final String MESSAGE_FORMAT_DEFAULT = "Powering down";
   public static final String TRIGGER_DEFAULT = "!quit";
 
@@ -18,7 +19,7 @@ public final class QuitCommand extends BaseCommand {
   protected QuitCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
       final ScheduleService scheduleService) {
     super(commandConfigurationBuilder.setTrigger(TRIGGER_DEFAULT)
-        .setDescription("Shuts the chat bot down.")
+        .setDescription(DESCRIPTION_DEFAULT)
         .setMessageFormat(MESSAGE_FORMAT_DEFAULT));
     this.scheduleService = scheduleService;
   }

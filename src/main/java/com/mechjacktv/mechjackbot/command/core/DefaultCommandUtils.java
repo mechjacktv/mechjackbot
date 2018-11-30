@@ -126,15 +126,15 @@ public final class DefaultCommandUtils implements CommandUtils {
   }
 
   @Override
-  public final void sendUsage(final Command command, final MessageEvent messageEvent) {
+  public final Message createUsageMessage(final Command command, final MessageEvent messageEvent) {
     Objects.requireNonNull(command, this.executionUtils.nullMessageForName("command"));
     Objects.requireNonNull(messageEvent, this.executionUtils.nullMessageForName("messageEvent"));
 
     final String messageFormat = this.configuration.get(COMMAND_USAGE_MESSAGE_FORMAT_KEY,
         COMMAND_USAGE_MESSAGE_FORMAT_DEFAULT);
 
-    messageEvent.sendResponse(Message.of(String.format(messageFormat, messageEvent.getChatUser().getTwitchLogin(),
-        command.getTrigger(), command.getUsage())));
+    return Message.of(String.format(messageFormat, messageEvent.getChatUser().getTwitchLogin(),
+        command.getTrigger(), command.getUsage()));
   }
 
   @Override

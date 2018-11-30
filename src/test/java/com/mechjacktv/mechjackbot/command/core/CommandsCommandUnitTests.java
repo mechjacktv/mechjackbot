@@ -1,7 +1,9 @@
 package com.mechjacktv.mechjackbot.command.core;
 
 import static com.mechjacktv.mechjackbot.command.BaseCommand.MESSAGE_FORMAT_KEY;
+import static com.mechjacktv.mechjackbot.command.core.CommandsCommand.DESCRIPTION_DEFAULT;
 import static com.mechjacktv.mechjackbot.command.core.CommandsCommand.MESSAGE_FORMAT_DEFAULT;
+import static com.mechjacktv.mechjackbot.command.core.CommandsCommand.TRIGGER_DEFAULT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -19,15 +21,20 @@ import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
 import com.mechjacktv.mechjackbot.command.BaseCommand;
+import com.mechjacktv.mechjackbot.command.BaseCommandContractTests;
 import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
 import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.DefaultTimeUtils;
+import com.mechjacktv.util.ExecutionUtils;
 
-public class CommandsCommandUnitTests extends CommandContractTests {
+public class CommandsCommandUnitTests extends BaseCommandContractTests {
 
   private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
 
   private final ArbitraryCommandTestUtils commandTestUtils = new ArbitraryCommandTestUtils(this.arbitraryDataGenerator);
+
+  private final ExecutionUtils executionUtils = new DefaultExecutionUtils();
 
   @Override
   protected Command givenASubjectToTest(final Configuration configuration) {
@@ -36,20 +43,29 @@ public class CommandsCommandUnitTests extends CommandContractTests {
 
   private Command givenASubjectToTest(final Configuration configuration, final CommandRegistry commandRegistry) {
     final DefaultCommandConfigurationBuilder builder = new DefaultCommandConfigurationBuilder(
-        this.commandTestUtils.givenACommandUtils(configuration),
-        configuration);
+        this.commandTestUtils.givenACommandUtils(configuration), configuration, this.executionUtils);
 
     return new CommandsCommand(builder, commandRegistry);
   }
 
   @Override
-  protected SettingKey getCommandTriggerKey() {
+  protected CommandDescription getDescriptionDefault() {
+    return CommandDescription.of(DESCRIPTION_DEFAULT);
+  }
+
+  @Override
+  protected SettingKey getDescriptionKey() {
+    return SettingKey.of(BaseCommand.DESCRIPTION_KEY, CommandsCommand.class);
+  }
+
+  @Override
+  protected SettingKey getTriggerKey() {
     return SettingKey.of(BaseCommand.TRIGGER_KEY, CommandsCommand.class);
   }
 
   @Override
-  protected CommandTrigger getCommandTriggerDefault() {
-    return CommandTrigger.of(CommandsCommand.TRIGGER_DEFAULT);
+  protected CommandTrigger getTriggerDefault() {
+    return CommandTrigger.of(TRIGGER_DEFAULT);
   }
 
   private CommandUtils givenACommandUtils(final Configuration configuration) {
@@ -77,7 +93,7 @@ public class CommandsCommandUnitTests extends CommandContractTests {
 
   @Test
   public final void handleMessageEvent_defaultFormat_sendsDefaultListOfCommands() {
-    final MapConfiguration appConfiguration = this.givenAnAppConfiguration();
+    final MapConfiguration appConfiguration = this.givenAConfiguration();
     final CommandUtils commandUtils = this.givenACommandUtils(appConfiguration);
     final Set<Command> commands = this.givenASetOfCommands(appConfiguration, commandUtils);
     final CommandRegistry commandRegistry = this.givenACommandRegistry(commands);
@@ -98,7 +114,7 @@ public class CommandsCommandUnitTests extends CommandContractTests {
   @Test
   public final void handleMessageEvent_customFormat_sendsCustomListOfCommands() {
     final String messageFormat = this.arbitraryDataGenerator.getString() + ": %2$s";
-    final MapConfiguration appConfiguration = this.givenAnAppConfiguration();
+    final MapConfiguration appConfiguration = this.givenAConfiguration();
     final CommandUtils commandUtils = this.givenACommandUtils(appConfiguration);
     final Set<Command> commands = this.givenASetOfCommands(appConfiguration, commandUtils);
     final CommandRegistry commandRegistry = this.givenACommandRegistry(commands);
@@ -123,9 +139,9 @@ public class CommandsCommandUnitTests extends CommandContractTests {
 
   @Test
   public final void handleMessageEvent_withNonTriggerableCommands_doesNotListNonTriggerableCommands() {
-    final MapConfiguration appConfiguration = this.givenAnAppConfiguration();
+    final MapConfiguration appConfiguration = this.givenAConfiguration();
     final CommandUtils commandUtils = this.givenACommandUtils(appConfiguration);
-    final Command nonTriggerableCommand = new ArbitraryCommand(appConfiguration, commandUtils,
+    final Command nonTriggerableCommand = new ArbitraryCommand(appConfiguration, commandUtils, this.executionUtils,
         this.arbitraryDataGenerator, false);
     final Set<Command> commands = Sets.newHashSet(nonTriggerableCommand,
         new ArbitraryCommand(appConfiguration, commandUtils, this.arbitraryDataGenerator),
