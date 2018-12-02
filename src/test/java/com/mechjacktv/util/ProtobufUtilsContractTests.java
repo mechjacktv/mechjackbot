@@ -10,6 +10,7 @@ import java.util.Set;
 import org.junit.Test;
 
 import com.mechjacktv.proto.util.UtilsMessage.TestKeyMessage;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 
 public abstract class ProtobufUtilsContractTests {
 

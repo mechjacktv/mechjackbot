@@ -3,7 +3,7 @@ package com.mechjacktv.configuration;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.HotUpdatePropertiesWrapperContractTests;
 import com.mechjacktv.util.PropertiesSource;

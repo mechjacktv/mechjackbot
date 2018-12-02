@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.mechjacktv.proto.util.UtilsMessage.TestKeyMessage;
 import com.mechjacktv.proto.util.UtilsMessage.TestValueMessage;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.util.*;
 
 public class MessageStoreUnitTests extends MessageStoreContractTests<TestKeyMessage, TestValueMessage> {

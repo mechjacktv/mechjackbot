@@ -22,8 +22,8 @@ import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.Message;
 import com.mechjacktv.mechjackbot.TwitchChannel;
 import com.mechjacktv.mechjackbot.TwitchPassword;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.twitchclient.TwitchLogin;
-import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
 

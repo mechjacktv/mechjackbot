@@ -7,7 +7,8 @@ import org.junit.Test;
 
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.mechjackbot.command.ArbitraryMessageEvent;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
 
@@ -28,19 +29,19 @@ public abstract class CommandContractTests {
   }
 
   @Test
-  public final void getName_whenCalled_returnIsNotNull() {
+  public final void getDescription_whenCalled_returnIsNotNull() {
     final Command subjectUnderTest = this.givenASubjectToTest();
 
-    final CommandName result = subjectUnderTest.getName();
+    final CommandDescription result = subjectUnderTest.getDescription();
 
     assertThat(result).isNotNull();
   }
 
   @Test
-  public final void getDescription_whenCalled_returnIsNotNull() {
+  public final void getName_whenCalled_returnIsNotNull() {
     final Command subjectUnderTest = this.givenASubjectToTest();
 
-    final CommandDescription result = subjectUnderTest.getDescription();
+    final CommandName result = subjectUnderTest.getName();
 
     assertThat(result).isNotNull();
   }

@@ -1,10 +1,16 @@
-package com.mechjacktv.mechjackbot;
+package com.mechjacktv.mechjackbot.command;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import javax.inject.Inject;
+
+import com.mechjacktv.mechjackbot.ChatBot;
+import com.mechjacktv.mechjackbot.ChatUser;
+import com.mechjacktv.mechjackbot.Message;
+import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.twitchclient.TwitchLogin;
-import com.mechjacktv.util.ArbitraryDataGenerator;
 
 public class ArbitraryMessageEvent implements MessageEvent {
 
@@ -13,6 +19,7 @@ public class ArbitraryMessageEvent implements MessageEvent {
   private Message message;
   private Message responseMessage;
 
+  @Inject
   public ArbitraryMessageEvent(final ArbitraryDataGenerator arbitraryDataGenerator) {
     this.chatBot = mock(ChatBot.class);
     this.chatUser = mock(ChatUser.class);

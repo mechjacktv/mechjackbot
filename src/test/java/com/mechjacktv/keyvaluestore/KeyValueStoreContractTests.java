@@ -10,7 +10,7 @@ import java.util.Optional;
 
 import org.junit.Test;
 
-import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.OptionalByteArrayEqualsExpected;

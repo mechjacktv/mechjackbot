@@ -16,14 +16,11 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 
 import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
-import com.mechjacktv.mechjackbot.command.BaseCommand;
-import com.mechjacktv.mechjackbot.command.BaseCommandContractTests;
-import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
-import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.mechjackbot.command.*;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.DefaultTimeUtils;
 import com.mechjacktv.util.ExecutionUtils;
@@ -54,13 +51,13 @@ public class CommandsCommandUnitTests extends BaseCommandContractTests {
   }
 
   @Override
-  protected SettingKey getDescriptionKey() {
-    return SettingKey.of(BaseCommand.DESCRIPTION_KEY, CommandsCommand.class);
+  protected ConfigurationKey getDescriptionKey() {
+    return ConfigurationKey.of(BaseCommand.DESCRIPTION_KEY, CommandsCommand.class);
   }
 
   @Override
-  protected SettingKey getTriggerKey() {
-    return SettingKey.of(BaseCommand.TRIGGER_KEY, CommandsCommand.class);
+  protected ConfigurationKey getTriggerKey() {
+    return ConfigurationKey.of(BaseCommand.TRIGGER_KEY, CommandsCommand.class);
   }
 
   @Override
@@ -120,7 +117,7 @@ public class CommandsCommandUnitTests extends BaseCommandContractTests {
     final CommandRegistry commandRegistry = this.givenACommandRegistry(commands);
     final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, commandRegistry);
-    appConfiguration.set(SettingKey.of(MESSAGE_FORMAT_KEY, CommandsCommand.class).value, messageFormat);
+    appConfiguration.set(ConfigurationKey.of(MESSAGE_FORMAT_KEY, CommandsCommand.class).value, messageFormat);
 
     subjectUnderTest.handleMessageEvent(messageEvent);
 

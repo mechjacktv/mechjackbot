@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.command.core;
+package com.mechjacktv.mechjackbot.command;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -12,6 +12,8 @@ import javax.inject.Inject;
 
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.command.core.CoolDownPeriodMs;
+import com.mechjacktv.mechjackbot.command.core.LastTrigger;
 import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.TimeUtils;

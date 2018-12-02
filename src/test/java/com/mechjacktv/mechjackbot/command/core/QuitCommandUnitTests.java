@@ -9,15 +9,15 @@ import static org.mockito.Mockito.*;
 import org.junit.Test;
 
 import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
 import com.mechjacktv.mechjackbot.command.BaseCommand;
 import com.mechjacktv.mechjackbot.command.BaseCommandContractTests;
 import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.twitchclient.TwitchLogin;
-import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
@@ -51,8 +51,8 @@ public class QuitCommandUnitTests extends BaseCommandContractTests {
   }
 
   @Override
-  protected SettingKey getDescriptionKey() {
-    return SettingKey.of(BaseCommand.DESCRIPTION_KEY, QuitCommand.class);
+  protected ConfigurationKey getDescriptionKey() {
+    return ConfigurationKey.of(BaseCommand.DESCRIPTION_KEY, QuitCommand.class);
   }
 
   @Override
@@ -61,8 +61,8 @@ public class QuitCommandUnitTests extends BaseCommandContractTests {
   }
 
   @Override
-  protected SettingKey getTriggerKey() {
-    return SettingKey.of(BaseCommand.TRIGGER_KEY, QuitCommand.class);
+  protected ConfigurationKey getTriggerKey() {
+    return ConfigurationKey.of(BaseCommand.TRIGGER_KEY, QuitCommand.class);
   }
 
   @Override
@@ -73,7 +73,7 @@ public class QuitCommandUnitTests extends BaseCommandContractTests {
   private MapConfiguration givenAnAppConfiguration(final String message) {
     final MapConfiguration appConfiguration = this.givenAConfiguration();
 
-    appConfiguration.set(SettingKey.of(MESSAGE_FORMAT_KEY, QuitCommand.class).value, message);
+    appConfiguration.set(ConfigurationKey.of(MESSAGE_FORMAT_KEY, QuitCommand.class).value, message);
     return appConfiguration;
   }
 

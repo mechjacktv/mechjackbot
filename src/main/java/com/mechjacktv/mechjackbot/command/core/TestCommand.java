@@ -10,9 +10,15 @@ import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 
 public final class TestCommand extends BaseCommand {
 
+  public static final String DEFAULT_DESCRIPTION = "This is a test command.";
+  public static final String DEFAULT_MESSAGE_FORMAT = "%2$s";
+  public static final String DEFAULT_TRIGGER = "!test";
+
   @Inject
   protected TestCommand(final CommandConfigurationBuilder commandConfigurationBuilder) {
-    super(commandConfigurationBuilder.setTrigger("!test"));
+    super(commandConfigurationBuilder.setDescription(DEFAULT_DESCRIPTION)
+        .setMessageFormat(DEFAULT_MESSAGE_FORMAT)
+        .setTrigger(DEFAULT_TRIGGER));
   }
 
   @Override

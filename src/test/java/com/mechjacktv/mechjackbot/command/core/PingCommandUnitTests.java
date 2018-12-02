@@ -7,15 +7,15 @@ import static org.mockito.Mockito.*;
 import org.junit.Test;
 
 import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
 import com.mechjacktv.mechjackbot.command.BaseCommand;
 import com.mechjacktv.mechjackbot.command.BaseCommandContractTests;
 import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.twitchclient.TwitchLogin;
-import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
 
@@ -48,13 +48,13 @@ public class PingCommandUnitTests extends BaseCommandContractTests {
   }
 
   @Override
-  protected SettingKey getDescriptionKey() {
-    return SettingKey.of(BaseCommand.DESCRIPTION_KEY, PingCommand.class);
+  protected ConfigurationKey getDescriptionKey() {
+    return ConfigurationKey.of(BaseCommand.DESCRIPTION_KEY, PingCommand.class);
   }
 
   @Override
-  protected SettingKey getTriggerKey() {
-    return SettingKey.of(BaseCommand.TRIGGER_KEY, PingCommand.class);
+  protected ConfigurationKey getTriggerKey() {
+    return ConfigurationKey.of(BaseCommand.TRIGGER_KEY, PingCommand.class);
   }
 
   @Override
@@ -65,7 +65,7 @@ public class PingCommandUnitTests extends BaseCommandContractTests {
   private MapConfiguration givenAnAppConfiguration(final String messageFormat) {
     final MapConfiguration appConfiguration = this.givenAConfiguration();
 
-    appConfiguration.set(SettingKey.of(BaseCommand.MESSAGE_FORMAT_KEY, PingCommand.class).value, messageFormat);
+    appConfiguration.set(ConfigurationKey.of(BaseCommand.MESSAGE_FORMAT_KEY, PingCommand.class).value, messageFormat);
     return appConfiguration;
   }
 

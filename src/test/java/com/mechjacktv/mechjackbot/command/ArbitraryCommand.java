@@ -1,9 +1,11 @@
-package com.mechjacktv.mechjackbot;
+package com.mechjacktv.mechjackbot.command;
+
+import javax.inject.Inject;
 
 import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.mechjackbot.command.BaseCommand;
-import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
-import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.mechjackbot.CommandUtils;
+import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
 
@@ -23,8 +25,15 @@ public class ArbitraryCommand extends BaseCommand {
         .setTrigger(arbitraryDataGenerator.getString()));
   }
 
+  @Inject
+  ArbitraryCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
+      final ArbitraryDataGenerator arbitraryDataGenerator) {
+    super(commandConfigurationBuilder.setDescription(arbitraryDataGenerator.getString())
+        .setTrigger(arbitraryDataGenerator.getString()));
+  }
+
   @Override
   public void handleMessageEvent(final MessageEvent messageEvent) {
-    // empty
+    /* no-op (2018-12-02 mechjack) */
   }
 }

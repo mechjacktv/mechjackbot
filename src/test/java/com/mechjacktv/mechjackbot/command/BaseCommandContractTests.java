@@ -1,26 +1,26 @@
 package com.mechjacktv.mechjackbot.command;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assume.assumeTrue;
+
+import org.junit.Test;
+
+import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.CommandContractTests;
 import com.mechjacktv.mechjackbot.CommandDescription;
 import com.mechjacktv.mechjackbot.CommandTrigger;
 
-import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assume.assumeTrue;
-
 public abstract class BaseCommandContractTests extends CommandContractTests {
 
   protected abstract CommandDescription getDescriptionDefault();
 
-  protected abstract SettingKey getDescriptionKey();
+  protected abstract ConfigurationKey getDescriptionKey();
 
   protected abstract CommandTrigger getTriggerDefault();
 
-  protected abstract SettingKey getTriggerKey();
+  protected abstract ConfigurationKey getTriggerKey();
 
   @Test
   public final void getDescription_defaultDescription_returnsDefaultDescription() {

@@ -10,7 +10,7 @@ import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 
-import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
 
@@ -38,7 +38,8 @@ public class MapConfigurationUnitTests extends ConfigurationContractTests {
   public final void set_nullKey_thrownNullPointerException() {
     final MapConfiguration subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.set(null, this.arbitraryDataGenerator.getString()));
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.set((String) null,
+        this.arbitraryDataGenerator.getString()));
 
     assertThat(thrown).isInstanceOf(NullPointerException.class)
         .hasMessage(this.executionUtils.nullMessageForName("key"));

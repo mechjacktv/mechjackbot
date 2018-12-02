@@ -9,14 +9,11 @@ import static org.mockito.Mockito.mock;
 import org.junit.Test;
 
 import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
-import com.mechjacktv.mechjackbot.command.BaseCommand;
-import com.mechjacktv.mechjackbot.command.BaseCommandContractTests;
-import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
-import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.mechjackbot.command.*;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.DefaultTimeUtils;
 import com.mechjacktv.util.ExecutionUtils;
@@ -49,13 +46,13 @@ public class HelpCommandUnitTests extends BaseCommandContractTests {
   }
 
   @Override
-  protected SettingKey getDescriptionKey() {
-    return SettingKey.of(BaseCommand.DESCRIPTION_KEY, HelpCommand.class);
+  protected ConfigurationKey getDescriptionKey() {
+    return ConfigurationKey.of(BaseCommand.DESCRIPTION_KEY, HelpCommand.class);
   }
 
   @Override
-  protected SettingKey getTriggerKey() {
-    return SettingKey.of(BaseCommand.TRIGGER_KEY, HelpCommand.class);
+  protected ConfigurationKey getTriggerKey() {
+    return ConfigurationKey.of(BaseCommand.TRIGGER_KEY, HelpCommand.class);
   }
 
   @Override
@@ -112,7 +109,7 @@ public class HelpCommandUnitTests extends BaseCommandContractTests {
   public final void handleMessageEvent_forTriggerableCommandAndCustomFormat_sendsCustomMessage() {
     final String customFormat = this.arbitraryDataGenerator.getString() + " %s %s %s";
     final MapConfiguration configuration = this.givenAConfiguration();
-    configuration.set(SettingKey.of(MESSAGE_FORMAT_KEY, HelpCommand.class).value, customFormat);
+    configuration.set(ConfigurationKey.of(MESSAGE_FORMAT_KEY, HelpCommand.class).value, customFormat);
     final CommandUtils commandUtils = this.givenACommandUtils(configuration);
     final Command command = new ArbitraryCommand(configuration, commandUtils, this.arbitraryDataGenerator);
     final CommandRegistry commandRegistry = this.givenACommandRegistry(command);
@@ -149,7 +146,7 @@ public class HelpCommandUnitTests extends BaseCommandContractTests {
   public final void handleMessageEvent_missingCommandAndCustomFormat_sendsCustomMissingMessage() {
     final String customFormat = this.arbitraryDataGenerator.getString() + " %s %s";
     final MapConfiguration configuration = this.givenAConfiguration();
-    configuration.set(SettingKey.of(MISSING_MESSAGE_FORMAT_KEY, HelpCommand.class).value, customFormat);
+    configuration.set(ConfigurationKey.of(MISSING_MESSAGE_FORMAT_KEY, HelpCommand.class).value, customFormat);
     final CommandUtils commandUtils = this.givenACommandUtils(configuration);
     final Command command = new ArbitraryCommand(configuration, commandUtils, this.arbitraryDataGenerator);
     final CommandRegistry commandRegistry = this.givenACommandRegistry(

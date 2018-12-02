@@ -1,16 +1,16 @@
 package com.mechjacktv.mechjackbot.command;
 
-import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.configuration.SettingKey;
-import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.util.DefaultExecutionUtils;
-import com.mechjacktv.util.ExecutionUtils;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.ConfigurationKey;
+import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.util.DefaultExecutionUtils;
+import com.mechjacktv.util.ExecutionUtils;
 
 public class BaseCommandUnitTests extends BaseCommandContractTests {
 
@@ -24,8 +24,8 @@ public class BaseCommandUnitTests extends BaseCommandContractTests {
   }
 
   @Override
-  protected SettingKey getDescriptionKey() {
-    return SettingKey.of(BaseCommand.DESCRIPTION_KEY, TestBaseCommand.class);
+  protected ConfigurationKey getDescriptionKey() {
+    return ConfigurationKey.of(BaseCommand.DESCRIPTION_KEY, TestBaseCommand.class);
   }
 
   @Override
@@ -34,8 +34,8 @@ public class BaseCommandUnitTests extends BaseCommandContractTests {
   }
 
   @Override
-  protected SettingKey getTriggerKey() {
-    return SettingKey.of(BaseCommand.TRIGGER_KEY, TestBaseCommand.class);
+  protected ConfigurationKey getTriggerKey() {
+    return ConfigurationKey.of(BaseCommand.TRIGGER_KEY, TestBaseCommand.class);
   }
 
   @Override
@@ -102,7 +102,8 @@ public class BaseCommandUnitTests extends BaseCommandContractTests {
   public final void handleMessageEvent_customMessageFormat_returnsExpectedMessage() {
     final String customMessageFormat = "%s";
     final MapConfiguration configuration = this.givenAConfiguration();
-    configuration.set(SettingKey.of(BaseCommand.MESSAGE_FORMAT_KEY, TestBaseCommand.class).value, customMessageFormat);
+    configuration.set(ConfigurationKey.of(BaseCommand.MESSAGE_FORMAT_KEY, TestBaseCommand.class).value,
+        customMessageFormat);
     final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final TestBaseCommand subjectUnderTest = this.givenASubjectToTest(configuration);
 

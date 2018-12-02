@@ -1,13 +1,5 @@
 package com.mechjacktv.mechjackbot;
 
-import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.mechjackbot.chatbot.ArbitraryChatBotConfiguration;
-import com.mechjacktv.twitchclient.TwitchLogin;
-import com.mechjacktv.util.*;
-
-import org.junit.Test;
-
 import static com.mechjacktv.mechjackbot.CommandUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -15,6 +7,17 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import org.junit.Test;
+
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.mechjackbot.chatbot.ArbitraryChatBotConfiguration;
+import com.mechjacktv.mechjackbot.command.ArbitraryCommand;
+import com.mechjacktv.mechjackbot.command.ArbitraryMessageEvent;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
+import com.mechjacktv.twitchclient.TwitchLogin;
+import com.mechjacktv.util.*;
 
 public abstract class CommandUtilsContractTests {
 

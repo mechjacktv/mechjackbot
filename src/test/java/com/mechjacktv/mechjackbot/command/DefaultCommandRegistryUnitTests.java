@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.command.core;
+package com.mechjacktv.mechjackbot.command;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.CommandTrigger;
-import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
 

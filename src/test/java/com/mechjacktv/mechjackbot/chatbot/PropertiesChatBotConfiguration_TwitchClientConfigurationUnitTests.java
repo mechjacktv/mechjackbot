@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.twitchclient.TwitchClientConfiguration;
 import com.mechjacktv.twitchclient.TwitchClientConfigurationContractTests;
-import com.mechjacktv.util.ArbitraryDataGenerator;
 import com.mechjacktv.util.MapPropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 

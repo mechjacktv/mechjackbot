@@ -1,8 +1,8 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
 import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.twitchclient.TwitchLogin;
-import com.mechjacktv.util.ArbitraryDataGenerator;
 
 public class ArbitraryChatBotConfiguration implements ChatBotConfiguration {
 

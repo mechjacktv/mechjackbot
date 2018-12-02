@@ -11,7 +11,7 @@ import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 
-import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
 
@@ -41,7 +41,7 @@ public abstract class ConfigurationContractTests {
   public final void get_nullKey_throwsNullPointerExceptionWithMessage() throws Exception {
     final Configuration subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.get(null));
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.get((String) null));
 
     assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(EXECUTION_UTILS.nullMessageForName("key"));
   }
@@ -75,7 +75,8 @@ public abstract class ConfigurationContractTests {
   public final void get_nullKeyWithDefaultValue_throwsNullPointerExceptionWithMessage() throws Exception {
     final Configuration subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.get(null, this.arbitraryDataGenerator.getString()));
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.get((String) null,
+        this.arbitraryDataGenerator.getString()));
 
     assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(EXECUTION_UTILS.nullMessageForName("key"));
   }

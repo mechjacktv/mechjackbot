@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import com.google.common.base.Strings;
 
 import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.configuration.SettingKey;
+import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.command.BaseCommand;
 import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
@@ -26,7 +26,7 @@ public final class HelpCommand extends BaseCommand {
   private final CommandUtils commandUtils;
   private final Configuration configuration;
   private final CommandMessageFormat missingMessageFormatDefault;
-  private final SettingKey missingMessageFormatKey;
+  private final ConfigurationKey missingMessageFormatKey;
 
   @Inject
   protected HelpCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
@@ -39,7 +39,7 @@ public final class HelpCommand extends BaseCommand {
     this.commandUtils = commandUtils;
     this.configuration = configuration;
     this.missingMessageFormatDefault = CommandMessageFormat.of(MISSING_MESSAGE_FORMAT_DEFAULT);
-    this.missingMessageFormatKey = SettingKey.of(MISSING_MESSAGE_FORMAT_KEY, this.getClass());
+    this.missingMessageFormatKey = ConfigurationKey.of(MISSING_MESSAGE_FORMAT_KEY, this.getClass());
   }
 
   @Override

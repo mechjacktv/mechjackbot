@@ -7,7 +7,7 @@ import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.CommandUtils;
 import com.mechjacktv.mechjackbot.TwitchChannel;
-import com.mechjacktv.mechjackbot.command.core.DefaultCommandUtils;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.util.*;
 
 public class ArbitraryCommandTestUtils {

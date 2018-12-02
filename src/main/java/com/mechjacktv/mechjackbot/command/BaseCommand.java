@@ -2,12 +2,12 @@ package com.mechjacktv.mechjackbot.command;
 
 import java.util.Objects;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.configuration.SettingKey;
+import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.util.ExecutionUtils;
-
-import org.apache.commons.lang3.ArrayUtils;
 
 public abstract class BaseCommand implements Command {
 
@@ -19,11 +19,11 @@ public abstract class BaseCommand implements Command {
   private final CommandUtils commandUtils;
   private final ExecutionUtils executionUtils;
   private final CommandDescription descriptionDefault;
-  private final SettingKey descriptionKey;
+  private final ConfigurationKey descriptionKey;
   private final CommandMessageFormat messageFormatDefault;
-  private final SettingKey messageFormatKey;
+  private final ConfigurationKey messageFormatKey;
   private final CommandTrigger triggerDefault;
-  private final SettingKey triggerKey;
+  private final ConfigurationKey triggerKey;
   private final CommandUsage usage;
   private final boolean triggerable;
 
@@ -36,11 +36,11 @@ public abstract class BaseCommand implements Command {
     this.configuration = commandConfiguration.getConfiguration();
     this.executionUtils = commandConfiguration.getExecutionUtils();
     this.descriptionDefault = commandConfiguration.getDescription();
-    this.descriptionKey = SettingKey.of(DESCRIPTION_KEY, this.getClass());
+    this.descriptionKey = ConfigurationKey.of(DESCRIPTION_KEY, this.getClass());
     this.messageFormatDefault = commandConfiguration.getMessageFormat();
-    this.messageFormatKey = SettingKey.of(MESSAGE_FORMAT_KEY, this.getClass());
+    this.messageFormatKey = ConfigurationKey.of(MESSAGE_FORMAT_KEY, this.getClass());
     this.triggerDefault = commandConfiguration.getTrigger();
-    this.triggerKey = SettingKey.of(TRIGGER_KEY, this.getClass());
+    this.triggerKey = ConfigurationKey.of(TRIGGER_KEY, this.getClass());
     this.triggerable = commandConfiguration.isTriggerable();
     this.usage = commandConfiguration.getUsage();
   }

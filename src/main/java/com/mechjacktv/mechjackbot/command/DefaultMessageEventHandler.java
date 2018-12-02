@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.command.core;
+package com.mechjacktv.mechjackbot.command;
 
 import java.util.HashMap;
 import java.util.Map;

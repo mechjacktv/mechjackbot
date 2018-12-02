@@ -5,7 +5,7 @@ import static com.mechjacktv.mechjackbot.chatbot.PropertiesChatBotConfiguration.
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.util.HotUpdatePropertiesWrapperContractTests;
 import com.mechjacktv.util.PropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;

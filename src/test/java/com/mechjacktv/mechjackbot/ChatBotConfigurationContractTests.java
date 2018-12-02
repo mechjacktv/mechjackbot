@@ -8,8 +8,8 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.twitchclient.TwitchLogin;
-import com.mechjacktv.util.ArbitraryDataGenerator;
 
 public abstract class ChatBotConfigurationContractTests {
 

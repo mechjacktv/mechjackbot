@@ -11,17 +11,15 @@ import java.util.UUID;
 import org.junit.Test;
 
 import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.configuration.SettingKey;
 import com.mechjacktv.keyvaluestore.MapKeyValueStore;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.mechjackbot.chatbot.ArbitraryChatBotConfiguration;
-import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
-import com.mechjacktv.mechjackbot.command.BaseCommand;
-import com.mechjacktv.mechjackbot.command.BaseCommandContractTests;
-import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
+import com.mechjacktv.mechjackbot.command.*;
 import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.Caster;
 import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.CasterKey;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.twitchclient.TwitchClient;
 import com.mechjacktv.util.*;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
@@ -80,8 +78,8 @@ public final class ShoutOutListenerCommandUnitTests extends BaseCommandContractT
   }
 
   @Override
-  protected SettingKey getDescriptionKey() {
-    return SettingKey.of(BaseCommand.DESCRIPTION_KEY, ShoutOutListenerCommand.class);
+  protected ConfigurationKey getDescriptionKey() {
+    return ConfigurationKey.of(BaseCommand.DESCRIPTION_KEY, ShoutOutListenerCommand.class);
   }
 
   @Override
@@ -90,8 +88,8 @@ public final class ShoutOutListenerCommandUnitTests extends BaseCommandContractT
   }
 
   @Override
-  protected SettingKey getTriggerKey() {
-    return SettingKey.of(BaseCommand.TRIGGER_KEY, ShoutOutListenerCommand.class);
+  protected ConfigurationKey getTriggerKey() {
+    return ConfigurationKey.of(BaseCommand.TRIGGER_KEY, ShoutOutListenerCommand.class);
   }
 
   @Test
@@ -142,7 +140,7 @@ public final class ShoutOutListenerCommandUnitTests extends BaseCommandContractT
   @Test
   public final void isTriggered_casterIsNotDueCustomFrequency_returnsFalse() {
     final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
-    appConfiguration.set(SettingKey.of(FREQUENCY_KEY, ShoutOutListenerCommand.class).value, "2");
+    appConfiguration.set(ConfigurationKey.of(FREQUENCY_KEY, ShoutOutListenerCommand.class).value, "2");
     final ShoutOutDataStore shoutOutDataStore = this.givenAShoutOutDataStore(appConfiguration);
     final MessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getTwitchLogin().value);
@@ -161,7 +159,7 @@ public final class ShoutOutListenerCommandUnitTests extends BaseCommandContractT
   public final void isTriggered_casterIsDueCustomFrequency_returnsTrue() {
     final String customFrequency = "2";
     final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
-    appConfiguration.set(SettingKey.of(FREQUENCY_KEY, ShoutOutListenerCommand.class).value, customFrequency);
+    appConfiguration.set(ConfigurationKey.of(FREQUENCY_KEY, ShoutOutListenerCommand.class).value, customFrequency);
     final ShoutOutDataStore shoutOutDataStore = this.givenAShoutOutDataStore(appConfiguration);
     final MessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getTwitchLogin().value);
@@ -195,7 +193,8 @@ public final class ShoutOutListenerCommandUnitTests extends BaseCommandContractT
   public final void handleMessageEvent_isCalledUsesCustomMessage_sendsResponse() {
     final String customMessageFormat = this.arbitraryDataGenerator.getString() + " %s";
     final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
-    appConfiguration.set(SettingKey.of(MESSAGE_FORMAT_KEY, ShoutOutListenerCommand.class).value, customMessageFormat);
+    appConfiguration.set(ConfigurationKey.of(MESSAGE_FORMAT_KEY, ShoutOutListenerCommand.class).value,
+        customMessageFormat);
     final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
     final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, this.givenAFakeTimeUtils(),
         this.givenAShoutOutDataStore(appConfiguration));

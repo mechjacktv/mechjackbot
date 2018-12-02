@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.command.core;
+package com.mechjacktv.mechjackbot.command;
 
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;

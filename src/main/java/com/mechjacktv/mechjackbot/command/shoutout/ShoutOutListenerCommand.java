@@ -3,7 +3,7 @@ package com.mechjacktv.mechjackbot.command.shoutout;
 import javax.inject.Inject;
 
 import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.configuration.SettingKey;
+import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.mechjackbot.command.BaseCommand;
 import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
@@ -22,7 +22,7 @@ public final class ShoutOutListenerCommand extends BaseCommand {
   private final Configuration configuration;
   private final ShoutOutDataStore shoutOutDataStore;
   private final TimeUtils timeUtils;
-  private SettingKey frequencyKey;
+  private ConfigurationKey frequencyKey;
 
   @Inject
   protected ShoutOutListenerCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
@@ -32,7 +32,7 @@ public final class ShoutOutListenerCommand extends BaseCommand {
     this.configuration = configuration;
     this.shoutOutDataStore = shoutOutDataStore;
     this.timeUtils = timeUtils;
-    this.frequencyKey = SettingKey.of(FREQUENCY_KEY, this.getClass());
+    this.frequencyKey = ConfigurationKey.of(FREQUENCY_KEY, this.getClass());
   }
 
   @Override

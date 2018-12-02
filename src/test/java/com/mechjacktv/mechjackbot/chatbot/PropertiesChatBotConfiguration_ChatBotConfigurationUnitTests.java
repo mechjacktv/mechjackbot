@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.ChatBotConfigurationContractTests;
-import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.util.MapPropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 

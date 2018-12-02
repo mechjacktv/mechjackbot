@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import org.junit.Test;
 
-import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 
 public abstract class TwitchClientConfigurationContractTests {
 
