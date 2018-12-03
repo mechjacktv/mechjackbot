@@ -20,7 +20,7 @@ public class PircBotXChatUserUnitTests {
   private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
 
   private PircBotXChatUser givenIHaveASubjectToTest(final User user) {
-    final ChatBotConfiguration chatBotConfiguration = new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator);
+    final ChatBotConfiguration chatBotConfiguration = new TestChatBotConfiguration(this.arbitraryDataGenerator);
     final ExecutionUtils executionUtils = new DefaultExecutionUtils();
 
     return new PircBotXChatUser(chatBotConfiguration, new DefaultCommandUtils(new MapConfiguration(executionUtils),

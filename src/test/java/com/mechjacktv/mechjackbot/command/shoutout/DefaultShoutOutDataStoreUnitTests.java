@@ -20,7 +20,7 @@ import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.keyvaluestore.MapKeyValueStore;
 import com.mechjacktv.keyvaluestore.MessageStoreContractTests;
-import com.mechjacktv.mechjackbot.chatbot.ArbitraryChatBotConfiguration;
+import com.mechjacktv.mechjackbot.chatbot.TestChatBotConfiguration;
 import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.Caster;
 import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.CasterKey;
 import com.mechjacktv.proto.twitchclient.TwitchClientMessage.UserFollow;
@@ -76,7 +76,7 @@ public class DefaultShoutOutDataStoreUnitTests extends MessageStoreContractTests
     }
 
     return new DefaultShoutOutDataStore(configuration,
-        new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator), (name) -> dataStore, this.executionUtils,
+        new TestChatBotConfiguration(this.arbitraryDataGenerator), (name) -> dataStore, this.executionUtils,
         new DefaultProtobufUtils(this.executionUtils), scheduleService, twitchClient);
   }
 

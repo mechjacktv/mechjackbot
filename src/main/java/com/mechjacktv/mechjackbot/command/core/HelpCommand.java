@@ -15,11 +15,11 @@ import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
 
 public final class HelpCommand extends BaseCommand {
 
-  public static final String DESCRIPTION_DEFAULT = "Returns the description for a command.";
-  public static final String MESSAGE_FORMAT_DEFAULT = "@%s, %s -> %s";
-  public static final String MISSING_MESSAGE_FORMAT_KEY = "missing_message_format";
-  public static final String MISSING_MESSAGE_FORMAT_DEFAULT = "@%s, I don't see a command triggered by %s.";
-  public static final String TRIGGER_DEFAULT = "!help";
+  public static final String DEFAULT_DESCRIPTION = "Returns the description for a command.";
+  public static final String DEFAULT_MESSAGE_FORMAT = "@%s, %s -> %s";
+  public static final String DEFAULT_MISSING_MESSAGE_FORMAT = "@%s, I don't see a command triggered by %s.";
+  public static final String DEFAULT_TRIGGER = "!help";
+  public static final String KEY_MISSING_MESSAGE_FORMAT = "missing_message_format";
   public static final String USAGE = "<commandTrigger>";
 
   private final CommandRegistry commandRegistry;
@@ -31,15 +31,15 @@ public final class HelpCommand extends BaseCommand {
   @Inject
   protected HelpCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
       final CommandRegistry commandRegistry, final CommandUtils commandUtils, final Configuration configuration) {
-    super(commandConfigurationBuilder.setTrigger(TRIGGER_DEFAULT)
-        .setDescription(DESCRIPTION_DEFAULT)
-        .setMessageFormat(MESSAGE_FORMAT_DEFAULT)
+    super(commandConfigurationBuilder.setTrigger(DEFAULT_TRIGGER)
+        .setDescription(DEFAULT_DESCRIPTION)
+        .setMessageFormat(DEFAULT_MESSAGE_FORMAT)
         .setUsage(USAGE));
     this.commandRegistry = commandRegistry;
     this.commandUtils = commandUtils;
     this.configuration = configuration;
-    this.missingMessageFormatDefault = CommandMessageFormat.of(MISSING_MESSAGE_FORMAT_DEFAULT);
-    this.missingMessageFormatKey = ConfigurationKey.of(MISSING_MESSAGE_FORMAT_KEY, this.getClass());
+    this.missingMessageFormatDefault = CommandMessageFormat.of(DEFAULT_MISSING_MESSAGE_FORMAT);
+    this.missingMessageFormatKey = ConfigurationKey.of(KEY_MISSING_MESSAGE_FORMAT, this.getClass());
   }
 
   @Override

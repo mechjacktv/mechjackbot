@@ -1,155 +1,124 @@
 package com.mechjacktv.mechjackbot.command;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
+import com.mechjacktv.configuration.ConfigurationKey;
+import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.mechjackbot.CommandDescription;
+import com.mechjacktv.mechjackbot.CommandTrigger;
+import com.mechjacktv.mechjackbot.Message;
+import com.mechjacktv.mechjackbot.TestCommand;
+import com.mechjacktv.mechjackbot.TestCommandConfigurationBuilder;
+import com.mechjacktv.mechjackbot.TestMessageEvent;
 
 import org.junit.Test;
 
-import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.configuration.ConfigurationKey;
-import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.util.DefaultExecutionUtils;
-import com.mechjacktv.util.ExecutionUtils;
+import static com.mechjacktv.mechjackbot.TestCommand.DEFAULT_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.TestCommand.DEFAULT_TRIGGER;
+import static com.mechjacktv.mechjackbot.TestCommand.KEY_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.TestCommand.KEY_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.TestCommand.KEY_TRIGGER;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class BaseCommandUnitTests extends BaseCommandContractTests {
 
-  private final ArbitraryCommandTestUtils commandTestUtils = new ArbitraryCommandTestUtils(this.arbitraryDataGenerator);
+  @Override
+  protected final TestCommand givenASubjectToTest() {
+    super.installModules();
+    return this.givenASubjectToTest(this.getMessageFormatDefault());
+  }
 
-  private final ExecutionUtils executionUtils = new DefaultExecutionUtils();
+  protected final TestCommand givenASubjectToTest(final CommandMessageFormat defaultMessageFormat) {
+    final TestCommandConfigurationBuilder builder = new TestCommandConfigurationBuilder(
+        this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class));
+    builder.setDefaultMessageFormat(defaultMessageFormat.value);
+
+    return new TestCommand(builder);
+  }
 
   @Override
   protected CommandDescription getDescriptionDefault() {
-    return CommandDescription.of(TestBaseCommand.DESCRIPTION_DEFAULT);
+    return CommandDescription.of(DEFAULT_DESCRIPTION);
   }
 
   @Override
   protected ConfigurationKey getDescriptionKey() {
-    return ConfigurationKey.of(BaseCommand.DESCRIPTION_KEY, TestBaseCommand.class);
+    return ConfigurationKey.of(KEY_DESCRIPTION, TestCommand.class);
   }
 
   @Override
   protected CommandTrigger getTriggerDefault() {
-    return CommandTrigger.of(TestBaseCommand.TRIGGER_DEFAULT);
+    return CommandTrigger.of(DEFAULT_TRIGGER);
   }
 
   @Override
   protected ConfigurationKey getTriggerKey() {
-    return ConfigurationKey.of(BaseCommand.TRIGGER_KEY, TestBaseCommand.class);
+    return ConfigurationKey.of(KEY_TRIGGER, TestCommand.class);
   }
 
-  @Override
-  protected TestBaseCommand givenASubjectToTest(final Configuration configuration) {
-    return this.givenASubjectToTest(configuration, new Object[] {});
+  private CommandMessageFormat getMessageFormatDefault() {
+    return CommandMessageFormat.of("%s %s %s %s");
   }
 
-  private TestBaseCommand givenASubjectToTest(final Configuration configuration, final Object[] responseArgs) {
-    final DefaultCommandConfigurationBuilder builder = new DefaultCommandConfigurationBuilder(
-        this.commandTestUtils.givenACommandUtils(configuration), configuration, this.executionUtils);
-
-    return new TestBaseCommand(builder, responseArgs);
+  private ConfigurationKey getMessageFormatKey() {
+    return ConfigurationKey.of(KEY_MESSAGE_FORMAT, TestCommand.class);
   }
 
   @Test
-  public final void handleMessageEvent_invalidMessageEvent_sendUsage() {
-    final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
-    final Command subjectUnderTest = this.givenASubjectToTest(this.givenAConfiguration(), null);
+  public final void handleMessageEvent_sendUsage_resultIsUsageMessage() {
+    this.installModules();
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
+    final TestCommand subjectUnderTest = this.givenASubjectToTest();
+    subjectUnderTest.setMessageEventHandler(subjectUnderTest::sendUsage);
 
     subjectUnderTest.handleMessageEvent(messageEvent);
     final Message result = messageEvent.getResponseMessage();
 
-    assertThat(result).isEqualTo(Message.of(String.format(CommandUtils.COMMAND_USAGE_MESSAGE_FORMAT_DEFAULT,
-        messageEvent.getChatUser().getTwitchLogin(), subjectUnderTest.getTrigger(), TestBaseCommand.USAGE)));
+    this.assertUsageMessageForCommand(result, subjectUnderTest, messageEvent);
   }
 
   @Test
-  public final void handleMessageEvent_nullMessageEvent_throwsNullPointerException() {
-    final Command subjectUnderTest = this.givenASubjectToTest(this.givenAConfiguration());
-
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.handleMessageEvent(null));
-
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(this.executionUtils.nullMessageForName(
-        "messageEvent"));
-  }
-
-  @Test
-  public final void handleMessageEvent_nullMessageFormat_throwsNullPointerException() {
-    final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
-    final TestBaseCommand subjectUnderTest = this.givenASubjectToTest(this.givenAConfiguration());
-    subjectUnderTest.sendNullMessageFormat();
+  public final void handleMessageEvent_sendResponseWithNullMessageFormat_throwsNullPointerException() {
+    this.installModules();
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
+    final TestCommand subjectUnderTest = this.givenASubjectToTest();
+    subjectUnderTest.setMessageEventHandler(event -> subjectUnderTest.sendResponse(event, (CommandMessageFormat) null));
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.handleMessageEvent(messageEvent));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(this.executionUtils.nullMessageForName(
-        "messageFormat"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "messageFormat");
   }
 
   @Test
-  public final void handleMessageEvent_defaultMessageFormat_returnsExpectedMessage() {
-    final Object[] args = new Object[] { this.arbitraryDataGenerator.getString(),
-        this.arbitraryDataGenerator.getString(), this.arbitraryDataGenerator.getString() };
-    final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
-    final TestBaseCommand subjectUnderTest = this.givenASubjectToTest(this.givenAConfiguration(), args);
+  public final void handleMessageEvent_noMessageFormatConfigured_resultIsDefaultMessage() {
+    this.installModules();
+    final Object[] responseArgs = new Object[] { this.testFrameworkRule.getArbitraryString(),
+        this.testFrameworkRule.getArbitraryString(), this.testFrameworkRule.getArbitraryString() };
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
+    final TestCommand subjectUnderTest = this.givenASubjectToTest();
+    subjectUnderTest.setMessageEventHandler(event -> subjectUnderTest.sendResponse(event, responseArgs));
 
     subjectUnderTest.handleMessageEvent(messageEvent);
     final Message result = messageEvent.getResponseMessage();
 
-    assertThat(result).isEqualTo(Message.of(String.format(TestBaseCommand.MESSAGE_FORMAT_DEFAULT,
-        messageEvent.getChatUser().getTwitchLogin(), args[0], args[1], args[2])));
+    assertThat(result).isEqualTo(Message.of(String.format(subjectUnderTest.getDefaultMessageFormat().value,
+        messageEvent.getChatUser().getTwitchLogin(), responseArgs[0], responseArgs[1], responseArgs[2])));
   }
 
   @Test
-  public final void handleMessageEvent_customMessageFormat_returnsExpectedMessage() {
+  public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
+    this.installModules();
     final String customMessageFormat = "%s";
-    final MapConfiguration configuration = this.givenAConfiguration();
-    configuration.set(ConfigurationKey.of(BaseCommand.MESSAGE_FORMAT_KEY, TestBaseCommand.class).value,
-        customMessageFormat);
-    final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
-    final TestBaseCommand subjectUnderTest = this.givenASubjectToTest(configuration);
+    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    configuration.set(this.getMessageFormatKey(), customMessageFormat);
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
+    final TestCommand subjectUnderTest = this.givenASubjectToTest();
+    subjectUnderTest.setMessageEventHandler(event -> subjectUnderTest.sendResponse(event));
 
     subjectUnderTest.handleMessageEvent(messageEvent);
     final Message result = messageEvent.getResponseMessage();
 
     assertThat(result).isEqualTo(Message.of(String.format(customMessageFormat,
         messageEvent.getChatUser().getTwitchLogin())));
-  }
-
-  private static final class TestBaseCommand extends BaseCommand {
-
-    private static final String DESCRIPTION_DEFAULT = "DESCRIPTION_DEFAULT";
-    private static final String MESSAGE_FORMAT_DEFAULT = "%s %s %s %s";
-    private static final String TRIGGER_DEFAULT = "TRIGGER_DEFAULT";
-    private static final String USAGE = "<1> <2> <3>";
-
-    private final Object[] responseArgs;
-    private boolean sendNullMessageFormat;
-
-    protected TestBaseCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
-        final Object[] responseArgs) {
-      super(commandConfigurationBuilder.setTrigger(TRIGGER_DEFAULT)
-          .setDescription(DESCRIPTION_DEFAULT)
-          .setMessageFormat(MESSAGE_FORMAT_DEFAULT)
-          .setUsage(USAGE));
-      this.responseArgs = responseArgs;
-    }
-
-    void sendNullMessageFormat() {
-      this.sendNullMessageFormat = true;
-    }
-
-    @Override
-    public void handleMessageEvent(final MessageEvent messageEvent) {
-      if (this.sendNullMessageFormat) {
-        this.sendResponse(messageEvent, null, this.responseArgs);
-      } else if (this.responseArgs == null) {
-        this.sendUsage(messageEvent);
-      } else if (this.responseArgs.length == 3) {
-        this.sendResponse(messageEvent, this.responseArgs);
-      } else {
-        this.sendResponse(messageEvent);
-      }
-    }
-
   }
 
 }

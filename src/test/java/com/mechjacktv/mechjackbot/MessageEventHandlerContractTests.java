@@ -10,7 +10,6 @@ import com.google.common.collect.Sets;
 
 import org.junit.Test;
 
-import com.mechjacktv.mechjackbot.command.ArbitraryMessageEvent;
 import com.mechjacktv.testframework.ArbitraryDataGenerator;
 
 public abstract class MessageEventHandlerContractTests {
@@ -38,7 +37,7 @@ public abstract class MessageEventHandlerContractTests {
   }
 
   protected final MessageEvent givenAMessageEvent() {
-    return new ArbitraryMessageEvent(this.arbitraryDataGenerator);
+    return new TestMessageEvent(this.arbitraryDataGenerator);
   }
 
   @Test

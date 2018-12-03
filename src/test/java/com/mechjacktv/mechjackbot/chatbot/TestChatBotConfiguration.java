@@ -1,17 +1,20 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
+import javax.inject.Inject;
+
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.twitchclient.TwitchLogin;
 
-public class ArbitraryChatBotConfiguration implements ChatBotConfiguration {
+public class TestChatBotConfiguration implements ChatBotConfiguration {
 
   private final DataLocation dataLocation;
   private final TwitchChannel twitchChannel;
   private final TwitchPassword twitchPassword;
   private final TwitchLogin twitchLogin;
 
-  public ArbitraryChatBotConfiguration(final ArbitraryDataGenerator arbitraryDataGenerator) {
+  @Inject
+  public TestChatBotConfiguration(final ArbitraryDataGenerator arbitraryDataGenerator) {
     this.dataLocation = DataLocation.of(arbitraryDataGenerator.getString());
     this.twitchChannel = TwitchChannel.of(arbitraryDataGenerator.getString());
     this.twitchPassword = TwitchPassword.of(arbitraryDataGenerator.getString());

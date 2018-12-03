@@ -2,6 +2,7 @@ package com.mechjacktv.testframework;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -25,6 +26,14 @@ public final class TestFrameworkRule extends ExternalResource {
     this.injector = null;
   }
 
+  public final void currentTimeDelta(final long delta, final TimeUnit unit) {
+    this.currentTimeDelta(delta, unit, 0);
+  }
+
+  public final void currentTimeDelta(final long delta, final TimeUnit unit, final long shift) {
+    this.getInstance(TestClock.class).currentTimeDelta(unit.toMillis(delta) + shift);
+  }
+
   public final void installModule(final Module module) {
     this.modules.add(module);
   }
@@ -34,6 +43,14 @@ public final class TestFrameworkRule extends ExternalResource {
       this.injector = Guice.createInjector(this.modules);
     }
     return this.injector.getInstance(type);
+  }
+
+  public final void assertNullPointerException(final Throwable thrown, final String name) {
+    this.getInstance(AssertionUtils.class).assertNullPointerException(thrown, name);
+  }
+
+  public final Long getArbitraryLong() {
+    return this.getInstance(ArbitraryDataGenerator.class).getLong();
   }
 
   public final String getArbitraryString() {

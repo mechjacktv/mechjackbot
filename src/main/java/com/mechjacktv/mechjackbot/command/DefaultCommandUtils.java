@@ -12,8 +12,6 @@ import javax.inject.Inject;
 
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.core.CoolDownPeriodMs;
-import com.mechjacktv.mechjackbot.command.core.LastTrigger;
 import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.TimeUtils;
@@ -44,7 +42,7 @@ public final class DefaultCommandUtils implements CommandUtils {
     Objects.requireNonNull(messageEvent, this.executionUtils.nullMessageForName("messageEvent"));
     return this.executionUtils.softenException(() -> {
       final Method method = command.getClass().getMethod("handleMessageEvent", MessageEvent.class);
-      final RestrictToAccessLevel roles = method.getAnnotation(RestrictToAccessLevel.class);
+      final RequiresAccessLevel roles = method.getAnnotation(RequiresAccessLevel.class);
 
       if (Objects.isNull(roles)) {
         return true;
@@ -80,7 +78,7 @@ public final class DefaultCommandUtils implements CommandUtils {
 
   private boolean isCooledDown(final CommandTrigger commandTrigger, final TwitchLogin twitchLog, final long now) {
     return this.isCooledDown(() -> this.commandLastTrigger.get(commandTrigger), this::getCommandCoolDown, now)
-        && this.isCooledDown(() -> this.viewerLastTrigger.get(twitchLog), this::getViewerCoolDown, now);
+        && this.isCooledDown(() -> this.viewerLastTrigger.get(twitchLog), this::getUserCoolDown, now);
   }
 
   private boolean isCooledDown(final Supplier<LastTrigger> lastTriggerSupplier,
@@ -92,14 +90,12 @@ public final class DefaultCommandUtils implements CommandUtils {
 
   private CoolDownPeriodMs getCommandCoolDown() {
     return CoolDownPeriodMs.of(this.timeUtils.secondsAsMs(Integer.parseInt(
-        this.configuration.get(COMMAND_COMMAND_COOL_DOWN_KEY,
-            COMMAND_COMMAND_COOL_DOWN_DEFAULT))));
+        this.configuration.get(KEY_COMMAND_COOL_DOWN, DEFAULT_COMMAND_COOL_DOWN))));
   }
 
-  private CoolDownPeriodMs getViewerCoolDown() {
+  private CoolDownPeriodMs getUserCoolDown() {
     return CoolDownPeriodMs.of(this.timeUtils.secondsAsMs(Integer.parseInt(
-        this.configuration.get(COMMAND_VIEWER_COOL_DOWN_KEY,
-            COMMAND_VIEWER_COOL_DOWN_DEFAULT))));
+        this.configuration.get(KEY_USER_COOL_DOWN, DEFAULT_USER_COOL_DOWN))));
   }
 
   @Override
@@ -132,8 +128,8 @@ public final class DefaultCommandUtils implements CommandUtils {
     Objects.requireNonNull(command, this.executionUtils.nullMessageForName("command"));
     Objects.requireNonNull(messageEvent, this.executionUtils.nullMessageForName("messageEvent"));
 
-    final String messageFormat = this.configuration.get(COMMAND_USAGE_MESSAGE_FORMAT_KEY,
-        COMMAND_USAGE_MESSAGE_FORMAT_DEFAULT);
+    final String messageFormat = this.configuration.get(KEY_USAGE_MESSAGE_FORMAT,
+        DEFAULT_USAGE_MESSAGE_FORMAT);
 
     return Message.of(String.format(messageFormat, messageEvent.getChatUser().getTwitchLogin(),
         command.getTrigger(), command.getUsage()));

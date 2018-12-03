@@ -9,23 +9,23 @@ import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 public final class QuitCommand extends BaseCommand {
 
-  public static final String DESCRIPTION_DEFAULT = "Shuts the chat bot down.";
-  public static final String MESSAGE_FORMAT_DEFAULT = "Powering down";
-  public static final String TRIGGER_DEFAULT = "!quit";
+  public static final String DEFAULT_DESCRIPTION = "Shuts the chat bot down.";
+  public static final String DEFAULT_MESSAGE_FORMAT = "Powering down";
+  public static final String DEFAULT_TRIGGER = "!quit";
 
   private final ScheduleService scheduleService;
 
   @Inject
   protected QuitCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
       final ScheduleService scheduleService) {
-    super(commandConfigurationBuilder.setTrigger(TRIGGER_DEFAULT)
-        .setDescription(DESCRIPTION_DEFAULT)
-        .setMessageFormat(MESSAGE_FORMAT_DEFAULT));
+    super(commandConfigurationBuilder.setTrigger(DEFAULT_TRIGGER)
+        .setDescription(DEFAULT_DESCRIPTION)
+        .setMessageFormat(DEFAULT_MESSAGE_FORMAT));
     this.scheduleService = scheduleService;
   }
 
   @Override
-  @RestrictToAccessLevel(AccessLevel.OWNER)
+  @RequiresAccessLevel(AccessLevel.OWNER)
   public void handleMessageEvent(final MessageEvent messageEvent) {
     this.sendResponse(messageEvent);
     this.scheduleService.stop();

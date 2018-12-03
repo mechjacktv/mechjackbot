@@ -32,7 +32,7 @@ public class PircBotXMessageEventUnitTests {
   private PircBotXMessageEvent givenASubjectToTest(final Configuration configuration,
       final GenericMessageEvent genericMessageEvent) {
     final PircBotXChatBotFactory chatBotFactory = new PircBotXChatBotFactory(configuration, this.executionUtils);
-    final ChatBotConfiguration chatBotConfiguration = new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator);
+    final ChatBotConfiguration chatBotConfiguration = new TestChatBotConfiguration(this.arbitraryDataGenerator);
     final CommandUtils commandUtils = new DefaultCommandUtils(configuration, this.executionUtils,
         new DefaultTimeUtils());
 

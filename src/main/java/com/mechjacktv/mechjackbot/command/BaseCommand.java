@@ -11,9 +11,9 @@ import com.mechjacktv.util.ExecutionUtils;
 
 public abstract class BaseCommand implements Command {
 
-  public static final String DESCRIPTION_KEY = "description";
-  public static final String MESSAGE_FORMAT_KEY = "message_format";
-  public static final String TRIGGER_KEY = "trigger";
+  public static final String KEY_DESCRIPTION = "description";
+  public static final String KEY_MESSAGE_FORMAT = "message_format";
+  public static final String KEY_TRIGGER = "trigger";
 
   private final Configuration configuration;
   private final CommandUtils commandUtils;
@@ -36,11 +36,11 @@ public abstract class BaseCommand implements Command {
     this.configuration = commandConfiguration.getConfiguration();
     this.executionUtils = commandConfiguration.getExecutionUtils();
     this.descriptionDefault = commandConfiguration.getDescription();
-    this.descriptionKey = ConfigurationKey.of(DESCRIPTION_KEY, this.getClass());
+    this.descriptionKey = ConfigurationKey.of(KEY_DESCRIPTION, this.getClass());
     this.messageFormatDefault = commandConfiguration.getMessageFormat();
-    this.messageFormatKey = ConfigurationKey.of(MESSAGE_FORMAT_KEY, this.getClass());
+    this.messageFormatKey = ConfigurationKey.of(KEY_MESSAGE_FORMAT, this.getClass());
     this.triggerDefault = commandConfiguration.getTrigger();
-    this.triggerKey = ConfigurationKey.of(TRIGGER_KEY, this.getClass());
+    this.triggerKey = ConfigurationKey.of(KEY_TRIGGER, this.getClass());
     this.triggerable = commandConfiguration.isTriggerable();
     this.usage = commandConfiguration.getUsage();
   }

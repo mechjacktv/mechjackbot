@@ -1,139 +1,118 @@
 package com.mechjacktv.mechjackbot.command.core;
 
-import static com.mechjacktv.mechjackbot.command.BaseCommand.MESSAGE_FORMAT_KEY;
-import static com.mechjacktv.mechjackbot.command.core.QuitCommand.MESSAGE_FORMAT_DEFAULT;
-import static com.mechjacktv.mechjackbot.command.core.QuitCommand.TRIGGER_DEFAULT;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import com.mechjacktv.configuration.ConfigurationKey;
+import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.mechjackbot.CommandDescription;
+import com.mechjacktv.mechjackbot.CommandTrigger;
+import com.mechjacktv.mechjackbot.Message;
+import com.mechjacktv.mechjackbot.TestChatBot;
+import com.mechjacktv.mechjackbot.TestMessageEvent;
+import com.mechjacktv.mechjackbot.command.BaseCommandContractTests;
+import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
+import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
+import com.mechjacktv.util.scheduleservice.ScheduleService;
+import com.mechjacktv.util.scheduleservice.ScheduleServiceTestModule;
+import com.mechjacktv.util.scheduleservice.TestScheduleService;
 
 import org.junit.Test;
 
-import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.configuration.ConfigurationKey;
-import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
-import com.mechjacktv.mechjackbot.command.BaseCommand;
-import com.mechjacktv.mechjackbot.command.BaseCommandContractTests;
-import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
-import com.mechjacktv.testframework.ArbitraryDataGenerator;
-import com.mechjacktv.twitchclient.TwitchLogin;
-import com.mechjacktv.util.DefaultExecutionUtils;
-import com.mechjacktv.util.ExecutionUtils;
-import com.mechjacktv.util.scheduleservice.ScheduleService;
+import static com.mechjacktv.mechjackbot.command.core.QuitCommand.DEFAULT_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.core.QuitCommand.DEFAULT_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.core.QuitCommand.DEFAULT_TRIGGER;
+import static com.mechjacktv.mechjackbot.command.core.QuitCommand.KEY_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.core.QuitCommand.KEY_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.core.QuitCommand.KEY_TRIGGER;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class QuitCommandUnitTests extends BaseCommandContractTests {
 
-  private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
-
-  private final ArbitraryCommandTestUtils commandTestUtils = new ArbitraryCommandTestUtils(this.arbitraryDataGenerator);
-
-  private final ExecutionUtils executionUtils = new DefaultExecutionUtils();
-
-  @Override
-  protected Command givenASubjectToTest(final Configuration configuration) {
-    return this.givenASubjectToTest(configuration, mock(ScheduleService.class));
-  }
-
-  private Command givenASubjectToTest(final String message) {
-    return this.givenASubjectToTest(message, mock(ScheduleService.class));
-  }
-
-  private Command givenASubjectToTest(final String message, final ScheduleService scheduleService) {
-    return this.givenASubjectToTest(this.givenAnAppConfiguration(message), scheduleService);
-  }
-
-  private Command givenASubjectToTest(final Configuration configuration, final ScheduleService scheduleService) {
-    final DefaultCommandConfigurationBuilder builder = new DefaultCommandConfigurationBuilder(
-        this.commandTestUtils.givenACommandUtils(configuration), configuration, this.executionUtils);
-
-    return new QuitCommand(builder, scheduleService);
+  protected final void installModules() {
+    super.installModules();
+    this.testFrameworkRule.installModule(new ScheduleServiceTestModule());
   }
 
   @Override
-  protected ConfigurationKey getDescriptionKey() {
-    return ConfigurationKey.of(BaseCommand.DESCRIPTION_KEY, QuitCommand.class);
+  protected final QuitCommand givenASubjectToTest() {
+    return new QuitCommand(this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class),
+        this.testFrameworkRule.getInstance(ScheduleService.class));
   }
 
   @Override
-  protected CommandDescription getDescriptionDefault() {
-    return CommandDescription.of(QuitCommand.DESCRIPTION_DEFAULT);
+  protected final CommandDescription getDescriptionDefault() {
+    return CommandDescription.of(DEFAULT_DESCRIPTION);
   }
 
   @Override
-  protected ConfigurationKey getTriggerKey() {
-    return ConfigurationKey.of(BaseCommand.TRIGGER_KEY, QuitCommand.class);
+  protected final ConfigurationKey getDescriptionKey() {
+    return ConfigurationKey.of(KEY_DESCRIPTION, QuitCommand.class);
   }
 
   @Override
-  protected CommandTrigger getTriggerDefault() {
-    return CommandTrigger.of(TRIGGER_DEFAULT);
+  protected final CommandTrigger getTriggerDefault() {
+    return CommandTrigger.of(DEFAULT_TRIGGER);
   }
 
-  private MapConfiguration givenAnAppConfiguration(final String message) {
-    final MapConfiguration appConfiguration = this.givenAConfiguration();
-
-    appConfiguration.set(ConfigurationKey.of(MESSAGE_FORMAT_KEY, QuitCommand.class).value, message);
-    return appConfiguration;
+  @Override
+  protected final ConfigurationKey getTriggerKey() {
+    return ConfigurationKey.of(KEY_TRIGGER, QuitCommand.class);
   }
 
-  private MessageEvent givenAFakeMessageEvent() {
-    return this.givenAFakeMessageEvent(mock(ChatBot.class));
+  private CommandMessageFormat getMessageFormatDefault() {
+    return CommandMessageFormat.of(DEFAULT_MESSAGE_FORMAT);
   }
 
-  private MessageEvent givenAFakeMessageEvent(final ChatBot chatBot) {
-    final MessageEvent messageEvent = mock(MessageEvent.class);
-    final ChatUser chatUser = mock(ChatUser.class);
-    final TwitchLogin twitchLogin = TwitchLogin.of(this.arbitraryDataGenerator.getString());
-
-    when(messageEvent.getChatBot()).thenReturn(chatBot);
-    when(messageEvent.getChatUser()).thenReturn(chatUser);
-    when(chatUser.getTwitchLogin()).thenReturn(twitchLogin);
-    return messageEvent;
+  private ConfigurationKey getMessageFormatKey() {
+    return ConfigurationKey.of(KEY_MESSAGE_FORMAT, QuitCommand.class);
   }
 
   @Test
-  public final void handleMessageEvent_defaultFormat_sendsDefaultMessage() {
-    final String message = MESSAGE_FORMAT_DEFAULT;
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    final Command subjectUnderTest = this.givenASubjectToTest(message);
+  public final void handleMessageEvent_noMessageFormatConfigured_resultIsDefaultMessage() {
+    this.installModules();
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
+    final QuitCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);
+    final Message result = messageEvent.getResponseMessage();
 
-    verify(messageEvent).sendResponse(eq(Message.of(message)));
+    assertThat(result).isEqualTo(Message.of(this.getMessageFormatDefault().value));
   }
 
   @Test
-  public final void handleMessageEvent_customFormat_sendsCustomMessage() {
-    final String message = this.arbitraryDataGenerator.getString();
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    final Command subjectUnderTest = this.givenASubjectToTest(message);
+  public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
+    this.installModules();
+    final String customMessageFormat = this.testFrameworkRule.getArbitraryString();
+    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    configuration.set(this.getMessageFormatKey(), customMessageFormat);
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
+    final QuitCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);
+    final Message result = messageEvent.getResponseMessage();
 
-    verify(messageEvent).sendResponse(eq(Message.of(message)));
+    assertThat(result).isEqualTo(Message.of(customMessageFormat));
   }
 
   @Test
-  public final void handleMessageEvent_whenCalled_stopsChatBot() {
-    final ChatBot chatBot = mock(ChatBot.class);
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent(chatBot);
-    final Command subjectUnderTest = this.givenASubjectToTest(MESSAGE_FORMAT_DEFAULT);
+  public final void handleMessageEvent_whenCalled_resultIsStoppedChatBot() {
+    this.installModules();
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
+    final QuitCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);
 
-    verify(chatBot).stop();
+    assertThat(((TestChatBot) messageEvent.getChatBot()).wasStopped()).isTrue();
   }
 
   @Test
   public final void handleMessageEvent_whenCalled_stopsScheduleService() {
-    final ScheduleService scheduleService = mock(ScheduleService.class);
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    final Command subjectUnderTest = this.givenASubjectToTest(MESSAGE_FORMAT_DEFAULT, scheduleService);
+    this.installModules();
+    final TestScheduleService scheduleService = this.testFrameworkRule.getInstance(TestScheduleService.class);
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
+    final QuitCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);
 
-    verify(scheduleService).stop();
+    assertThat(scheduleService.wasStopped()).isTrue();
   }
 
 }

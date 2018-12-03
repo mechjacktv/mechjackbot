@@ -11,8 +11,16 @@ import com.mechjacktv.mechjackbot.Command;
 import com.mechjacktv.mechjackbot.CommandContractTests;
 import com.mechjacktv.mechjackbot.CommandDescription;
 import com.mechjacktv.mechjackbot.CommandTrigger;
+import com.mechjacktv.mechjackbot.Message;
+import com.mechjacktv.mechjackbot.MessageEvent;
 
 public abstract class BaseCommandContractTests extends CommandContractTests {
+
+  @Override
+  protected void installModules() {
+    super.installModules();
+    this.testFrameworkRule.installModule(new CommandTestModule());
+  }
 
   protected abstract CommandDescription getDescriptionDefault();
 
@@ -22,8 +30,17 @@ public abstract class BaseCommandContractTests extends CommandContractTests {
 
   protected abstract ConfigurationKey getTriggerKey();
 
+  protected final void assertUsageMessageForCommand(final Message result, final Command subjectUnderTest,
+      final MessageEvent messageEvent) {
+    final CommandAssertionsUtils commandAssertionsUtils = this.testFrameworkRule
+        .getInstance(CommandAssertionsUtils.class);
+
+    commandAssertionsUtils.assertUsageMessageForCommand(result, subjectUnderTest, messageEvent);
+  }
+
   @Test
-  public final void getDescription_defaultDescription_returnsDefaultDescription() {
+  public final void getDescription_noDescriptionConfigured_resultIsEqualToDefaultDescription() {
+    this.installModules();
     final Command subjectUnderTest = this.givenASubjectToTest();
 
     final CommandDescription result = subjectUnderTest.getDescription();
@@ -32,7 +49,8 @@ public abstract class BaseCommandContractTests extends CommandContractTests {
   }
 
   @Test
-  public final void getTrigger_defaultTrigger_returnsDefaultTrigger() {
+  public final void getTrigger_noTriggerConfigured_resultIsEqualToDefaultTrigger() {
+    this.installModules();
     final Command subjectUnderTest = this.givenASubjectToTest();
     assumeTrue(subjectUnderTest.isTriggerable());
 
@@ -42,28 +60,30 @@ public abstract class BaseCommandContractTests extends CommandContractTests {
   }
 
   @Test
-  public final void getDescription_customDescription_returnsCustomDescription() {
-    final CommandDescription commandDescription = CommandDescription.of(this.arbitraryDataGenerator.getString());
-    final MapConfiguration configuration = this.givenAConfiguration();
-    configuration.set(this.getDescriptionKey().value, commandDescription.value);
-    final Command subjectUnderTest = this.givenASubjectToTest(configuration);
+  public final void getDescription_customDescriptionConfigured_resultIsEqualToCustomDescription() {
+    this.installModules();
+    final CommandDescription commandDescription = CommandDescription.of(this.testFrameworkRule.getArbitraryString());
+    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    configuration.set(this.getDescriptionKey(), commandDescription.value);
+    final Command subjectUnderTest = this.givenASubjectToTest();
 
     final CommandDescription result = subjectUnderTest.getDescription();
 
-    assertThat(result.value).isEqualTo(commandDescription.value);
+    assertThat(result).isEqualTo(commandDescription);
   }
 
   @Test
-  public final void getTrigger_customTrigger_returnsCustomTrigger() {
-    final CommandTrigger commandTrigger = CommandTrigger.of(this.arbitraryDataGenerator.getString());
-    final MapConfiguration configuration = this.givenAConfiguration();
-    configuration.set(this.getTriggerKey().value, commandTrigger.value);
-    final Command subjectUnderTest = this.givenASubjectToTest(configuration);
+  public final void getTrigger_customTriggerConfigured_resultIsEqualToCustomTrigger() {
+    this.installModules();
+    final CommandTrigger commandTrigger = CommandTrigger.of(this.testFrameworkRule.getArbitraryString());
+    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    configuration.set(this.getTriggerKey(), commandTrigger.value);
+    final Command subjectUnderTest = this.givenASubjectToTest();
     assumeTrue(subjectUnderTest.isTriggerable());
 
     final CommandTrigger result = subjectUnderTest.getTrigger();
 
-    assertThat(result.value).isEqualTo(commandTrigger.value);
+    assertThat(result).isEqualTo(commandTrigger);
   }
 
 }

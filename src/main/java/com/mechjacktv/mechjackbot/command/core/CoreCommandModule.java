@@ -17,7 +17,6 @@ public final class CoreCommandModule extends AbstractModule {
     Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(HelpCommand.class).in(Scopes.SINGLETON);
     Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(PingCommand.class).in(Scopes.SINGLETON);
     Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(QuitCommand.class).in(Scopes.SINGLETON);
-    Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(TestCommand.class).in(Scopes.SINGLETON);
   }
 
 }

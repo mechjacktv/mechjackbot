@@ -42,7 +42,7 @@ public class PircBotXListenerUnitTests {
   private PircBotXListener givenASubjectToTest(final Configuration configuration,
       final MessageEventHandler messageEventHandler) {
     final PircBotXChatBotFactory chatBotFactory = new PircBotXChatBotFactory(configuration, this.executionUtils);
-    final ChatBotConfiguration chatBotConfiguration = new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator);
+    final ChatBotConfiguration chatBotConfiguration = new TestChatBotConfiguration(this.arbitraryDataGenerator);
     final CommandUtils commandUtils = new DefaultCommandUtils(configuration, this.executionUtils,
         new DefaultTimeUtils());
     final PircBotXMessageEventFactory messageEventFactory = new PircBotXMessageEventFactory(configuration,
