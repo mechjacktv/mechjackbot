@@ -6,7 +6,7 @@ public final class ArbitraryDataGenerator {
 
   private final AtomicLong atomicLong;
 
-  public ArbitraryDataGenerator() {
+  ArbitraryDataGenerator() {
     this.atomicLong = new AtomicLong();
   }
 

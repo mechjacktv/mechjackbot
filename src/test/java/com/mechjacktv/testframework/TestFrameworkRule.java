@@ -6,7 +6,9 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.Module;
+import com.google.inject.Provider;
 
 import org.junit.rules.ExternalResource;
 import org.slf4j.Logger;
@@ -61,10 +63,26 @@ public final class TestFrameworkRule extends ExternalResource {
   }
 
   public final <T> T getInstance(final Class<T> type) {
+    return this.getInjector().getInstance(type);
+  }
+
+  public final <T> T getInstance(final Key<T> type) {
+    return this.getInjector().getInstance(type);
+  }
+
+  public final <T> Provider<T> getProvider(final Class<T> type) {
+    return this.getInjector().getProvider(type);
+  }
+
+  public final <T> Provider<T> getProvider(final Key<T> type) {
+    return this.getInjector().getProvider(type);
+  }
+
+  private Injector getInjector() {
     if (this.injector == null) {
       this.injector = Guice.createInjector(this.modules);
     }
-    return this.injector.getInstance(type);
+    return this.injector;
   }
 
   public final void installModule(final Module module) {

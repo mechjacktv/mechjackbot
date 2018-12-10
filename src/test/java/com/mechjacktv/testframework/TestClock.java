@@ -4,6 +4,11 @@ public final class TestClock {
 
   private long currentTime = 0;
 
+  TestClock() {
+    // making constructor package private
+    super();
+  }
+
   public final long currentTime() {
     return this.currentTime;
   }

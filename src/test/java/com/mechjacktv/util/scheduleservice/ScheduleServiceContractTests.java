@@ -14,16 +14,11 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import com.mechjacktv.testframework.TestFrameworkRule;
-import com.mechjacktv.util.UtilTestModule;
 
 public abstract class ScheduleServiceContractTests {
 
   @Rule
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
-
-  protected void installModules() {
-    this.testFrameworkRule.installModule(new UtilTestModule());
-  }
 
   private static final Boolean DELAY = true;
   private static final Boolean NO_DELAY = false;
@@ -36,7 +31,6 @@ public abstract class ScheduleServiceContractTests {
 
   @Test
   public final void schedule_nullRunnable_throwsNullPointerExceptionWithMessage() {
-    this.installModules();
     final ScheduleService subjectToTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectToTest.schedule(null,
@@ -47,7 +41,6 @@ public abstract class ScheduleServiceContractTests {
 
   @Test
   public final void schedule_nullPeriod_throwsNullPointerExceptionWithMessage() {
-    this.installModules();
     final ScheduleService subjectToTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
@@ -58,7 +51,6 @@ public abstract class ScheduleServiceContractTests {
 
   @Test
   public final void schedule_nullTimeUnit_throwsNullPointerExceptionWithMessage() {
-    this.installModules();
     final ScheduleService subjectToTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
@@ -69,7 +61,6 @@ public abstract class ScheduleServiceContractTests {
 
   @Test
   public final void schedule_noDelaySpecified_schedulesWithNoDelay() {
-    this.installModules();
     final ScheduledExecutorService scheduledExecutorService = mock(ScheduledExecutorService.class);
     final ScheduleService subjectToTest = this.givenASubjectToTest(scheduledExecutorService);
 
@@ -80,7 +71,6 @@ public abstract class ScheduleServiceContractTests {
 
   @Test
   public final void schedule_nullDelay_throwsNullPointerExceptionWithMessage() {
-    this.installModules();
     final ScheduleService subjectToTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectToTest
@@ -91,7 +81,6 @@ public abstract class ScheduleServiceContractTests {
 
   @Test
   public final void schedule_noDelay_schedulesWithNoDelay() {
-    this.installModules();
     final ScheduledExecutorService scheduledExecutorService = mock(ScheduledExecutorService.class);
     final ScheduleService subjectToTest = this.givenASubjectToTest(scheduledExecutorService);
 
@@ -103,7 +92,6 @@ public abstract class ScheduleServiceContractTests {
 
   @Test
   public final void schedule_withDelay_schedulesWithDelay() {
-    this.installModules();
     final int period = this.testFrameworkRule.getArbitraryInteger();
     final ScheduledExecutorService scheduledExecutorService = mock(ScheduledExecutorService.class);
     final ScheduleService subjectToTest = this.givenASubjectToTest(scheduledExecutorService);
@@ -116,7 +104,6 @@ public abstract class ScheduleServiceContractTests {
 
   @Test
   public final void stop_called_shutsDownExecutor() {
-    this.installModules();
     final ScheduledExecutorService scheduledExecutorService = mock(ScheduledExecutorService.class);
     final ScheduleService subjectToTest = this.givenASubjectToTest(scheduledExecutorService);
 

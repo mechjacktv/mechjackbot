@@ -1,34 +1,41 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import com.mechjacktv.configuration.ConfigurationTestModule;
+import com.mechjacktv.mechjackbot.ChatBotConfiguration;
+import com.mechjacktv.mechjackbot.CommandUtils;
+import com.mechjacktv.mechjackbot.command.CommandTestModule;
+import com.mechjacktv.testframework.TestFrameworkRule;
+import com.mechjacktv.twitchclient.TwitchLogin;
+import com.mechjacktv.util.UtilTestModule;
 
+import org.junit.Rule;
 import org.junit.Test;
 import org.pircbotx.User;
 
-import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.mechjackbot.ChatBotConfiguration;
-import com.mechjacktv.mechjackbot.command.DefaultCommandUtils;
-import com.mechjacktv.testframework.ArbitraryDataGenerator;
-import com.mechjacktv.twitchclient.TwitchLogin;
-import com.mechjacktv.util.DefaultExecutionUtils;
-import com.mechjacktv.util.DefaultTimeUtils;
-import com.mechjacktv.util.ExecutionUtils;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class PircBotXChatUserUnitTests {
 
-  private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
+  @Rule
+  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+
+  private void installModules() {
+    this.testFrameworkRule.installModule(new ChatBotTestModule());
+    this.testFrameworkRule.installModule(new CommandTestModule());
+    this.testFrameworkRule.installModule(new ConfigurationTestModule());
+    this.testFrameworkRule.installModule(new UtilTestModule());
+  }
 
   private PircBotXChatUser givenIHaveASubjectToTest(final User user) {
-    final ChatBotConfiguration chatBotConfiguration = new TestChatBotConfiguration(this.arbitraryDataGenerator);
-    final ExecutionUtils executionUtils = new DefaultExecutionUtils();
-
-    return new PircBotXChatUser(chatBotConfiguration, new DefaultCommandUtils(new MapConfiguration(executionUtils),
-        executionUtils, new DefaultTimeUtils()), user);
+    return new PircBotXChatUser(this.testFrameworkRule.getInstance(ChatBotConfiguration.class),
+        this.testFrameworkRule.getInstance(CommandUtils.class), user);
   }
 
   private User givenIHaveAFakeUser() {
-    return this.givenIHaveAFakeUser(this.arbitraryDataGenerator.getString());
+    return this.givenIHaveAFakeUser(this.testFrameworkRule.getArbitraryString());
   }
 
   private User givenIHaveAFakeUser(final String nick) {
@@ -40,6 +47,7 @@ public class PircBotXChatUserUnitTests {
 
   @Test
   public final void getTitchLogin_forUser_getNickFromUser() {
+    this.installModules();
     final User user = this.givenIHaveAFakeUser();
     final PircBotXChatUser subjectUnderTest = this.givenIHaveASubjectToTest(user);
 
@@ -50,7 +58,8 @@ public class PircBotXChatUserUnitTests {
 
   @Test
   public final void getTitchLogin_forUser_wrapsNickValueInTwitchLogin() {
-    final String nick = this.arbitraryDataGenerator.getString();
+    this.installModules();
+    final String nick = this.testFrameworkRule.getArbitraryString();
     final User user = this.givenIHaveAFakeUser(nick);
     final PircBotXChatUser subjectUnderTest = this.givenIHaveASubjectToTest(user);
 
