@@ -9,13 +9,13 @@ import com.google.protobuf.Message;
 import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.ProtobufUtils;
 
-public abstract class AbstractMessageStore<K extends Message, V extends Message> implements MessageStore<K, V> {
+public abstract class BaseMessageStore<K extends Message, V extends Message> implements MessageStore<K, V> {
 
   private final KeyValueStore keyValueStore;
   private final ExecutionUtils executionUtils;
   private final ProtobufUtils protobufUtils;
 
-  protected AbstractMessageStore(final KeyValueStore keyValueStore, final ExecutionUtils executionUtils,
+  protected BaseMessageStore(final KeyValueStore keyValueStore, final ExecutionUtils executionUtils,
       final ProtobufUtils protobufUtils) {
     this.keyValueStore = keyValueStore;
     this.executionUtils = executionUtils;

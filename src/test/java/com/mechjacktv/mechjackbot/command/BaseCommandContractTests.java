@@ -49,17 +49,6 @@ public abstract class BaseCommandContractTests extends CommandContractTests {
   }
 
   @Test
-  public final void getTrigger_noTriggerConfigured_resultIsEqualToDefaultTrigger() {
-    this.installModules();
-    final Command subjectUnderTest = this.givenASubjectToTest();
-    assumeTrue(subjectUnderTest.isTriggerable());
-
-    final CommandTrigger result = subjectUnderTest.getTrigger();
-
-    assertThat(result).isEqualTo(this.getTriggerDefault());
-  }
-
-  @Test
   public final void getDescription_customDescriptionConfigured_resultIsEqualToCustomDescription() {
     this.installModules();
     final CommandDescription commandDescription = CommandDescription.of(this.testFrameworkRule.getArbitraryString());
@@ -70,6 +59,17 @@ public abstract class BaseCommandContractTests extends CommandContractTests {
     final CommandDescription result = subjectUnderTest.getDescription();
 
     assertThat(result).isEqualTo(commandDescription);
+  }
+
+  @Test
+  public final void getTrigger_noTriggerConfigured_resultIsEqualToDefaultTrigger() {
+    this.installModules();
+    final Command subjectUnderTest = this.givenASubjectToTest();
+    assumeTrue(subjectUnderTest.isTriggerable());
+
+    final CommandTrigger result = subjectUnderTest.getTrigger();
+
+    assertThat(result).isEqualTo(this.getTriggerDefault());
   }
 
   @Test

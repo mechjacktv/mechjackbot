@@ -1,6 +1,10 @@
 package com.mechjacktv.mechjackbot.command.shoutout;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -9,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.keyvaluestore.AbstractMessageStore;
+import com.mechjacktv.keyvaluestore.BaseMessageStore;
 import com.mechjacktv.keyvaluestore.KeyValueStoreFactory;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.Caster;
@@ -24,11 +28,11 @@ import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.ProtobufUtils;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
-public final class DefaultShoutOutDataStore extends AbstractMessageStore<CasterKey, Caster>
+public final class DefaultShoutOutDataStore extends BaseMessageStore<CasterKey, Caster>
     implements ShoutOutDataStore {
 
-  static final String UPDATE_PERIOD_KEY = "command.shoutout.update_period.minutes";
-  static final String UPDATE_PERIOD_DEFAULT = "10";
+  public static final String KEY_UPDATE_PERIOD = "command.shoutout.update_period.minutes";
+  public static final String DEFAULT_UPDATE_PERIOD = "10";
 
   private static final Logger log = LoggerFactory.getLogger(DefaultShoutOutDataStore.class);
   private static final String KEY_VALUE_STORE_NAME = DefaultShoutOutDataStore.class.getCanonicalName();
@@ -43,7 +47,7 @@ public final class DefaultShoutOutDataStore extends AbstractMessageStore<CasterK
     super(keyValueStoreFactory.createOrOpenKeyValueStore(KEY_VALUE_STORE_NAME), executionUtils, protobufUtils);
     this.executionUtils = executionUtils;
     scheduleService.schedule(() -> this.updateCasters(chatBotConfiguration, twitchClient),
-        Integer.parseInt(configuration.get(UPDATE_PERIOD_KEY, UPDATE_PERIOD_DEFAULT)), TimeUnit.MINUTES);
+        Integer.parseInt(configuration.get(KEY_UPDATE_PERIOD, DEFAULT_UPDATE_PERIOD)), TimeUnit.MINUTES);
   }
 
   private void updateCasters(final ChatBotConfiguration chatBotConfiguration,

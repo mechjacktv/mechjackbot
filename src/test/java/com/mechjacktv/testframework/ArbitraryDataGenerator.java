@@ -2,9 +2,6 @@ package com.mechjacktv.testframework;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.mechjacktv.proto.util.UtilsMessage.TestKeyMessage;
-import com.mechjacktv.proto.util.UtilsMessage.TestValueMessage;
-
 public final class ArbitraryDataGenerator {
 
   private final AtomicLong atomicLong;
@@ -27,14 +24,6 @@ public final class ArbitraryDataGenerator {
 
   public final String getString() {
     return String.format("Arbitrary-%d", this.getLong());
-  }
-
-  public final TestKeyMessage getTestKeyMessage() {
-    return TestKeyMessage.newBuilder().setValue(this.getString()).build();
-  }
-
-  public final TestValueMessage getTestValueMessage() {
-    return TestValueMessage.newBuilder().setValue(this.getString()).build();
   }
 
 }

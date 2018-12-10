@@ -13,7 +13,11 @@ public final class TestScheduleService implements ScheduleService {
   private Consumer<Runnable> runnableHandler;
 
   TestScheduleService() {
+    this.delay = null;
+    this.period = null;
+    this.runnable = null;
     this.stopped = false;
+    this.unit = null;
     this.runnableHandler = runnable -> {
       /* no-op (2018-12-02 mechjack) */
     };

@@ -9,8 +9,14 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 
 import org.junit.rules.ExternalResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class TestFrameworkRule extends ExternalResource {
+
+  public static final int ARBITRARY_COLLECTION_SIZE = 10;
+
+  private final Logger logger = LoggerFactory.getLogger(TestFrameworkRule.class);
 
   private final Set<Module> modules = new HashSet<>();
   private Injector injector = null;
@@ -26,6 +32,10 @@ public final class TestFrameworkRule extends ExternalResource {
     this.injector = null;
   }
 
+  public final void assertNullPointerException(final Throwable thrown, final String name) {
+    this.getInstance(AssertionUtils.class).assertNullPointerException(thrown, name);
+  }
+
   public final void currentTimeDelta(final long delta, final TimeUnit unit) {
     this.currentTimeDelta(delta, unit, 0);
   }
@@ -34,8 +44,20 @@ public final class TestFrameworkRule extends ExternalResource {
     this.getInstance(TestClock.class).currentTimeDelta(unit.toMillis(delta) + shift);
   }
 
-  public final void installModule(final Module module) {
-    this.modules.add(module);
+  public final byte[] getArbitraryByteArray() {
+    return this.getInstance(ArbitraryDataGenerator.class).getByteArray();
+  }
+
+  public final Integer getArbitraryInteger() {
+    return this.getInstance(ArbitraryDataGenerator.class).getInteger();
+  }
+
+  public final Long getArbitraryLong() {
+    return this.getInstance(ArbitraryDataGenerator.class).getLong();
+  }
+
+  public final String getArbitraryString() {
+    return this.getInstance(ArbitraryDataGenerator.class).getString();
   }
 
   public final <T> T getInstance(final Class<T> type) {
@@ -45,16 +67,8 @@ public final class TestFrameworkRule extends ExternalResource {
     return this.injector.getInstance(type);
   }
 
-  public final void assertNullPointerException(final Throwable thrown, final String name) {
-    this.getInstance(AssertionUtils.class).assertNullPointerException(thrown, name);
-  }
-
-  public final Long getArbitraryLong() {
-    return this.getInstance(ArbitraryDataGenerator.class).getLong();
-  }
-
-  public final String getArbitraryString() {
-    return this.getInstance(ArbitraryDataGenerator.class).getString();
+  public final void installModule(final Module module) {
+    this.modules.add(module);
   }
 
 }

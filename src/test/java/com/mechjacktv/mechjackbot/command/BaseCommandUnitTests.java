@@ -1,5 +1,15 @@
 package com.mechjacktv.mechjackbot.command;
 
+import static com.mechjacktv.mechjackbot.TestCommand.DEFAULT_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.TestCommand.DEFAULT_TRIGGER;
+import static com.mechjacktv.mechjackbot.TestCommand.KEY_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.TestCommand.KEY_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.TestCommand.KEY_TRIGGER;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
+import org.junit.Test;
+
 import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.mechjackbot.CommandDescription;
@@ -9,21 +19,10 @@ import com.mechjacktv.mechjackbot.TestCommand;
 import com.mechjacktv.mechjackbot.TestCommandConfigurationBuilder;
 import com.mechjacktv.mechjackbot.TestMessageEvent;
 
-import org.junit.Test;
-
-import static com.mechjacktv.mechjackbot.TestCommand.DEFAULT_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.TestCommand.DEFAULT_TRIGGER;
-import static com.mechjacktv.mechjackbot.TestCommand.KEY_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.TestCommand.KEY_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.TestCommand.KEY_TRIGGER;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-
 public class BaseCommandUnitTests extends BaseCommandContractTests {
 
   @Override
   protected final TestCommand givenASubjectToTest() {
-    super.installModules();
     return this.givenASubjectToTest(this.getMessageFormatDefault());
   }
 
