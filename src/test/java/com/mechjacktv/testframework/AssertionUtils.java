@@ -12,6 +12,7 @@ public final class AssertionUtils {
   private final NullMessageForNameFactory nullMessageForNameFactory;
 
   @Inject
+  // TODO (2018-12-09 mechjack): Figure out how to make @Nullable work with Guice
   AssertionUtils(@Nullable final NullMessageForNameFactory nullMessageForNameFactory) {
     this.nullMessageForNameFactory = nullMessageForNameFactory;
   }

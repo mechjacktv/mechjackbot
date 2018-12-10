@@ -1,26 +1,29 @@
 package com.mechjacktv.configuration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import com.mechjacktv.testframework.TestFrameworkRule;
+import com.mechjacktv.util.UtilTestModule;
+
 import org.assertj.core.api.SoftAssertions;
+import org.junit.Rule;
 import org.junit.Test;
 
-import com.mechjacktv.testframework.ArbitraryDataGenerator;
-import com.mechjacktv.util.DefaultExecutionUtils;
-import com.mechjacktv.util.ExecutionUtils;
+import static com.mechjacktv.testframework.TestFrameworkRule.ARBITRARY_COLLECTION_SIZE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 public abstract class ConfigurationContractTests {
 
-  private static final Integer NUMBER_OF_PROPERTIES = 3;
-  private static final ExecutionUtils EXECUTION_UTILS = new DefaultExecutionUtils();
+  @Rule
+  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
-  private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
+  protected void installModules() {
+    this.testFrameworkRule.installModule(new UtilTestModule());
+  }
 
   private Configuration givenASubjectToTest() throws Exception {
     return this.givenASubjectToTest(this.givenAPropertiesMap());
@@ -31,34 +34,37 @@ public abstract class ConfigurationContractTests {
   private Map<String, String> givenAPropertiesMap() {
     final Map<String, String> properties = new HashMap<>();
 
-    for (int i = 0; i < NUMBER_OF_PROPERTIES; i++) {
-      properties.put(this.arbitraryDataGenerator.getString(), this.arbitraryDataGenerator.getString());
+    for (int i = 0; i < ARBITRARY_COLLECTION_SIZE; i++) {
+      properties.put(this.testFrameworkRule.getArbitraryString(), this.testFrameworkRule.getArbitraryString());
     }
     return properties;
   }
 
   @Test
   public final void get_nullKey_throwsNullPointerExceptionWithMessage() throws Exception {
+    this.installModules();
     final Configuration subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.get((String) null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(EXECUTION_UTILS.nullMessageForName("key"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "key");
   }
 
   @Test
   public final void get_noValueForKey_returnsEmptyOptional() throws Exception {
+    this.installModules();
     final Configuration subjectUnderTest = this.givenASubjectToTest();
 
-    final Optional<String> result = subjectUnderTest.get(this.arbitraryDataGenerator.getString());
+    final Optional<String> result = subjectUnderTest.get(this.testFrameworkRule.getArbitraryString());
 
     assertThat(result).isEmpty();
   }
 
   @Test
   public final void get_withData_returnsOptionalWithValue() throws Exception {
-    final String key = this.arbitraryDataGenerator.getString();
-    final String value = this.arbitraryDataGenerator.getString();
+    this.installModules();
+    final String key = this.testFrameworkRule.getArbitraryString();
+    final String value = this.testFrameworkRule.getArbitraryString();
     final Map<String, String> properties = new HashMap<>();
     properties.put(key, value);
     final Configuration subjectUnderTest = this.givenASubjectToTest(properties);
@@ -73,50 +79,55 @@ public abstract class ConfigurationContractTests {
 
   @Test
   public final void get_nullKeyWithDefaultValue_throwsNullPointerExceptionWithMessage() throws Exception {
+    this.installModules();
     final Configuration subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.get((String) null,
-        this.arbitraryDataGenerator.getString()));
+        this.testFrameworkRule.getArbitraryString()));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(EXECUTION_UTILS.nullMessageForName("key"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "key");
   }
 
   @Test
   public final void get_forKeyWithNoValueAndDefaultValue_returnsDefaultValue() throws Exception {
-    final String defaultValue = this.arbitraryDataGenerator.getString();
+    this.installModules();
+    final String defaultValue = this.testFrameworkRule.getArbitraryString();
     final Configuration subjectUnderTest = this.givenASubjectToTest();
 
-    final String result = subjectUnderTest.get(this.arbitraryDataGenerator.getString(), defaultValue);
+    final String result = subjectUnderTest.get(this.testFrameworkRule.getArbitraryString(), defaultValue);
 
     assertThat(result).isEqualTo(defaultValue);
   }
 
   @Test
   public final void get_forKeyWithNoValueAndNullDefaultValue_returnsNull() throws Exception {
+    this.installModules();
     final Configuration subjectUnderTest = this.givenASubjectToTest();
 
-    final String result = subjectUnderTest.get(this.arbitraryDataGenerator.getString(), null);
+    final String result = subjectUnderTest.get(this.testFrameworkRule.getArbitraryString(), null);
 
     assertThat(result).isNull();
   }
 
   @Test
   public final void get_forKeyWithValueAndDefaultValue_returnsKeyValue() throws Exception {
-    final String key = this.arbitraryDataGenerator.getString();
-    final String value = this.arbitraryDataGenerator.getString();
+    this.installModules();
+    final String key = this.testFrameworkRule.getArbitraryString();
+    final String value = this.testFrameworkRule.getArbitraryString();
     final Map<String, String> properties = new HashMap<>();
     properties.put(key, value);
     final Configuration subjectUnderTest = this.givenASubjectToTest(properties);
 
-    final String result = subjectUnderTest.get(key, this.arbitraryDataGenerator.getString());
+    final String result = subjectUnderTest.get(key, this.testFrameworkRule.getArbitraryString());
 
     assertThat(result).isEqualTo(value);
   }
 
   @Test
   public final void get_forKeyWithValueAndNullDefaultValue_returnsKeyValue() throws Exception {
-    final String key = this.arbitraryDataGenerator.getString();
-    final String value = this.arbitraryDataGenerator.getString();
+    this.installModules();
+    final String key = this.testFrameworkRule.getArbitraryString();
+    final String value = this.testFrameworkRule.getArbitraryString();
     final Map<String, String> properties = new HashMap<>();
     properties.put(key, value);
     final Configuration subjectUnderTest = this.givenASubjectToTest(properties);
@@ -128,6 +139,7 @@ public abstract class ConfigurationContractTests {
 
   @Test
   public final void getKeys_whenDataPresent_returnsCollectionOfKeys() throws Exception {
+    this.installModules();
     final Map<String, String> properties = this.givenAPropertiesMap();
     final Configuration subjectUnderTest = this.givenASubjectToTest(properties);
 
@@ -138,6 +150,7 @@ public abstract class ConfigurationContractTests {
 
   @Test
   public final void getKeys_noData_returnsEmptyCollection() throws Exception {
+    this.installModules();
     final Configuration subjectUnderTest = this.givenASubjectToTest(new HashMap<>());
 
     final Collection<String> result = subjectUnderTest.getKeys();

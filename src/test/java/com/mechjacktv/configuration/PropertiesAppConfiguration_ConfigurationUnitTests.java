@@ -12,7 +12,6 @@ import com.mechjacktv.util.scheduleservice.ScheduleService;
 public class PropertiesAppConfiguration_ConfigurationUnitTests extends ConfigurationContractTests {
 
   @Override
-  @SuppressWarnings("unchecked")
   protected Configuration givenASubjectToTest(final Map<String, String> properties) {
     return this.givenASubjectToTest(new MapPropertiesSource(properties));
   }

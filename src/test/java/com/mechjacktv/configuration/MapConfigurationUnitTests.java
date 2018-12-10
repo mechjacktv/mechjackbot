@@ -1,6 +1,5 @@
 package com.mechjacktv.configuration;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 import java.util.HashMap;
@@ -10,15 +9,9 @@ import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 
-import com.mechjacktv.testframework.ArbitraryDataGenerator;
-import com.mechjacktv.util.DefaultExecutionUtils;
 import com.mechjacktv.util.ExecutionUtils;
 
 public class MapConfigurationUnitTests extends ConfigurationContractTests {
-
-  private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
-
-  private final ExecutionUtils executionUtils = new DefaultExecutionUtils();
 
   private MapConfiguration givenASubjectToTest() {
     return this.givenASubjectToTest(new HashMap<>());
@@ -26,7 +19,8 @@ public class MapConfigurationUnitTests extends ConfigurationContractTests {
 
   @Override
   protected MapConfiguration givenASubjectToTest(Map<String, String> properties) {
-    final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
+    final MapConfiguration appConfiguration = new MapConfiguration(
+        this.testFrameworkRule.getInstance(ExecutionUtils.class));
 
     for (final String key : properties.keySet()) {
       appConfiguration.set(key, properties.get(key));
@@ -36,29 +30,31 @@ public class MapConfigurationUnitTests extends ConfigurationContractTests {
 
   @Test
   public final void set_nullKey_thrownNullPointerException() {
+    this.installModules();
     final MapConfiguration subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.set((String) null,
-        this.arbitraryDataGenerator.getString()));
+        this.testFrameworkRule.getArbitraryString()));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class)
-        .hasMessage(this.executionUtils.nullMessageForName("key"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "key");
   }
 
   @Test
   public final void set_nullValue_thrownNullPointerException() {
+    this.installModules();
     final MapConfiguration subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.set(this.arbitraryDataGenerator.getString(), null));
+    final Throwable thrown = catchThrowable(
+        () -> subjectUnderTest.set(this.testFrameworkRule.getArbitraryString(), null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class)
-        .hasMessage(this.executionUtils.nullMessageForName("value"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "value");
   }
 
   @Test
   public final void set_withKeyValuePair_storesValue() {
-    final String key = this.arbitraryDataGenerator.getString();
-    final String value = this.arbitraryDataGenerator.getString();
+    this.installModules();
+    final String key = this.testFrameworkRule.getArbitraryString();
+    final String value = this.testFrameworkRule.getArbitraryString();
     final MapConfiguration subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.set(key, value);
