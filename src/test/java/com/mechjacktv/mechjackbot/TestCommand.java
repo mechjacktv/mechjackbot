@@ -22,6 +22,7 @@ public class TestCommand extends BaseCommand {
   private MessageEvent messageEvent;
   private Consumer<MessageEvent> messageEventHandler;
   private Boolean triggerable;
+  private Boolean triggered;
   private CommandUsage usage;
 
   @Inject
@@ -43,6 +44,7 @@ public class TestCommand extends BaseCommand {
       /* no-op (2018-12-02 mechjack) */
     };
     this.triggerable = null;
+    this.triggered = null;
     this.usage = testCommandConfiguration.getUsage();
   }
 
@@ -77,12 +79,21 @@ public class TestCommand extends BaseCommand {
     return Objects.nonNull(this.triggerable) ? this.triggerable : super.isTriggerable();
   }
 
+  @Override
+  public boolean isTriggered(final MessageEvent messageEvent) {
+    return Objects.nonNull(this.triggered) ? this.triggered : super.isTriggered(messageEvent);
+  }
+
   public void setMessageEventHandler(final Consumer<MessageEvent> messageEventHandler) {
     this.messageEventHandler = messageEventHandler;
   }
 
   public void setTriggerable(final boolean triggerable) {
     this.triggerable = triggerable;
+  }
+
+  public void setTriggered(final boolean triggered) {
+    this.triggered = triggered;
   }
 
 }

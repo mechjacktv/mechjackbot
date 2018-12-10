@@ -1,19 +1,6 @@
 package com.mechjacktv.mechjackbot;
 
-import static com.mechjacktv.mechjackbot.CommandUtils.DEFAULT_COMMAND_COOL_DOWN;
-import static com.mechjacktv.mechjackbot.CommandUtils.DEFAULT_USAGE_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.CommandUtils.DEFAULT_USER_COOL_DOWN;
-import static com.mechjacktv.mechjackbot.CommandUtils.KEY_COMMAND_COOL_DOWN;
-import static com.mechjacktv.mechjackbot.CommandUtils.KEY_USAGE_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.CommandUtils.KEY_USER_COOL_DOWN;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.Mockito.mock;
-
 import java.util.concurrent.TimeUnit;
-
-import org.junit.Rule;
-import org.junit.Test;
 
 import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.ConfigurationTestModule;
@@ -24,6 +11,19 @@ import com.mechjacktv.mechjackbot.command.CommandTestModule;
 import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.util.UtilTestModule;
 
+import org.junit.Rule;
+import org.junit.Test;
+
+import static com.mechjacktv.mechjackbot.CommandUtils.DEFAULT_COMMAND_COOL_DOWN;
+import static com.mechjacktv.mechjackbot.CommandUtils.DEFAULT_USAGE_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.CommandUtils.DEFAULT_USER_COOL_DOWN;
+import static com.mechjacktv.mechjackbot.CommandUtils.KEY_COMMAND_COOL_DOWN;
+import static com.mechjacktv.mechjackbot.CommandUtils.KEY_USAGE_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.CommandUtils.KEY_USER_COOL_DOWN;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.Mockito.mock;
+
 public abstract class CommandUtilsContractTests {
 
   @Rule
@@ -33,7 +33,6 @@ public abstract class CommandUtilsContractTests {
     this.testFrameworkRule.installModule(new ChatBotTestModule());
     this.testFrameworkRule.installModule(new CommandTestModule());
     this.testFrameworkRule.installModule(new ConfigurationTestModule());
-    this.testFrameworkRule.installModule(new MechJackBotTestModule());
     this.testFrameworkRule.installModule(new UtilTestModule());
   }
 

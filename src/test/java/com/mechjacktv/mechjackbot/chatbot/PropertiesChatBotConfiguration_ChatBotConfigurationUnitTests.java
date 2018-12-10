@@ -7,13 +7,10 @@ import java.util.Map;
 
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.ChatBotConfigurationContractTests;
-import com.mechjacktv.testframework.ArbitraryDataGenerator;
 import com.mechjacktv.util.MapPropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 public class PropertiesChatBotConfiguration_ChatBotConfigurationUnitTests extends ChatBotConfigurationContractTests {
-
-  private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
 
   @Override
   protected ChatBotConfiguration givenASubjectToTest(final String dataLocation, final Map<String, String> properties) {
@@ -26,7 +23,8 @@ public class PropertiesChatBotConfiguration_ChatBotConfigurationUnitTests extend
   private Map<String, String> mapKeysForProperties(final Map<String, String> properties) {
     final Map<String, String> realProperties = new HashMap<>();
 
-    realProperties.put(PropertiesChatBotConfiguration.TWITCH_CLIENT_ID_KEY, this.arbitraryDataGenerator.getString());
+    realProperties.put(PropertiesChatBotConfiguration.TWITCH_CLIENT_ID_KEY,
+        this.testFrameworkRule.getArbitraryString());
     if (properties.containsKey(ChatBotConfigurationContractTests.TWITCH_CHANNEL_KEY)) {
       realProperties.put(PropertiesChatBotConfiguration.TWITCH_CHANNEL_KEY,
           properties.get(ChatBotConfigurationContractTests.TWITCH_CHANNEL_KEY));

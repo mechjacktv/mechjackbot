@@ -1,6 +1,7 @@
 package com.mechjacktv.mechjackbot;
 
 import com.mechjacktv.configuration.ConfigurationTestModule;
+import com.mechjacktv.mechjackbot.command.CommandTestModule;
 import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.util.UtilTestModule;
 
@@ -17,7 +18,7 @@ public abstract class CommandContractTests {
 
   protected void installModules() {
     this.testFrameworkRule.installModule(new ConfigurationTestModule());
-    this.testFrameworkRule.installModule(new MechJackBotTestModule());
+    this.testFrameworkRule.installModule(new CommandTestModule());
     this.testFrameworkRule.installModule(new UtilTestModule());
   }
 

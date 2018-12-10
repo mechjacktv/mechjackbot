@@ -1,21 +1,21 @@
 package com.mechjacktv.mechjackbot.command;
 
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
-
 import java.util.Set;
-import java.util.function.Function;
 
 import com.google.common.collect.Sets;
+import com.mechjacktv.mechjackbot.Command;
+import com.mechjacktv.mechjackbot.CommandRegistry;
+import com.mechjacktv.mechjackbot.CommandUtils;
+import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.MessageEventHandlerContractTests;
+import com.mechjacktv.mechjackbot.TestCommand;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 
-import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.util.DefaultExecutionUtils;
-import com.mechjacktv.util.DefaultTimeUtils;
-import com.mechjacktv.util.ExecutionUtils;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class DefaultMessageEventHandlerUnitTests extends MessageEventHandlerContractTests {
 
@@ -25,42 +25,35 @@ public class DefaultMessageEventHandlerUnitTests extends MessageEventHandlerCont
   }
 
   protected DefaultMessageEventHandler givenASubjectToTest(final Set<Command> commands, final Logger logger) {
-    final ExecutionUtils executionUtils = new DefaultExecutionUtils();
-    final CommandRegistry commandRegistry = new DefaultCommandRegistry(new DefaultExecutionUtils());
-    final CommandUtils commandUtils = new DefaultCommandUtils(new MapConfiguration(executionUtils), executionUtils,
-        new DefaultTimeUtils());
-
-    return new DefaultMessageEventHandler(commands, commandRegistry, commandUtils, this.givenALoggerFactory(logger));
-  }
-
-  @SuppressWarnings("unchecked")
-  private Function<String, Logger> givenALoggerFactory(final Logger logger) {
-    final Function<String, Logger> loggerFactory = mock(Function.class);
-
-    when(loggerFactory.apply(isA(String.class))).thenReturn(logger);
-    return loggerFactory;
+    return new DefaultMessageEventHandler(commands, this.testFrameworkRule.getInstance(CommandRegistry.class),
+        this.testFrameworkRule.getInstance(CommandUtils.class), (name) -> logger);
   }
 
   @Test
   public final void handleMessageEvent_isCalled_logsAnInfoLevelMessage() {
-    final Command command = this.givenAFakeCommand(true);
+    this.installModules();
+    final TestCommand command = this.testFrameworkRule.getInstance(TestCommand.class);
+    command.setTriggered(true);
     final Logger logger = mock(Logger.class);
     final DefaultMessageEventHandler subjectUnderTest = this.givenASubjectToTest(Sets.newHashSet(command), logger);
 
-    subjectUnderTest.handleMessageEvent(this.givenAMessageEvent());
+    subjectUnderTest.handleMessageEvent(this.testFrameworkRule.getInstance(MessageEvent.class));
 
     verify(logger).info(isA(String.class));
   }
 
   @Test
-  public final void handleMessageEvent_commandThrowsException_logsAnInfoAndErrorLevelMessageWithSameLogger()
-      throws Throwable {
-    final Command command = this.givenAFakeCommand(true);
-    doThrow(RuntimeException.class).when(command).handleMessageEvent(isA(MessageEvent.class));
+  public final void handleMessageEvent_commandThrowsException_logsAnInfoAndErrorLevelMessageWithSameLogger() {
+    this.installModules();
+    final TestCommand command = this.testFrameworkRule.getInstance(TestCommand.class);
+    command.setTriggered(true);
+    command.setMessageEventHandler(messageEvent -> {
+      throw new RuntimeException();
+    });
     final Logger logger = mock(Logger.class);
     final DefaultMessageEventHandler subjectUnderTest = this.givenASubjectToTest(Sets.newHashSet(command), logger);
 
-    subjectUnderTest.handleMessageEvent(this.givenAMessageEvent());
+    subjectUnderTest.handleMessageEvent(this.testFrameworkRule.getInstance(MessageEvent.class));
 
     verify(logger).info(isA(String.class));
     verify(logger).error(isA(String.class), isA(Throwable.class));

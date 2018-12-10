@@ -1,6 +1,11 @@
 package com.mechjacktv.mechjackbot.command;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -38,6 +43,10 @@ public final class DefaultCommandRegistry implements CommandRegistry {
   @Override
   public final void addCommand(final Command command) {
     Objects.requireNonNull(command, this.executionUtils.nullMessageForName("command"));
+    if (this.commands.containsKey(command.getTrigger())) {
+      log.warn(String.format("Command, %s, with trigger, %s, was already registered. Replacing with %s",
+          this.commands.get(command.getTrigger()).getName(), command.getTrigger(), command.getName()));
+    }
     this.commands.put(command.getTrigger(), command);
     log.info(String.format("Added command, %s, with trigger, %s", command.getName(), command.getTrigger()));
   }

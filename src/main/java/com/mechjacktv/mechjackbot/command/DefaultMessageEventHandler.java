@@ -10,7 +10,11 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.Command;
+import com.mechjacktv.mechjackbot.CommandRegistry;
+import com.mechjacktv.mechjackbot.CommandUtils;
+import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.MessageEventHandler;
 
 final class DefaultMessageEventHandler implements MessageEventHandler {
 
