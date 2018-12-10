@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.twitchclient.TwitchLogin;
-import com.mechjacktv.util.UtilTestModule;
 
 public abstract class ChatBotConfigurationContractTests {
 
@@ -21,11 +20,6 @@ public abstract class ChatBotConfigurationContractTests {
 
   @Rule
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
-
-  protected void installModule() {
-    // TODO (2018-12-09 mechjack): Remove when @Nullable works with Guice
-    this.testFrameworkRule.installModule(new UtilTestModule());
-  }
 
   private ChatBotConfiguration givenASubjectToTest(final String dataLocation) {
     return this.givenASubjectToTest(dataLocation, this.givenIHaveAPropertiesMap());
@@ -48,7 +42,6 @@ public abstract class ChatBotConfigurationContractTests {
 
   @Test
   public final void new_channelMissing_throwsIllegalStateException() {
-    this.installModule();
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
     properties.remove(TWITCH_CHANNEL_KEY);
 
@@ -59,7 +52,6 @@ public abstract class ChatBotConfigurationContractTests {
 
   @Test
   public final void new_passwordMissing_throwsIllegalStateException() {
-    this.installModule();
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
     properties.remove(TWITCH_PASSWORD_KEY);
 
@@ -70,7 +62,6 @@ public abstract class ChatBotConfigurationContractTests {
 
   @Test
   public final void new_usernameKeyMissing_throwsIllegalStateException() {
-    this.installModule();
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
     properties.remove(TWITCH_LOGIN_KEY);
 
@@ -81,7 +72,6 @@ public abstract class ChatBotConfigurationContractTests {
 
   @Test
   public final void getDataLocation_isPresent_returnsDataLocation() {
-    this.installModule();
     final String dataLocation = this.testFrameworkRule.getArbitraryString();
     final ChatBotConfiguration subjectUnderTest = this.givenASubjectToTest(dataLocation);
 
@@ -92,7 +82,6 @@ public abstract class ChatBotConfigurationContractTests {
 
   @Test
   public final void getTwitchChannel_isPresent_returnsTwitchChannel() {
-    this.installModule();
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
     final ChatBotConfiguration subjectUnderTest = this.givenASubjectToTest(properties);
 
@@ -103,7 +92,6 @@ public abstract class ChatBotConfigurationContractTests {
 
   @Test
   public final void getTwitchPassword_isPresent_returnsTwitchPassword() {
-    this.installModule();
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
     final ChatBotConfiguration subjectUnderTest = this.givenASubjectToTest(properties);
 
@@ -114,7 +102,6 @@ public abstract class ChatBotConfigurationContractTests {
 
   @Test
   public final void getTwitchLogin_isPresent_returnsTwitchLogin() {
-    this.installModule();
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
     final ChatBotConfiguration subjectUnderTest = this.givenASubjectToTest(properties);
 

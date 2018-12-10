@@ -2,6 +2,7 @@ package com.mechjacktv.testframework;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
+import com.google.inject.multibindings.OptionalBinder;
 
 public final class TestFrameworkModule extends AbstractModule {
 
@@ -10,6 +11,8 @@ public final class TestFrameworkModule extends AbstractModule {
     this.bind(ArbitraryDataGenerator.class).in(Scopes.SINGLETON);
     this.bind(AssertionUtils.class).in(Scopes.SINGLETON);
     this.bind(TestClock.class).in(Scopes.SINGLETON);
+
+    OptionalBinder.newOptionalBinder(this.binder(), NullMessageForNameFactory.class);
   }
 
 }

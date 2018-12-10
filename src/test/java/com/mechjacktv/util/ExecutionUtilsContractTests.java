@@ -14,11 +14,6 @@ public abstract class ExecutionUtilsContractTests {
   @Rule
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
-  protected void installModules() {
-    // TODO (2018-12-09 mechjack): Remove when @Nullable with Guice is solved
-    this.testFrameworkRule.installModule(new UtilTestModule());
-  }
-
   abstract ExecutionUtils givenASubjectToTest();
 
   @Test
@@ -34,7 +29,6 @@ public abstract class ExecutionUtilsContractTests {
 
   @Test
   public final void softenException_withRunnableThrowsException_throwsWrappingException() {
-    this.installModules();
     final String exceptionMessage = this.testFrameworkRule.getArbitraryString();
     final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
 
@@ -48,7 +42,6 @@ public abstract class ExecutionUtilsContractTests {
 
   @Test
   public final void softenException_withRunnableThrowsExceptionNonWrappingException_throwsSoftenedException() {
-    this.installModules();
     final String exceptionMessage = this.testFrameworkRule.getArbitraryString();
     final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
 
@@ -72,7 +65,6 @@ public abstract class ExecutionUtilsContractTests {
 
   @Test
   public final void softenException_withSupplierThrowsException_throwsWrappingException() {
-    this.installModules();
     final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.softenException(this::supplierThrowsException,
@@ -83,7 +75,6 @@ public abstract class ExecutionUtilsContractTests {
 
   @Test
   public final void softenException_withSupplierThrowsExceptionNonWrappingException_throwsSoftenedException() {
-    this.installModules();
     final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.softenException(this::supplierThrowsException,

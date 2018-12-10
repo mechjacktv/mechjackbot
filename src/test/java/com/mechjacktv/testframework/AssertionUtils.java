@@ -1,19 +1,17 @@
 package com.mechjacktv.testframework;
 
-import java.util.Objects;
+import java.util.Optional;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import org.assertj.core.api.SoftAssertions;
 
 public final class AssertionUtils {
 
-  private final NullMessageForNameFactory nullMessageForNameFactory;
+  private final Optional<NullMessageForNameFactory> nullMessageForNameFactory;
 
   @Inject
-  // TODO (2018-12-09 mechjack): Figure out how to make @Nullable work with Guice
-  AssertionUtils(@Nullable final NullMessageForNameFactory nullMessageForNameFactory) {
+  AssertionUtils(final Optional<NullMessageForNameFactory> nullMessageForNameFactory) {
     this.nullMessageForNameFactory = nullMessageForNameFactory;
   }
 
@@ -21,9 +19,9 @@ public final class AssertionUtils {
     final SoftAssertions softly = new SoftAssertions();
 
     softly.assertThat(thrown).isInstanceOf(NullPointerException.class);
-    if (Objects.nonNull(this.nullMessageForNameFactory)) {
-      softly.assertThat(thrown).hasMessage(this.nullMessageForNameFactory.create(name));
-    }
+    this.nullMessageForNameFactory.ifPresent(factory -> {
+      softly.assertThat(thrown).hasMessage(factory.create(name));
+    });
     softly.assertAll();
   }
 
