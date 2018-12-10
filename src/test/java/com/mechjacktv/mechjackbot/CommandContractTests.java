@@ -1,15 +1,15 @@
 package com.mechjacktv.mechjackbot;
 
-import com.mechjacktv.configuration.ConfigurationTestModule;
-import com.mechjacktv.mechjackbot.command.CommandTestModule;
-import com.mechjacktv.testframework.TestFrameworkRule;
-import com.mechjacktv.util.UtilTestModule;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assume.assumeTrue;
 
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assume.assumeTrue;
+import com.mechjacktv.configuration.ConfigurationTestModule;
+import com.mechjacktv.mechjackbot.command.CommandTestModule;
+import com.mechjacktv.testframework.TestFrameworkRule;
+import com.mechjacktv.util.UtilTestModule;
 
 public abstract class CommandContractTests {
 
