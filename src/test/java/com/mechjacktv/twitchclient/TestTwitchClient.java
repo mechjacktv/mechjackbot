@@ -18,7 +18,8 @@ public class TestTwitchClient implements TwitchClient {
   private BiFunction<TwitchUserId, TwitchUserFollowsCursor, UserFollows> getUserFollowsFromIdWithCursorImpl;
 
   @Inject
-  TestTwitchClient(final TwitchUsersEndpoint twitchUsersEndpoint, final TwitchUsersFollowsEndpoint twitchUsersFollowsEndpoint) {
+  TestTwitchClient(final TwitchUsersEndpoint twitchUsersEndpoint,
+      final TwitchUsersFollowsEndpoint twitchUsersFollowsEndpoint) {
     // TODO (2018-12-18 mechjack): make use of test endpoints for default handlers
     this.getUserIdImpl = login -> null;
     this.getUsersImpl = (twitchLogins, twitchUserIds) -> null;
