@@ -17,4 +17,5 @@ public enum AccessLevel {
   public final Integer value() {
     return this.value;
   }
+
 }
