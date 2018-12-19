@@ -6,8 +6,9 @@ import com.mechjacktv.gson.GsonModule;
 import com.mechjacktv.keyvaluestore.KeyValueStoreModule;
 import com.mechjacktv.mechjackbot.chatbot.PircBotXChatBotModule;
 import com.mechjacktv.mechjackbot.command.CommandModule;
+import com.mechjacktv.mechjackbot.command.shoutout.ShoutOutCommandModule;
 import com.mechjacktv.twitchclient.TwitchClientModule;
-import com.mechjacktv.util.UtilsModule;
+import com.mechjacktv.util.UtilModule;
 import com.mechjacktv.util.scheduleservice.ScheduleServiceModule;
 
 final class MainModule extends AbstractModule {
@@ -19,8 +20,9 @@ final class MainModule extends AbstractModule {
     this.install(new KeyValueStoreModule());
     this.install(new PircBotXChatBotModule());
     this.install(new ScheduleServiceModule());
+    this.install(new ShoutOutCommandModule());
     this.install(new TwitchClientModule());
-    this.install(new UtilsModule());
+    this.install(new UtilModule());
   }
 
 }

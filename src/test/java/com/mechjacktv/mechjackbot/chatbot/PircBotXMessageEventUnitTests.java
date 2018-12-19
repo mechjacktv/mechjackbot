@@ -1,59 +1,62 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
+import static com.mechjacktv.mechjackbot.chatbot.PircBotXMessageEvent.RESPONSE_MESSAGE_FORMAT_DEFAULT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.google.inject.Key;
+import com.google.inject.TypeLiteral;
 
 import org.assertj.core.api.SoftAssertions;
+import org.junit.Rule;
 import org.junit.Test;
+import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.core.DefaultCommandUtils;
-import com.mechjacktv.util.ArbitraryDataGenerator;
-import com.mechjacktv.util.DefaultExecutionUtils;
-import com.mechjacktv.util.DefaultTimeUtils;
+import com.mechjacktv.configuration.ConfigurationTestModule;
+import com.mechjacktv.mechjackbot.ChatBot;
+import com.mechjacktv.mechjackbot.ChatBotConfiguration;
+import com.mechjacktv.mechjackbot.ChatUser;
+import com.mechjacktv.mechjackbot.CommandUtils;
+import com.mechjacktv.mechjackbot.Message;
+import com.mechjacktv.mechjackbot.command.CommandTestModule;
+import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.util.ExecutionUtils;
+import com.mechjacktv.util.UtilTestModule;
 
 public class PircBotXMessageEventUnitTests {
 
-  private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
-  private final ExecutionUtils executionUtils = new DefaultExecutionUtils();
+  @Rule
+  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+
+  private void installModules() {
+    this.testFrameworkRule.installModule(new ChatBotTestModule());
+    this.testFrameworkRule.installModule(new CommandTestModule());
+    this.testFrameworkRule.installModule(new ConfigurationTestModule());
+    this.testFrameworkRule.installModule(new UtilTestModule());
+  }
+
+  private PircBotXMessageEvent givenASubjectToTest() {
+    return this.givenASubjectToTest(mock(GenericMessageEvent.class));
+  }
 
   private PircBotXMessageEvent givenASubjectToTest(final GenericMessageEvent genericMessageEvent) {
-    return this.givenASubjectToTest(this.givenAnAppConfiguration(), genericMessageEvent);
-  }
-
-  private PircBotXMessageEvent givenASubjectToTest(final Configuration configuration) {
-    return this.givenASubjectToTest(configuration, mock(GenericMessageEvent.class));
-  }
-
-  private PircBotXMessageEvent givenASubjectToTest(final Configuration configuration,
-      final GenericMessageEvent genericMessageEvent) {
-    final PircBotXChatBotFactory chatBotFactory = new PircBotXChatBotFactory(configuration, this.executionUtils);
-    final ChatBotConfiguration chatBotConfiguration = new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator);
-    final CommandUtils commandUtils = new DefaultCommandUtils(configuration, this.executionUtils,
-        new DefaultTimeUtils());
-
-    return new PircBotXMessageEvent(configuration, chatBotConfiguration, chatBotFactory, commandUtils,
-        this.executionUtils, genericMessageEvent);
-  }
-
-  private Configuration givenAnAppConfiguration() {
-    return this.givenAnAppConfiguration("%s");
-  }
-
-  private Configuration givenAnAppConfiguration(final String format) {
-    final Configuration configuration = mock(Configuration.class);
-
-    when(configuration.get(eq(PircBotXMessageEvent.RESPONSE_MESSAGE_FORMAT_KEY),
-        eq(PircBotXMessageEvent.RESPONSE_MESSAGE_FORMAT_DEFAULT))).thenReturn(format);
-    return configuration;
+    return new PircBotXMessageEvent(this.testFrameworkRule.getInstance(Configuration.class),
+        this.testFrameworkRule.getInstance(ChatBotConfiguration.class),
+        this.testFrameworkRule.getInstance(Key.get(new TypeLiteral<ChatBotFactory<PircBotX>>() {
+        })),
+        this.testFrameworkRule.getInstance(CommandUtils.class),
+        this.testFrameworkRule.getInstance(ExecutionUtils.class), genericMessageEvent);
   }
 
   @Test
   public final void getChatBot_whenCalled_wrapsPircBotXFromGenericMessageEvent() {
+    this.installModules();
     final GenericMessageEvent genericMessageEvent = mock(GenericMessageEvent.class);
     final PircBotXMessageEvent subjectUnderTest = this.givenASubjectToTest(genericMessageEvent);
 
@@ -64,6 +67,7 @@ public class PircBotXMessageEventUnitTests {
 
   @Test
   public final void getChatBot_whenCalled_returnsNonNullChatBot() {
+    this.installModules();
     final GenericMessageEvent genericMessageEvent = mock(GenericMessageEvent.class);
     final PircBotXMessageEvent subjectUnderTest = this.givenASubjectToTest(genericMessageEvent);
 
@@ -74,6 +78,7 @@ public class PircBotXMessageEventUnitTests {
 
   @Test
   public final void getChatUser_whenCalled_wrapsUserFromGenericMessageEvent() {
+    this.installModules();
     final GenericMessageEvent genericMessageEvent = mock(GenericMessageEvent.class);
     final PircBotXMessageEvent subjectUnderTest = this.givenASubjectToTest(genericMessageEvent);
 
@@ -84,6 +89,7 @@ public class PircBotXMessageEventUnitTests {
 
   @Test
   public final void getChatUser_whenCalled_returnsNonNullChatUser() {
+    this.installModules();
     final GenericMessageEvent genericMessageEvent = mock(GenericMessageEvent.class);
     final PircBotXMessageEvent subjectUnderTest = this.givenASubjectToTest(genericMessageEvent);
 
@@ -94,8 +100,9 @@ public class PircBotXMessageEventUnitTests {
 
   @Test
   public final void getMessage_whenCalled_wrapsMessageFromGenericMessageEvent() {
+    this.installModules();
     final GenericMessageEvent genericMessageEvent = mock(GenericMessageEvent.class);
-    when(genericMessageEvent.getMessage()).thenReturn(this.arbitraryDataGenerator.getString());
+    when(genericMessageEvent.getMessage()).thenReturn(this.testFrameworkRule.getArbitraryString());
     final PircBotXMessageEvent subjectUnderTest = this.givenASubjectToTest(genericMessageEvent);
 
     subjectUnderTest.getMessage();
@@ -105,7 +112,8 @@ public class PircBotXMessageEventUnitTests {
 
   @Test
   public final void getMessage_whenCalled_returnsNonNullMessageWithValue() {
-    final String message = this.arbitraryDataGenerator.getString();
+    this.installModules();
+    final String message = this.testFrameworkRule.getArbitraryString();
     final GenericMessageEvent genericMessageEvent = mock(GenericMessageEvent.class);
     when(genericMessageEvent.getMessage()).thenReturn(message);
     final PircBotXMessageEvent subjectUnderTest = this.givenASubjectToTest(genericMessageEvent);
@@ -120,50 +128,37 @@ public class PircBotXMessageEventUnitTests {
 
   @Test
   public final void sendResponse_nullMessage_throwsNullPointerExceptionWithMessage() {
+    this.installModules();
     final GenericMessageEvent genericMessageEvent = mock(GenericMessageEvent.class);
     final PircBotXMessageEvent subjectUnderTest = this.givenASubjectToTest(genericMessageEvent);
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.sendResponse(null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class)
-        .hasMessage(this.executionUtils.nullMessageForName("message"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "message");
   }
 
   @Test
   public final void sendResponse_forMessage_callsGenericMessageEventRespondWith() {
-    final Message message = Message.of(this.arbitraryDataGenerator.getString());
+    this.installModules();
+    final Message message = Message.of(this.testFrameworkRule.getArbitraryString());
     final GenericMessageEvent genericMessageEvent = mock(GenericMessageEvent.class);
     final PircBotXMessageEvent subjectUnderTest = this.givenASubjectToTest(genericMessageEvent);
 
     subjectUnderTest.sendResponse(message);
 
-    verify(genericMessageEvent).respondWith(eq(message.value));
-  }
-
-  @Test
-  public final void sendResponse_forMessage_asksForConfiguredMessageFormat() {
-    final Configuration configuration = this.givenAnAppConfiguration();
-    final Message message = Message.of(this.arbitraryDataGenerator.getString());
-    final PircBotXMessageEvent subjectUnderTest = this.givenASubjectToTest(configuration);
-
-    subjectUnderTest.sendResponse(message);
-
-    verify(configuration).get(eq(PircBotXMessageEvent.RESPONSE_MESSAGE_FORMAT_KEY),
-        eq(PircBotXMessageEvent.RESPONSE_MESSAGE_FORMAT_DEFAULT));
+    verify(genericMessageEvent).respondWith(eq(String.format(RESPONSE_MESSAGE_FORMAT_DEFAULT, message)));
   }
 
   @Test
   public final void sendResponse_forMessage_wrapsMessageInMessageFormat() {
-    final Message message = Message.of(this.arbitraryDataGenerator.getString());
-    final Configuration configuration = this.givenAnAppConfiguration(
-        PircBotXMessageEvent.RESPONSE_MESSAGE_FORMAT_DEFAULT);
+    this.installModules();
+    final Message message = Message.of(this.testFrameworkRule.getArbitraryString());
     final GenericMessageEvent genericMessageEvent = mock(GenericMessageEvent.class);
-    final PircBotXMessageEvent subjectUnderTest = this.givenASubjectToTest(configuration, genericMessageEvent);
+    final PircBotXMessageEvent subjectUnderTest = this.givenASubjectToTest(genericMessageEvent);
 
     subjectUnderTest.sendResponse(message);
 
     verify(genericMessageEvent).respondWith(eq(
-        String.format(PircBotXMessageEvent.RESPONSE_MESSAGE_FORMAT_DEFAULT, message.value)));
+        String.format(RESPONSE_MESSAGE_FORMAT_DEFAULT, message.value)));
   }
-
 }

@@ -3,7 +3,10 @@ package com.mechjacktv.twitchclient;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -47,7 +50,7 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
       "  \"" + UNKNOWN_DATA + "\": \"" + UNKNOWN_DATA + "\"\n" +
       "}\n";
 
-  abstract TwitchUsersFollowsEndpoint givenASubjectToTest(Gson gson, TwitchClientUtils twitchClientUtils);
+  protected abstract TwitchUsersFollowsEndpoint givenASubjectToTest(Gson gson, TwitchClientUtils twitchClientUtils);
 
   private Gson givenAGson() {
     final GsonBuilder gsonBuilder = new GsonBuilder();

@@ -6,7 +6,7 @@ import javax.inject.Inject;
 
 import com.mechjacktv.util.ExecutionUtils;
 
-public class MapConfiguration implements Configuration {
+public final class MapConfiguration implements Configuration {
 
   private final ExecutionUtils executionUtils;
   private final Map<String, String> data;
@@ -16,15 +16,24 @@ public class MapConfiguration implements Configuration {
     this(executionUtils, new HashMap<>());
   }
 
-  @Inject
   public MapConfiguration(final ExecutionUtils executionUtils, final Map<String, String> data) {
     this.executionUtils = executionUtils;
     this.data = data;
   }
 
   @Override
+  public final Optional<String> get(final ConfigurationKey key) {
+    return this.get(key.value);
+  }
+
+  @Override
   public final Optional<String> get(final String key) {
     return Optional.ofNullable(this.get(key, null));
+  }
+
+  @Override
+  public String get(final ConfigurationKey key, final String defaultValue) {
+    return this.get(key.value, defaultValue);
   }
 
   @Override
@@ -34,6 +43,10 @@ public class MapConfiguration implements Configuration {
     final String value = this.data.get(key);
 
     return value != null ? value : defaultValue;
+  }
+
+  public void set(final ConfigurationKey key, final String value) {
+    this.set(key.value, value);
   }
 
   public void set(final String key, final String value) {

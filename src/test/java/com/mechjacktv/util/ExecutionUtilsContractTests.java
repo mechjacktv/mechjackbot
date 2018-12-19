@@ -3,13 +3,16 @@ package com.mechjacktv.util;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
+import org.junit.Rule;
 import org.junit.Test;
 
+import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.util.function.SupplierWithException;
 
 public abstract class ExecutionUtilsContractTests {
 
-  private static final String EXCEPTION_MESSAGE = "EXCEPTION_MESSAGE";
+  @Rule
+  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
   abstract ExecutionUtils givenASubjectToTest();
 
@@ -26,26 +29,28 @@ public abstract class ExecutionUtilsContractTests {
 
   @Test
   public final void softenException_withRunnableThrowsException_throwsWrappingException() {
+    final String exceptionMessage = this.testFrameworkRule.getArbitraryString();
     final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.softenException(
         () -> {
-          throw new Exception(EXCEPTION_MESSAGE);
+          throw new Exception(exceptionMessage);
         }, WrappingException.class));
 
-    assertThat(thrown).isInstanceOf(WrappingException.class).hasMessage(EXCEPTION_MESSAGE);
+    assertThat(thrown).isInstanceOf(WrappingException.class).hasMessage(exceptionMessage);
   }
 
   @Test
   public final void softenException_withRunnableThrowsExceptionNonWrappingException_throwsSoftenedException() {
+    final String exceptionMessage = this.testFrameworkRule.getArbitraryString();
     final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.softenException(
         () -> {
-          throw new Exception(EXCEPTION_MESSAGE);
+          throw new Exception(exceptionMessage);
         }, NonWrappingException.class));
 
-    assertThat(thrown).isInstanceOf(SoftenedException.class).hasMessage(EXCEPTION_MESSAGE);
+    assertThat(thrown).isInstanceOf(SoftenedException.class).hasMessage(exceptionMessage);
   }
 
   @Test
@@ -65,7 +70,7 @@ public abstract class ExecutionUtilsContractTests {
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.softenException(this::supplierThrowsException,
         WrappingException.class));
 
-    assertThat(thrown).isInstanceOf(WrappingException.class).hasMessage(EXCEPTION_MESSAGE);
+    assertThat(thrown).isInstanceOf(WrappingException.class);
   }
 
   @Test
@@ -75,11 +80,11 @@ public abstract class ExecutionUtilsContractTests {
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.softenException(this::supplierThrowsException,
         NonWrappingException.class));
 
-    assertThat(thrown).isInstanceOf(SoftenedException.class).hasMessage(EXCEPTION_MESSAGE);
+    assertThat(thrown).isInstanceOf(SoftenedException.class);
   }
 
   private SupplierWithException<Object> supplierThrowsException() throws Exception {
-    throw new Exception(EXCEPTION_MESSAGE);
+    throw new Exception(this.testFrameworkRule.getArbitraryString());
   }
 
   private static final class WrappingException extends RuntimeException {

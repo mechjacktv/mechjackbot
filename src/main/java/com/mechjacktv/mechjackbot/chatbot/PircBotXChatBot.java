@@ -9,7 +9,10 @@ import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.Listener;
 
 import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.ChatBot;
+import com.mechjacktv.mechjackbot.ChatBotConfiguration;
+import com.mechjacktv.mechjackbot.Message;
+import com.mechjacktv.mechjackbot.TwitchChannel;
 import com.mechjacktv.util.ExecutionUtils;
 
 public final class PircBotXChatBot implements ChatBot {
@@ -28,7 +31,7 @@ public final class PircBotXChatBot implements ChatBot {
   private final PircBotX pircBotX;
 
   @Inject
-  public PircBotXChatBot(final Configuration configuration, final ChatBotConfiguration chatBotConfiguration,
+  PircBotXChatBot(final Configuration configuration, final ChatBotConfiguration chatBotConfiguration,
       final ExecutionUtils executionUtils, final Listener listener) {
     this(configuration, chatBotConfiguration, executionUtils, listener, PircBotX::new);
   }

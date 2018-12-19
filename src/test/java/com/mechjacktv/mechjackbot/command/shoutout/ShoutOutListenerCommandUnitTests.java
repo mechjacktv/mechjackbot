@@ -1,87 +1,67 @@
 package com.mechjacktv.mechjackbot.command.shoutout;
 
-import static com.mechjacktv.mechjackbot.command.BaseCommand.MESSAGE_FORMAT_KEY;
-import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerCommand.*;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerCommand.DEFAULT_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerCommand.DEFAULT_FREQUENCY;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerCommand.DEFAULT_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerCommand.KEY_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerCommand.KEY_FREQUENCY;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerCommand.KEY_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerCommand.KEY_TRIGGER;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
+import org.assertj.core.api.Condition;
 import org.junit.Test;
 
 import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.configuration.SettingKey;
-import com.mechjacktv.keyvaluestore.MapKeyValueStore;
-import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.chatbot.ArbitraryChatBotConfiguration;
-import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
-import com.mechjacktv.mechjackbot.command.BaseCommand;
+import com.mechjacktv.keyvaluestore.KeyValueStoreTestModule;
+import com.mechjacktv.mechjackbot.CommandDescription;
+import com.mechjacktv.mechjackbot.CommandTrigger;
+import com.mechjacktv.mechjackbot.Message;
+import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.TestMessageEvent;
+import com.mechjacktv.mechjackbot.chatbot.ChatBotTestModule;
 import com.mechjacktv.mechjackbot.command.BaseCommandContractTests;
-import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
+import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
+import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
 import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.Caster;
 import com.mechjacktv.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.CasterKey;
-import com.mechjacktv.twitchclient.TwitchClient;
-import com.mechjacktv.util.*;
-import com.mechjacktv.util.scheduleservice.ScheduleService;
+import com.mechjacktv.twitchclient.TwitchClientTestModule;
+import com.mechjacktv.util.TestTimeUtils;
+import com.mechjacktv.util.TimeUtils;
+import com.mechjacktv.util.scheduleservice.ScheduleServiceTestModule;
 
 public final class ShoutOutListenerCommandUnitTests extends BaseCommandContractTests {
 
-  private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
-
-  private final ArbitraryCommandTestUtils commandTestUtils = new ArbitraryCommandTestUtils(this.arbitraryDataGenerator);
-
-  private final ExecutionUtils executionUtils = new DefaultExecutionUtils();
-
-  private final TimeUtils timeUtils = new DefaultTimeUtils();
+  protected final void installModules() {
+    super.installModules();
+    this.testFrameworkRule.installModule(new ChatBotTestModule());
+    this.testFrameworkRule.installModule(new KeyValueStoreTestModule());
+    this.testFrameworkRule.installModule(new ScheduleServiceTestModule());
+    this.testFrameworkRule.installModule(new ShoutOutCommandTestModule());
+    this.testFrameworkRule.installModule(new TwitchClientTestModule());
+  }
 
   @Override
-  protected final ShoutOutListenerCommand givenASubjectToTest(final Configuration configuration) {
-    return this.givenASubjectToTest(configuration, this.commandTestUtils.givenACommandUtils(configuration),
-        new DefaultTimeUtils(), this.givenAShoutOutDataStore(configuration));
-  }
-
-  private ShoutOutListenerCommand givenASubjectToTest(final Configuration configuration,
-      final TimeUtils timeUtils, final ShoutOutDataStore shoutOutDataStore) {
-    return this.givenASubjectToTest(configuration, this.commandTestUtils.givenACommandUtils(configuration),
-        timeUtils, shoutOutDataStore);
-  }
-
-  private ShoutOutListenerCommand givenASubjectToTest(final Configuration configuration,
-      final CommandUtils commandUtils, final TimeUtils timeUtils, final ShoutOutDataStore shoutOutDataStore) {
-    final DefaultCommandConfigurationBuilder builder = new DefaultCommandConfigurationBuilder(commandUtils,
-        configuration, this.executionUtils);
-
-    return new ShoutOutListenerCommand(builder, configuration, shoutOutDataStore, timeUtils);
-  }
-
-  private ShoutOutDataStore givenAShoutOutDataStore(final Configuration configuration) {
-    return new DefaultShoutOutDataStore(configuration,
-        new ArbitraryChatBotConfiguration(this.arbitraryDataGenerator), (name) -> new MapKeyValueStore(),
-        this.executionUtils, new DefaultProtobufUtils(this.executionUtils), mock(ScheduleService.class),
-        mock(TwitchClient.class));
-  }
-
-  private TimeUtils givenAFakeTimeUtils() {
-    final TimeUtils timeUtils = mock(TimeUtils.class);
-
-    when(timeUtils.currentTime()).thenAnswer((invocation -> this.timeUtils.currentTime()));
-    when(timeUtils.secondsAsMs(isA(Integer.class)))
-        .thenAnswer((invocation -> this.timeUtils.secondsAsMs(invocation.getArgument(0))));
-    when(timeUtils.hoursAsMs(isA(Integer.class)))
-        .thenAnswer((invocation -> this.timeUtils.hoursAsMs(invocation.getArgument(0))));
-    return timeUtils;
+  protected final ShoutOutListenerCommand givenASubjectToTest() {
+    return new ShoutOutListenerCommand(this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class),
+        this.testFrameworkRule.getInstance(Configuration.class),
+        this.testFrameworkRule.getInstance(ShoutOutDataStore.class),
+        this.testFrameworkRule.getInstance(TimeUtils.class));
   }
 
   @Override
   protected CommandDescription getDescriptionDefault() {
-    return CommandDescription.of(DESCRIPTION_DEFAULT);
+    return CommandDescription.of(DEFAULT_DESCRIPTION);
   }
 
   @Override
-  protected SettingKey getDescriptionKey() {
-    return SettingKey.of(BaseCommand.DESCRIPTION_KEY, ShoutOutListenerCommand.class);
+  protected ConfigurationKey getDescriptionKey() {
+    return ConfigurationKey.of(KEY_DESCRIPTION, ShoutOutListenerCommand.class);
   }
 
   @Override
@@ -90,14 +70,31 @@ public final class ShoutOutListenerCommandUnitTests extends BaseCommandContractT
   }
 
   @Override
-  protected SettingKey getTriggerKey() {
-    return SettingKey.of(BaseCommand.TRIGGER_KEY, ShoutOutListenerCommand.class);
+  protected ConfigurationKey getTriggerKey() {
+    return ConfigurationKey.of(KEY_TRIGGER, ShoutOutListenerCommand.class);
+  }
+
+  private CommandMessageFormat getMessageFormatDefault() {
+    return CommandMessageFormat.of(DEFAULT_MESSAGE_FORMAT);
+  }
+
+  private ConfigurationKey getMessageFormatKey() {
+    return ConfigurationKey.of(KEY_MESSAGE_FORMAT, ShoutOutListenerCommand.class);
+  }
+
+  private Integer getFrequencyDefault() {
+    return Integer.parseInt(DEFAULT_FREQUENCY);
+  }
+
+  private ConfigurationKey getFrequencyKey() {
+    return ConfigurationKey.of(KEY_FREQUENCY, ShoutOutListenerCommand.class);
   }
 
   @Test
-  public final void isTriggered_noCasterPresent_returnsFalse() {
-    final MessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
-    final Command subjectUnderTest = this.givenASubjectToTest();
+  public final void isTriggered_notACaster_resultIsFalse() {
+    this.installModules();
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final ShoutOutListenerCommand subjectUnderTest = this.givenASubjectToTest();
 
     final boolean result = subjectUnderTest.isTriggered(messageEvent);
 
@@ -105,16 +102,15 @@ public final class ShoutOutListenerCommandUnitTests extends BaseCommandContractT
   }
 
   @Test
-  public final void isTriggered_casterIsNotDue_returnsFalse() {
-    final Configuration configuration = new MapConfiguration(this.executionUtils);
-    final ShoutOutDataStore shoutOutDataStore = this.givenAShoutOutDataStore(configuration);
-    final MessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
+  public final void isTriggered_casterIsNotDue_resultIsFalse() {
+    this.installModules();
+    this.testFrameworkRule.currentTimeDelta(this.getFrequencyDefault(), TimeUnit.HOURS);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final ShoutOutDataStore shoutOutDataStore = this.testFrameworkRule.getInstance(ShoutOutDataStore.class);
     final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getTwitchLogin().value);
     final Caster caster = shoutOutDataStore.createCaster(casterKey.getName(), 0L);
     shoutOutDataStore.put(casterKey, caster);
-    final TimeUtils timeUtils = this.givenAFakeTimeUtils();
-    when(timeUtils.currentTime()).thenReturn(0L);
-    final Command subjectUnderTest = this.givenASubjectToTest(configuration, timeUtils, shoutOutDataStore);
+    final ShoutOutListenerCommand subjectUnderTest = this.givenASubjectToTest();
 
     final boolean result = subjectUnderTest.isTriggered(messageEvent);
 
@@ -122,17 +118,15 @@ public final class ShoutOutListenerCommandUnitTests extends BaseCommandContractT
   }
 
   @Test
-  public final void isTriggered_casterIsDue_returnsTrue() {
-    final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
-    final ShoutOutDataStore shoutOutDataStore = this.givenAShoutOutDataStore(appConfiguration);
-    final MessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
+  public final void isTriggered_casterIsDue_resultIsTrue() {
+    this.installModules();
+    this.testFrameworkRule.currentTimeDelta(this.getFrequencyDefault(), TimeUnit.HOURS, 1);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final ShoutOutDataStore shoutOutDataStore = this.testFrameworkRule.getInstance(ShoutOutDataStore.class);
     final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getTwitchLogin().value);
     final Caster caster = shoutOutDataStore.createCaster(casterKey.getName(), 0L);
     shoutOutDataStore.put(casterKey, caster);
-    final TimeUtils timeUtils = this.givenAFakeTimeUtils();
-    when(timeUtils.currentTime()).thenReturn(
-        this.timeUtils.hoursAsMs(Integer.parseInt(FREQUENCY_DEFAULT) + 1));
-    final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, timeUtils, shoutOutDataStore);
+    final ShoutOutListenerCommand subjectUnderTest = this.givenASubjectToTest();
 
     final boolean result = subjectUnderTest.isTriggered(messageEvent);
 
@@ -140,17 +134,19 @@ public final class ShoutOutListenerCommandUnitTests extends BaseCommandContractT
   }
 
   @Test
-  public final void isTriggered_casterIsNotDueCustomFrequency_returnsFalse() {
-    final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
-    appConfiguration.set(SettingKey.of(FREQUENCY_KEY, ShoutOutListenerCommand.class).value, "2");
-    final ShoutOutDataStore shoutOutDataStore = this.givenAShoutOutDataStore(appConfiguration);
-    final MessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
+  public final void isTriggered_casterIsNotDueWithCustomFrequency_resultIsFalse() {
+    this.installModules();
+    final int customFrequency = this.getFrequencyDefault() + 1;
+    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    configuration.set(ConfigurationKey.of(KEY_FREQUENCY, ShoutOutListenerCommand.class),
+        Integer.toString(customFrequency));
+    this.testFrameworkRule.currentTimeDelta(this.getFrequencyDefault(), TimeUnit.HOURS);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final ShoutOutDataStore shoutOutDataStore = this.testFrameworkRule.getInstance(ShoutOutDataStore.class);
     final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getTwitchLogin().value);
     final Caster caster = shoutOutDataStore.createCaster(casterKey.getName(), 0L);
     shoutOutDataStore.put(casterKey, caster);
-    final TimeUtils timeUtils = this.givenAFakeTimeUtils();
-    when(timeUtils.currentTime()).thenReturn(this.timeUtils.hoursAsMs(1));
-    final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, timeUtils, shoutOutDataStore);
+    final ShoutOutListenerCommand subjectUnderTest = this.givenASubjectToTest();
 
     final boolean result = subjectUnderTest.isTriggered(messageEvent);
 
@@ -158,19 +154,19 @@ public final class ShoutOutListenerCommandUnitTests extends BaseCommandContractT
   }
 
   @Test
-  public final void isTriggered_casterIsDueCustomFrequency_returnsTrue() {
-    final String customFrequency = "2";
-    final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
-    appConfiguration.set(SettingKey.of(FREQUENCY_KEY, ShoutOutListenerCommand.class).value, customFrequency);
-    final ShoutOutDataStore shoutOutDataStore = this.givenAShoutOutDataStore(appConfiguration);
-    final MessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
+  public final void isTriggered_casterIsDueWithCustomFrequency_resultIsTrue() {
+    this.installModules();
+    final int customFrequency = this.getFrequencyDefault() + 1;
+    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    configuration.set(ConfigurationKey.of(KEY_FREQUENCY, ShoutOutListenerCommand.class),
+        Integer.toString(customFrequency));
+    this.testFrameworkRule.currentTimeDelta(customFrequency, TimeUnit.HOURS, 1);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final ShoutOutDataStore shoutOutDataStore = this.testFrameworkRule.getInstance(ShoutOutDataStore.class);
     final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getTwitchLogin().value);
     final Caster caster = shoutOutDataStore.createCaster(casterKey.getName(), 0L);
     shoutOutDataStore.put(casterKey, caster);
-    final TimeUtils timeUtils = this.givenAFakeTimeUtils();
-    when(timeUtils.currentTime()).thenReturn(
-        this.timeUtils.hoursAsMs(Integer.parseInt(customFrequency) + 1));
-    final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, timeUtils, shoutOutDataStore);
+    final ShoutOutListenerCommand subjectUnderTest = this.givenASubjectToTest();
 
     final boolean result = subjectUnderTest.isTriggered(messageEvent);
 
@@ -178,51 +174,59 @@ public final class ShoutOutListenerCommandUnitTests extends BaseCommandContractT
   }
 
   @Test
-  public final void handleMessageEvent_isCalled_sendsResponse() {
-    final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
-    final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
-    final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, this.givenAFakeTimeUtils(),
-        this.givenAShoutOutDataStore(appConfiguration));
+  public final void handleMessageEvent_noMessageFormatConfigured_resultIsDefaultMessage() {
+    this.installModules();
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
+    final ShoutOutListenerCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);
+    final Message result = messageEvent.getResponseMessage();
 
-    assertThat(messageEvent.getResponseMessage()).isNotNull();
-    assertThat(messageEvent.getResponseMessage().value).isEqualTo(String.format(MESSAGE_FORMAT_DEFAULT,
-        messageEvent.getChatUser().getTwitchLogin()));
+    assertThat(result).isEqualTo(Message.of(String.format(this.getMessageFormatDefault().value,
+        messageEvent.getChatUser().getTwitchLogin())));
   }
 
   @Test
-  public final void handleMessageEvent_isCalledUsesCustomMessage_sendsResponse() {
-    final String customMessageFormat = this.arbitraryDataGenerator.getString() + " %s";
-    final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
-    appConfiguration.set(SettingKey.of(MESSAGE_FORMAT_KEY, ShoutOutListenerCommand.class).value, customMessageFormat);
-    final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
-    final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, this.givenAFakeTimeUtils(),
-        this.givenAShoutOutDataStore(appConfiguration));
+  public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
+    this.installModules();
+    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + " %s";
+    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    configuration.set(this.getMessageFormatKey(), customMessageFormat);
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
+    final ShoutOutListenerCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);
+    final Message result = messageEvent.getResponseMessage();
 
-    assertThat(messageEvent.getResponseMessage()).isNotNull();
-    assertThat(messageEvent.getResponseMessage().value).isEqualTo(String.format(customMessageFormat,
-        messageEvent.getChatUser().getTwitchLogin()));
+    assertThat(result).isEqualTo(Message.of(String.format(customMessageFormat,
+        messageEvent.getChatUser().getTwitchLogin())));
   }
 
   @Test
-  public final void handleMessageEvent_isCalled_updateDataStore() {
-    final MapConfiguration appConfiguration = new MapConfiguration(this.executionUtils);
-    final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
-    final CasterKey casterKey = CasterKey.newBuilder()
-        .setName(messageEvent.getChatUser().getTwitchLogin().value.toLowerCase()).build();
-    final Caster caster = Caster.newBuilder().setName(casterKey.getName()).setLastShoutOut(0L).build();
-    final ShoutOutDataStore shoutOutDataStore = mock(ShoutOutDataStore.class);
-    when(shoutOutDataStore.createCasterKey(isA(String.class))).thenReturn(casterKey);
-    when(shoutOutDataStore.createCaster(isA(String.class), anyLong())).thenReturn(caster);
-    final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, this.givenAFakeTimeUtils(),
-        shoutOutDataStore);
+  public final void handleMessageEvent_isCalled_resultIsUpdatedDataStore() {
+    this.installModules();
+    final TestTimeUtils timeUtils = this.testFrameworkRule.getInstance(TestTimeUtils.class);
+    final Long lastShoutOut = timeUtils.hoursAsMs(this.getFrequencyDefault());
+    this.testFrameworkRule.currentTimeDelta(lastShoutOut, TimeUnit.MILLISECONDS);
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
+    final ShoutOutDataStore shoutOutDataStore = this.testFrameworkRule.getInstance(ShoutOutDataStore.class);
+    final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getTwitchLogin().value);
+    final Caster caster = shoutOutDataStore.createCaster(casterKey.getName(), 0L);
+    shoutOutDataStore.put(casterKey, caster);
+
+    final ShoutOutListenerCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);
 
-    verify(shoutOutDataStore).put(eq(casterKey), eq(caster));
+    assertThat(shoutOutDataStore).is(new Condition<ShoutOutDataStore>() {
+
+      @Override
+      public boolean matches(final ShoutOutDataStore actual) {
+        return actual.get(casterKey).isPresent() && actual.get(casterKey).get().getLastShoutOut() == lastShoutOut;
+      }
+
+    });
+
   }
 
 }

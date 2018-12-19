@@ -1,158 +1,140 @@
 package com.mechjacktv.mechjackbot.command.core;
 
-import static com.mechjacktv.mechjackbot.command.BaseCommand.MESSAGE_FORMAT_KEY;
-import static com.mechjacktv.mechjackbot.command.core.CommandsCommand.DESCRIPTION_DEFAULT;
-import static com.mechjacktv.mechjackbot.command.core.CommandsCommand.MESSAGE_FORMAT_DEFAULT;
-import static com.mechjacktv.mechjackbot.command.core.CommandsCommand.TRIGGER_DEFAULT;
+import static com.mechjacktv.mechjackbot.command.core.CommandsCommand.DEFAULT_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.core.CommandsCommand.DEFAULT_TRIGGER;
+import static com.mechjacktv.mechjackbot.command.core.CommandsCommand.KEY_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.core.CommandsCommand.KEY_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.core.CommandsCommand.KEY_TRIGGER;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
-import com.google.common.collect.Sets;
-
-import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 
-import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.configuration.SettingKey;
-import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
-import com.mechjacktv.mechjackbot.command.BaseCommand;
+import com.mechjacktv.mechjackbot.Command;
+import com.mechjacktv.mechjackbot.CommandDescription;
+import com.mechjacktv.mechjackbot.CommandRegistry;
+import com.mechjacktv.mechjackbot.CommandTrigger;
+import com.mechjacktv.mechjackbot.Message;
+import com.mechjacktv.mechjackbot.TestCommand;
+import com.mechjacktv.mechjackbot.TestCommandConfigurationBuilder;
+import com.mechjacktv.mechjackbot.TestMessageEvent;
 import com.mechjacktv.mechjackbot.command.BaseCommandContractTests;
-import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
-import com.mechjacktv.util.ArbitraryDataGenerator;
-import com.mechjacktv.util.DefaultExecutionUtils;
-import com.mechjacktv.util.DefaultTimeUtils;
-import com.mechjacktv.util.ExecutionUtils;
+import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
+import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
 
 public class CommandsCommandUnitTests extends BaseCommandContractTests {
 
-  private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
-
-  private final ArbitraryCommandTestUtils commandTestUtils = new ArbitraryCommandTestUtils(this.arbitraryDataGenerator);
-
-  private final ExecutionUtils executionUtils = new DefaultExecutionUtils();
-
-  @Override
-  protected Command givenASubjectToTest(final Configuration configuration) {
-    return this.givenASubjectToTest(configuration, mock(CommandRegistry.class));
-  }
-
-  private Command givenASubjectToTest(final Configuration configuration, final CommandRegistry commandRegistry) {
-    final DefaultCommandConfigurationBuilder builder = new DefaultCommandConfigurationBuilder(
-        this.commandTestUtils.givenACommandUtils(configuration), configuration, this.executionUtils);
-
-    return new CommandsCommand(builder, commandRegistry);
+  protected final CommandsCommand givenASubjectToTest() {
+    return new CommandsCommand(this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class),
+        this.testFrameworkRule.getInstance(CommandRegistry.class));
   }
 
   @Override
   protected CommandDescription getDescriptionDefault() {
-    return CommandDescription.of(DESCRIPTION_DEFAULT);
+    return CommandDescription.of(DEFAULT_DESCRIPTION);
   }
 
   @Override
-  protected SettingKey getDescriptionKey() {
-    return SettingKey.of(BaseCommand.DESCRIPTION_KEY, CommandsCommand.class);
+  protected ConfigurationKey getDescriptionKey() {
+    return ConfigurationKey.of(KEY_DESCRIPTION, CommandsCommand.class);
   }
 
   @Override
-  protected SettingKey getTriggerKey() {
-    return SettingKey.of(BaseCommand.TRIGGER_KEY, CommandsCommand.class);
+  protected ConfigurationKey getTriggerKey() {
+    return ConfigurationKey.of(KEY_TRIGGER, CommandsCommand.class);
   }
 
   @Override
   protected CommandTrigger getTriggerDefault() {
-    return CommandTrigger.of(TRIGGER_DEFAULT);
+    return CommandTrigger.of(DEFAULT_TRIGGER);
   }
 
-  private CommandUtils givenACommandUtils(final Configuration configuration) {
-    return new DefaultCommandUtils(configuration, this.executionUtils, new DefaultTimeUtils());
+  private CommandMessageFormat getMessageFormatDefault() {
+    return CommandMessageFormat.of(CommandsCommand.DEFAULT_MESSAGE_FORMAT);
   }
 
-  private Set<Command> givenASetOfCommands(final Configuration configuration,
-      final CommandUtils commandUtils) {
+  private ConfigurationKey getMessageFormatKey() {
+    return ConfigurationKey.of(KEY_MESSAGE_FORMAT, CommandsCommand.class);
+  }
+
+  private Set<Command> givenASetOfCommands() {
     final Set<Command> commands = new HashSet<>();
 
     for (int i = 0; i < 3; i++) {
-      commands.add(new ArbitraryCommand(configuration, commandUtils, this.arbitraryDataGenerator));
+      commands.add(new TestCommand(
+          new TestCommandConfigurationBuilder(this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class))
+              .setDefaultTrigger(UUID.randomUUID().toString())));
     }
     return commands;
   }
 
-  private CommandRegistry givenACommandRegistry(final Set<Command> commands) {
-    final CommandRegistry commandRegistry = new DefaultCommandRegistry(this.executionUtils);
+  @Test
+  public final void handleMessageEvent_noMessageFormatConfigured_resultIsDefaultMessage() {
+    this.installModules();
+    final Set<Command> commands = this.givenASetOfCommands();
+    final CommandRegistry commandRegistry = this.testFrameworkRule.getInstance(CommandRegistry.class);
+    commands.forEach(commandRegistry::addCommand);
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
+    final CommandsCommand subjectUnderTest = this.givenASubjectToTest();
 
-    for (final Command command : commands) {
-      commandRegistry.addCommand(command);
-    }
-    return commandRegistry;
+    subjectUnderTest.handleMessageEvent(messageEvent);
+    final Message result = messageEvent.getResponseMessage();
+
+    assertThat(result).isEqualTo(Message.of(String.format(this.getMessageFormatDefault().value,
+        messageEvent.getChatUser().getTwitchLogin(), commands
+            .stream().map(command -> command.getTrigger().value)
+            .sorted().collect(Collectors.joining(" ")))));
   }
 
   @Test
-  public final void handleMessageEvent_defaultFormat_sendsDefaultListOfCommands() {
-    final MapConfiguration appConfiguration = this.givenAConfiguration();
-    final CommandUtils commandUtils = this.givenACommandUtils(appConfiguration);
-    final Set<Command> commands = this.givenASetOfCommands(appConfiguration, commandUtils);
-    final CommandRegistry commandRegistry = this.givenACommandRegistry(commands);
-    final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
-    final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, commandRegistry);
+  public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
+    this.installModules();
+    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + ": %2$s %1$s";
+    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    configuration.set(this.getMessageFormatKey(), customMessageFormat);
+    final Set<Command> commands = this.givenASetOfCommands();
+    final CommandRegistry commandRegistry = this.testFrameworkRule.getInstance(CommandRegistry.class);
+    commands.forEach(commandRegistry::addCommand);
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
+    final CommandsCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);
+    final Message result = messageEvent.getResponseMessage();
 
-    final SoftAssertions softly = new SoftAssertions();
-    final Message message = messageEvent.getResponseMessage();
-    softly.assertThat(message.value).contains(this.stripFormat(MESSAGE_FORMAT_DEFAULT));
-    for (final Command command : commands) {
-      softly.assertThat(message.value).contains(command.getTrigger().value);
-    }
-    softly.assertAll();
+    assertThat(result).isEqualTo(Message.of(String.format(customMessageFormat,
+        messageEvent.getChatUser().getTwitchLogin(), commands
+            .stream().map(command -> command.getTrigger().value)
+            .sorted().collect(Collectors.joining(" ")))));
   }
 
   @Test
-  public final void handleMessageEvent_customFormat_sendsCustomListOfCommands() {
-    final String messageFormat = this.arbitraryDataGenerator.getString() + ": %2$s";
-    final MapConfiguration appConfiguration = this.givenAConfiguration();
-    final CommandUtils commandUtils = this.givenACommandUtils(appConfiguration);
-    final Set<Command> commands = this.givenASetOfCommands(appConfiguration, commandUtils);
-    final CommandRegistry commandRegistry = this.givenACommandRegistry(commands);
-    final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
-    final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, commandRegistry);
-    appConfiguration.set(SettingKey.of(MESSAGE_FORMAT_KEY, CommandsCommand.class).value, messageFormat);
+  public final void handleMessageEvent_noMessageFormatConfiguredWithNonTriggerableCommand_resultIsDefaultMessageWithoutNonTriggerableCommand() {
+    this.installModules();
+    final TestCommand nonTriggerableCommand = this.testFrameworkRule.getInstance(TestCommand.class);
+    nonTriggerableCommand.setTriggerable(false);
+    final Set<Command> commands = this.givenASetOfCommands();
+    final CommandRegistry commandRegistry = this.testFrameworkRule.getInstance(CommandRegistry.class);
+    commandRegistry.addCommand(nonTriggerableCommand);
+    commands.forEach(commandRegistry::addCommand);
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
+    final CommandsCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);
+    final Message result = messageEvent.getResponseMessage();
 
-    final SoftAssertions softly = new SoftAssertions();
-    final Message message = messageEvent.getResponseMessage();
-    softly.assertThat(message.value).contains(this.stripFormat(messageFormat));
-    for (final Command command : commands) {
-      softly.assertThat(message.value).contains(command.getTrigger().value);
-    }
-    softly.assertAll();
-  }
-
-  private String stripFormat(final String messageFormat) {
-    return messageFormat.replace("%2$s", "").trim();
-  }
-
-  @Test
-  public final void handleMessageEvent_withNonTriggerableCommands_doesNotListNonTriggerableCommands() {
-    final MapConfiguration appConfiguration = this.givenAConfiguration();
-    final CommandUtils commandUtils = this.givenACommandUtils(appConfiguration);
-    final Command nonTriggerableCommand = new ArbitraryCommand(appConfiguration, commandUtils, this.executionUtils,
-        this.arbitraryDataGenerator, false);
-    final Set<Command> commands = Sets.newHashSet(nonTriggerableCommand,
-        new ArbitraryCommand(appConfiguration, commandUtils, this.arbitraryDataGenerator),
-        new ArbitraryCommand(appConfiguration, commandUtils, this.arbitraryDataGenerator));
-    final CommandRegistry commandRegistry = this.givenACommandRegistry(commands);
-    final ArbitraryMessageEvent messageEvent = new ArbitraryMessageEvent(this.arbitraryDataGenerator);
-    final Command subjectUnderTest = this.givenASubjectToTest(appConfiguration, commandRegistry);
-
-    subjectUnderTest.handleMessageEvent(messageEvent);
-
-    assertThat(messageEvent.getResponseMessage().value).doesNotContain(nonTriggerableCommand.getTrigger().value);
+    System.out.println(commands
+        .stream().map(command -> command.getTrigger().value)
+        .sorted().collect(Collectors.joining(" ")));
+    assertThat(result).isEqualTo(Message.of(String.format(this.getMessageFormatDefault().value,
+        messageEvent.getChatUser().getTwitchLogin(), commands
+            .stream().map(command -> command.getTrigger().value)
+            .sorted().collect(Collectors.joining(" ")))));
   }
 
 }

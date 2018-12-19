@@ -3,7 +3,7 @@ package com.mechjacktv.mechjackbot.command.shoutout;
 import javax.inject.Inject;
 
 import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.configuration.SettingKey;
+import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.mechjackbot.command.BaseCommand;
 import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
@@ -13,26 +13,26 @@ import com.mechjacktv.util.TimeUtils;
 
 public final class ShoutOutListenerCommand extends BaseCommand {
 
-  public static final String DESCRIPTION_DEFAULT = "Monitors chat looking for casters who are due for a shout out.";
-  public static final String FREQUENCY_DEFAULT = "1";
-  public static final String FREQUENCY_KEY = "frequency.hours";
-  public static final String MESSAGE_FORMAT_DEFAULT = "Fellow streamer in the stream! Everyone, please give a warm "
+  public static final String DEFAULT_DESCRIPTION = "Monitors chat looking for casters who are due for a shout out.";
+  public static final String DEFAULT_FREQUENCY = "1";
+  public static final String DEFAULT_MESSAGE_FORMAT = "Fellow streamer in the stream! Everyone, please give a warm "
       + "welcome to @%1$s. It would be great if you checked them out and gave them a follow. https://twitch.tv/%1$s";
+  public static final String KEY_FREQUENCY = "frequency.hours";
 
   private final Configuration configuration;
   private final ShoutOutDataStore shoutOutDataStore;
   private final TimeUtils timeUtils;
-  private SettingKey frequencyKey;
+  private ConfigurationKey frequencyKey;
 
   @Inject
-  protected ShoutOutListenerCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
+  ShoutOutListenerCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
       final Configuration configuration, final ShoutOutDataStore shoutOutDataStore, final TimeUtils timeUtils) {
-    super(commandConfigurationBuilder.setDescription(DESCRIPTION_DEFAULT)
-        .setMessageFormat(MESSAGE_FORMAT_DEFAULT));
+    super(commandConfigurationBuilder.setDescription(DEFAULT_DESCRIPTION)
+        .setMessageFormat(DEFAULT_MESSAGE_FORMAT));
     this.configuration = configuration;
     this.shoutOutDataStore = shoutOutDataStore;
     this.timeUtils = timeUtils;
-    this.frequencyKey = SettingKey.of(FREQUENCY_KEY, this.getClass());
+    this.frequencyKey = ConfigurationKey.of(KEY_FREQUENCY, this.getClass());
   }
 
   @Override
@@ -42,7 +42,7 @@ public final class ShoutOutListenerCommand extends BaseCommand {
 
   private boolean isCasterDue(final MessageEvent messageEvent) {
     final Long frequency = this.timeUtils.hoursAsMs(
-        Integer.parseInt(this.configuration.get(this.frequencyKey.value, FREQUENCY_DEFAULT)));
+        Integer.parseInt(this.configuration.get(this.frequencyKey.value, DEFAULT_FREQUENCY)));
     final TwitchLogin twitchLogin = messageEvent.getChatUser().getTwitchLogin();
     final CasterKey casterKey = this.shoutOutDataStore.createCasterKey(twitchLogin.value);
 

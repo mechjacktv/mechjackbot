@@ -30,7 +30,7 @@ public final class DefaultCommandConfigurationBuilder implements CommandConfigur
   private String usage;
 
   @Inject
-  public DefaultCommandConfigurationBuilder(final CommandUtils commandUtils, final Configuration configuration,
+  DefaultCommandConfigurationBuilder(final CommandUtils commandUtils, final Configuration configuration,
       final ExecutionUtils executionUtils) {
     this.commandUtils = commandUtils;
     this.configuration = configuration;

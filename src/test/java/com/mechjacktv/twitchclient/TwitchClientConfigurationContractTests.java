@@ -5,13 +5,15 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 
 import java.util.Optional;
 
+import org.junit.Rule;
 import org.junit.Test;
 
-import com.mechjacktv.util.ArbitraryDataGenerator;
+import com.mechjacktv.testframework.TestFrameworkRule;
 
 public abstract class TwitchClientConfigurationContractTests {
 
-  protected final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
+  @Rule
+  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
   protected abstract TwitchClientConfiguration givenASubjectToTest(Optional<String> clientId);
 
@@ -26,7 +28,7 @@ public abstract class TwitchClientConfigurationContractTests {
 
   @Test
   public final void getTwitchClientId_isPresent_returnsTwitchClientId() {
-    final String clientId = this.arbitraryDataGenerator.getString();
+    final String clientId = this.testFrameworkRule.getArbitraryString();
     final TwitchClientConfiguration subjectUnderTest = this.givenASubjectToTest(Optional.of(clientId));
 
     final TwitchClientId result = subjectUnderTest.getTwitchClientId();

@@ -1,8 +1,6 @@
 package com.mechjacktv.mechjackbot.command.core;
 
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -14,42 +12,25 @@ import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 
 public final class CommandsCommand extends BaseCommand {
 
-  public static final String DESCRIPTION_DEFAULT = "Lists all the commands available to users.";
-  public static final String MESSAGE_FORMAT_DEFAULT = "Channel Commands: %2$s";
-  public static final String TRIGGER_DEFAULT = "!commands";
+  public static final String DEFAULT_DESCRIPTION = "Lists all the commands available to users.";
+  public static final String DEFAULT_MESSAGE_FORMAT = "Commands: %2$s";
+  public static final String DEFAULT_TRIGGER = "!commands";
 
   private final CommandRegistry commandRegistry;
 
   @Inject
-  protected CommandsCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
+  CommandsCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
       final CommandRegistry commandRegistry) {
-    super(commandConfigurationBuilder.setTrigger(TRIGGER_DEFAULT)
-        .setDescription(DESCRIPTION_DEFAULT)
-        .setMessageFormat(MESSAGE_FORMAT_DEFAULT));
+    super(commandConfigurationBuilder.setTrigger(DEFAULT_TRIGGER)
+        .setDescription(DEFAULT_DESCRIPTION)
+        .setMessageFormat(DEFAULT_MESSAGE_FORMAT));
     this.commandRegistry = commandRegistry;
   }
 
   @Override
   public void handleMessageEvent(final MessageEvent messageEvent) {
-    final StringBuilder builder = new StringBuilder();
-
-    for (final Command command : this.getSortedCommands()) {
-      if (command.isTriggerable()) {
-        builder.append(String.format(" %s", command.getTrigger()));
-      }
-    }
-    this.sendResponse(messageEvent, builder.toString().trim());
-  }
-
-  private Set<Command> getSortedCommands() {
-    final SortedSet<Command> sortedCommands = new TreeSet<>(this::compareCommands);
-
-    sortedCommands.addAll(this.commandRegistry.getCommands());
-    return sortedCommands;
-  }
-
-  private int compareCommands(final Command command1, final Command command2) {
-    return command1.getTrigger().value.compareTo(command2.getTrigger().value);
+    this.sendResponse(messageEvent, this.commandRegistry.getCommands().stream().filter(Command::isTriggerable)
+        .map(command -> command.getTrigger().value).sorted().collect(Collectors.joining(" ")));
   }
 
 }

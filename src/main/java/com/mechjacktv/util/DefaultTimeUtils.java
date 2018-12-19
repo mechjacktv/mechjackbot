@@ -4,6 +4,10 @@ import java.util.Objects;
 
 public final class DefaultTimeUtils implements TimeUtils {
 
+  DefaultTimeUtils() {
+    // make constructor package-private
+  }
+
   @Override
   public Long currentTime() {
     return System.currentTimeMillis();

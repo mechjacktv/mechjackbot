@@ -26,8 +26,18 @@ public class PropertiesConfiguration extends HotUpdatePropertiesWrapper implemen
   }
 
   @Override
+  public final Optional<String> get(final ConfigurationKey key) {
+    return this.get(key.value);
+  }
+
+  @Override
   public final Optional<String> get(final String key) {
     return Optional.ofNullable(this.get(key, null));
+  }
+
+  @Override
+  public final String get(final ConfigurationKey key, final String defaultValue) {
+    return this.get(key.value, defaultValue);
   }
 
   @Override

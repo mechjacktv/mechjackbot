@@ -2,28 +2,28 @@ package com.mechjacktv.mechjackbot.command;
 
 import java.util.Objects;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.configuration.SettingKey;
+import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.mechjackbot.*;
 import com.mechjacktv.util.ExecutionUtils;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 public abstract class BaseCommand implements Command {
 
-  public static final String DESCRIPTION_KEY = "description";
-  public static final String MESSAGE_FORMAT_KEY = "message_format";
-  public static final String TRIGGER_KEY = "trigger";
+  public static final String KEY_DESCRIPTION = "description";
+  public static final String KEY_MESSAGE_FORMAT = "message_format";
+  public static final String KEY_TRIGGER = "trigger";
 
   private final Configuration configuration;
   private final CommandUtils commandUtils;
   private final ExecutionUtils executionUtils;
   private final CommandDescription descriptionDefault;
-  private final SettingKey descriptionKey;
+  private final ConfigurationKey descriptionKey;
   private final CommandMessageFormat messageFormatDefault;
-  private final SettingKey messageFormatKey;
+  private final ConfigurationKey messageFormatKey;
   private final CommandTrigger triggerDefault;
-  private final SettingKey triggerKey;
+  private final ConfigurationKey triggerKey;
   private final CommandUsage usage;
   private final boolean triggerable;
 
@@ -36,11 +36,11 @@ public abstract class BaseCommand implements Command {
     this.configuration = commandConfiguration.getConfiguration();
     this.executionUtils = commandConfiguration.getExecutionUtils();
     this.descriptionDefault = commandConfiguration.getDescription();
-    this.descriptionKey = SettingKey.of(DESCRIPTION_KEY, this.getClass());
+    this.descriptionKey = ConfigurationKey.of(KEY_DESCRIPTION, this.getClass());
     this.messageFormatDefault = commandConfiguration.getMessageFormat();
-    this.messageFormatKey = SettingKey.of(MESSAGE_FORMAT_KEY, this.getClass());
+    this.messageFormatKey = ConfigurationKey.of(KEY_MESSAGE_FORMAT, this.getClass());
     this.triggerDefault = commandConfiguration.getTrigger();
-    this.triggerKey = SettingKey.of(TRIGGER_KEY, this.getClass());
+    this.triggerKey = ConfigurationKey.of(KEY_TRIGGER, this.getClass());
     this.triggerable = commandConfiguration.isTriggerable();
     this.usage = commandConfiguration.getUsage();
   }

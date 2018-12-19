@@ -6,10 +6,11 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Rule;
 import org.junit.Test;
 
+import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.twitchclient.TwitchLogin;
-import com.mechjacktv.util.ArbitraryDataGenerator;
 
 public abstract class ChatBotConfigurationContractTests {
 
@@ -17,14 +18,15 @@ public abstract class ChatBotConfigurationContractTests {
   public static final String TWITCH_PASSWORD_KEY = "TWITCH_PASSWORD_KEY";
   public static final String TWITCH_LOGIN_KEY = "TWITCH_LOGIN_KEY";
 
-  private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
+  @Rule
+  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
   private ChatBotConfiguration givenASubjectToTest(final String dataLocation) {
     return this.givenASubjectToTest(dataLocation, this.givenIHaveAPropertiesMap());
   }
 
   private ChatBotConfiguration givenASubjectToTest(final Map<String, String> properties) {
-    return this.givenASubjectToTest(this.arbitraryDataGenerator.getString(), properties);
+    return this.givenASubjectToTest(this.testFrameworkRule.getArbitraryString(), properties);
   }
 
   protected abstract ChatBotConfiguration givenASubjectToTest(String dataLocation, Map<String, String> properties);
@@ -32,9 +34,9 @@ public abstract class ChatBotConfigurationContractTests {
   private Map<String, String> givenIHaveAPropertiesMap() {
     final Map<String, String> properties = new HashMap<>();
 
-    properties.put(TWITCH_CHANNEL_KEY, this.arbitraryDataGenerator.getString());
-    properties.put(TWITCH_PASSWORD_KEY, this.arbitraryDataGenerator.getString());
-    properties.put(TWITCH_LOGIN_KEY, this.arbitraryDataGenerator.getString());
+    properties.put(TWITCH_CHANNEL_KEY, this.testFrameworkRule.getArbitraryString());
+    properties.put(TWITCH_PASSWORD_KEY, this.testFrameworkRule.getArbitraryString());
+    properties.put(TWITCH_LOGIN_KEY, this.testFrameworkRule.getArbitraryString());
     return properties;
   }
 
@@ -70,7 +72,7 @@ public abstract class ChatBotConfigurationContractTests {
 
   @Test
   public final void getDataLocation_isPresent_returnsDataLocation() {
-    final String dataLocation = this.arbitraryDataGenerator.getString();
+    final String dataLocation = this.testFrameworkRule.getArbitraryString();
     final ChatBotConfiguration subjectUnderTest = this.givenASubjectToTest(dataLocation);
 
     final DataLocation result = subjectUnderTest.getDataLocation();

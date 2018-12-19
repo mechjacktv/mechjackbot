@@ -1,28 +1,20 @@
 package com.mechjacktv.guice;
 
-import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.Provider;
 
-public class InjectorBridge {
+public interface InjectorBridge {
 
-  private final static InjectorBridge INSTANCE = new InjectorBridge();
-
-  private Injector injector;
-
-  public static InjectorBridge getBridge() {
-    return INSTANCE;
+  static InjectorBridge getBridge() {
+    return DefaultInjectorBridge.INSTANCE;
   }
 
-  void setInjector(final Injector injector) {
-    this.injector = injector;
-  }
+  <T> T getInstance(Class<T> type);
 
-  public final <T> T getInstance(final Class<T> type) {
-    return this.injector.getInstance(type);
-  }
+  <T> T getInstance(Key<T> type);
 
-  public final <T> Provider<T> getProvider(final Class<T> type) {
-    return this.injector.getProvider(type);
-  }
+  <T> Provider<T> getProvider(Class<T> type);
+
+  <T> Provider<T> getProvider(Key<T> type);
 
 }

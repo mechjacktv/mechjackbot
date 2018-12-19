@@ -1,5 +1,6 @@
 package com.mechjacktv.util;
 
+import static com.mechjacktv.testframework.TestFrameworkRule.ARBITRARY_COLLECTION_SIZE;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -16,14 +17,10 @@ import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 public class HotUpdatePropertiesWrapperUnitTests extends HotUpdatePropertiesWrapperContractTests {
 
-  private static final Integer NUMBER_OF_PROPERTIES = 3;
-
-  private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
-
   @Override
-  protected HotUpdatePropertiesWrapper givenASubjectToTest(final PropertiesSource propertiesSource,
-      final ScheduleService scheduleService) {
-    return this.givenASubjectToTest(propertiesSource, scheduleService, mock(Logger.class));
+  protected HotUpdatePropertiesWrapper givenASubjectToTest(final PropertiesSource propertiesSource) {
+    return this.givenASubjectToTest(propertiesSource, this.testFrameworkRule.getInstance(ScheduleService.class),
+        mock(Logger.class));
   }
 
   private HotUpdatePropertiesWrapper givenASubjectToTest(final PropertiesSource propertiesSource,
@@ -40,14 +37,14 @@ public class HotUpdatePropertiesWrapperUnitTests extends HotUpdatePropertiesWrap
   protected Map<String, String> givenAPropertiesMap() {
     final Map<String, String> properties = new HashMap<>();
 
-    for (int i = 0; i < NUMBER_OF_PROPERTIES; i++) {
-      properties.put(this.arbitraryDataGenerator.getString(), this.arbitraryDataGenerator.getString());
+    for (int i = 0; i < ARBITRARY_COLLECTION_SIZE; i++) {
+      properties.put(this.testFrameworkRule.getArbitraryString(), this.testFrameworkRule.getArbitraryString());
     }
     return properties;
   }
 
   @Test
-  public final void getProperties_withExceptionReadingPropertiesSource_logsError() throws Exception {
+  public final void getProperties_withExceptionReadingPropertiesSource_logsError() {
     final Logger logger = mock(Logger.class);
     final HotUpdatePropertiesWrapper subjectUnderTest = this.givenASubjectToTest(new ExceptionalPropertiesSource(),
         logger);

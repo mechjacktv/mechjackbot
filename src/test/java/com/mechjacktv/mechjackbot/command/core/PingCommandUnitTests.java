@@ -1,105 +1,87 @@
 package com.mechjacktv.mechjackbot.command.core;
 
-import static com.mechjacktv.mechjackbot.command.core.PingCommand.*;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static com.mechjacktv.mechjackbot.command.core.PingCommand.DEFAULT_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.core.PingCommand.DEFAULT_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.core.PingCommand.DEFAULT_TRIGGER;
+import static com.mechjacktv.mechjackbot.command.core.PingCommand.KEY_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.core.PingCommand.KEY_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.core.PingCommand.KEY_TRIGGER;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
-import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.configuration.SettingKey;
-import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.mechjackbot.command.ArbitraryCommandTestUtils;
-import com.mechjacktv.mechjackbot.command.BaseCommand;
+import com.mechjacktv.mechjackbot.CommandDescription;
+import com.mechjacktv.mechjackbot.CommandTrigger;
+import com.mechjacktv.mechjackbot.Message;
+import com.mechjacktv.mechjackbot.TestMessageEvent;
 import com.mechjacktv.mechjackbot.command.BaseCommandContractTests;
-import com.mechjacktv.mechjackbot.command.DefaultCommandConfigurationBuilder;
-import com.mechjacktv.twitchclient.TwitchLogin;
-import com.mechjacktv.util.ArbitraryDataGenerator;
-import com.mechjacktv.util.DefaultExecutionUtils;
-import com.mechjacktv.util.ExecutionUtils;
+import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
+import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
 
 public class PingCommandUnitTests extends BaseCommandContractTests {
 
-  private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
-
-  private final ArbitraryCommandTestUtils commandTestUtils = new ArbitraryCommandTestUtils(this.arbitraryDataGenerator);
-
-  private final ExecutionUtils executionUtils = new DefaultExecutionUtils();
-
   @Override
-  protected Command givenASubjectToTest(final Configuration configuration) {
-    return this.givenASubjectToTest(configuration, this.commandTestUtils.givenACommandUtils(configuration));
-  }
-
-  private Command givenASubjectToTest(final String messageFormat) {
-    final Configuration configuration = this.givenAnAppConfiguration(messageFormat);
-
-    return this.givenASubjectToTest(configuration, mock(CommandUtils.class));
-  }
-
-  private Command givenASubjectToTest(final Configuration configuration, final CommandUtils commandUtils) {
-    return new PingCommand(new DefaultCommandConfigurationBuilder(commandUtils, configuration, this.executionUtils));
+  protected PingCommand givenASubjectToTest() {
+    return new PingCommand(this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class));
   }
 
   @Override
   protected CommandDescription getDescriptionDefault() {
-    return CommandDescription.of(DESCRIPTION_DEFAULT);
+    return CommandDescription.of(DEFAULT_DESCRIPTION);
   }
 
   @Override
-  protected SettingKey getDescriptionKey() {
-    return SettingKey.of(BaseCommand.DESCRIPTION_KEY, PingCommand.class);
+  protected ConfigurationKey getDescriptionKey() {
+    return ConfigurationKey.of(KEY_DESCRIPTION, PingCommand.class);
   }
 
   @Override
-  protected SettingKey getTriggerKey() {
-    return SettingKey.of(BaseCommand.TRIGGER_KEY, PingCommand.class);
+  protected ConfigurationKey getTriggerKey() {
+    return ConfigurationKey.of(KEY_TRIGGER, PingCommand.class);
   }
 
   @Override
   protected CommandTrigger getTriggerDefault() {
-    return CommandTrigger.of(TRIGGER_DEFAULT);
+    return CommandTrigger.of(DEFAULT_TRIGGER);
   }
 
-  private MapConfiguration givenAnAppConfiguration(final String messageFormat) {
-    final MapConfiguration appConfiguration = this.givenAConfiguration();
-
-    appConfiguration.set(SettingKey.of(BaseCommand.MESSAGE_FORMAT_KEY, PingCommand.class).value, messageFormat);
-    return appConfiguration;
+  private CommandMessageFormat getMessageFormatDefault() {
+    return CommandMessageFormat.of(DEFAULT_MESSAGE_FORMAT);
   }
 
-  private MessageEvent givenAFakeMessageEvent(final TwitchLogin twitchLogin) {
-    final MessageEvent messageEvent = mock(MessageEvent.class);
-    final ChatUser chatUser = mock(ChatUser.class);
-
-    when(messageEvent.getChatUser()).thenReturn(chatUser);
-    when(chatUser.getTwitchLogin()).thenReturn(twitchLogin);
-    return messageEvent;
+  private ConfigurationKey getMessageFormatKey() {
+    return ConfigurationKey.of(KEY_MESSAGE_FORMAT, PingCommand.class);
   }
 
   @Test
-  public final void handleMessageEvent_defaultFormat_sendsDefaultMessage() {
-    final String messageFormat = MESSAGE_FORMAT_DEFAULT;
-    final TwitchLogin twitchLogin = TwitchLogin.of(this.arbitraryDataGenerator.getString());
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent(twitchLogin);
-    final Command subjectUnderTest = this.givenASubjectToTest(messageFormat);
+  public final void handleMessageEvent_noMessageFormatConfigured_resultIsDefaultMessage() {
+    this.installModules();
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
+    final PingCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);
+    final Message result = messageEvent.getResponseMessage();
 
-    verify(messageEvent).sendResponse(eq(Message.of(String.format(messageFormat, twitchLogin))));
+    assertThat(result).isEqualTo(Message.of(String.format(this.getMessageFormatDefault().value,
+        messageEvent.getChatUser().getTwitchLogin())));
   }
 
   @Test
-  public final void handleMessageEvent_customFormat_sendsCustomMessage() {
-    final String messageFormat = this.arbitraryDataGenerator.getString() + ", %s";
-    final TwitchLogin twitchLogin = TwitchLogin.of(this.arbitraryDataGenerator.getString());
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent(twitchLogin);
-    final Command subjectUnderTest = this.givenASubjectToTest(messageFormat);
+  public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
+    this.installModules();
+    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + "%s";
+    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    configuration.set(this.getMessageFormatKey(), customMessageFormat);
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
+    final PingCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);
+    final Message result = messageEvent.getResponseMessage();
 
-    verify(messageEvent).sendResponse(eq(Message.of(String.format(messageFormat, twitchLogin))));
+    assertThat(result).isEqualTo(Message.of(String.format(customMessageFormat,
+        messageEvent.getChatUser().getTwitchLogin())));
   }
 
 }
