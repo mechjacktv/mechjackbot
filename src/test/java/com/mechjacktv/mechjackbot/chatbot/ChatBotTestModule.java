@@ -3,11 +3,12 @@ package com.mechjacktv.mechjackbot.chatbot;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import com.google.inject.TypeLiteral;
-import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 
 import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.types.GenericMessageEvent;
+
+import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 
 public class ChatBotTestModule extends AbstractModule {
 
