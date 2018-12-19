@@ -74,7 +74,7 @@ public final class DefaultCommandConfigurationBuilder implements CommandConfigur
   public CommandConfiguration build() {
     return new DefaultCommandConfiguration(this.commandUtils, this.configuration, this.executionUtils,
         CommandDescription.of(this.getDescription()), CommandMessageFormat.of(this.getMessageFormat()),
-        CommandTrigger.of(this.getTrigger()), this.getTriggerable(), CommandUsage.of(this.getUsage()));
+        CommandTrigger.of(this.getTrigger()), this.isTriggerable(), CommandUsage.of(this.getUsage()));
   }
 
   private String getDescription() {
@@ -89,7 +89,7 @@ public final class DefaultCommandConfigurationBuilder implements CommandConfigur
     return Objects.isNull(this.trigger) ? UUID.randomUUID().toString() : this.trigger;
   }
 
-  private boolean getTriggerable() {
+  private boolean isTriggerable() {
     return Objects.isNull(this.triggerable) ? UNSET_TRIGGERABLE : this.triggerable;
   }
 

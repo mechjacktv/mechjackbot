@@ -21,9 +21,7 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.ConfigurationTestModule;
 import com.mechjacktv.mechjackbot.ChatBot;
-import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.ChatUser;
-import com.mechjacktv.mechjackbot.CommandUtils;
 import com.mechjacktv.mechjackbot.Message;
 import com.mechjacktv.mechjackbot.command.CommandTestModule;
 import com.mechjacktv.testframework.TestFrameworkRule;
@@ -48,12 +46,10 @@ public class PircBotXMessageEventUnitTests {
 
   private PircBotXMessageEvent givenASubjectToTest(final GenericMessageEvent genericMessageEvent) {
     return new PircBotXMessageEvent(this.testFrameworkRule.getInstance(Configuration.class),
-        this.testFrameworkRule.getInstance(ChatBotConfiguration.class),
         this.testFrameworkRule.getInstance(Key.get(new TypeLiteral<ChatBotFactory<PircBotX>>() {
         })),
         this.testFrameworkRule.getInstance(Key.get(new TypeLiteral<ChatUserFactory<User>>() {
         })),
-        this.testFrameworkRule.getInstance(CommandUtils.class),
         this.testFrameworkRule.getInstance(ExecutionUtils.class), genericMessageEvent);
   }
 
