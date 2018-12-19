@@ -11,7 +11,6 @@ import org.pircbotx.User;
 
 import com.mechjacktv.configuration.ConfigurationTestModule;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
-import com.mechjacktv.mechjackbot.CommandUtils;
 import com.mechjacktv.mechjackbot.command.CommandTestModule;
 import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.twitchclient.TwitchLogin;
@@ -30,8 +29,7 @@ public class PircBotXChatUserUnitTests {
   }
 
   private PircBotXChatUser givenIHaveASubjectToTest(final User user) {
-    return new PircBotXChatUser(this.testFrameworkRule.getInstance(ChatBotConfiguration.class),
-        this.testFrameworkRule.getInstance(CommandUtils.class), user);
+    return new PircBotXChatUser(this.testFrameworkRule.getInstance(ChatBotConfiguration.class), user);
   }
 
   private User givenIHaveAFakeUser() {

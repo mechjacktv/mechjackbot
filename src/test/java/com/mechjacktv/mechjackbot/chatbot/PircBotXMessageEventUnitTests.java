@@ -15,6 +15,7 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.Rule;
 import org.junit.Test;
 import org.pircbotx.PircBotX;
+import org.pircbotx.User;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import com.mechjacktv.configuration.Configuration;
@@ -49,6 +50,8 @@ public class PircBotXMessageEventUnitTests {
     return new PircBotXMessageEvent(this.testFrameworkRule.getInstance(Configuration.class),
         this.testFrameworkRule.getInstance(ChatBotConfiguration.class),
         this.testFrameworkRule.getInstance(Key.get(new TypeLiteral<ChatBotFactory<PircBotX>>() {
+        })),
+        this.testFrameworkRule.getInstance(Key.get(new TypeLiteral<ChatUserFactory<User>>() {
         })),
         this.testFrameworkRule.getInstance(CommandUtils.class),
         this.testFrameworkRule.getInstance(ExecutionUtils.class), genericMessageEvent);

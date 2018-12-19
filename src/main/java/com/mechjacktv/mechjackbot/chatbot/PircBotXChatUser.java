@@ -5,18 +5,15 @@ import org.pircbotx.User;
 import com.mechjacktv.mechjackbot.AccessLevel;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.ChatUser;
-import com.mechjacktv.mechjackbot.CommandUtils;
 import com.mechjacktv.twitchclient.TwitchLogin;
 
 final class PircBotXChatUser implements ChatUser {
 
   private final ChatBotConfiguration chatBotConfiguration;
-  private final CommandUtils commandUtils;
   private final User user;
 
-  PircBotXChatUser(final ChatBotConfiguration chatBotConfiguration, final CommandUtils commandUtils, final User user) {
+  PircBotXChatUser(final ChatBotConfiguration chatBotConfiguration, final User user) {
     this.chatBotConfiguration = chatBotConfiguration;
-    this.commandUtils = commandUtils;
     this.user = user;
   }
 

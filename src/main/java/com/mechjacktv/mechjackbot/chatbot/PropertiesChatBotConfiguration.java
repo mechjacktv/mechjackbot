@@ -5,6 +5,10 @@ import java.io.File;
 import javax.inject.Inject;
 
 import com.google.common.base.Strings;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.DataLocation;
 import com.mechjacktv.mechjackbot.TwitchChannel;
@@ -16,9 +20,6 @@ import com.mechjacktv.util.FilePropertiesSource;
 import com.mechjacktv.util.HotUpdatePropertiesWrapper;
 import com.mechjacktv.util.PropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class PropertiesChatBotConfiguration extends HotUpdatePropertiesWrapper
     implements ChatBotConfiguration, TwitchClientConfiguration {
