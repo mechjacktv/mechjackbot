@@ -3,11 +3,19 @@ package com.mechjacktv.util;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
+import org.junit.Rule;
 import org.junit.Test;
+
+import com.mechjacktv.testframework.TestFrameworkRule;
 
 public abstract class TimeUtilsContractTests {
 
-  private static final ExecutionUtils EXECUTION_UTILS = new DefaultExecutionUtils();
+  @Rule
+  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+
+  protected void installModules() {
+    this.testFrameworkRule.installModule(new UtilTestModule());
+  }
 
   abstract TimeUtils givenASubjectToTest();
 
@@ -22,12 +30,12 @@ public abstract class TimeUtilsContractTests {
 
   @Test
   public final void secondAsMs_nullSecond_throwsNullPointerException() {
+    this.installModules();
     final TimeUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.secondsAsMs(null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class)
-        .hasMessage(EXECUTION_UTILS.nullMessageForName("seconds"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "seconds");
   }
 
   @Test
@@ -41,11 +49,12 @@ public abstract class TimeUtilsContractTests {
 
   @Test
   public final void hoursAsMs_nullSecond_throwsNullPointerException() {
+    this.installModules();
     final TimeUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.hoursAsMs(null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class).hasMessage(EXECUTION_UTILS.nullMessageForName("hours"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "hours");
   }
 
 }

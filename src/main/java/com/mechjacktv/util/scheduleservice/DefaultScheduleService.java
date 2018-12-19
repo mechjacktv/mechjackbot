@@ -15,7 +15,7 @@ public final class DefaultScheduleService implements ScheduleService {
   private final ScheduledExecutorService scheduledExecutorService;
 
   @Inject
-  public DefaultScheduleService() {
+  DefaultScheduleService() {
     this(Executors.newScheduledThreadPool(POOL_SIZE));
   }
 

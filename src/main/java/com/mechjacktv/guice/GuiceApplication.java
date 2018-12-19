@@ -1,6 +1,8 @@
 package com.mechjacktv.guice;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.google.inject.Guice;
@@ -16,8 +18,10 @@ public abstract class GuiceApplication {
   }
 
   protected GuiceApplication(final Collection<Module> modules) {
+    final Set<Module> allModules = new HashSet<>(modules);
+    allModules.add(new GuiceModule());
     this.injector = Guice.createInjector(modules);
-    InjectorBridge.INSTANCE = new InjectorBridge(this.injector);
+    DefaultInjectorBridge.INSTANCE.setInjector(this.injector);
   }
 
   public final void start() {

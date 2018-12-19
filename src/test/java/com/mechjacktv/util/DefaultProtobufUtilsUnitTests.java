@@ -3,8 +3,13 @@ package com.mechjacktv.util;
 public class DefaultProtobufUtilsUnitTests extends ProtobufUtilsContractTests {
 
   @Override
-  ProtobufUtils givenASubjectToTest() {
-    return new DefaultProtobufUtils(new DefaultExecutionUtils());
+  protected DefaultProtobufUtils givenASubjectToTest() {
+    return new DefaultProtobufUtils(this.testFrameworkRule.getInstance(ExecutionUtils.class));
+  }
+
+  @Override
+  protected void installModules() {
+    this.testFrameworkRule.installModule(new UtilTestModule());
   }
 
 }

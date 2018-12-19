@@ -1,33 +1,20 @@
 package com.mechjacktv.guice;
 
-import java.util.Objects;
-
-import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.Provider;
 
-public class InjectorBridge {
+public interface InjectorBridge {
 
-  static InjectorBridge INSTANCE = null;
-
-  private final Injector injector;
-
-  public static InjectorBridge getInstance() {
-    if (Objects.isNull(INSTANCE)) {
-      throw new IllegalStateException("No InjectorBridge instance has been set.");
-    }
-    return INSTANCE;
+  static InjectorBridge getBridge() {
+    return DefaultInjectorBridge.INSTANCE;
   }
 
-  InjectorBridge(final Injector injector) {
-    this.injector = injector;
-  }
+  <T> T getInstance(Class<T> type);
 
-  public final <T> T getInstance(Class<T> type) {
-    return this.injector.getInstance(type);
-  }
+  <T> T getInstance(Key<T> type);
 
-  public final <T> Provider<T> getProvider(Class<T> type) {
-    return this.injector.getProvider(type);
-  }
+  <T> Provider<T> getProvider(Class<T> type);
+
+  <T> Provider<T> getProvider(Key<T> type);
 
 }

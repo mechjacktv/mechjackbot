@@ -1,5 +1,6 @@
 package com.mechjacktv.util;
 
+import static com.mechjacktv.testframework.TestFrameworkRule.ARBITRARY_COLLECTION_SIZE;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -7,59 +8,67 @@ import static org.mockito.Mockito.verify;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 
+import com.mechjacktv.util.function.ConsumerWithException;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 public class HotUpdatePropertiesWrapperUnitTests extends HotUpdatePropertiesWrapperContractTests {
 
-  private static final Integer NUMBER_OF_PROPERTIES = 3;
-
-  private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
-
   @Override
-  protected HotUpdatePropertiesWrapper givenASubjectToTest(final Supplier<InputStream> propertiesSupplier,
-      final ScheduleService scheduleService) {
-    return this.givenASubjectToTest(propertiesSupplier, scheduleService, mock(Logger.class));
+  protected HotUpdatePropertiesWrapper givenASubjectToTest(final PropertiesSource propertiesSource) {
+    return this.givenASubjectToTest(propertiesSource, this.testFrameworkRule.getInstance(ScheduleService.class),
+        mock(Logger.class));
   }
 
-  private HotUpdatePropertiesWrapper givenASubjectToTest(final Supplier<InputStream> propertiesSupplier,
+  private HotUpdatePropertiesWrapper givenASubjectToTest(final PropertiesSource propertiesSource,
+      final Logger logger) {
+    return this.givenASubjectToTest(propertiesSource, mock(ScheduleService.class), logger);
+  }
+
+  private HotUpdatePropertiesWrapper givenASubjectToTest(final PropertiesSource propertiesSource,
       final ScheduleService scheduleService, final Logger logger) {
-    return new TestHotUpdatePropertiesWrapper(propertiesSupplier, scheduleService, logger);
+    return new TestHotUpdatePropertiesWrapper(propertiesSource, scheduleService, logger);
   }
 
   @Override
   protected Map<String, String> givenAPropertiesMap() {
     final Map<String, String> properties = new HashMap<>();
 
-    for (int i = 0; i < NUMBER_OF_PROPERTIES; i++) {
-      properties.put(this.arbitraryDataGenerator.getString(), this.arbitraryDataGenerator.getString());
+    for (int i = 0; i < ARBITRARY_COLLECTION_SIZE; i++) {
+      properties.put(this.testFrameworkRule.getArbitraryString(), this.testFrameworkRule.getArbitraryString());
     }
     return properties;
   }
 
   @Test
-  public final void getProperties_withExceptionGettingInputStream_logsError() {
-    final Logger log = mock(Logger.class);
-    final HotUpdatePropertiesWrapper subjectUnderTest = this.givenASubjectToTest(() -> {
-      throw new IORuntimeException("test exception", new Exception());
-    }, mock(ScheduleService.class), log);
+  public final void getProperties_withExceptionReadingPropertiesSource_logsError() {
+    final Logger logger = mock(Logger.class);
+    final HotUpdatePropertiesWrapper subjectUnderTest = this.givenASubjectToTest(new ExceptionalPropertiesSource(),
+        logger);
 
     subjectUnderTest.getProperties();
 
-    verify(log).error(isA(String.class), isA(Throwable.class));
+    verify(logger).error(isA(String.class), isA(Throwable.class));
   }
 
   private static final class TestHotUpdatePropertiesWrapper extends HotUpdatePropertiesWrapper {
 
-    TestHotUpdatePropertiesWrapper(final Supplier<InputStream> propertiesSupplier,
-        final ScheduleService scheduleService, final Logger logger) {
-      super(propertiesSupplier, scheduleService, logger);
+    TestHotUpdatePropertiesWrapper(final PropertiesSource propertiesSource, final ScheduleService scheduleService,
+        final Logger logger) {
+      super(propertiesSource, scheduleService, logger);
     }
 
+  }
+
+  private static final class ExceptionalPropertiesSource implements PropertiesSource {
+
+    @Override
+    public void read(final ConsumerWithException<InputStream> propertiesLoader) throws Exception {
+      throw new Exception();
+    }
   }
 
 }

@@ -5,11 +5,15 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 
 import java.util.Optional;
 
+import org.junit.Rule;
 import org.junit.Test;
+
+import com.mechjacktv.testframework.TestFrameworkRule;
 
 public abstract class TwitchClientConfigurationContractTests {
 
-  private static final String TWITCH_CLIENT_ID = "TWITCH_CLIENT_ID";
+  @Rule
+  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
   protected abstract TwitchClientConfiguration givenASubjectToTest(Optional<String> clientId);
 
@@ -24,11 +28,12 @@ public abstract class TwitchClientConfigurationContractTests {
 
   @Test
   public final void getTwitchClientId_isPresent_returnsTwitchClientId() {
-    final TwitchClientConfiguration subjectUnderTest = this.givenASubjectToTest(Optional.of(TWITCH_CLIENT_ID));
+    final String clientId = this.testFrameworkRule.getArbitraryString();
+    final TwitchClientConfiguration subjectUnderTest = this.givenASubjectToTest(Optional.of(clientId));
 
     final TwitchClientId result = subjectUnderTest.getTwitchClientId();
 
-    assertThat(result.value).isEqualTo(TWITCH_CLIENT_ID);
+    assertThat(result.value).isEqualTo(clientId);
   }
 
 }

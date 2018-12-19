@@ -1,7 +1,5 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
-import java.util.Set;
-
 import javax.inject.Inject;
 
 import org.pircbotx.PircBotX;
@@ -10,29 +8,29 @@ import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.PingEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
-import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.mechjackbot.Message;
+import com.mechjacktv.mechjackbot.MessageEventHandler;
+import com.mechjacktv.mechjackbot.TwitchChannel;
 
-final class PircBotXListener extends ListenerAdapter {
+public final class PircBotXListener extends ListenerAdapter {
 
   static final String JOIN_EVENT_MESSAGE_KEY = "chat_bot.join_event.message";
   static final String JOIN_EVENT_MESSAGE_DEFAULT = "Present and ready for action";
 
-  private final AppConfiguration appConfiguration;
-  private final CommandRegistry commandRegistry;
+  private final Configuration configuration;
   private final ChatBotFactory<PircBotX> chatBotFactory;
   private final MessageEventFactory<GenericMessageEvent> messageEventFactory;
+  private final MessageEventHandler messageEventHandler;
 
   @Inject
-  public PircBotXListener(final Set<Command> commands, final AppConfiguration appConfiguration,
-      final CommandRegistry commandRegistry, final ChatBotFactory<PircBotX> chatBotFactory,
-      final MessageEventFactory<GenericMessageEvent> messageEventFactory) {
-    this.appConfiguration = appConfiguration;
-    this.commandRegistry = commandRegistry;
+  PircBotXListener(final Configuration configuration, final ChatBotFactory<PircBotX> chatBotFactory,
+      final MessageEventFactory<GenericMessageEvent> messageEventFactory,
+      final MessageEventHandler messageEventHandler) {
+    this.configuration = configuration;
     this.chatBotFactory = chatBotFactory;
     this.messageEventFactory = messageEventFactory;
-    for (final Command command : commands) {
-      this.commandRegistry.addCommand(command);
-    }
+    this.messageEventHandler = messageEventHandler;
   }
 
   @Override
@@ -42,18 +40,12 @@ final class PircBotXListener extends ListenerAdapter {
 
   @Override
   public final void onGenericMessage(final GenericMessageEvent event) {
-    final MessageEvent messageEvent = this.messageEventFactory.create(event);
-
-    for (final Command command : this.commandRegistry.getCommands()) {
-      if (command.isTriggered(messageEvent)) {
-        command.handleMessageEvent(messageEvent);
-      }
-    }
+    this.messageEventHandler.handleMessageEvent(this.messageEventFactory.create(event));
   }
 
   @Override
   public void onJoin(final JoinEvent event) {
     this.chatBotFactory.create(event.getBot()).sendMessage(TwitchChannel.of(event.getChannel().getName()),
-        Message.of(this.appConfiguration.get(JOIN_EVENT_MESSAGE_KEY, JOIN_EVENT_MESSAGE_DEFAULT)));
+        Message.of(this.configuration.get(JOIN_EVENT_MESSAGE_KEY, JOIN_EVENT_MESSAGE_DEFAULT)));
   }
 }

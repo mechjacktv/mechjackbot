@@ -4,7 +4,7 @@ import com.google.protobuf.Message;
 
 import com.mechjacktv.proto.twitchclient.TwitchClientMessage.UserFollow;
 
-public final class UserFollowMessageTypeAdapter extends AbstractMessageTypeAdapter<UserFollow> {
+public final class UserFollowMessageTypeAdapter extends BaseMessageTypeAdapter<UserFollow> {
 
   @Override
   Message.Builder getBuilder() {

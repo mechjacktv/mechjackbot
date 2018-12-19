@@ -10,23 +10,25 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
+import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.TimeUtils;
 
 public final class DefaultCommandUtils implements CommandUtils {
 
-  private final AppConfiguration appConfiguration;
+  private final Configuration configuration;
   private final ExecutionUtils executionUtils;
   private final TimeUtils timeUtils;
   private final Map<CommandTrigger, Pattern> commandTriggerPatterns;
   private final Map<CommandTrigger, LastTrigger> commandLastTrigger;
-  private final Map<ChatUsername, LastTrigger> viewerLastTrigger;
+  private final Map<TwitchLogin, LastTrigger> viewerLastTrigger;
 
   @Inject
-  public DefaultCommandUtils(final AppConfiguration appConfiguration, final ChatBotConfiguration botConfiguration,
-      final ExecutionUtils executionUtils, final TimeUtils timeUtils) {
-    this.appConfiguration = appConfiguration;
+  DefaultCommandUtils(final Configuration configuration, final ExecutionUtils executionUtils,
+      final TimeUtils timeUtils) {
+    this.configuration = configuration;
     this.executionUtils = executionUtils;
     this.timeUtils = timeUtils;
     this.commandTriggerPatterns = new HashMap<>();
@@ -40,7 +42,7 @@ public final class DefaultCommandUtils implements CommandUtils {
     Objects.requireNonNull(messageEvent, this.executionUtils.nullMessageForName("messageEvent"));
     return this.executionUtils.softenException(() -> {
       final Method method = command.getClass().getMethod("handleMessageEvent", MessageEvent.class);
-      final RestrictToAccessLevel roles = method.getAnnotation(RestrictToAccessLevel.class);
+      final RequiresAccessLevel roles = method.getAnnotation(RequiresAccessLevel.class);
 
       if (Objects.isNull(roles)) {
         return true;
@@ -65,18 +67,18 @@ public final class DefaultCommandUtils implements CommandUtils {
       if (Objects.nonNull(noCoolDown)
           || this.hasAccessLevel(messageEvent, AccessLevel.MODERATOR)) {
         return true;
-      } else if (this.isCooledDown(command.getTrigger(), messageEvent.getChatUser().getUsername(), now)) {
+      } else if (this.isCooledDown(command.getTrigger(), messageEvent.getChatUser().getTwitchLogin(), now)) {
         this.commandLastTrigger.put(command.getTrigger(), LastTrigger.of(now));
-        this.viewerLastTrigger.put(messageEvent.getChatUser().getUsername(), LastTrigger.of(now));
+        this.viewerLastTrigger.put(messageEvent.getChatUser().getTwitchLogin(), LastTrigger.of(now));
         return true;
       }
       return false;
     }, CommandException.class);
   }
 
-  private boolean isCooledDown(final CommandTrigger commandTrigger, final ChatUsername chatUsername, final long now) {
+  private boolean isCooledDown(final CommandTrigger commandTrigger, final TwitchLogin twitchLog, final long now) {
     return this.isCooledDown(() -> this.commandLastTrigger.get(commandTrigger), this::getCommandCoolDown, now)
-        && this.isCooledDown(() -> this.viewerLastTrigger.get(chatUsername), this::getViewerCoolDown, now);
+        && this.isCooledDown(() -> this.viewerLastTrigger.get(twitchLog), this::getUserCoolDown, now);
   }
 
   private boolean isCooledDown(final Supplier<LastTrigger> lastTriggerSupplier,
@@ -88,14 +90,12 @@ public final class DefaultCommandUtils implements CommandUtils {
 
   private CoolDownPeriodMs getCommandCoolDown() {
     return CoolDownPeriodMs.of(this.timeUtils.secondsAsMs(Integer.parseInt(
-        this.appConfiguration.get(COMMAND_COMMAND_COOL_DOWN_KEY,
-            COMMAND_COMMAND_COOL_DOWN_DEFAULT))));
+        this.configuration.get(KEY_COMMAND_COOL_DOWN, DEFAULT_COMMAND_COOL_DOWN))));
   }
 
-  private CoolDownPeriodMs getViewerCoolDown() {
+  private CoolDownPeriodMs getUserCoolDown() {
     return CoolDownPeriodMs.of(this.timeUtils.secondsAsMs(Integer.parseInt(
-        this.appConfiguration.get(COMMAND_VIEWER_COOL_DOWN_KEY,
-            COMMAND_VIEWER_COOL_DOWN_DEFAULT))));
+        this.configuration.get(KEY_USER_COOL_DOWN, DEFAULT_USER_COOL_DOWN))));
   }
 
   @Override
@@ -124,20 +124,19 @@ public final class DefaultCommandUtils implements CommandUtils {
   }
 
   @Override
-  public final void sendUsage(final Command command, final MessageEvent messageEvent) {
+  public final Message createUsageMessage(final Command command, final MessageEvent messageEvent) {
     Objects.requireNonNull(command, this.executionUtils.nullMessageForName("command"));
     Objects.requireNonNull(messageEvent, this.executionUtils.nullMessageForName("messageEvent"));
 
-    final String messageFormat = this.appConfiguration.get(COMMAND_USAGE_MESSAGE_FORMAT_KEY,
-        COMMAND_USAGE_MESSAGE_FORMAT_DEFAULT);
+    final String messageFormat = this.configuration.get(KEY_USAGE_MESSAGE_FORMAT,
+        DEFAULT_USAGE_MESSAGE_FORMAT);
 
-    messageEvent.sendResponse(Message.of(String.format(messageFormat,
-        this.sanitizeChatUsername(messageEvent.getChatUser().getUsername()), command.getTrigger(),
-        command.getUsage())));
+    return Message.of(String.format(messageFormat, messageEvent.getChatUser().getTwitchLogin(),
+        command.getTrigger(), command.getUsage()));
   }
 
   @Override
-  public Message messageWithoutTrigger(final Command command, final MessageEvent messageEvent) {
+  public Message stripTriggerFromMessage(final Command command, final MessageEvent messageEvent) {
     Objects.requireNonNull(command, this.executionUtils.nullMessageForName("command"));
     Objects.requireNonNull(messageEvent, this.executionUtils.nullMessageForName("messageEvent"));
 
@@ -145,18 +144,6 @@ public final class DefaultCommandUtils implements CommandUtils {
     final Message message = messageEvent.getMessage();
 
     return Message.of(message.value.substring(commandTrigger.value.length()).trim());
-  }
-
-  @Override
-  public final ChatUsername sanitizeChatUsername(ChatUsername chatUsername) {
-    Objects.requireNonNull(chatUsername, this.executionUtils.nullMessageForName("chatUsername"));
-
-    String sanitizedValue = chatUsername.value.trim().toLowerCase();
-
-    if (sanitizedValue.startsWith("@")) {
-      sanitizedValue = sanitizedValue.substring(1);
-    }
-    return ChatUsername.of(sanitizedValue);
   }
 
 }

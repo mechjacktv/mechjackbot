@@ -3,9 +3,14 @@ package com.mechjacktv.mechjackbot.chatbot;
 import java.util.Objects;
 
 import org.pircbotx.PircBotX;
+import org.pircbotx.User;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
-import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.mechjackbot.ChatBot;
+import com.mechjacktv.mechjackbot.ChatUser;
+import com.mechjacktv.mechjackbot.Message;
+import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.util.ExecutionUtils;
 
 public final class PircBotXMessageEvent implements MessageEvent {
@@ -13,20 +18,18 @@ public final class PircBotXMessageEvent implements MessageEvent {
   static final String RESPONSE_MESSAGE_FORMAT_KEY = PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_KEY;
   static final String RESPONSE_MESSAGE_FORMAT_DEFAULT = PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_DEFAULT;
 
-  private final AppConfiguration appConfiguration;
-  private final ChatBotConfiguration chatBotConfiguration;
+  private final Configuration configuration;
   private final ChatBotFactory<PircBotX> chatBotFactory;
-  private final CommandUtils commandUtils;
+  private final ChatUserFactory<User> chatUserFactory;
   private final ExecutionUtils executionUtils;
   private final GenericMessageEvent genericMessageEvent;
 
-  PircBotXMessageEvent(final AppConfiguration appConfiguration, final ChatBotConfiguration chatBotConfiguration,
-      final ChatBotFactory<PircBotX> chatBotFactory, final CommandUtils commandUtils,
-      final ExecutionUtils executionUtils, final GenericMessageEvent genericMessageEvent) {
-    this.appConfiguration = appConfiguration;
-    this.chatBotConfiguration = chatBotConfiguration;
+  PircBotXMessageEvent(final Configuration configuration, final ChatBotFactory<PircBotX> chatBotFactory,
+      final ChatUserFactory<User> chatUserFactory, final ExecutionUtils executionUtils,
+      final GenericMessageEvent genericMessageEvent) {
+    this.configuration = configuration;
     this.chatBotFactory = chatBotFactory;
-    this.commandUtils = commandUtils;
+    this.chatUserFactory = chatUserFactory;
     this.executionUtils = executionUtils;
     this.genericMessageEvent = genericMessageEvent;
   }
@@ -38,7 +41,7 @@ public final class PircBotXMessageEvent implements MessageEvent {
 
   @Override
   public ChatUser getChatUser() {
-    return new PircBotXChatUser(this.chatBotConfiguration, this.commandUtils, this.genericMessageEvent.getUser());
+    return this.chatUserFactory.create(this.genericMessageEvent.getUser());
   }
 
   @Override
@@ -50,7 +53,7 @@ public final class PircBotXMessageEvent implements MessageEvent {
   public void sendResponse(final Message message) {
     Objects.requireNonNull(message, this.executionUtils.nullMessageForName("message"));
     this.genericMessageEvent.respondWith(String.format(
-        this.appConfiguration.get(RESPONSE_MESSAGE_FORMAT_KEY, RESPONSE_MESSAGE_FORMAT_DEFAULT), message.value));
+        this.configuration.get(RESPONSE_MESSAGE_FORMAT_KEY, RESPONSE_MESSAGE_FORMAT_DEFAULT), message.value));
   }
 
 }

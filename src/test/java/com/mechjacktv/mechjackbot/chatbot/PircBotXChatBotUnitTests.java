@@ -1,80 +1,99 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
+import static com.mechjacktv.mechjackbot.chatbot.PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_KEY;
+import static com.mechjacktv.mechjackbot.chatbot.PircBotXChatBot.SHUTDOWN_MESSAGE_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.function.Function;
 
 import org.assertj.core.api.SoftAssertions;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.Listener;
 import org.pircbotx.output.OutputIRC;
 
-import com.mechjacktv.mechjackbot.*;
-import com.mechjacktv.util.ArbitraryDataGenerator;
-import com.mechjacktv.util.DefaultExecutionUtils;
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.ConfigurationTestModule;
+import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.mechjackbot.ChatBotConfiguration;
+import com.mechjacktv.mechjackbot.Message;
+import com.mechjacktv.mechjackbot.TwitchChannel;
+import com.mechjacktv.mechjackbot.command.CommandTestModule;
+import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.util.ExecutionUtils;
+import com.mechjacktv.util.UtilTestModule;
 
 public class PircBotXChatBotUnitTests {
 
-  private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
-  private final ExecutionUtils executionUtils = new DefaultExecutionUtils();
+  @Rule
+  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
-  private PircBotXChatBot givenIHaveASubjectToTest(final PircBotX pircBotX) {
-    return this.givenIHaveASubjectToTest(mock(AppConfiguration.class), pircBotX);
+  private void installModules() {
+    this.testFrameworkRule.installModule(new ChatBotTestModule());
+    this.testFrameworkRule.installModule(new CommandTestModule());
+    this.testFrameworkRule.installModule(new ConfigurationTestModule());
+    this.testFrameworkRule.installModule(new UtilTestModule());
   }
 
-  @SuppressWarnings("unchecked")
-  private PircBotXChatBot givenIHaveASubjectToTest(final AppConfiguration appConfiguration, final PircBotX pircBotX) {
-    final Function<Configuration, PircBotX> botFactory = mock(Function.class);
-
-    when(botFactory.apply(isA(Configuration.class))).thenReturn(pircBotX);
-    return this.givenIHaveASubjectToTest(appConfiguration, this.givenIHaveAFakeChatBotConfiguration(),
-        mock(Listener.class), botFactory);
+  private PircBotXChatBot givenASubjectToTest() {
+    return this.givenASubjectToTest(this.givenAFakePircBotX());
   }
 
-  private PircBotXChatBot givenIHaveASubjectToTest(final AppConfiguration appConfiguration,
-      final ChatBotConfiguration chatBotConfiguration, final Listener listener,
-      final Function<Configuration, PircBotX> botFactory) {
-    return new PircBotXChatBot(appConfiguration, chatBotConfiguration, this.executionUtils, listener,
-        botFactory);
+  private PircBotXChatBot givenASubjectToTest(final PircBotX pircBotX) {
+    return this.givenASubjectToTest(mock(Listener.class), pircBotX);
   }
 
-  private ChatBotConfiguration givenIHaveAFakeChatBotConfiguration() {
-    final ChatBotConfiguration chatBotConfiguration = mock(ChatBotConfiguration.class);
-    final TwitchUsername twitchUsername = TwitchUsername.of(this.arbitraryDataGenerator.getString());
-    final TwitchPassword twitchPassword = TwitchPassword.of(this.arbitraryDataGenerator.getString());
-    final TwitchChannel twitchChannel = TwitchChannel.of(this.arbitraryDataGenerator.getString());
+  private PircBotXChatBot givenASubjectToTest(final Listener listener, final PircBotX pircBotX) {
+    return this.givenASubjectToTest(listener, configuration -> pircBotX);
+  }
 
-    when(chatBotConfiguration.getTwitchUsername()).thenReturn(twitchUsername);
-    when(chatBotConfiguration.getTwitchPassword()).thenReturn(twitchPassword);
-    when(chatBotConfiguration.getTwitchChannel()).thenReturn(twitchChannel);
-    return chatBotConfiguration;
+  private PircBotXChatBot givenASubjectToTest(final Listener listener,
+      final Function<org.pircbotx.Configuration, PircBotX> botFactory) {
+    return new PircBotXChatBot(this.testFrameworkRule.getInstance(Configuration.class),
+        this.testFrameworkRule.getInstance(ChatBotConfiguration.class),
+        this.testFrameworkRule.getInstance(ExecutionUtils.class),
+        listener, botFactory);
+  }
+
+  private PircBotX givenAFakePircBotX() {
+    return this.givenAFakePircBotX(mock(OutputIRC.class));
+  }
+
+  private PircBotX givenAFakePircBotX(final OutputIRC outputIRC) {
+    final PircBotX pircBotX = mock(PircBotX.class);
+
+    when(pircBotX.sendIRC()).thenReturn(outputIRC);
+    return pircBotX;
   }
 
   @Test
   @SuppressWarnings("unchecked")
   public final void new_withConfiguration_configuresPircBotXCorrectly() {
-    final ChatBotConfiguration chatBotConfiguration = this.givenIHaveAFakeChatBotConfiguration();
+    this.installModules();
     final Listener listener = mock(Listener.class);
-    final Function<Configuration, PircBotX> botFactory = mock(Function.class);
-    final ArgumentCaptor<Configuration> configurationArgumentCaptor = ArgumentCaptor.forClass(Configuration.class);
-    when(botFactory.apply(configurationArgumentCaptor.capture())).thenReturn(mock(PircBotX.class));
-    this.givenIHaveASubjectToTest(mock(AppConfiguration.class), chatBotConfiguration, listener, botFactory);
+    final PircBotX pircBotX = this.givenAFakePircBotX();
+    final Function<org.pircbotx.Configuration, PircBotX> botFactory = mock(Function.class);
+    final ArgumentCaptor<org.pircbotx.Configuration> configurationArgumentCaptor = ArgumentCaptor.forClass(
+        org.pircbotx.Configuration.class);
+    when(botFactory.apply(configurationArgumentCaptor.capture())).thenReturn(pircBotX);
+    this.givenASubjectToTest(listener, botFactory);
 
-    final Configuration result = configurationArgumentCaptor.getValue();
+    final org.pircbotx.Configuration result = configurationArgumentCaptor.getValue();
 
+    final ChatBotConfiguration chatBotConfiguration = this.testFrameworkRule.getInstance(ChatBotConfiguration.class);
     final SoftAssertions softly = new SoftAssertions();
-    final Configuration.ServerEntry serverEntry = result.getServers().get(0);
-    softly.assertThat(result.getName()).isEqualTo(chatBotConfiguration.getTwitchUsername().value);
+    final org.pircbotx.Configuration.ServerEntry serverEntry = result.getServers().get(0);
+    softly.assertThat(result.getName()).isEqualTo(chatBotConfiguration.getTwitchLogin().value);
     softly.assertThat(serverEntry.getHostname()).isEqualTo(PircBotXChatBot.TWITCH_IRC_SERVER_HOST);
     softly.assertThat(serverEntry.getPort()).isEqualTo(PircBotXChatBot.TWITCH_IRC_SERVER_PORT);
     softly.assertThat(result.getServerPassword()).isEqualTo(chatBotConfiguration.getTwitchPassword().value);
@@ -85,8 +104,9 @@ public class PircBotXChatBotUnitTests {
 
   @Test
   public final void start_whenCalled_callsStartOnPircBotX() throws IOException, IrcException {
-    final PircBotX pircBotX = mock(PircBotX.class);
-    final PircBotXChatBot subjectUnderTest = this.givenIHaveASubjectToTest(pircBotX);
+    this.installModules();
+    final PircBotX pircBotX = this.givenAFakePircBotX();
+    final PircBotXChatBot subjectUnderTest = this.givenASubjectToTest(pircBotX);
 
     subjectUnderTest.start();
 
@@ -95,9 +115,10 @@ public class PircBotXChatBotUnitTests {
 
   @Test
   public final void start_startBotThrowsIOException_throwsChatBotStartupException() throws IOException, IrcException {
-    final PircBotX pircBotX = mock(PircBotX.class);
+    this.installModules();
+    final PircBotX pircBotX = this.givenAFakePircBotX();
     doThrow(IOException.class).when(pircBotX).startBot();
-    final PircBotXChatBot subjectUnderTest = this.givenIHaveASubjectToTest(pircBotX);
+    final PircBotXChatBot subjectUnderTest = this.givenASubjectToTest(pircBotX);
 
     final Throwable thrown = catchThrowable(subjectUnderTest::start);
 
@@ -106,9 +127,10 @@ public class PircBotXChatBotUnitTests {
 
   @Test
   public final void start_startBotThrowsIrcException_throwsChatBotStartupException() throws IOException, IrcException {
-    final PircBotX pircBotX = mock(PircBotX.class);
+    this.installModules();
+    final PircBotX pircBotX = this.givenAFakePircBotX();
     doThrow(IrcException.class).when(pircBotX).startBot();
-    final PircBotXChatBot subjectUnderTest = this.givenIHaveASubjectToTest(pircBotX);
+    final PircBotXChatBot subjectUnderTest = this.givenASubjectToTest(pircBotX);
 
     final Throwable thrown = catchThrowable(subjectUnderTest::start);
 
@@ -117,38 +139,36 @@ public class PircBotXChatBotUnitTests {
 
   @Test
   public final void sendMessage_nullChannel_throwsNullPointerExceptionWithMessage() {
-    final PircBotXChatBot subjectUnderTest = this.givenIHaveASubjectToTest(mock(PircBotX.class));
+    this.installModules();
+    final PircBotXChatBot subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.sendMessage(null,
-        Message.of(this.arbitraryDataGenerator.getString())));
+        Message.of(this.testFrameworkRule.getArbitraryString())));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class)
-        .hasMessage(this.executionUtils.nullMessageForName("channel"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "channel");
   }
 
   @Test
   public final void sendMessage_nullMessage_throwsNullPointerExceptionWithMessage() {
-    final PircBotXChatBot subjectUnderTest = this.givenIHaveASubjectToTest(mock(PircBotX.class));
+    this.installModules();
+    final PircBotXChatBot subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.sendMessage(
-        TwitchChannel.of(this.arbitraryDataGenerator.getString()), null));
+        TwitchChannel.of(this.testFrameworkRule.getArbitraryString()), null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class)
-        .hasMessage(this.executionUtils.nullMessageForName("message"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "message");
   }
 
   @Test
   public final void sendMessage_isCalled_sendsTheFormattedMessage() {
-    final String messageFormat = "Formatted %s";
-    final AppConfiguration appConfiguration = mock(AppConfiguration.class);
-    when(appConfiguration.get(eq(PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_KEY),
-        eq(PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_DEFAULT))).thenReturn(messageFormat);
-    final PircBotX pircBotX = mock(PircBotX.class);
+    this.installModules();
+    final String messageFormat = this.testFrameworkRule.getArbitraryString() + "%s";
+    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    configuration.set(CHAT_BOT_MESSAGE_FORMAT_KEY, messageFormat);
     final OutputIRC outputIRC = mock(OutputIRC.class);
-    when(pircBotX.sendIRC()).thenReturn(outputIRC);
-    final PircBotXChatBot subjectUnderTest = this.givenIHaveASubjectToTest(appConfiguration, pircBotX);
-    final TwitchChannel channel = TwitchChannel.of(this.arbitraryDataGenerator.getString());
-    final Message message = Message.of(this.arbitraryDataGenerator.getString());
+    final TwitchChannel channel = TwitchChannel.of(this.testFrameworkRule.getArbitraryString());
+    final Message message = Message.of(this.testFrameworkRule.getArbitraryString());
+    final PircBotXChatBot subjectUnderTest = this.givenASubjectToTest(this.givenAFakePircBotX(outputIRC));
 
     subjectUnderTest.sendMessage(channel, message);
 
@@ -157,13 +177,13 @@ public class PircBotXChatBotUnitTests {
 
   @Test
   public final void stop_whenCalled_callsStopOnPircBotX() {
-    final String shutdownMessage = this.arbitraryDataGenerator.getString();
-    final AppConfiguration appConfiguration = mock(AppConfiguration.class);
-    final PircBotX pircBotX = mock(PircBotX.class);
+    this.installModules();
+    final String shutdownMessage = this.testFrameworkRule.getArbitraryString();
+    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    configuration.set(SHUTDOWN_MESSAGE_KEY, shutdownMessage);
     final OutputIRC outputIRC = mock(OutputIRC.class);
-    when(pircBotX.sendIRC()).thenReturn(outputIRC);
-    when(appConfiguration.get(eq(PircBotXChatBot.SHUTDOWN_MESSAGE_KEY), isA(String.class))).thenReturn(shutdownMessage);
-    final PircBotXChatBot subjectUnderTest = this.givenIHaveASubjectToTest(appConfiguration, pircBotX);
+    final PircBotX pircBotX = this.givenAFakePircBotX(outputIRC);
+    final PircBotXChatBot subjectUnderTest = this.givenASubjectToTest(pircBotX);
 
     subjectUnderTest.stop();
 

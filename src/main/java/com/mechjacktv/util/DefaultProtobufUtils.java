@@ -14,7 +14,7 @@ public final class DefaultProtobufUtils implements ProtobufUtils {
   private final ExecutionUtils executionUtils;
 
   @Inject
-  public DefaultProtobufUtils(final ExecutionUtils executionUtils) {
+  DefaultProtobufUtils(final ExecutionUtils executionUtils) {
     this.executionUtils = executionUtils;
   }
 

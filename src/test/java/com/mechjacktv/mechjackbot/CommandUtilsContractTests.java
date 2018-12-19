@@ -1,101 +1,95 @@
 package com.mechjacktv.mechjackbot;
 
-import static com.mechjacktv.mechjackbot.CommandUtils.*;
+import static com.mechjacktv.mechjackbot.CommandUtils.DEFAULT_COMMAND_COOL_DOWN;
+import static com.mechjacktv.mechjackbot.CommandUtils.DEFAULT_USAGE_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.CommandUtils.DEFAULT_USER_COOL_DOWN;
+import static com.mechjacktv.mechjackbot.CommandUtils.KEY_COMMAND_COOL_DOWN;
+import static com.mechjacktv.mechjackbot.CommandUtils.KEY_USAGE_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.CommandUtils.KEY_USER_COOL_DOWN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
+import java.util.concurrent.TimeUnit;
+
+import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 
-import com.mechjacktv.mechjackbot.configuration.ArbitraryChatBotConfiguration;
-import com.mechjacktv.mechjackbot.configuration.MapAppConfiguration;
-import com.mechjacktv.util.*;
+import com.mechjacktv.configuration.ConfigurationKey;
+import com.mechjacktv.configuration.ConfigurationTestModule;
+import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.mechjackbot.chatbot.ChatBotTestModule;
+import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
+import com.mechjacktv.mechjackbot.command.CommandTestModule;
+import com.mechjacktv.testframework.TestFrameworkRule;
+import com.mechjacktv.util.UtilTestModule;
 
 public abstract class CommandUtilsContractTests {
 
-  private final ArbitraryDataGenerator arbitraryDataGenerator = new ArbitraryDataGenerator();
+  @Rule
+  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
-  private final ArbitraryChatBotConfiguration chatBotConfiguration = new ArbitraryChatBotConfiguration(
-      this.arbitraryDataGenerator);
-
-  private final ExecutionUtils executionUtils = new DefaultExecutionUtils();
-
-  private final MapAppConfiguration appConfiguration = new MapAppConfiguration(this.executionUtils);
-
-  private final TimeUtils timeUtils = new DefaultTimeUtils();
-
-  private CommandUtils givenASubjectToTest() {
-    return this.givenASubjectToTest(this.appConfiguration, this.chatBotConfiguration, this.timeUtils);
+  protected void installModules() {
+    this.testFrameworkRule.installModule(new ChatBotTestModule());
+    this.testFrameworkRule.installModule(new CommandTestModule());
+    this.testFrameworkRule.installModule(new ConfigurationTestModule());
+    this.testFrameworkRule.installModule(new UtilTestModule());
   }
 
-  private CommandUtils givenASubjectToTest(final TimeUtils timeUtils) {
-    return this.givenASubjectToTest(this.appConfiguration, this.chatBotConfiguration, timeUtils);
+  protected abstract CommandUtils givenASubjectToTest();
+
+  protected Integer getCommandCoolDownDefault() {
+    return Integer.parseInt(DEFAULT_COMMAND_COOL_DOWN);
   }
 
-  protected abstract CommandUtils givenASubjectToTest(final AppConfiguration appConfiguration,
-      final ChatBotConfiguration chatBotConfiguration, final TimeUtils timeUtils);
-
-  private MessageEvent givenAFakeMessageEvent() {
-    final MessageEvent messageEvent = mock(MessageEvent.class);
-    final ChatUser chatUser = mock(ChatUser.class);
-
-    when(messageEvent.getChatUser()).thenReturn(chatUser);
-    when(chatUser.getUsername()).thenReturn(ChatUsername.of(this.arbitraryDataGenerator.getString()));
-    return messageEvent;
+  protected ConfigurationKey getCommandCoolDownKey() {
+    return ConfigurationKey.of(KEY_COMMAND_COOL_DOWN);
   }
 
-  private TimeUtils givenAFakeTimeUtils() {
-    final TimeUtils timeUtils = mock(TimeUtils.class);
+  protected Integer getUserCoolDownDefault() {
+    return Integer.parseInt(DEFAULT_USER_COOL_DOWN);
+  }
 
-    when(timeUtils.currentTime()).thenAnswer((invocation -> this.timeUtils.currentTime()));
-    when(timeUtils.secondsAsMs(isA(Integer.class)))
-        .thenAnswer((invocation -> this.timeUtils.secondsAsMs(invocation.getArgument(0))));
-    when(timeUtils.hoursAsMs(isA(Integer.class)))
-        .thenAnswer((invocation -> this.timeUtils.hoursAsMs(invocation.getArgument(0))));
-    return timeUtils;
+  protected ConfigurationKey getUserCoolDownKey() {
+    return ConfigurationKey.of(KEY_USER_COOL_DOWN);
+  }
+
+  protected String getUsageMessageFormatDefault() {
+    return DEFAULT_USAGE_MESSAGE_FORMAT;
+  }
+
+  protected ConfigurationKey getUsageMessageFormatKey() {
+    return ConfigurationKey.of(KEY_USAGE_MESSAGE_FORMAT);
   }
 
   @Test
   public final void hasAccessLevel_nullCommand_throwsNullPointerException() {
+    this.installModules();
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.hasAccessLevel(null, mock(MessageEvent.class)));
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.hasAccessLevel(null, messageEvent));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class)
-        .hasMessage(this.executionUtils.nullMessageForName("command"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "command");
   }
 
   @Test
   public final void hasAccessLevel_nullMessageEvent_throwsNullPointerException() {
+    this.installModules();
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.hasAccessLevel(mock(Command.class), null));
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.hasAccessLevel(command, null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class)
-        .hasMessage(this.executionUtils.nullMessageForName("messageEvent"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "messageEvent");
   }
 
   @Test
-  public final void hasAccessLevel_commandHasNoRestrictions_returnsTrue() {
+  public final void hasAccessLevel_commandHasNoRestrictions_resultIsTrue() {
+    this.installModules();
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-
-    final boolean result = subjectUnderTest.hasAccessLevel(mock(Command.class), mock(MessageEvent.class));
-
-    assertThat(result).isTrue();
-  }
-
-  @Test
-  public final void hasAccessLevel_userIsOwner_returnsTrue() {
-    final ChatUser chatUser = mock(ChatUser.class);
-    final MessageEvent messageEvent = mock(MessageEvent.class);
-    when(messageEvent.getChatUser()).thenReturn(chatUser);
-    when(chatUser.getUsername()).thenReturn(ChatUsername.of(this.chatBotConfiguration.getTwitchChannel().value));
-    when(chatUser.hasAccessLevel(isA(AccessLevel.class))).thenReturn(true);
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-    final Command command = new RestrictedCommand(this, subjectUnderTest);
 
     final boolean result = subjectUnderTest.hasAccessLevel(command, messageEvent);
 
@@ -103,14 +97,16 @@ public abstract class CommandUtilsContractTests {
   }
 
   @Test
-  public final void hasAccessLevel_userHasRoles_returnsTrue() {
-    final ChatUser chatUser = mock(ChatUser.class);
-    final MessageEvent messageEvent = mock(MessageEvent.class);
-    when(messageEvent.getChatUser()).thenReturn(chatUser);
-    when(chatUser.getUsername()).thenReturn(ChatUsername.of(this.arbitraryDataGenerator.getString()));
-    when(chatUser.hasAccessLevel(eq(AccessLevel.SUBSCRIBER))).thenReturn(true);
+  public final void hasAccessLevel_messageEventIsFromChannelOwner_resultIsTrue() {
+    this.installModules();
+    final ChatBotConfiguration chatBotConfiguration = this.testFrameworkRule.getInstance(ChatBotConfiguration.class);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final TestChatUser chatUser = (TestChatUser) messageEvent.getChatUser();
+    chatUser.setTwitchLogin(chatBotConfiguration.getTwitchLogin());
+    chatUser.setAccessLevelCheck(accessLevel -> true);
+    final Command command = new RequiresAccessLevelSubscriberCommand(
+        this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class));
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-    final Command command = new RestrictedCommand(this, subjectUnderTest);
 
     final boolean result = subjectUnderTest.hasAccessLevel(command, messageEvent);
 
@@ -118,13 +114,33 @@ public abstract class CommandUtilsContractTests {
   }
 
   @Test
-  public final void hasAccessLevel_userDoesNotHaveRoles_returnsFalse() {
-    final ChatUser chatUser = mock(ChatUser.class);
-    final MessageEvent messageEvent = mock(MessageEvent.class);
-    when(messageEvent.getChatUser()).thenReturn(chatUser);
-    when(chatUser.getUsername()).thenReturn(ChatUsername.of(this.arbitraryDataGenerator.getString()));
+  public final void hasAccessLevel_messageEventIsFromUserWithRequiredRole_resultIsTrue() {
+    this.installModules();
+    final ChatBotConfiguration chatBotConfiguration = this.testFrameworkRule.getInstance(ChatBotConfiguration.class);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final TestChatUser chatUser = (TestChatUser) messageEvent.getChatUser();
+    // chatUser is SUBSCRIBER
+    chatUser.setAccessLevelCheck(accessLevel -> AccessLevel.SUBSCRIBER.value() <= accessLevel.value());
+    final Command command = new RequiresAccessLevelSubscriberCommand(
+        this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class));
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-    final Command command = new RestrictedCommand(this, subjectUnderTest);
+
+    final boolean result = subjectUnderTest.hasAccessLevel(command, messageEvent);
+
+    assertThat(result).isTrue();
+  }
+
+  @Test
+  public final void hasAccessLevel_messageEventIsFromUserWithoutRequiredRole_resultIsFalse() {
+    this.installModules();
+    final ChatBotConfiguration chatBotConfiguration = this.testFrameworkRule.getInstance(ChatBotConfiguration.class);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final TestChatUser chatUser = (TestChatUser) messageEvent.getChatUser();
+    // chatUser is FOLLOWER
+    chatUser.setAccessLevelCheck(accessLevel -> AccessLevel.FOLLOWER.value() <= accessLevel.value());
+    final Command command = new RequiresAccessLevelSubscriberCommand(
+        this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class));
+    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final boolean result = subjectUnderTest.hasAccessLevel(command, messageEvent);
 
@@ -133,76 +149,64 @@ public abstract class CommandUtilsContractTests {
 
   @Test
   public final void isCooledDown_nullCommand_throwsNullPointerException() {
+    this.installModules();
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.isCooledDown(null, mock(MessageEvent.class)));
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.isCooledDown(null, messageEvent));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class)
-        .hasMessage(this.executionUtils.nullMessageForName("command"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "command");
   }
 
   @Test
   public final void isCooledDown_nullMessageEvent_throwsNullPointerException() {
+    this.installModules();
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.isCooledDown(mock(Command.class), null));
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.isCooledDown(command, null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class)
-        .hasMessage(this.executionUtils.nullMessageForName("messageEvent"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "messageEvent");
   }
 
   @Test
-  public final void isCooledDown_commandAndUserFirstCalled_returnsTrue() {
+  public final void isCooledDown_commandAndUserFirstCalled_resultIsTrue() {
+    this.installModules();
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final boolean result = subjectUnderTest.isCooledDown(new RestrictedCommand(this, subjectUnderTest),
-        this.givenAFakeMessageEvent());
+    final boolean result = subjectUnderTest.isCooledDown(command, messageEvent);
 
     assertThat(result).isTrue();
   }
 
   @Test
-  public final void isCooledDown_commandIsCooledViewerIsNot_returnsFalse() {
-    final Long originTime = this.arbitraryDataGenerator.getLong();
-    final TimeUtils timeUtils = this.givenAFakeTimeUtils();
-    when(timeUtils.currentTime()).thenReturn(originTime, originTime + 1);
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest(timeUtils);
-    final Command command = new RestrictedCommand(this, subjectUnderTest);
-    // set command lastTrigger
-    subjectUnderTest.isCooledDown(command, this.givenAFakeMessageEvent());
+  public final void isCooledDown_commandIsCooling_resultIsFalse() {
+    this.installModules();
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
+    // set lastTrigger for command
+    subjectUnderTest.isCooledDown(command, this.testFrameworkRule.getInstance(MessageEvent.class));
+    // advance time to the command cool down duration
+    this.testFrameworkRule.currentTimeDelta(this.getCommandCoolDownDefault(), TimeUnit.SECONDS);
 
-    final boolean result = subjectUnderTest.isCooledDown(command, this.givenAFakeMessageEvent());
-
-    assertThat(result).isFalse();
-  }
-
-  @Test
-  public final void isCooledDown_viewerIsCoolCommandIsNot_returnsFalse() {
-    final Long originTime = this.arbitraryDataGenerator.getLong();
-    final TimeUtils timeUtils = this.givenAFakeTimeUtils();
-    when(timeUtils.currentTime()).thenReturn(originTime, originTime + 1);
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest(timeUtils);
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    // set viewer lastTrigger
-    subjectUnderTest.isCooledDown(new RestrictedCommand(this, subjectUnderTest), messageEvent);
-
-    final boolean result = subjectUnderTest.isCooledDown(new RestrictedCommand(this, subjectUnderTest), messageEvent);
+    final boolean result = subjectUnderTest.isCooledDown(command, messageEvent);
 
     assertThat(result).isFalse();
   }
 
   @Test
-  public final void isCooledDown_viewerAndCommandAreCooled_returnsFalse() {
-    final Long originTime = this.arbitraryDataGenerator.getLong();
-    final int userCoolDown = Integer.parseInt(CommandUtils.COMMAND_VIEWER_COOL_DOWN_DEFAULT);
-    final TimeUtils timeUtils = this.givenAFakeTimeUtils();
-    when(timeUtils.currentTime()).thenReturn(originTime,
-        originTime + this.timeUtils.secondsAsMs(userCoolDown + 1));
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest(timeUtils);
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    final Command command = new RestrictedCommand(this, subjectUnderTest);
-    // set lastTriggers
-    subjectUnderTest.isCooledDown(command, messageEvent);
+  public final void isCooledDown_commandIsCooled_resultIsTrue() {
+    this.installModules();
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
+    // set lastTrigger for command
+    subjectUnderTest.isCooledDown(command, this.testFrameworkRule.getInstance(MessageEvent.class));
+    // advance time to one millisecond longer than the command cool down duration
+    this.testFrameworkRule.currentTimeDelta(this.getCommandCoolDownDefault(), TimeUnit.SECONDS, 1);
 
     final boolean result = subjectUnderTest.isCooledDown(command, messageEvent);
 
@@ -210,15 +214,31 @@ public abstract class CommandUtilsContractTests {
   }
 
   @Test
-  public final void isCooledDown_noCoolDownCommand_returnsTrue() {
-    final Long originTime = this.arbitraryDataGenerator.getLong();
-    final TimeUtils timeUtils = this.givenAFakeTimeUtils();
-    when(timeUtils.currentTime()).thenReturn(originTime, originTime + 1);
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest(timeUtils);
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    final Command command = new NoCoolDownCommand(this, subjectUnderTest);
-    // set lastTriggers
-    subjectUnderTest.isCooledDown(command, messageEvent);
+  public final void isCooledDown_userIsCooling_resultIsFalse() {
+    this.installModules();
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
+    // set lastTrigger for user
+    subjectUnderTest.isCooledDown(this.testFrameworkRule.getInstance(TestCommand.class), messageEvent);
+    // advance time to the user cool down duration
+    this.testFrameworkRule.currentTimeDelta(this.getUserCoolDownDefault(), TimeUnit.SECONDS);
+
+    final boolean result = subjectUnderTest.isCooledDown(command, messageEvent);
+
+    assertThat(result).isFalse();
+  }
+
+  @Test
+  public final void isCooledDown_userIsCooled_resultIsTrue() {
+    this.installModules();
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
+    // set lastTrigger for user
+    subjectUnderTest.isCooledDown(this.testFrameworkRule.getInstance(TestCommand.class), messageEvent);
+    // advance time to one millisecond longer than the user cool down duration
+    this.testFrameworkRule.currentTimeDelta(this.getUserCoolDownDefault(), TimeUnit.SECONDS, 1);
 
     final boolean result = subjectUnderTest.isCooledDown(command, messageEvent);
 
@@ -226,16 +246,33 @@ public abstract class CommandUtilsContractTests {
   }
 
   @Test
-  public final void isCooledDown_privilegedViewer_returnsTrue() {
-    final Long originTime = this.arbitraryDataGenerator.getLong();
-    final TimeUtils timeUtils = this.givenAFakeTimeUtils();
-    when(timeUtils.currentTime()).thenReturn(originTime, originTime + 1);
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest(timeUtils);
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    when(messageEvent.getChatUser().hasAccessLevel(eq(AccessLevel.MODERATOR))).thenReturn(true);
-    final Command command = new RestrictedCommand(this, subjectUnderTest);
-    // set lastTriggers
+  public final void isCooledDown_commandAndUserAreCooling_resultIsFalse() {
+    this.installModules();
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
+    // set lastTrigger for command and user
     subjectUnderTest.isCooledDown(command, messageEvent);
+    // advance time to the shorter cool down duration
+    this.testFrameworkRule.currentTimeDelta(Math.min(this.getCommandCoolDownDefault(),
+        this.getUserCoolDownDefault()), TimeUnit.SECONDS);
+
+    final boolean result = subjectUnderTest.isCooledDown(command, messageEvent);
+
+    assertThat(result).isFalse();
+  }
+
+  @Test
+  public final void isCooledDown_commandAndUserAreCooled_resultIsTrue() {
+    this.installModules();
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
+    // set lastTrigger for command and user
+    subjectUnderTest.isCooledDown(command, messageEvent);
+    // advance time to one millisecond longer than the longer cool down duration
+    this.testFrameworkRule.currentTimeDelta(Math.max(this.getCommandCoolDownDefault(),
+        this.getUserCoolDownDefault()), TimeUnit.SECONDS, 1);
 
     final boolean result = subjectUnderTest.isCooledDown(command, messageEvent);
 
@@ -243,109 +280,147 @@ public abstract class CommandUtilsContractTests {
   }
 
   @Test
-  public final void isCooledDown_customCommandCoolDownNotCool_returnsFalse() {
-    final Long originTime = this.arbitraryDataGenerator.getLong();
-    final int defaultCommandCoolDown = Integer.parseInt(CommandUtils.COMMAND_COMMAND_COOL_DOWN_DEFAULT);
-    final String customCommandCoolDown = Integer.toString(defaultCommandCoolDown + 1);
-    this.appConfiguration.set(COMMAND_COMMAND_COOL_DOWN_KEY, customCommandCoolDown);
-    final TimeUtils timeUtils = this.givenAFakeTimeUtils();
-    when(timeUtils.currentTime()).thenReturn(originTime,
-        originTime + 1 + this.timeUtils.secondsAsMs(defaultCommandCoolDown));
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest(timeUtils);
-    final Command command = new RestrictedCommand(this, subjectUnderTest);
-    // set command lastTrigger
-    subjectUnderTest.isCooledDown(command, this.givenAFakeMessageEvent());
+  public final void isCooledDown_noCoolDownCommandBothWouldBeCooling_resultIsTrue() {
+    this.installModules();
+    final Command command = new NoCoolDownCommand(
+        this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class));
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
+    // set lastTrigger for command and user
+    subjectUnderTest.isCooledDown(command, messageEvent);
+    // advance time to the shorter cool down duration
+    this.testFrameworkRule.currentTimeDelta(Math.min(this.getCommandCoolDownDefault(),
+        this.getUserCoolDownDefault()), TimeUnit.SECONDS);
 
-    final boolean result = subjectUnderTest.isCooledDown(command, this.givenAFakeMessageEvent());
-
-    assertThat(result).isFalse();
-  }
-
-  @Test
-  public final void isCooledDown_customCommandCoolDownCooledDown_returnsTrue() {
-    final int delta = 1;
-    final Long originTime = this.arbitraryDataGenerator.getLong();
-    final int defaultCommandCoolDown = Integer.parseInt(CommandUtils.COMMAND_COMMAND_COOL_DOWN_DEFAULT);
-    final String customCommandCoolDown = Integer.toString(defaultCommandCoolDown + delta);
-    this.appConfiguration.set(COMMAND_COMMAND_COOL_DOWN_KEY, customCommandCoolDown);
-    final TimeUtils timeUtils = this.givenAFakeTimeUtils();
-    when(timeUtils.currentTime()).thenReturn(originTime,
-        originTime + 1 + this.timeUtils.secondsAsMs(defaultCommandCoolDown + delta));
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest(timeUtils);
-    final Command command = new RestrictedCommand(this, subjectUnderTest);
-    // set command lastTrigger
-    subjectUnderTest.isCooledDown(command, this.givenAFakeMessageEvent());
-
-    final boolean result = subjectUnderTest.isCooledDown(command, this.givenAFakeMessageEvent());
+    final boolean result = subjectUnderTest.isCooledDown(command, messageEvent);
 
     assertThat(result).isTrue();
   }
 
   @Test
-  public final void isCooledDown_customViewerCoolDownNotCooled_returnsFalse() {
-    final Long originTime = this.arbitraryDataGenerator.getLong();
-    final int defaultViewerCoolDown = Integer.parseInt(CommandUtils.COMMAND_VIEWER_COOL_DOWN_DEFAULT);
-    final String customViewerCoolDown = Integer.toString(defaultViewerCoolDown + 1);
-    this.appConfiguration.set(COMMAND_VIEWER_COOL_DOWN_KEY, customViewerCoolDown);
-    final TimeUtils timeUtils = this.givenAFakeTimeUtils();
-    when(timeUtils.currentTime()).thenReturn(originTime,
-        originTime + 1 + this.timeUtils.secondsAsMs(defaultViewerCoolDown));
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest(timeUtils);
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    // set command lastTrigger
-    subjectUnderTest.isCooledDown(new RestrictedCommand(this, subjectUnderTest), messageEvent);
+  public final void isCooledDown_privilegedUserBothWouldBeCooling_resultIsTrue() {
+    this.installModules();
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final TestChatUser chatUser = (TestChatUser) messageEvent.getChatUser();
+    // chatUser is MODERATOR
+    chatUser.setAccessLevelCheck(accessLevel -> AccessLevel.MODERATOR.value() >= accessLevel.value());
+    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
+    // set lastTrigger for command and user
+    subjectUnderTest.isCooledDown(command, messageEvent);
+    // advance time to the shorter cool down duration
+    this.testFrameworkRule.currentTimeDelta(Math.min(this.getCommandCoolDownDefault(),
+        this.getUserCoolDownDefault()), TimeUnit.SECONDS);
 
-    final boolean result = subjectUnderTest.isCooledDown(new RestrictedCommand(this, subjectUnderTest), messageEvent);
+    final boolean result = subjectUnderTest.isCooledDown(command, messageEvent);
+
+    assertThat(result).isTrue();
+  }
+
+  @Test
+  public final void isCooledDown_customCommandCoolDownCommandIsCooling_resultIsFalse() {
+    this.installModules();
+    final int customCommandCoolDown = this.getCommandCoolDownDefault() + 1;
+    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    configuration.set(this.getCommandCoolDownKey(), Integer.toString(customCommandCoolDown));
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
+    // set lastTrigger for command
+    subjectUnderTest.isCooledDown(command, this.testFrameworkRule.getInstance(MessageEvent.class));
+    // advance time to the custom command cool down duration
+    this.testFrameworkRule.currentTimeDelta(customCommandCoolDown, TimeUnit.SECONDS);
+
+    final boolean result = subjectUnderTest.isCooledDown(command, messageEvent);
 
     assertThat(result).isFalse();
   }
 
   @Test
-  public final void isCooledDown_customViewerCoolDownCooledDown_returnsTrue() {
-    final int delta = 1;
-    final Long originTime = this.arbitraryDataGenerator.getLong();
-    final int defaultViewerCoolDown = Integer.parseInt(CommandUtils.COMMAND_VIEWER_COOL_DOWN_DEFAULT);
-    final String customViewerCoolDown = Integer.toString(defaultViewerCoolDown + delta);
-    this.appConfiguration.set(COMMAND_VIEWER_COOL_DOWN_KEY, customViewerCoolDown);
-    final TimeUtils timeUtils = this.givenAFakeTimeUtils();
-    when(timeUtils.currentTime()).thenReturn(originTime,
-        originTime + 1 + this.timeUtils.secondsAsMs(defaultViewerCoolDown + delta));
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest(timeUtils);
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    // set command lastTrigger
-    subjectUnderTest.isCooledDown(new RestrictedCommand(this, subjectUnderTest), messageEvent);
+  public final void isCooledDown_customCommandCoolDownCommandIsCooled_resultIsTrue() {
+    this.installModules();
+    final int customCommandCoolDown = this.getCommandCoolDownDefault() + 1;
+    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    configuration.set(this.getCommandCoolDownKey(), Integer.toString(customCommandCoolDown));
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
+    // set lastTrigger for command
+    subjectUnderTest.isCooledDown(command, this.testFrameworkRule.getInstance(MessageEvent.class));
+    // advance time to one millisecond past custom command cool down duration
+    this.testFrameworkRule.currentTimeDelta(customCommandCoolDown, TimeUnit.SECONDS, 1);
 
-    final boolean result = subjectUnderTest.isCooledDown(new RestrictedCommand(this, subjectUnderTest), messageEvent);
+    final boolean result = subjectUnderTest.isCooledDown(command, messageEvent);
+
+    assertThat(result).isTrue();
+  }
+
+  @Test
+  public final void isCooledDown_customUserCoolDownUserIsCooling_resultIsFalse() {
+    this.installModules();
+    final int customUserCoolDown = this.getUserCoolDownDefault() + 1;
+    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    configuration.set(this.getUserCoolDownKey(), Integer.toString(customUserCoolDown));
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
+    // set lastTrigger for user
+    subjectUnderTest.isCooledDown(this.testFrameworkRule.getInstance(TestCommand.class), messageEvent);
+    // advance time to the custom user cool down duration
+    this.testFrameworkRule.currentTimeDelta(customUserCoolDown, TimeUnit.SECONDS);
+
+    final boolean result = subjectUnderTest.isCooledDown(command, messageEvent);
+
+    assertThat(result).isFalse();
+  }
+
+  @Test
+  public final void isCooledDown_customUserCoolDownUserIsCooled_resultIsTrue() {
+    this.installModules();
+    final int customUserCoolDown = this.getUserCoolDownDefault() + 1;
+    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    configuration.set(this.getUserCoolDownKey(), Integer.toString(customUserCoolDown));
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
+    final MessageEvent messageEvent = this.testFrameworkRule.getInstance(MessageEvent.class);
+    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
+    // set lastTrigger for user
+    subjectUnderTest.isCooledDown(this.testFrameworkRule.getInstance(TestCommand.class), messageEvent);
+    // advance time to one millisecond longer than the custom user cool down
+    // duration
+    this.testFrameworkRule.currentTimeDelta(customUserCoolDown, TimeUnit.SECONDS, 1);
+
+    final boolean result = subjectUnderTest.isCooledDown(command, messageEvent);
 
     assertThat(result).isTrue();
   }
 
   @Test
   public final void isTriggered_nullCommand_throwsNullPointerException() {
+    this.installModules();
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.isTriggered(null, mock(MessageEvent.class)));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class)
-        .hasMessage(this.executionUtils.nullMessageForName("command"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "command");
   }
 
   @Test
   public final void isTriggered_nullMessageEvent_throwsNullPointerException() {
+    this.installModules();
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.isTriggered(mock(Command.class), null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class)
-        .hasMessage(this.executionUtils.nullMessageForName("messageEvent"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "messageEvent");
   }
 
   @Test
-  public final void isTriggered_messageEventForCommand_returnsTrue() {
+  public final void isTriggered_commandIsTriggered_resultIsTrue() {
+    this.installModules();
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
+    messageEvent.setMessage(Message.of(command.getTrigger().value));
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-    final Command command = new RestrictedCommand(this, subjectUnderTest);
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    when(messageEvent.getMessage()).thenReturn(Message.of(command.getTrigger().value));
 
     final boolean result = subjectUnderTest.isTriggered(command, messageEvent);
 
@@ -353,11 +428,11 @@ public abstract class CommandUtilsContractTests {
   }
 
   @Test
-  public final void isTriggered_messageEventNotForCommand_returnsTrue() {
+  public final void isTriggered_commandIsNotTriggered_resultIsFalse() {
+    this.installModules();
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-    final Command command = new RestrictedCommand(this, subjectUnderTest);
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    when(messageEvent.getMessage()).thenReturn(Message.of(this.arbitraryDataGenerator.getString()));
 
     final boolean result = subjectUnderTest.isTriggered(command, messageEvent);
 
@@ -365,11 +440,12 @@ public abstract class CommandUtilsContractTests {
   }
 
   @Test
-  public final void isTriggered_triggerIsWrongCase_returnsTrue() {
+  public final void isTriggered_triggerIsWrongCase_resultIsTrue() {
+    this.installModules();
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
+    messageEvent.setMessage(Message.of(command.getTrigger().value.toUpperCase()));
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-    final Command command = new RestrictedCommand(this, subjectUnderTest);
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    when(messageEvent.getMessage()).thenReturn(Message.of(command.getTrigger().value.toUpperCase()));
 
     final boolean result = subjectUnderTest.isTriggered(command, messageEvent);
 
@@ -377,192 +453,115 @@ public abstract class CommandUtilsContractTests {
   }
 
   @Test
-  public final void sendUsage_nullCommand_throwsNullPointerException() {
+  public final void createUsageMessage_nullCommand_throwsNullPointerException() {
+    this.installModules();
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.sendUsage(null, mock(MessageEvent.class)));
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.createUsageMessage(null, mock(MessageEvent.class)));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class)
-        .hasMessage(this.executionUtils.nullMessageForName("command"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "command");
   }
 
   @Test
-  public final void sendUsage_nullMessageEvent_throwsNullPointerException() {
+  public final void createUsageMessage_nullMessageEvent_throwsNullPointerException() {
+    this.installModules();
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.sendUsage(mock(Command.class), null));
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.createUsageMessage(mock(Command.class), null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class)
-        .hasMessage(this.executionUtils.nullMessageForName("messageEvent"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "messageEvent");
   }
 
   @Test
-  public final void sendUsage_forCommand_retrievedChatUsername() {
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
+  public final void createUsageMessage_noUsageMessageFormatConfigured_resultIsDefaultUsageMessage() {
+    this.installModules();
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    subjectUnderTest.sendUsage(mock(Command.class), messageEvent);
+    final Message result = subjectUnderTest.createUsageMessage(command, messageEvent);
 
-    verify(messageEvent.getChatUser()).getUsername();
+    assertThat(result).isEqualTo(Message.of(String.format(this.getUsageMessageFormatDefault(),
+        messageEvent.getChatUser().getTwitchLogin(), command.getTrigger(), command.getUsage())));
   }
 
   @Test
-  public final void sendUsage_forCommand_sanitizesChatUsername() {
-    final ArgumentCaptor<Message> argumentCaptor = ArgumentCaptor.forClass(Message.class);
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    doNothing().when(messageEvent).sendResponse(argumentCaptor.capture());
+  public final void createUsageMessage_customUsageMessageFormatConfigured_resultIsCustomUsageMessage() {
+    this.installModules();
+    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + "%s %s %s";
+    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    configuration.set(this.getUsageMessageFormatKey(), customMessageFormat);
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    subjectUnderTest.sendUsage(mock(Command.class), messageEvent);
-    final Message result = argumentCaptor.getValue();
-
-    assertThat(result.value)
-        .contains(subjectUnderTest.sanitizeChatUsername(messageEvent.getChatUser().getUsername()).value);
-  }
-
-  @Test
-  public final void sendUsage_forCommand_retrievedTrigger() {
-    final Command command = mock(Command.class);
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-
-    subjectUnderTest.sendUsage(command, this.givenAFakeMessageEvent());
-
-    verify(command).getTrigger();
-  }
-
-  @Test
-  public final void sendUsage_forCommand_retrievedUsage() {
-    final Command command = mock(Command.class);
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-
-    subjectUnderTest.sendUsage(command, this.givenAFakeMessageEvent());
-
-    verify(command).getUsage();
-  }
-
-  @Test
-  public final void sendUsage_customMessageFormat_sendsCustomMessageFormat() {
-    final String customMessageFormat = "%s, %s takes %s";
-    this.appConfiguration.set(COMMAND_USAGE_MESSAGE_FORMAT_KEY, customMessageFormat);
-    final ArgumentCaptor<Message> argumentCaptor = ArgumentCaptor.forClass(Message.class);
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    doNothing().when(messageEvent).sendResponse(argumentCaptor.capture());
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-    final Command command = new RestrictedCommand(this, subjectUnderTest);
-
-    subjectUnderTest.sendUsage(command, messageEvent);
-    final Message result = argumentCaptor.getValue();
+    final Message result = subjectUnderTest.createUsageMessage(command, messageEvent);
 
     assertThat(result).isEqualTo(Message.of(String.format(customMessageFormat,
-        subjectUnderTest.sanitizeChatUsername(messageEvent.getChatUser().getUsername()), command.getTrigger(),
-        command.getUsage())));
+        messageEvent.getChatUser().getTwitchLogin(), command.getTrigger(), command.getUsage())));
   }
 
   @Test
-  public final void messageWithoutTrigger_nullCommand_throwsNullPointerException() {
+  public final void stripTriggerFromMessage_nullCommand_throwsNullPointerException() {
+    this.installModules();
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.messageWithoutTrigger(null, mock(MessageEvent.class)));
+        () -> subjectUnderTest.stripTriggerFromMessage(null, mock(MessageEvent.class)));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class)
-        .hasMessage(this.executionUtils.nullMessageForName("command"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "command");
   }
 
   @Test
-  public final void messageWithoutTrigger_nullMessageEvent_throwsNullPointerException() {
+  public final void stripTriggerFromMessage_nullMessageEvent_throwsNullPointerException() {
+    this.installModules();
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.messageWithoutTrigger(mock(Command.class), null));
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.stripTriggerFromMessage(mock(Command.class), null));
 
-    assertThat(thrown).isInstanceOf(NullPointerException.class)
-        .hasMessage(this.executionUtils.nullMessageForName("messageEvent"));
+    this.testFrameworkRule.assertNullPointerException(thrown, "messageEvent");
   }
 
   @Test
-  public final void messageWithoutTrigger_forCommandAndMessageEvent_stripsTriggerFromMessage() {
-    final String messageArguments = this.arbitraryDataGenerator.getString();
+  public final void stripTriggerFromMessage_forCommandAndMessageEvent_stripsTriggerFromMessage() {
+    this.installModules();
+    final String messageArgument = this.testFrameworkRule.getArbitraryString();
+    final Command command = this.testFrameworkRule.getInstance(TestCommand.class);
+    final TestMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestMessageEvent.class);
     final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-    final Command command = new RestrictedCommand(this, subjectUnderTest);
-    final MessageEvent messageEvent = this.givenAFakeMessageEvent();
-    when(messageEvent.getMessage()).thenReturn(Message.of(String.format("%s %s", command.getTrigger(),
-        messageArguments)));
+    messageEvent.setMessage(Message.of(String.format("%s %s", command.getTrigger(), messageArgument)));
 
-    final Message result = subjectUnderTest.messageWithoutTrigger(command, messageEvent);
+    final Message result = subjectUnderTest.stripTriggerFromMessage(command, messageEvent);
 
-    assertThat(result).isEqualTo(Message.of(messageArguments));
+    assertThat(result).isEqualTo(Message.of(messageArgument));
   }
 
-  @Test
-  public final void sanitizeChatUsername_nullChatUsername_throwsNullPointerException() {
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
+  private static final class RequiresAccessLevelSubscriberCommand extends TestCommand {
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.sanitizeChatUsername(null));
-
-    assertThat(thrown).isInstanceOf(NullPointerException.class)
-        .hasMessage(this.executionUtils.nullMessageForName("chatUsername"));
-  }
-
-  @Test
-  public final void sanitizeChatUsername_noSanitizationNeeded_returnsUnchanged() {
-    final ChatUsername chatUsername = ChatUsername.of(this.arbitraryDataGenerator.getString().toLowerCase());
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-
-    final ChatUsername result = subjectUnderTest.sanitizeChatUsername(chatUsername);
-
-    assertThat(result).isEqualTo(chatUsername);
-  }
-
-  @Test
-  public final void sanitizeChatUsername_needLowerCasing_lowerCases() {
-    final String chatUsername = this.arbitraryDataGenerator.getString();
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-
-    final ChatUsername result = subjectUnderTest.sanitizeChatUsername(ChatUsername.of(chatUsername));
-
-    assertThat(result).isEqualTo(ChatUsername.of(chatUsername.toLowerCase()));
-  }
-
-  @Test
-  public final void sanitizeChatUsername_hasAmpersand_stripsAmpersand() {
-    final String chatUsername = this.arbitraryDataGenerator.getString().toLowerCase();
-    final CommandUtils subjectUnderTest = this.givenASubjectToTest();
-
-    final ChatUsername result = subjectUnderTest.sanitizeChatUsername(ChatUsername.of("@" + chatUsername));
-
-    assertThat(result).isEqualTo(ChatUsername.of(chatUsername));
-  }
-
-  private static final class RestrictedCommand extends AbstractCommand {
-
-    private RestrictedCommand(final CommandUtilsContractTests testSuite, final CommandUtils commandUtils) {
-      super(new Configuration(testSuite.appConfiguration, commandUtils,
-          CommandDescription.of(testSuite.arbitraryDataGenerator.getString()),
-          CommandTriggerKey.of(testSuite.arbitraryDataGenerator.getString()),
-          CommandTrigger.of(testSuite.arbitraryDataGenerator.getString())));
+    private RequiresAccessLevelSubscriberCommand(final CommandConfigurationBuilder commandConfigurationBuilder) {
+      super(commandConfigurationBuilder);
     }
 
     @Override
-    @RestrictToAccessLevel(AccessLevel.SUBSCRIBER)
+    @RequiresAccessLevel(AccessLevel.SUBSCRIBER)
     public void handleMessageEvent(MessageEvent messageEvent) {
-      // empty
+      super.handleMessageEvent(messageEvent);
     }
+
   }
 
-  private static final class NoCoolDownCommand extends AbstractCommand {
+  private static final class NoCoolDownCommand extends TestCommand {
 
-    private NoCoolDownCommand(final CommandUtilsContractTests testSuite, final CommandUtils commandUtils) {
-      super(new Configuration(testSuite.appConfiguration, commandUtils,
-          CommandDescription.of(testSuite.arbitraryDataGenerator.getString()),
-          CommandTriggerKey.of(testSuite.arbitraryDataGenerator.getString()),
-          CommandTrigger.of(testSuite.arbitraryDataGenerator.getString())));
+    private NoCoolDownCommand(final CommandConfigurationBuilder commandConfigurationBuilder) {
+      super(commandConfigurationBuilder);
     }
 
     @Override
     @NoCoolDown
     public void handleMessageEvent(MessageEvent messageEvent) {
-      // empty
+      super.handleMessageEvent(messageEvent);
     }
+
   }
 
 }

@@ -1,68 +1,68 @@
 package com.mechjacktv.util;
 
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 
 import org.assertj.core.api.SoftAssertions;
+import org.junit.Rule;
 import org.junit.Test;
 
-import com.mechjacktv.util.scheduleservice.ScheduleService;
+import com.mechjacktv.testframework.TestFrameworkRule;
+import com.mechjacktv.util.scheduleservice.ScheduleServiceTestModule;
+import com.mechjacktv.util.scheduleservice.TestScheduleService;
 
 public abstract class HotUpdatePropertiesWrapperContractTests {
 
-  private final PropertiesUtils propertiesUtils = new PropertiesUtils();
+  @Rule
+  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
-  private HotUpdatePropertiesWrapper givenASubjectToTest(final Supplier<InputStream> propertiesSupplier) {
-    return this.givenASubjectToTest(propertiesSupplier, mock(ScheduleService.class));
+  protected void installModules() {
+    this.testFrameworkRule.installModule(new ScheduleServiceTestModule());
+    this.testFrameworkRule.installModule(new UtilTestModule());
   }
 
-  @SuppressWarnings("unchecked")
-  private void givenASubjectToTest(final ScheduleService scheduleService) {
-    this.givenASubjectToTest(this::givenAPropertiesInputStream, scheduleService);
+  private void constructATestSubject() {
+    this.givenASubjectToTest(new MapPropertiesSource(this.givenAPropertiesMap()));
   }
 
-  protected abstract HotUpdatePropertiesWrapper givenASubjectToTest(Supplier<InputStream> propertiesSupplier,
-      ScheduleService scheduleService);
+  protected abstract HotUpdatePropertiesWrapper givenASubjectToTest(final PropertiesSource propertiesSource);
 
   protected abstract Map<String, String> givenAPropertiesMap();
 
-  private InputStream givenAPropertiesInputStream() {
-    return this.propertiesUtils.propertiesMapAsInputStream(this.givenAPropertiesMap());
-  }
-
   @Test
-  public final void getProperties_withPropertiesInputStream_returnsLoadedProperties() {
+  public final void getProperties_withPropertiesSource_returnsLoadedProperties() {
+    this.installModules();
     final Map<String, String> properties = this.givenAPropertiesMap();
-    final InputStream propertiesInputStream = this.propertiesUtils.propertiesMapAsInputStream(properties);
-    final HotUpdatePropertiesWrapper subjectUnderTest = this.givenASubjectToTest(() -> propertiesInputStream);
+    final HotUpdatePropertiesWrapper subjectUnderTest = this.givenASubjectToTest(new MapPropertiesSource(properties));
 
     final Properties result = subjectUnderTest.getProperties();
 
-    final SoftAssertions softly = new SoftAssertions();
-    softly.assertThat(result).containsAllEntriesOf(properties);
-    softly.assertAll();
+    assertThat(result).containsAllEntriesOf(properties);
   }
 
   @Test
   public final void new_withScheduleService_schedulesJob() {
+    this.installModules();
+    final int updatePeriod = 2;
     final String originalUpdatePeriod = System.getProperty(HotUpdatePropertiesWrapper.UPDATE_PERIOD_KEY);
 
+    // TODO (2018-12-09 mechjack): Create System Properties rule
     try {
-      System.setProperty(HotUpdatePropertiesWrapper.UPDATE_PERIOD_KEY, "2");
-      final ScheduleService scheduleService = mock(ScheduleService.class);
+      System.setProperty(HotUpdatePropertiesWrapper.UPDATE_PERIOD_KEY, Integer.toString(updatePeriod));
 
       // testing scheduling on create
-      this.givenASubjectToTest(scheduleService);
+      this.constructATestSubject();
 
-      verify(scheduleService).schedule(isA(Runnable.class), eq(2), eq(TimeUnit.MINUTES), eq(true));
+      final TestScheduleService scheduleService = this.testFrameworkRule.getInstance(TestScheduleService.class);
+      final SoftAssertions softly = new SoftAssertions();
+      softly.assertThat(scheduleService.getRunnable()).isNotNull();
+      softly.assertThat(scheduleService.getPeriod()).isEqualTo(updatePeriod);
+      softly.assertThat(scheduleService.getUnit()).isEqualTo(TimeUnit.MINUTES);
+      softly.assertThat(scheduleService.getDelay()).isTrue();
+      softly.assertAll();
     } finally {
       if (originalUpdatePeriod != null) {
         System.setProperty(HotUpdatePropertiesWrapper.UPDATE_PERIOD_KEY, originalUpdatePeriod);

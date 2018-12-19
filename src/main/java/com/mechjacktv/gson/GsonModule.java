@@ -27,4 +27,5 @@ public final class GsonModule extends AbstractModule {
     }
     return gsonBuilder.create();
   }
+
 }

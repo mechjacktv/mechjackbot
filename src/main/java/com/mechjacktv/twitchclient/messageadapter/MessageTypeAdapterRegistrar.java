@@ -13,4 +13,5 @@ public final class MessageTypeAdapterRegistrar implements TypeAdapterRegistrar {
     gsonBuilder.registerTypeAdapter(User.class, new UserMessageTypeAdapter());
     gsonBuilder.registerTypeAdapter(UserFollow.class, new UserFollowMessageTypeAdapter());
   }
+
 }
