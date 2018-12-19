@@ -5,6 +5,8 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import javax.inject.Inject;
+
 import com.mechjacktv.proto.twitchclient.TwitchClientMessage.UserFollows;
 import com.mechjacktv.proto.twitchclient.TwitchClientMessage.Users;
 
@@ -15,7 +17,9 @@ public class TestTwitchClient implements TwitchClient {
   private Function<TwitchUserId, UserFollows> getUserFollowsFromIdImpl;
   private BiFunction<TwitchUserId, TwitchUserFollowsCursor, UserFollows> getUserFollowsFromIdWithCursorImpl;
 
-  TestTwitchClient() {
+  @Inject
+  TestTwitchClient(final TwitchUsersEndpoint twitchUsersEndpoint, final TwitchUsersFollowsEndpoint twitchUsersFollowsEndpoint) {
+    // TODO (2018-12-18 mechjack): make use of test endpoints for default handlers
     this.getUserIdImpl = login -> null;
     this.getUsersImpl = (twitchLogins, twitchUserIds) -> null;
     this.getUserFollowsFromIdImpl = fromId -> null;
