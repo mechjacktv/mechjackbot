@@ -72,14 +72,29 @@ public final class DefaultCommandConfigurationBuilder implements CommandConfigur
 
   @Override
   public CommandConfiguration build() {
-    final String description = Objects.isNull(this.description) ? UNSET_DESCRIPTION : this.description;
-    final String messageFormat = Objects.isNull(this.messageFormat) ? UNSET_MESSAGE_FORMAT : this.messageFormat;
-    final String trigger = Objects.isNull(this.trigger) ? UUID.randomUUID().toString() : this.trigger;
-    final boolean triggerable = Objects.isNull(this.triggerable) ? UNSET_TRIGGERABLE : this.triggerable;
-    final String usage = Objects.isNull(this.usage) ? UNSET_USAGE : this.usage;
-
     return new DefaultCommandConfiguration(this.commandUtils, this.configuration, this.executionUtils,
-        CommandDescription.of(description), CommandMessageFormat.of(messageFormat), CommandTrigger.of(trigger),
-        triggerable, CommandUsage.of(usage));
+        CommandDescription.of(this.getDescription()), CommandMessageFormat.of(this.getMessageFormat()),
+        CommandTrigger.of(this.getTrigger()), this.getTriggerable(), CommandUsage.of(this.getUsage()));
   }
+
+  private String getDescription() {
+    return Objects.isNull(this.description) ? UNSET_DESCRIPTION : this.description;
+  }
+
+  private String getMessageFormat() {
+    return Objects.isNull(this.messageFormat) ? UNSET_MESSAGE_FORMAT : this.messageFormat;
+  }
+
+  private String getTrigger() {
+    return Objects.isNull(this.trigger) ? UUID.randomUUID().toString() : this.trigger;
+  }
+
+  private boolean getTriggerable() {
+    return Objects.isNull(this.triggerable) ? UNSET_TRIGGERABLE : this.triggerable;
+  }
+
+  private String getUsage() {
+    return Objects.isNull(this.usage) ? UNSET_USAGE : this.usage;
+  }
+
 }

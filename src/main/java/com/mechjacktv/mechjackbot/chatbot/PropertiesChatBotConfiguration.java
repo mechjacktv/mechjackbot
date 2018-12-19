@@ -5,10 +5,6 @@ import java.io.File;
 import javax.inject.Inject;
 
 import com.google.common.base.Strings;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.DataLocation;
 import com.mechjacktv.mechjackbot.TwitchChannel;
@@ -16,11 +12,13 @@ import com.mechjacktv.mechjackbot.TwitchPassword;
 import com.mechjacktv.twitchclient.TwitchClientConfiguration;
 import com.mechjacktv.twitchclient.TwitchClientId;
 import com.mechjacktv.twitchclient.TwitchLogin;
-import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.FilePropertiesSource;
 import com.mechjacktv.util.HotUpdatePropertiesWrapper;
 import com.mechjacktv.util.PropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class PropertiesChatBotConfiguration extends HotUpdatePropertiesWrapper
     implements ChatBotConfiguration, TwitchClientConfiguration {
@@ -39,7 +37,7 @@ public final class PropertiesChatBotConfiguration extends HotUpdatePropertiesWra
   private final DataLocation dataLocation;
 
   @Inject
-  PropertiesChatBotConfiguration(final ExecutionUtils executionUtils, final ScheduleService scheduleService) {
+  PropertiesChatBotConfiguration(final ScheduleService scheduleService) {
     this(System.getProperty(DATA_LOCATION_KEY, DATA_LOCATION_DEFAULT), new FilePropertiesSource(
         new File(System.getProperty(DATA_LOCATION_KEY, DATA_LOCATION_DEFAULT), CONFIG_PROPERTIES_FILE_NAME)),
         scheduleService);
