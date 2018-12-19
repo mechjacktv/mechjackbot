@@ -4,11 +4,15 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Provider;
 
-public class DefaultInjectorBridge implements InjectorBridge {
+public final class DefaultInjectorBridge implements InjectorBridge {
 
   final static DefaultInjectorBridge INSTANCE = new DefaultInjectorBridge();
 
   private Injector injector;
+
+  DefaultInjectorBridge() {
+    // give constructor package visibility
+  }
 
   void setInjector(final Injector injector) {
     this.injector = injector;

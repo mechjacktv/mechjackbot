@@ -13,7 +13,7 @@ import com.mechjacktv.mechjackbot.Message;
 import com.mechjacktv.mechjackbot.MessageEventHandler;
 import com.mechjacktv.mechjackbot.TwitchChannel;
 
-final class PircBotXListener extends ListenerAdapter {
+public final class PircBotXListener extends ListenerAdapter {
 
   static final String JOIN_EVENT_MESSAGE_KEY = "chat_bot.join_event.message";
   static final String JOIN_EVENT_MESSAGE_DEFAULT = "Present and ready for action";
@@ -24,7 +24,7 @@ final class PircBotXListener extends ListenerAdapter {
   private final MessageEventHandler messageEventHandler;
 
   @Inject
-  public PircBotXListener(final Configuration configuration, final ChatBotFactory<PircBotX> chatBotFactory,
+  PircBotXListener(final Configuration configuration, final ChatBotFactory<PircBotX> chatBotFactory,
       final MessageEventFactory<GenericMessageEvent> messageEventFactory,
       final MessageEventHandler messageEventHandler) {
     this.configuration = configuration;

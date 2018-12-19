@@ -1,10 +1,19 @@
 package com.mechjacktv.twitchclient;
 
+import com.mechjacktv.util.UtilTestModule;
+
 public class DefaultTwitchClientUnitTests extends TwitchClientContractTests {
 
   @Override
-  TwitchClient givenASubjectToTest(final TwitchUsersEndpoint twitchUsersEndpoint,
-      final TwitchUsersFollowsEndpoint twitchUsersFollowsEndpoint) {
-    return new DefaultTwitchClient(twitchUsersEndpoint, twitchUsersFollowsEndpoint);
+  protected void installModules() {
+    super.installModules();
+    this.testFrameworkRule.installModule(new UtilTestModule());
   }
+
+  @Override
+  protected TwitchClient givenASubjectToTest() {
+    return new DefaultTwitchClient(this.testFrameworkRule.getInstance(TwitchUsersEndpoint.class),
+        this.testFrameworkRule.getInstance(TwitchUsersFollowsEndpoint.class));
+  }
+
 }

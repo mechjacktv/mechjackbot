@@ -1,5 +1,17 @@
 package com.mechjacktv.mechjackbot.command.core;
 
+import static com.mechjacktv.mechjackbot.command.core.HelpCommand.DEFAULT_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.core.HelpCommand.DEFAULT_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.core.HelpCommand.DEFAULT_MISSING_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.core.HelpCommand.DEFAULT_TRIGGER;
+import static com.mechjacktv.mechjackbot.command.core.HelpCommand.KEY_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.core.HelpCommand.KEY_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.core.HelpCommand.KEY_MISSING_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.core.HelpCommand.KEY_TRIGGER;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.Test;
+
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.MapConfiguration;
@@ -13,18 +25,6 @@ import com.mechjacktv.mechjackbot.TestMessageEvent;
 import com.mechjacktv.mechjackbot.command.BaseCommandContractTests;
 import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
-
-import org.junit.Test;
-
-import static com.mechjacktv.mechjackbot.command.core.HelpCommand.DEFAULT_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.command.core.HelpCommand.DEFAULT_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.core.HelpCommand.DEFAULT_MISSING_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.core.HelpCommand.DEFAULT_TRIGGER;
-import static com.mechjacktv.mechjackbot.command.core.HelpCommand.KEY_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.command.core.HelpCommand.KEY_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.core.HelpCommand.KEY_MISSING_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.core.HelpCommand.KEY_TRIGGER;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class HelpCommandUnitTests extends BaseCommandContractTests {
 

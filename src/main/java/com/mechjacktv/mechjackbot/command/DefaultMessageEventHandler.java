@@ -16,7 +16,7 @@ import com.mechjacktv.mechjackbot.CommandUtils;
 import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.mechjackbot.MessageEventHandler;
 
-final class DefaultMessageEventHandler implements MessageEventHandler {
+public final class DefaultMessageEventHandler implements MessageEventHandler {
 
   private final Function<String, Logger> loggerFactory;
   private final Map<String, Logger> loggers;

@@ -1,5 +1,14 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.pircbotx.User;
+
 import com.mechjacktv.configuration.ConfigurationTestModule;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.CommandUtils;
@@ -7,15 +16,6 @@ import com.mechjacktv.mechjackbot.command.CommandTestModule;
 import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.util.UtilTestModule;
-
-import org.junit.Rule;
-import org.junit.Test;
-import org.pircbotx.User;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class PircBotXChatUserUnitTests {
 

@@ -1,4 +1,4 @@
-package com.mechjacktv.twitchclient.endpoint;
+package com.mechjacktv.twitchclient;
 
 import java.util.Objects;
 
@@ -11,7 +11,6 @@ import com.google.gson.stream.JsonReader;
 import com.mechjacktv.proto.twitchclient.TwitchClientMessage.UserFollow;
 import com.mechjacktv.proto.twitchclient.TwitchClientMessage.UserFollows;
 import com.mechjacktv.proto.twitchclient.TwitchClientMessage.UserFollows.Builder;
-import com.mechjacktv.twitchclient.*;
 
 public final class DefaultTwitchUsersFollowsEndpoint implements TwitchUsersFollowsEndpoint {
 
@@ -20,7 +19,7 @@ public final class DefaultTwitchUsersFollowsEndpoint implements TwitchUsersFollo
   private final TypeAdapter<UserFollow> userTypeAdapter;
 
   @Inject
-  public DefaultTwitchUsersFollowsEndpoint(final Gson gson, final TwitchClientUtils twitchClientUtils) {
+  DefaultTwitchUsersFollowsEndpoint(final Gson gson, final TwitchClientUtils twitchClientUtils) {
     this.gson = gson;
     this.twitchClientUtils = twitchClientUtils;
     this.userTypeAdapter = this.gson.getAdapter(UserFollow.class);

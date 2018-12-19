@@ -16,7 +16,7 @@ public final class QuitCommand extends BaseCommand {
   private final ScheduleService scheduleService;
 
   @Inject
-  protected QuitCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
+  QuitCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
       final ScheduleService scheduleService) {
     super(commandConfigurationBuilder.setTrigger(DEFAULT_TRIGGER)
         .setDescription(DEFAULT_DESCRIPTION)

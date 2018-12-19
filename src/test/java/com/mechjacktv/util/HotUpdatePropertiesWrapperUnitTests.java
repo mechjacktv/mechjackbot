@@ -1,19 +1,19 @@
 package com.mechjacktv.util;
 
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
-import com.mechjacktv.util.function.ConsumerWithException;
-import com.mechjacktv.util.scheduleservice.ScheduleService;
-
-import org.junit.Test;
-import org.slf4j.Logger;
-
 import static com.mechjacktv.testframework.TestFrameworkRule.ARBITRARY_COLLECTION_SIZE;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.Test;
+import org.slf4j.Logger;
+
+import com.mechjacktv.util.function.ConsumerWithException;
+import com.mechjacktv.util.scheduleservice.ScheduleService;
 
 public class HotUpdatePropertiesWrapperUnitTests extends HotUpdatePropertiesWrapperContractTests {
 

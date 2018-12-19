@@ -13,7 +13,7 @@ public final class PingCommand extends BaseCommand {
   public static final String DEFAULT_TRIGGER = "!ping";
 
   @Inject
-  protected PingCommand(final CommandConfigurationBuilder commandConfigurationBuilder) {
+  PingCommand(final CommandConfigurationBuilder commandConfigurationBuilder) {
     super(commandConfigurationBuilder.setTrigger(DEFAULT_TRIGGER)
         .setDescription(DEFAULT_DESCRIPTION)
         .setMessageFormat(DEFAULT_MESSAGE_FORMAT));

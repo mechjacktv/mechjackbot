@@ -1,5 +1,11 @@
 package com.mechjacktv.mechjackbot.command.shoutout;
 
+import static com.mechjacktv.mechjackbot.command.shoutout.DefaultShoutOutDataStore.DEFAULT_UPDATE_PERIOD;
+import static com.mechjacktv.mechjackbot.command.shoutout.DefaultShoutOutDataStore.KEY_UPDATE_PERIOD;
+import static com.mechjacktv.proto.twitchclient.TwitchClientMessage.UserFollows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +14,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.assertj.core.api.SoftAssertions;
+import org.junit.Test;
 
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.ConfigurationKey;
@@ -30,15 +39,6 @@ import com.mechjacktv.util.ProtobufUtils;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 import com.mechjacktv.util.scheduleservice.ScheduleServiceTestModule;
 import com.mechjacktv.util.scheduleservice.TestScheduleService;
-
-import org.assertj.core.api.SoftAssertions;
-import org.junit.Test;
-
-import static com.mechjacktv.mechjackbot.command.shoutout.DefaultShoutOutDataStore.DEFAULT_UPDATE_PERIOD;
-import static com.mechjacktv.mechjackbot.command.shoutout.DefaultShoutOutDataStore.KEY_UPDATE_PERIOD;
-import static com.mechjacktv.proto.twitchclient.TwitchClientMessage.UserFollows;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class DefaultShoutOutDataStoreUnitTests extends MessageStoreContractTests<CasterKey, Caster> {
 

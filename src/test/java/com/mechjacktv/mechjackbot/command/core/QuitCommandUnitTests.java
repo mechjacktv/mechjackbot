@@ -1,5 +1,15 @@
 package com.mechjacktv.mechjackbot.command.core;
 
+import static com.mechjacktv.mechjackbot.command.core.QuitCommand.DEFAULT_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.core.QuitCommand.DEFAULT_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.core.QuitCommand.DEFAULT_TRIGGER;
+import static com.mechjacktv.mechjackbot.command.core.QuitCommand.KEY_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.core.QuitCommand.KEY_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.core.QuitCommand.KEY_TRIGGER;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.Test;
+
 import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.mechjackbot.CommandDescription;
@@ -13,16 +23,6 @@ import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 import com.mechjacktv.util.scheduleservice.ScheduleServiceTestModule;
 import com.mechjacktv.util.scheduleservice.TestScheduleService;
-
-import org.junit.Test;
-
-import static com.mechjacktv.mechjackbot.command.core.QuitCommand.DEFAULT_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.command.core.QuitCommand.DEFAULT_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.core.QuitCommand.DEFAULT_TRIGGER;
-import static com.mechjacktv.mechjackbot.command.core.QuitCommand.KEY_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.command.core.QuitCommand.KEY_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.core.QuitCommand.KEY_TRIGGER;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class QuitCommandUnitTests extends BaseCommandContractTests {
 

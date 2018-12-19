@@ -1,182 +1,138 @@
 package com.mechjacktv.twitchclient;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.assertj.core.api.Assertions.fail;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
 
+import org.assertj.core.api.SoftAssertions;
+import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.slf4j.Logger;
 
-import com.mechjacktv.util.DefaultExecutionUtils;
-import com.mechjacktv.util.ExecutionUtils;
-import com.mechjacktv.util.function.ConsumerWithException;
+import com.mechjacktv.testframework.TestFrameworkRule;
 
 public abstract class TwitchClientUtilsContractTests {
 
-  private static final String EXCEPTION_MESSAGE = "exception message";
-  private static final TwitchUrl SERVICE_URL = TwitchUrl.of("api/test");
-  private static final TwitchClientId TWITCH_CLIENT_ID = TwitchClientId.of("TWITCH_CLIENT_ID");
-  private static final String UNKNOWN_OBJECT_NAME = "unknown";
+  @Rule
+  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
-  private TwitchClientUtils givenASubjectToTest(final UrlConnectionFactory urlConnectionFactory) {
-    final TwitchClientConfiguration twitchClientConfiguration = mock(TwitchClientConfiguration.class);
-
-    when(twitchClientConfiguration.getTwitchClientId()).thenReturn(TWITCH_CLIENT_ID);
-    return this.givenASubjectToTest(twitchClientConfiguration, new DefaultExecutionUtils(),
-        urlConnectionFactory, mock(Logger.class));
+  protected void installModules() {
+    this.testFrameworkRule.installModule(new TwitchClientTestModule());
   }
 
-  private TwitchClientUtils givenASubjectToTest(final Logger logger) {
-    final TwitchClientConfiguration twitchClientConfiguration = mock(TwitchClientConfiguration.class);
-
-    when(twitchClientConfiguration.getTwitchClientId()).thenReturn(TWITCH_CLIENT_ID);
-    return this.givenASubjectToTest(twitchClientConfiguration, new DefaultExecutionUtils(),
-        mock(UrlConnectionFactory.class), logger);
-  }
-
-  abstract TwitchClientUtils givenASubjectToTest(TwitchClientConfiguration twitchClientConfiguration,
-      ExecutionUtils executionUtils, UrlConnectionFactory urlConnectionFactory, Logger logger);
+  protected abstract TwitchClientUtils givenASubjectToTest();
 
   @Test
-  public final void handleResponse_openConnectionThrowsIOException_consumerIsNotCalled() throws IOException {
-    final UrlConnectionFactory urlConnectionFactory = mock(UrlConnectionFactory.class);
-    final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest(urlConnectionFactory);
-    when(urlConnectionFactory.openConnection(isA(String.class))).thenAnswer((i) -> {
-      throw new IOException(EXCEPTION_MESSAGE);
+  public final void handleResponse_openConnectionThrowsIOException_twitchConnectExceptionIsThrown() {
+    this.installModules();
+    final TestUrlConnectionFactory urlConnectionFactory = this.testFrameworkRule
+        .getInstance(TestUrlConnectionFactory.class);
+    urlConnectionFactory.setOpenConnectionHandler(url -> {
+      throw new IOException();
     });
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.handleResponse(SERVICE_URL,
-        (reader) -> fail("Response handler **MUST** not be called on connection error")));
+    final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest();
 
-    assertThat(thrown).isNotNull();
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest
+        .handleResponse(TwitchUrl.of(this.testFrameworkRule.getArbitraryString()),
+            reader -> fail("Response handler **MUST** not be called on connection error")));
+
+    assertThat(thrown).isInstanceOf(TwitchConnectionException.class);
   }
 
   @Test
-  public final void handleResponse_openConnectionThrowsIOException_twitchConnectExceptionIsThrown() throws IOException {
-    final UrlConnectionFactory urlConnectionFactory = mock(UrlConnectionFactory.class);
-    final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest(urlConnectionFactory);
-    when(urlConnectionFactory.openConnection(isA(String.class))).thenAnswer((i) -> {
-      throw new IOException(EXCEPTION_MESSAGE);
+  public final void handleResponse_connectionOpened_callsCorrectServiceApi() {
+    this.installModules();
+    final String serviceUri = this.testFrameworkRule.getArbitraryString();
+    final TestUrlConnectionFactory urlConnectionFactory = this.testFrameworkRule
+        .getInstance(TestUrlConnectionFactory.class);
+    final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest();
+
+    final String[] result = new String[1];
+    urlConnectionFactory.setOpenConnectionHandler(url -> {
+      result[0] = url;
+      return new TestUrlConnection();
+    });
+    subjectUnderTest.handleResponse(TwitchUrl.of(serviceUri), reader -> {
+      /* no-op (2018-12-10 mechjack) */
     });
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.handleResponse(SERVICE_URL, (reader) -> {
-      // empty
-    }));
-
-    assertThat(thrown).isInstanceOf(TwitchConnectionException.class).hasMessage(EXCEPTION_MESSAGE);
+    final SoftAssertions softly = new SoftAssertions();
+    softly.assertThat(result[0]).contains(TwitchClientUtils.TWITCH_API_URL);
+    softly.assertThat(result[0]).contains(serviceUri);
+    softly.assertAll();
   }
 
   @Test
-  public final void handleResponse_connectionOpened_callsCorrectServiceApi() throws IOException {
-    final UrlConnection urlConnection = this.givenAFakeUrlConnection();
-    final UrlConnectionFactory urlConnectionFactory = mock(UrlConnectionFactory.class);
-    final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest(urlConnectionFactory);
-    final ArgumentCaptor<String> url = ArgumentCaptor.forClass(String.class);
-    when(urlConnectionFactory.openConnection(url.capture())).thenReturn(urlConnection);
+  public final void handleResponse_connectionOpened_setClientId() {
+    this.installModules();
+    final TestUrlConnectionFactory urlConnectionFactory = this.testFrameworkRule
+        .getInstance(TestUrlConnectionFactory.class);
+    final TestUrlConnection urlConnection = new TestUrlConnection();
+    urlConnectionFactory.setOpenConnectionHandler(url -> urlConnection);
+    final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest();
 
-    subjectUnderTest.handleResponse(SERVICE_URL, (reader) -> {
-      // empty
+    final String[] result = new String[1];
+    urlConnection.setSetRequestPropertyHandler((name, value) -> {
+      if ("Client-ID".equals(name)) {
+        result[0] = value;
+      }
+    });
+    subjectUnderTest.handleResponse(TwitchUrl.of(this.testFrameworkRule.getArbitraryString()), reader -> {
+      /* no-op (2018-12-10 mechjack) */
     });
 
-    assertThat(url.getValue()).contains(TwitchClientUtils.TWITCH_API_URL);
-    assertThat(url.getValue()).contains(SERVICE_URL.value);
-  }
-
-  private UrlConnection givenAFakeUrlConnection() throws IOException {
-    final UrlConnection urlConnection = mock(UrlConnection.class);
-
-    when(urlConnection.getInputStream()).thenReturn(mock(InputStream.class));
-    return urlConnection;
+    final TwitchClientConfiguration twitchClientConfiguration = this.testFrameworkRule
+        .getInstance(TwitchClientConfiguration.class);
+    assertThat(result[0]).isEqualTo(twitchClientConfiguration.getTwitchClientId().value);
   }
 
   @Test
-  public final void handleResponse_connectionOpened_setClientId() throws IOException {
-    final UrlConnection urlConnection = this.givenAFakeUrlConnection();
-    final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest(urlConnection);
-    final ArgumentCaptor<String> url = ArgumentCaptor.forClass(String.class);
-    doNothing().when(urlConnection).setRequestProperty(eq("Client-ID"), url.capture());
-
-    subjectUnderTest.handleResponse(SERVICE_URL, (reader) -> {
-      // empty
+  public final void handleResponse_getInputStreamThrowsIOException_throwsTwitchConnectException() {
+    this.installModules();
+    final String exceptionMessage = this.testFrameworkRule.getArbitraryString();
+    final TestUrlConnectionFactory urlConnectionFactory = this.testFrameworkRule
+        .getInstance(TestUrlConnectionFactory.class);
+    final TestUrlConnection urlConnection = new TestUrlConnection();
+    urlConnectionFactory.setOpenConnectionHandler(url -> urlConnection);
+    urlConnection.setGetInputStreamHandler(() -> {
+      throw new IOException(exceptionMessage);
     });
+    final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest();
 
-    assertThat(url.getValue()).isEqualTo(TWITCH_CLIENT_ID.value);
-  }
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.handleResponse(
+        TwitchUrl.of(this.testFrameworkRule.getArbitraryString()), (reader) -> {
+          /* no-op (2018-12-18 mechjack) */
+        }));
 
-  private TwitchClientUtils givenASubjectToTest(final UrlConnection urlConnection) throws IOException {
-    return this.givenASubjectToTest(this.givenAFakeUrlConnectionFactory(urlConnection));
-  }
-
-  private UrlConnectionFactory givenAFakeUrlConnectionFactory(final UrlConnection urlConnection) throws IOException {
-    final UrlConnectionFactory urlConnectionFactory = mock(UrlConnectionFactory.class);
-
-    when(urlConnectionFactory.openConnection(isA(String.class))).thenReturn(urlConnection);
-    return urlConnectionFactory;
+    assertThat(thrown).isInstanceOf(TwitchConnectionException.class).hasMessage(exceptionMessage);
   }
 
   @Test
-  public final void handleResponse_getInputStreamThrowsIOException_throwsTwitchConnectException() throws IOException {
-    final UrlConnection urlConnection = mock(UrlConnection.class);
-    final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest(urlConnection);
-    when(urlConnection.getInputStream()).thenThrow(new IOException(EXCEPTION_MESSAGE));
+  public final void handleResponse_consumerThrowsException_throwsTwitchDataException() {
+    this.installModules();
+    final String exceptionMessage = this.testFrameworkRule.getArbitraryString();
+    final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.handleResponse(SERVICE_URL, (reader) -> {
-      // empty
-    }));
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.handleResponse(
+        TwitchUrl.of(this.testFrameworkRule.getArbitraryString()), (reader) -> {
+          throw new Exception(exceptionMessage);
+        }));
 
-    assertThat(thrown).isInstanceOf(TwitchConnectionException.class).hasMessage(EXCEPTION_MESSAGE);
+    assertThat(thrown).isInstanceOf(TwitchDataException.class).hasMessage(exceptionMessage);
   }
 
   @Test
-  public final void handleResponse_consumerThrowsException_throwsTwitchDataException() throws IOException {
-    final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest(this.givenAFakeUrlConnectionFactory());
+  public final void handleResponse_allGoesWell_consumerIsCalled() {
+    this.installModules();
+    final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.handleResponse(SERVICE_URL, (reader) -> {
-      throw new Exception(EXCEPTION_MESSAGE);
-    }));
+    final boolean[] result = new boolean[] { false };
+    subjectUnderTest.handleResponse(TwitchUrl.of(this.testFrameworkRule.getArbitraryString()),
+        (inputStream) -> result[0] = true);
 
-    assertThat(thrown).isInstanceOf(TwitchDataException.class).hasMessage(EXCEPTION_MESSAGE);
-  }
-
-  private UrlConnectionFactory givenAFakeUrlConnectionFactory() throws IOException {
-    return this.givenAFakeUrlConnectionFactory(this.givenAFakeUrlConnection());
-  }
-
-  @Test
-  @SuppressWarnings("unchecked")
-  public final void handleResponse_allGoesWell_consumerIsCalled() throws Exception {
-    final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest(this.givenAFakeUrlConnectionFactory());
-    final ConsumerWithException<Reader> consumer = mock(ConsumerWithException.class);
-
-    subjectUnderTest.handleResponse(SERVICE_URL, consumer);
-
-    verify(consumer).accept(isA(Reader.class));
-  }
-
-  @Test
-  public final void handleInvalidObjectName_forName_logsWarning() {
-    final Logger logger = mock(Logger.class);
-    final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest(logger);
-
-    subjectUnderTest.handleUnknownObjectName(UNKNOWN_OBJECT_NAME);
-
-    verify(logger).warn(isA(String.class));
-  }
-
-  @Test
-  public final void handleUnknownObjectName_forName_warningMessageContainsUnknownObjectName() {
-    final Logger logger = mock(Logger.class);
-    final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest(logger);
-    final ArgumentCaptor<String> unknownObjectNameCaptor = ArgumentCaptor.forClass(String.class);
-    doNothing().when(logger).warn(unknownObjectNameCaptor.capture());
-
-    subjectUnderTest.handleUnknownObjectName(UNKNOWN_OBJECT_NAME);
-
-    assertThat(unknownObjectNameCaptor.getValue()).contains(UNKNOWN_OBJECT_NAME);
+    assertThat(result[0]).isTrue();
   }
 
 }

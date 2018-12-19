@@ -2,7 +2,7 @@ package com.mechjacktv.configuration;
 
 import com.mechjacktv.util.typedobject.TypedString;
 
-public class ConfigurationKey extends TypedString {
+public final class ConfigurationKey extends TypedString {
 
   public static ConfigurationKey of(final String value) {
     return TypedString.of(ConfigurationKey.class, value.toLowerCase());

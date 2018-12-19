@@ -19,7 +19,7 @@ public final class CommandsCommand extends BaseCommand {
   private final CommandRegistry commandRegistry;
 
   @Inject
-  protected CommandsCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
+  CommandsCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
       final CommandRegistry commandRegistry) {
     super(commandConfigurationBuilder.setTrigger(DEFAULT_TRIGGER)
         .setDescription(DEFAULT_DESCRIPTION)

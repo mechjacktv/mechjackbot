@@ -25,7 +25,7 @@ public final class DefaultCommandRegistry implements CommandRegistry {
   private final ExecutionUtils executionUtils;
 
   @Inject
-  public DefaultCommandRegistry(final ExecutionUtils executionUtils) {
+  DefaultCommandRegistry(final ExecutionUtils executionUtils) {
     this.commands = new HashMap<>();
     this.executionUtils = executionUtils;
   }

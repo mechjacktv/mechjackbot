@@ -1,17 +1,15 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
+import static com.mechjacktv.mechjackbot.chatbot.PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_KEY;
+import static com.mechjacktv.mechjackbot.chatbot.PircBotXListener.JOIN_EVENT_MESSAGE_KEY;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.isA;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
-import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.configuration.ConfigurationTestModule;
-import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.mechjackbot.Message;
-import com.mechjacktv.mechjackbot.MessageEvent;
-import com.mechjacktv.mechjackbot.MessageEventHandler;
-import com.mechjacktv.mechjackbot.TwitchChannel;
-import com.mechjacktv.mechjackbot.command.CommandTestModule;
-import com.mechjacktv.testframework.TestFrameworkRule;
-import com.mechjacktv.util.UtilTestModule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,13 +20,16 @@ import org.pircbotx.hooks.events.PingEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.pircbotx.output.OutputIRC;
 
-import static com.mechjacktv.mechjackbot.chatbot.PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_KEY;
-import static com.mechjacktv.mechjackbot.chatbot.PircBotXListener.JOIN_EVENT_MESSAGE_KEY;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.isA;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.ConfigurationTestModule;
+import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.mechjackbot.Message;
+import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.MessageEventHandler;
+import com.mechjacktv.mechjackbot.TwitchChannel;
+import com.mechjacktv.mechjackbot.command.CommandTestModule;
+import com.mechjacktv.testframework.TestFrameworkRule;
+import com.mechjacktv.util.UtilTestModule;
 
 public class PircBotXListenerUnitTests {
 

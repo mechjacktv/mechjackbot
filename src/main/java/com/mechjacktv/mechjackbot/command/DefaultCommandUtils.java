@@ -26,7 +26,7 @@ public final class DefaultCommandUtils implements CommandUtils {
   private final Map<TwitchLogin, LastTrigger> viewerLastTrigger;
 
   @Inject
-  public DefaultCommandUtils(final Configuration configuration, final ExecutionUtils executionUtils,
+  DefaultCommandUtils(final Configuration configuration, final ExecutionUtils executionUtils,
       final TimeUtils timeUtils) {
     this.configuration = configuration;
     this.executionUtils = executionUtils;

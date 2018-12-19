@@ -1,4 +1,4 @@
-package com.mechjacktv.twitchclient.endpoint;
+package com.mechjacktv.twitchclient;
 
 import java.util.Objects;
 import java.util.Set;
@@ -12,7 +12,6 @@ import com.google.gson.stream.JsonReader;
 
 import com.mechjacktv.proto.twitchclient.TwitchClientMessage.User;
 import com.mechjacktv.proto.twitchclient.TwitchClientMessage.Users;
-import com.mechjacktv.twitchclient.*;
 
 public final class DefaultTwitchUsersEndpoint implements TwitchUsersEndpoint {
 
@@ -21,7 +20,7 @@ public final class DefaultTwitchUsersEndpoint implements TwitchUsersEndpoint {
   private final TypeAdapter<User> userTypeAdapter;
 
   @Inject
-  public DefaultTwitchUsersEndpoint(final Gson gson, final TwitchClientUtils twitchClientUtils) {
+  DefaultTwitchUsersEndpoint(final Gson gson, final TwitchClientUtils twitchClientUtils) {
     this.gson = gson;
     this.twitchClientUtils = twitchClientUtils;
     this.userTypeAdapter = this.gson.getAdapter(User.class);

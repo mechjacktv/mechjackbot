@@ -2,7 +2,7 @@ package com.mechjacktv.mechjackbot.command;
 
 import com.mechjacktv.util.typedobject.TypedString;
 
-public class CommandMessageFormat extends TypedString {
+public final class CommandMessageFormat extends TypedString {
 
   private CommandMessageFormat(final String value) {
     super(value);

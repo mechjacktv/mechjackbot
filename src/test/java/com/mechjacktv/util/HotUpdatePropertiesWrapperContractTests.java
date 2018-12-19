@@ -1,18 +1,18 @@
 package com.mechjacktv.util;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-
-import com.mechjacktv.testframework.TestFrameworkRule;
-import com.mechjacktv.util.scheduleservice.ScheduleServiceTestModule;
-import com.mechjacktv.util.scheduleservice.TestScheduleService;
 
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.mechjacktv.testframework.TestFrameworkRule;
+import com.mechjacktv.util.scheduleservice.ScheduleServiceTestModule;
+import com.mechjacktv.util.scheduleservice.TestScheduleService;
 
 public abstract class HotUpdatePropertiesWrapperContractTests {
 

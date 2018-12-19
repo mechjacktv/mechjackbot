@@ -9,7 +9,7 @@ import com.google.gson.stream.JsonWriter;
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
 
-abstract class AbstractMessageTypeAdapter<M extends Message> extends TypeAdapter<M> {
+abstract class BaseMessageTypeAdapter<M extends Message> extends TypeAdapter<M> {
 
   @Override
   public final void write(final JsonWriter jsonWriter, final Message message) throws IOException {

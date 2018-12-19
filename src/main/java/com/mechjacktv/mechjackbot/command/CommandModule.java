@@ -9,7 +9,7 @@ import com.mechjacktv.mechjackbot.MessageEventHandler;
 import com.mechjacktv.mechjackbot.command.core.CoreCommandModule;
 import com.mechjacktv.mechjackbot.command.shoutout.ShoutOutCommandModule;
 
-public class CommandModule extends AbstractModule {
+public final class CommandModule extends AbstractModule {
 
   @Override
   protected void configure() {

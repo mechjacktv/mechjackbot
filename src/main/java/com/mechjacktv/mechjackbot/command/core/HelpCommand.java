@@ -29,7 +29,7 @@ public final class HelpCommand extends BaseCommand {
   private final ConfigurationKey missingMessageFormatKey;
 
   @Inject
-  protected HelpCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
+  HelpCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
       final CommandRegistry commandRegistry, final CommandUtils commandUtils, final Configuration configuration) {
     super(commandConfigurationBuilder.setTrigger(DEFAULT_TRIGGER)
         .setDescription(DEFAULT_DESCRIPTION)

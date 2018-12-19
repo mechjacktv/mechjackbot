@@ -17,12 +17,12 @@ public class MessageStoreUnitTests extends MessageStoreContractTests<TestKeyMess
   @Override
   protected TestMessageStore givenASubjectToTest(final Map<TestKeyMessage, TestValueMessage> data) {
     final MapKeyValueStore mapKeyValueStore = new MapKeyValueStore();
-    final ExecutionUtils executionUtils = new DefaultExecutionUtils();
 
     for (final TestKeyMessage key : data.keySet()) {
       mapKeyValueStore.put(key.toByteArray(), data.get(key).toByteArray());
     }
-    return new TestMessageStore(mapKeyValueStore, executionUtils, new DefaultProtobufUtils(executionUtils));
+    return new TestMessageStore(mapKeyValueStore, this.testFrameworkRule.getInstance(ExecutionUtils.class),
+        this.testFrameworkRule.getInstance(ProtobufUtils.class));
   }
 
   @Override

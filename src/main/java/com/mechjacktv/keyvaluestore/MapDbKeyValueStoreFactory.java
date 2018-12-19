@@ -10,7 +10,7 @@ import org.mapdb.Serializer;
 
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 
-final class MapDbKeyValueStoreFactory implements KeyValueStoreFactory {
+public final class MapDbKeyValueStoreFactory implements KeyValueStoreFactory {
 
   private final DB db;
 

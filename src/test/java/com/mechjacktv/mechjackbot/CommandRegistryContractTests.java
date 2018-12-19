@@ -1,19 +1,19 @@
 package com.mechjacktv.mechjackbot;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
 import java.util.Collection;
 import java.util.Optional;
-
-import com.mechjacktv.configuration.ConfigurationTestModule;
-import com.mechjacktv.mechjackbot.command.CommandTestModule;
-import com.mechjacktv.testframework.TestFrameworkRule;
-import com.mechjacktv.util.UtilTestModule;
 
 import org.assertj.core.api.Condition;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
+import com.mechjacktv.configuration.ConfigurationTestModule;
+import com.mechjacktv.mechjackbot.command.CommandTestModule;
+import com.mechjacktv.testframework.TestFrameworkRule;
+import com.mechjacktv.util.UtilTestModule;
 
 public abstract class CommandRegistryContractTests {
 

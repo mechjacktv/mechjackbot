@@ -13,6 +13,10 @@ public final class DefaultExecutionUtils implements ExecutionUtils {
 
   private static final Logger log = LoggerFactory.getLogger(DefaultExecutionUtils.class);
 
+  DefaultExecutionUtils() {
+    // make constructor package-private
+  }
+
   @Override
   public String nullMessageForName(final String name) {
     return String.format("`%s` **MUST** not be `null`", name);

@@ -1,15 +1,20 @@
 package com.mechjacktv.configuration;
 
-import static org.mockito.Mockito.mock;
-
 import java.util.Map;
 
-import com.mechjacktv.util.DefaultExecutionUtils;
+import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.MapPropertiesSource;
 import com.mechjacktv.util.PropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
+import com.mechjacktv.util.scheduleservice.ScheduleServiceTestModule;
 
 public class PropertiesAppConfiguration_ConfigurationUnitTests extends ConfigurationContractTests {
+
+  @Override
+  protected void installModules() {
+    super.installModules();
+    this.testFrameworkRule.installModule(new ScheduleServiceTestModule());
+  }
 
   @Override
   protected Configuration givenASubjectToTest(final Map<String, String> properties) {
@@ -17,7 +22,8 @@ public class PropertiesAppConfiguration_ConfigurationUnitTests extends Configura
   }
 
   private PropertiesConfiguration givenASubjectToTest(final PropertiesSource propertiesSource) {
-    return new PropertiesConfiguration(propertiesSource, new DefaultExecutionUtils(), mock(ScheduleService.class));
+    return new PropertiesConfiguration(propertiesSource, this.testFrameworkRule.getInstance(ExecutionUtils.class),
+        this.testFrameworkRule.getInstance(ScheduleService.class));
   }
 
 }

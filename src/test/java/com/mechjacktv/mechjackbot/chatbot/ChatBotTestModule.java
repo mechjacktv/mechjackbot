@@ -19,7 +19,7 @@ public class ChatBotTestModule extends AbstractModule {
     }).to(PircBotXChatBotFactory.class).in(Scopes.SINGLETON);
 
     this.bind(new TypeLiteral<MessageEventFactory<GenericMessageEvent>>() {
-    }).to(PircBotXMessageEventFactory.class).asEagerSingleton();
+    }).to(PircBotXMessageEventFactory.class).in(Scopes.SINGLETON);
   }
 
 }

@@ -25,7 +25,7 @@ public final class ShoutOutListenerCommand extends BaseCommand {
   private ConfigurationKey frequencyKey;
 
   @Inject
-  protected ShoutOutListenerCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
+  ShoutOutListenerCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
       final Configuration configuration, final ShoutOutDataStore shoutOutDataStore, final TimeUtils timeUtils) {
     super(commandConfigurationBuilder.setDescription(DEFAULT_DESCRIPTION)
         .setMessageFormat(DEFAULT_MESSAGE_FORMAT));
