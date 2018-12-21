@@ -43,12 +43,24 @@ public final class DefaultCommandRegistry implements CommandRegistry {
   @Override
   public final void addCommand(final Command command) {
     Objects.requireNonNull(command, this.executionUtils.nullMessageForName("command"));
-    if (this.commands.containsKey(command.getTrigger())) {
+    if (this.hasCommand(command.getTrigger())) {
       log.warn(String.format("Command, %s, with trigger, %s, was already registered. Replacing with %s",
           this.commands.get(command.getTrigger()).getName(), command.getTrigger(), command.getName()));
     }
     this.commands.put(command.getTrigger(), command);
     log.info(String.format("Added command, %s, with trigger, %s", command.getName(), command.getTrigger()));
+  }
+
+  @Override
+  public boolean hasCommand(final CommandTrigger trigger) {
+    Objects.requireNonNull(trigger, this.executionUtils.nullMessageForName("trigger"));
+    return this.commands.containsKey(trigger);
+  }
+
+  @Override
+  public boolean removeCommand(final CommandTrigger trigger) {
+    Objects.requireNonNull(trigger, this.executionUtils.nullMessageForName("trigger"));
+    return this.commands.remove(trigger) != null;
   }
 
 }

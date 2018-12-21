@@ -4,9 +4,10 @@ public enum AccessLevel {
 
   OWNER(1),
   MODERATOR(2),
-  SUBSCRIBER(3),
-  FOLLOWER(4),
-  EVERYONE(5);
+  VIP(3),
+  SUBSCRIBER(4),
+  FOLLOWER(5),
+  EVERYONE(6 );
 
   private final Integer value;
 

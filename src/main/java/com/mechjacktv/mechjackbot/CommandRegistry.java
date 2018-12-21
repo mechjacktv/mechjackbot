@@ -11,4 +11,8 @@ public interface CommandRegistry {
 
   void addCommand(Command command);
 
+  boolean hasCommand(CommandTrigger trigger);
+
+  boolean removeCommand(CommandTrigger trigger);
+
 }
