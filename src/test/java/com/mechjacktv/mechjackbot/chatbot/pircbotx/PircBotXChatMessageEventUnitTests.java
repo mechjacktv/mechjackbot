@@ -1,7 +1,23 @@
 package com.mechjacktv.mechjackbot.chatbot.pircbotx;
 
+import static com.mechjacktv.mechjackbot.chatbot.pircbotx.PircBotXChatMessageEvent.RESPONSE_MESSAGE_FORMAT_DEFAULT;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
+
+import org.assertj.core.api.SoftAssertions;
+import org.junit.Rule;
+import org.junit.Test;
+import org.pircbotx.PircBotX;
+import org.pircbotx.User;
+import org.pircbotx.hooks.types.GenericMessageEvent;
+
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.ConfigurationTestModule;
 import com.mechjacktv.mechjackbot.ChatBot;
@@ -14,21 +30,6 @@ import com.mechjacktv.mechjackbot.command.CommandTestModule;
 import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.UtilTestModule;
-
-import org.assertj.core.api.SoftAssertions;
-import org.junit.Rule;
-import org.junit.Test;
-import org.pircbotx.PircBotX;
-import org.pircbotx.User;
-import org.pircbotx.hooks.types.GenericMessageEvent;
-
-import static com.mechjacktv.mechjackbot.chatbot.pircbotx.PircBotXChatMessageEvent.RESPONSE_MESSAGE_FORMAT_DEFAULT;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class PircBotXChatMessageEventUnitTests {
 

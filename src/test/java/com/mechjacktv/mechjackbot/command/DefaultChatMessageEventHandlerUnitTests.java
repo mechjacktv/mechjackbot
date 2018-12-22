@@ -11,11 +11,11 @@ import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.slf4j.Logger;
 
-import com.mechjacktv.mechjackbot.ChatMessageEventHandlerContractTests;
 import com.mechjacktv.mechjackbot.ChatCommand;
 import com.mechjacktv.mechjackbot.ChatCommandRegistry;
 import com.mechjacktv.mechjackbot.ChatCommandUtils;
 import com.mechjacktv.mechjackbot.ChatMessageEvent;
+import com.mechjacktv.mechjackbot.ChatMessageEventHandlerContractTests;
 import com.mechjacktv.mechjackbot.TestChatCommand;
 
 public class DefaultChatMessageEventHandlerUnitTests extends ChatMessageEventHandlerContractTests {
