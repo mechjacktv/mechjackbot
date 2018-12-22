@@ -1,7 +1,7 @@
-package com.mechjacktv.mechjackbot.chatbot;
+package com.mechjacktv.mechjackbot.chatbot.pircbotx;
 
-import static com.mechjacktv.mechjackbot.chatbot.PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_KEY;
-import static com.mechjacktv.mechjackbot.chatbot.PircBotXListener.JOIN_EVENT_MESSAGE_KEY;
+import static com.mechjacktv.mechjackbot.chatbot.pircbotx.PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_KEY;
+import static com.mechjacktv.mechjackbot.chatbot.pircbotx.PircBotXListener.JOIN_EVENT_MESSAGE_KEY;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.isA;
 import static org.mockito.Mockito.mock;
@@ -27,6 +27,9 @@ import com.mechjacktv.mechjackbot.Message;
 import com.mechjacktv.mechjackbot.MessageEvent;
 import com.mechjacktv.mechjackbot.MessageEventHandler;
 import com.mechjacktv.mechjackbot.TwitchChannel;
+import com.mechjacktv.mechjackbot.chatbot.ChatBotFactory;
+import com.mechjacktv.mechjackbot.chatbot.ChatBotTestModule;
+import com.mechjacktv.mechjackbot.chatbot.MessageEventFactory;
 import com.mechjacktv.mechjackbot.command.CommandTestModule;
 import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.util.UtilTestModule;
@@ -40,6 +43,7 @@ public class PircBotXListenerUnitTests {
     this.testFrameworkRule.installModule(new ChatBotTestModule());
     this.testFrameworkRule.installModule(new CommandTestModule());
     this.testFrameworkRule.installModule(new ConfigurationTestModule());
+    this.testFrameworkRule.installModule(new PircBotXChatBotTestModule());
     this.testFrameworkRule.installModule(new UtilTestModule());
   }
 

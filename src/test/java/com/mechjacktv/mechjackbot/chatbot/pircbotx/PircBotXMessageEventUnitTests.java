@@ -1,6 +1,6 @@
-package com.mechjacktv.mechjackbot.chatbot;
+package com.mechjacktv.mechjackbot.chatbot.pircbotx;
 
-import static com.mechjacktv.mechjackbot.chatbot.PircBotXMessageEvent.RESPONSE_MESSAGE_FORMAT_DEFAULT;
+import static com.mechjacktv.mechjackbot.chatbot.pircbotx.PircBotXMessageEvent.RESPONSE_MESSAGE_FORMAT_DEFAULT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.eq;
@@ -23,6 +23,9 @@ import com.mechjacktv.configuration.ConfigurationTestModule;
 import com.mechjacktv.mechjackbot.ChatBot;
 import com.mechjacktv.mechjackbot.ChatUser;
 import com.mechjacktv.mechjackbot.Message;
+import com.mechjacktv.mechjackbot.chatbot.ChatBotFactory;
+import com.mechjacktv.mechjackbot.chatbot.ChatBotTestModule;
+import com.mechjacktv.mechjackbot.chatbot.ChatUserFactory;
 import com.mechjacktv.mechjackbot.command.CommandTestModule;
 import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.util.ExecutionUtils;
@@ -37,6 +40,7 @@ public class PircBotXMessageEventUnitTests {
     this.testFrameworkRule.installModule(new ChatBotTestModule());
     this.testFrameworkRule.installModule(new CommandTestModule());
     this.testFrameworkRule.installModule(new ConfigurationTestModule());
+    this.testFrameworkRule.installModule(new PircBotXChatBotTestModule());
     this.testFrameworkRule.installModule(new UtilTestModule());
   }
 

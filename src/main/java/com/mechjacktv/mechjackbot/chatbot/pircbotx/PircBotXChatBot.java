@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.chatbot;
+package com.mechjacktv.mechjackbot.chatbot.pircbotx;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -13,6 +13,7 @@ import com.mechjacktv.mechjackbot.ChatBot;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.Message;
 import com.mechjacktv.mechjackbot.TwitchChannel;
+import com.mechjacktv.mechjackbot.chatbot.ChatBotStartupException;
 import com.mechjacktv.util.ExecutionUtils;
 
 public final class PircBotXChatBot implements ChatBot {

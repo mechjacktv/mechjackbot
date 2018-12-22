@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule;
 
 import com.mechjacktv.gson.GsonModule;
 import com.mechjacktv.keyvaluestore.KeyValueStoreModule;
-import com.mechjacktv.mechjackbot.chatbot.PircBotXChatBotModule;
+import com.mechjacktv.mechjackbot.chatbot.pircbotx.PircBotXChatBotModule;
 import com.mechjacktv.mechjackbot.command.CommandModule;
 import com.mechjacktv.mechjackbot.command.shoutout.ShoutOutCommandModule;
 import com.mechjacktv.twitchclient.TwitchClientModule;

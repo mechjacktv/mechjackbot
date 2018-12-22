@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.chatbot;
+package com.mechjacktv.mechjackbot.chatbot.pircbotx;
 
 import org.pircbotx.User;
 

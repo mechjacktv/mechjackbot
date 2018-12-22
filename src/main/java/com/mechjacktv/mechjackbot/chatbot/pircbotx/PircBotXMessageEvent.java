@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.chatbot;
+package com.mechjacktv.mechjackbot.chatbot.pircbotx;
 
 import java.util.Objects;
 
@@ -11,6 +11,8 @@ import com.mechjacktv.mechjackbot.ChatBot;
 import com.mechjacktv.mechjackbot.ChatUser;
 import com.mechjacktv.mechjackbot.Message;
 import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.chatbot.ChatBotFactory;
+import com.mechjacktv.mechjackbot.chatbot.ChatUserFactory;
 import com.mechjacktv.util.ExecutionUtils;
 
 public final class PircBotXMessageEvent implements MessageEvent {

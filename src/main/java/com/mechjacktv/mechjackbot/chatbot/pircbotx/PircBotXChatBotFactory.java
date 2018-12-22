@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.chatbot;
+package com.mechjacktv.mechjackbot.chatbot.pircbotx;
 
 import javax.inject.Inject;
 
@@ -6,6 +6,7 @@ import org.pircbotx.PircBotX;
 
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.ChatBot;
+import com.mechjacktv.mechjackbot.chatbot.ChatBotFactory;
 import com.mechjacktv.util.ExecutionUtils;
 
 class PircBotXChatBotFactory implements ChatBotFactory<PircBotX> {

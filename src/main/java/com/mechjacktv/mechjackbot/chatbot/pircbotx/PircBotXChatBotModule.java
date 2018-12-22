@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.chatbot;
+package com.mechjacktv.mechjackbot.chatbot.pircbotx;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
@@ -12,6 +12,11 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.ChatBot;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
+import com.mechjacktv.mechjackbot.chatbot.ChatBotFactory;
+import com.mechjacktv.mechjackbot.chatbot.ChatUserFactory;
+import com.mechjacktv.mechjackbot.chatbot.DefaultPropertiesConfiguration;
+import com.mechjacktv.mechjackbot.chatbot.MessageEventFactory;
+import com.mechjacktv.mechjackbot.chatbot.PropertiesChatBotConfiguration;
 import com.mechjacktv.twitchclient.TwitchClientConfiguration;
 
 public final class PircBotXChatBotModule extends AbstractModule {

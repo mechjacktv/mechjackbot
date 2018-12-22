@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.chatbot;
+package com.mechjacktv.mechjackbot.chatbot.pircbotx;
 
 import javax.inject.Inject;
 
@@ -12,6 +12,8 @@ import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.Message;
 import com.mechjacktv.mechjackbot.MessageEventHandler;
 import com.mechjacktv.mechjackbot.TwitchChannel;
+import com.mechjacktv.mechjackbot.chatbot.ChatBotFactory;
+import com.mechjacktv.mechjackbot.chatbot.MessageEventFactory;
 
 public final class PircBotXListener extends ListenerAdapter {
 

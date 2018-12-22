@@ -1,4 +1,4 @@
-package com.mechjacktv.mechjackbot.chatbot;
+package com.mechjacktv.mechjackbot.chatbot.pircbotx;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -11,6 +11,7 @@ import org.pircbotx.User;
 
 import com.mechjacktv.configuration.ConfigurationTestModule;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
+import com.mechjacktv.mechjackbot.chatbot.ChatBotTestModule;
 import com.mechjacktv.mechjackbot.command.CommandTestModule;
 import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.twitchclient.TwitchLogin;
@@ -25,6 +26,7 @@ public class PircBotXChatUserUnitTests {
     this.testFrameworkRule.installModule(new ChatBotTestModule());
     this.testFrameworkRule.installModule(new CommandTestModule());
     this.testFrameworkRule.installModule(new ConfigurationTestModule());
+    this.testFrameworkRule.installModule(new PircBotXChatBotTestModule());
     this.testFrameworkRule.installModule(new UtilTestModule());
   }
 
