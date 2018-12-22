@@ -15,7 +15,7 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-public abstract class ChatChatCommandRegistryContractTests {
+public abstract class ChatCommandRegistryContractTests {
 
   @Rule
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();

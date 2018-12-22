@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.mock;
 
-public abstract class ChatChatCommandUtilsContractTests {
+public abstract class ChatCommandUtilsContractTests {
 
   @Rule
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();

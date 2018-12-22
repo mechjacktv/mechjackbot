@@ -20,7 +20,7 @@ import com.mechjacktv.mechjackbot.command.CommandTestModule;
 import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.util.UtilTestModule;
 
-public abstract class ChatChatChatMessageEventHandlerContractTests {
+public abstract class ChatMessageEventHandlerContractTests {
 
   @Rule
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();

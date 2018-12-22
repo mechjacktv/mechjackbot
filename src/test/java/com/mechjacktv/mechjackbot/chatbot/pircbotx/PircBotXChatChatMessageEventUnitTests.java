@@ -30,7 +30,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class PircBotXChatChatMessageEventUnitTests {
+public class PircBotXChatMessageEventUnitTests {
 
   @Rule
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
