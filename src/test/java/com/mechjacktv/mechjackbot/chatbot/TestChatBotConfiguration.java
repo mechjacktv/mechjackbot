@@ -9,15 +9,15 @@ import com.mechjacktv.twitchclient.TwitchLogin;
 public class TestChatBotConfiguration implements ChatBotConfiguration {
 
   private final DataLocation dataLocation;
-  private final TwitchChannel twitchChannel;
-  private final TwitchPassword twitchPassword;
+  private final ChatChannel chatChannel;
+  private final UserPassword userPassword;
   private final TwitchLogin twitchLogin;
 
   @Inject
   public TestChatBotConfiguration(final ArbitraryDataGenerator arbitraryDataGenerator) {
     this.dataLocation = DataLocation.of(arbitraryDataGenerator.getString());
-    this.twitchChannel = TwitchChannel.of(arbitraryDataGenerator.getString());
-    this.twitchPassword = TwitchPassword.of(arbitraryDataGenerator.getString());
+    this.chatChannel = ChatChannel.of(arbitraryDataGenerator.getString());
+    this.userPassword = UserPassword.of(arbitraryDataGenerator.getString());
     this.twitchLogin = TwitchLogin.of(arbitraryDataGenerator.getString());
   }
 
@@ -27,13 +27,13 @@ public class TestChatBotConfiguration implements ChatBotConfiguration {
   }
 
   @Override
-  public TwitchChannel getTwitchChannel() {
-    return this.twitchChannel;
+  public ChatChannel getChatChannel() {
+    return this.chatChannel;
   }
 
   @Override
-  public TwitchPassword getTwitchPassword() {
-    return this.twitchPassword;
+  public UserPassword getUserPassword() {
+    return this.userPassword;
   }
 
   @Override

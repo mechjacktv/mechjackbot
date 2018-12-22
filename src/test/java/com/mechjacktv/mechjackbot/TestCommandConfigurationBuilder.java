@@ -8,10 +8,10 @@ import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
 public class TestCommandConfigurationBuilder {
 
   private final CommandConfigurationBuilder commandConfigurationBuilder;
-  private CommandDescription defaultDescription;
+  private ChatCommandDescription defaultDescription;
   private CommandMessageFormat defaultMessageFormat;
-  private CommandTrigger defaultTrigger;
-  private CommandUsage usage;
+  private ChatCommandTrigger defaultTrigger;
+  private ChatCommandUsage usage;
 
   public TestCommandConfigurationBuilder(final CommandConfigurationBuilder commandConfigurationBuilder) {
     this.commandConfigurationBuilder = commandConfigurationBuilder;
@@ -22,7 +22,7 @@ public class TestCommandConfigurationBuilder {
   }
 
   public final TestCommandConfigurationBuilder setDefaultDescription(final String defaultDescription) {
-    this.defaultDescription = CommandDescription.of(defaultDescription);
+    this.defaultDescription = ChatCommandDescription.of(defaultDescription);
     return this;
   }
 
@@ -32,26 +32,26 @@ public class TestCommandConfigurationBuilder {
   }
 
   public final TestCommandConfigurationBuilder setDefaultTrigger(final String defaultTrigger) {
-    this.defaultTrigger = CommandTrigger.of(defaultTrigger);
+    this.defaultTrigger = ChatCommandTrigger.of(defaultTrigger);
     return this;
   }
 
   public final TestCommandConfigurationBuilder setUsage(final String usage) {
-    this.usage = CommandUsage.of(usage);
+    this.usage = ChatCommandUsage.of(usage);
     return this;
   }
 
   public final TestCommandConfiguration build() {
-    final CommandDescription defaultDescription = Objects.isNull(this.defaultDescription)
-        ? CommandDescription.of(TestCommand.DEFAULT_DESCRIPTION)
+    final ChatCommandDescription defaultDescription = Objects.isNull(this.defaultDescription)
+        ? ChatCommandDescription.of(TestChatCommand.DEFAULT_DESCRIPTION)
         : this.defaultDescription;
     final CommandMessageFormat defaultMessageFormat = Objects.isNull(this.defaultMessageFormat)
-        ? CommandMessageFormat.of(TestCommand.DEFAULT_MESSAGE_FORMAT)
+        ? CommandMessageFormat.of(TestChatCommand.DEFAULT_MESSAGE_FORMAT)
         : this.defaultMessageFormat;
-    final CommandTrigger defaultTrigger = Objects.isNull(this.defaultTrigger)
-        ? CommandTrigger.of(TestCommand.DEFAULT_TRIGGER)
+    final ChatCommandTrigger defaultTrigger = Objects.isNull(this.defaultTrigger)
+        ? ChatCommandTrigger.of(TestChatCommand.DEFAULT_TRIGGER)
         : this.defaultTrigger;
-    final CommandUsage usage = Objects.isNull(this.usage) ? CommandUsage.of(TestCommand.USAGE) : this.usage;
+    final ChatCommandUsage usage = Objects.isNull(this.usage) ? ChatCommandUsage.of(TestChatCommand.USAGE) : this.usage;
 
     return new TestCommandConfiguration(this.commandConfigurationBuilder, defaultDescription, defaultMessageFormat,
         defaultTrigger, usage);

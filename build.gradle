@@ -36,6 +36,7 @@ dependencies {
     implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.+'
     implementation group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.+'
     implementation group: 'org.mapdb', name: 'mapdb', version: '3.+'
+    implementation group: 'org.kitteh.irc', name: 'client-lib', version: '4.+'
     implementation group: 'org.pircbotx', name: 'pircbotx', version: '2.+'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
     implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'

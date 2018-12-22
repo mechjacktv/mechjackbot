@@ -10,9 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
+import com.mechjacktv.mechjackbot.ChatChannel;
 import com.mechjacktv.mechjackbot.DataLocation;
-import com.mechjacktv.mechjackbot.TwitchChannel;
-import com.mechjacktv.mechjackbot.TwitchPassword;
+import com.mechjacktv.mechjackbot.UserPassword;
 import com.mechjacktv.twitchclient.TwitchClientConfiguration;
 import com.mechjacktv.twitchclient.TwitchClientId;
 import com.mechjacktv.twitchclient.TwitchLogin;
@@ -67,8 +67,8 @@ public final class PropertiesChatBotConfiguration extends HotUpdatePropertiesWra
   }
 
   @Override
-  public TwitchChannel getTwitchChannel() {
-    return TwitchChannel.of(this.getProperties().getProperty(TWITCH_CHANNEL_KEY));
+  public ChatChannel getChatChannel() {
+    return ChatChannel.of(this.getProperties().getProperty(TWITCH_CHANNEL_KEY));
   }
 
   @Override
@@ -77,8 +77,8 @@ public final class PropertiesChatBotConfiguration extends HotUpdatePropertiesWra
   }
 
   @Override
-  public TwitchPassword getTwitchPassword() {
-    return TwitchPassword.of(this.getProperties().getProperty(TWITCH_PASSWORD_KEY));
+  public UserPassword getUserPassword() {
+    return UserPassword.of(this.getProperties().getProperty(TWITCH_PASSWORD_KEY));
   }
 
   @Override

@@ -2,7 +2,7 @@ package com.mechjacktv.mechjackbot;
 
 public interface ChatBot {
 
-  void sendMessage(final TwitchChannel twitchChannel, final Message message);
+  void sendMessage(final ChatChannel chatChannel, final ChatMessage chatMessage);
 
   void start();
 
