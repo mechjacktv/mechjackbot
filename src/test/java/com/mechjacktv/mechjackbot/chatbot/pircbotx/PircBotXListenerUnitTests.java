@@ -8,9 +8,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.google.inject.Key;
-import com.google.inject.TypeLiteral;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.pircbotx.PircBotX;
@@ -26,9 +23,7 @@ import com.mechjacktv.mechjackbot.ChatChannel;
 import com.mechjacktv.mechjackbot.ChatMessage;
 import com.mechjacktv.mechjackbot.ChatMessageEvent;
 import com.mechjacktv.mechjackbot.ChatMessageEventHandler;
-import com.mechjacktv.mechjackbot.chatbot.ChatBotFactory;
 import com.mechjacktv.mechjackbot.chatbot.ChatBotTestModule;
-import com.mechjacktv.mechjackbot.chatbot.ChatMessageEventFactory;
 import com.mechjacktv.mechjackbot.command.CommandTestModule;
 import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.util.UtilTestModule;
@@ -52,10 +47,8 @@ public class PircBotXListenerUnitTests {
 
   private PircBotXListener givenASubjectToTest(final ChatMessageEventHandler chatMessageEventHandler) {
     return new PircBotXListener(this.testFrameworkRule.getInstance(Configuration.class),
-        this.testFrameworkRule.getInstance(Key.get(new TypeLiteral<ChatBotFactory<PircBotX>>() {
-        })),
-        this.testFrameworkRule.getInstance(Key.get(new TypeLiteral<ChatMessageEventFactory<GenericMessageEvent>>() {
-        })), chatMessageEventHandler);
+        this.testFrameworkRule.getInstance(PircBotXChatBotFactory.class),
+        this.testFrameworkRule.getInstance(PircBotXChatMessageEventFactory.class), chatMessageEventHandler);
   }
 
   @Test

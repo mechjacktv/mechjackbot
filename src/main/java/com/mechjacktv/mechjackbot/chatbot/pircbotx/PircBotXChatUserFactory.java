@@ -6,9 +6,8 @@ import org.pircbotx.User;
 
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.ChatUser;
-import com.mechjacktv.mechjackbot.chatbot.ChatUserFactory;
 
-class PircBotXChatUserFactory implements ChatUserFactory<User> {
+class PircBotXChatUserFactory {
 
   private final ChatBotConfiguration chatBotConfiguration;
 
@@ -17,7 +16,6 @@ class PircBotXChatUserFactory implements ChatUserFactory<User> {
     this.chatBotConfiguration = chatBotConfiguration;
   }
 
-  @Override
   public ChatUser create(final User user) {
     return new PircBotXChatUser(this.chatBotConfiguration, user);
   }

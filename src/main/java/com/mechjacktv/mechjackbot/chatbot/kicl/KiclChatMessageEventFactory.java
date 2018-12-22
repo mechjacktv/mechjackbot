@@ -3,25 +3,22 @@ package com.mechjacktv.mechjackbot.chatbot.kicl;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import org.kitteh.irc.client.library.element.User;
 import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.ChatBot;
 import com.mechjacktv.mechjackbot.ChatMessageEvent;
-import com.mechjacktv.mechjackbot.chatbot.ChatMessageEventFactory;
-import com.mechjacktv.mechjackbot.chatbot.ChatUserFactory;
 import com.mechjacktv.util.ExecutionUtils;
 
-public class KiclChatMessageEventFactory implements ChatMessageEventFactory<ChannelMessageEvent> {
+public class KiclChatMessageEventFactory {
 
   private final Provider<ChatBot> chatBotProvider;
-  private final ChatUserFactory<User> chatUserFactory;
+  private final KiclChatUserFactory chatUserFactory;
   private final Configuration configuration;
   private final ExecutionUtils executionUtils;
 
   @Inject
-  KiclChatMessageEventFactory(final Provider<ChatBot> chatBotProvider, final ChatUserFactory<User> chatUserFactory,
+  KiclChatMessageEventFactory(final Provider<ChatBot> chatBotProvider, final KiclChatUserFactory chatUserFactory,
       final Configuration configuration, final ExecutionUtils executionUtils) {
     this.chatBotProvider = chatBotProvider;
     this.chatUserFactory = chatUserFactory;
@@ -29,7 +26,6 @@ public class KiclChatMessageEventFactory implements ChatMessageEventFactory<Chan
     this.executionUtils = executionUtils;
   }
 
-  @Override
   public ChatMessageEvent create(final ChannelMessageEvent event) {
     return new KiclChatMessageEvent(event, this.chatBotProvider.get(), this.chatUserFactory, this.configuration,
         this.executionUtils);

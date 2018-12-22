@@ -6,10 +6,9 @@ import org.pircbotx.PircBotX;
 
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.ChatBot;
-import com.mechjacktv.mechjackbot.chatbot.ChatBotFactory;
 import com.mechjacktv.util.ExecutionUtils;
 
-class PircBotXChatBotFactory implements ChatBotFactory<PircBotX> {
+class PircBotXChatBotFactory {
 
   private final Configuration configuration;
   private final ExecutionUtils executionUtils;
@@ -20,7 +19,6 @@ class PircBotXChatBotFactory implements ChatBotFactory<PircBotX> {
     this.executionUtils = executionUtils;
   }
 
-  @Override
   public final ChatBot create(final PircBotX pircBotX) {
     return new PircBotXChatBot(this.configuration, this.executionUtils, pircBotX);
   }

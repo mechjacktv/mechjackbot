@@ -13,7 +13,6 @@ import com.mechjacktv.mechjackbot.ChatBot;
 import com.mechjacktv.mechjackbot.ChatChannel;
 import com.mechjacktv.mechjackbot.ChatMessage;
 import com.mechjacktv.mechjackbot.ChatMessageEventHandler;
-import com.mechjacktv.mechjackbot.chatbot.ChatMessageEventFactory;
 
 final class KiclChatBotListener {
 
@@ -21,15 +20,14 @@ final class KiclChatBotListener {
   static final String JOIN_EVENT_MESSAGE_DEFAULT = "Present and ready for action";
 
   private final Provider<ChatBot> chatBotProvider;
-  private final ChatMessageEventFactory<ChannelMessageEvent> chatMessageEventFactory;
+  private final KiclChatMessageEventFactory chatMessageEventFactory;
   private final ChatMessageEventHandler chatMessageEventHandler;
   private final Configuration configuration;
 
   @Inject
   KiclChatBotListener(final Provider<ChatBot> chatBotProvider,
-      final ChatMessageEventFactory<ChannelMessageEvent> chatMessageEventFactory,
-      final ChatMessageEventHandler chatMessageEventHandler,
-      final Configuration configuration) {
+      final KiclChatMessageEventFactory chatMessageEventFactory,
+      final ChatMessageEventHandler chatMessageEventHandler, final Configuration configuration) {
     this.chatBotProvider = chatBotProvider;
     this.chatMessageEventFactory = chatMessageEventFactory;
     this.chatMessageEventHandler = chatMessageEventHandler;

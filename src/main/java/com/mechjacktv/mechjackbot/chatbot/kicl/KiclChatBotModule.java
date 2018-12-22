@@ -3,12 +3,9 @@ package com.mechjacktv.mechjackbot.chatbot.kicl;
 import com.google.inject.Provides;
 import com.google.inject.Scopes;
 import com.google.inject.Singleton;
-import com.google.inject.TypeLiteral;
 
 import org.kitteh.irc.client.library.Client;
 import org.kitteh.irc.client.library.Client.Builder;
-import org.kitteh.irc.client.library.element.User;
-import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 import org.kitteh.irc.client.library.feature.twitch.TwitchDelaySender;
 import org.kitteh.irc.client.library.feature.twitch.TwitchListener;
 import org.slf4j.Logger;
@@ -17,8 +14,6 @@ import org.slf4j.LoggerFactory;
 import com.mechjacktv.mechjackbot.ChatBot;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.chatbot.ChatBotModule;
-import com.mechjacktv.mechjackbot.chatbot.ChatMessageEventFactory;
-import com.mechjacktv.mechjackbot.chatbot.ChatUserFactory;
 
 public class KiclChatBotModule extends ChatBotModule {
 
@@ -28,16 +23,10 @@ public class KiclChatBotModule extends ChatBotModule {
   @Override
   protected void configure() {
     super.configure();
-
     this.bind(ChatBot.class).to(KiclChatBot.class).in(Scopes.SINGLETON);
     this.bind(KiclChatBotListener.class).in(Scopes.SINGLETON);
-
-    this.bind(new TypeLiteral<ChatUserFactory<User>>() {
-    }).to(KiclChatUserFactory.class).in(Scopes.SINGLETON);
-
-    this.bind(new TypeLiteral<ChatMessageEventFactory<ChannelMessageEvent>>() {
-    }).to(KiclChatMessageEventFactory.class).in(Scopes.SINGLETON);
-
+    this.bind(KiclChatMessageEventFactory.class).in(Scopes.SINGLETON);
+    this.bind(KiclChatUserFactory.class).in(Scopes.SINGLETON);
   }
 
   @Provides
