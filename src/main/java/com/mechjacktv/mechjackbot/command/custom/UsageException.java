@@ -1,8 +1,8 @@
 package com.mechjacktv.mechjackbot.command.custom;
 
-import com.mechjacktv.mechjackbot.CommandException;
+import com.mechjacktv.mechjackbot.ChatCommandException;
 
-public final class UsageException extends CommandException {
+public final class UsageException extends ChatCommandException {
 
   private static final long serialVersionUID = -5205822143278258132L;
 

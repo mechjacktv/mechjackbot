@@ -2,19 +2,19 @@ package com.mechjacktv.mechjackbot.command.custom;
 
 import javax.inject.Inject;
 
+import picocli.CommandLine;
+
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.ConfigurationKey;
-import com.mechjacktv.mechjackbot.CommandUtils;
-import com.mechjacktv.mechjackbot.Message;
-import com.mechjacktv.mechjackbot.MessageEvent;
-import com.mechjacktv.mechjackbot.command.BaseCommand;
+import com.mechjacktv.mechjackbot.ChatCommandUtils;
+import com.mechjacktv.mechjackbot.ChatMessage;
+import com.mechjacktv.mechjackbot.ChatMessageEvent;
+import com.mechjacktv.mechjackbot.command.BaseChatCommand;
 import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
 import com.mechjacktv.proto.mechjackbot.command.custom.CustomComandDataStoreMessage.CustomCommandKey;
 
-import picocli.CommandLine;
-
-public class SetCommandCommand extends BaseCommand {
+public class SetCommandChatCommand extends BaseChatCommand {
 
   public static final String DEFAULT_DESCRIPTION = "Set a custom command body and/or access level.";
   public static final String DEFAULT_MESSAGE_FORMAT = "Command set for trigger, %2$s";
@@ -24,15 +24,15 @@ public class SetCommandCommand extends BaseCommand {
   public static final String USAGE = "<trigger> [(-a|--access-level) "
       + "(owner|moderator|vip|subscriber|follower|everyone)] [<body>]";
 
-  private final CommandUtils commandUtils;
+  private final ChatCommandUtils commandUtils;
   private final Configuration configuration;
   private final CustomCommandDataStore customCommandDataStore;
   private final CommandMessageFormat bodyRequiredMessageFormatDefault;
   private final ConfigurationKey bodyRequiredMessageFormatKey;
 
   @Inject
-  protected SetCommandCommand(
-      final CommandConfigurationBuilder commandConfigurationBuilder, final CommandUtils commandUtils,
+  protected SetCommandChatCommand(
+      final CommandConfigurationBuilder commandConfigurationBuilder, final ChatCommandUtils commandUtils,
       final Configuration configuration, final CustomCommandDataStore customCommandDataStore) {
     super(commandConfigurationBuilder.setTrigger(DEFAULT_TRIGGER)
         .setDescription(DEFAULT_DESCRIPTION)
@@ -46,10 +46,10 @@ public class SetCommandCommand extends BaseCommand {
   }
 
   @Override
-  public void handleMessageEvent(final MessageEvent messageEvent) {
-    final Message rawMessage = this.commandUtils.stripTriggerFromMessage(this, messageEvent);
+  public void handleMessageEvent(final ChatMessageEvent messageEvent) {
+    final ChatMessage rawMessage = this.commandUtils.stripTriggerFromMessage(this, messageEvent);
 
-    if("".equals(rawMessage.value.trim())) {
+    if ("".equals(rawMessage.value.trim())) {
       this.sendUsage(messageEvent);
       return;
     }

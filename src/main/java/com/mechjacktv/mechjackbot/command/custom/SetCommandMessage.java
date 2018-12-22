@@ -3,15 +3,15 @@ package com.mechjacktv.mechjackbot.command.custom;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.mechjacktv.mechjackbot.AccessLevel;
-import com.mechjacktv.mechjackbot.CommandTrigger;
-
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
+import com.mechjacktv.mechjackbot.ChatCommandTrigger;
+import com.mechjacktv.mechjackbot.UserRole;
+
 public class SetCommandMessage {
 
-  @Option(names = {"-a", "--access-level"})
+  @Option(names = { "-a", "--access-level" })
   private String rawAccessLevel = null;
 
   @Parameters(index = "1..*")
@@ -20,13 +20,13 @@ public class SetCommandMessage {
   @Parameters(index = "0")
   private String rawTrigger = null;
 
-  private AccessLevel accessLevel = null;
+  private UserRole accessLevel = null;
 
   private CommandBody body = null;
 
-  private CommandTrigger trigger = null;
+  private ChatCommandTrigger trigger = null;
 
-  public Optional<AccessLevel> getAccessLevel() {
+  public Optional<UserRole> getAccessLevel() {
     return Optional.ofNullable(this.accessLevel);
   }
 
@@ -34,17 +34,17 @@ public class SetCommandMessage {
     return Optional.ofNullable(this.body);
   }
 
-  public CommandTrigger getTrigger() {
+  public ChatCommandTrigger getTrigger() {
     return this.trigger;
   }
 
   public void validate() {
     Objects.nonNull(this.rawTrigger);
-    this.trigger = CommandTrigger.of(this.rawTrigger);
-    if(Objects.nonNull(this.rawAccessLevel)) {
-      this.accessLevel = AccessLevel.valueOf(this.rawAccessLevel.toUpperCase());
+    this.trigger = ChatCommandTrigger.of(this.rawTrigger);
+    if (Objects.nonNull(this.rawAccessLevel)) {
+      this.accessLevel = UserRole.valueOf(this.rawAccessLevel.toUpperCase());
     }
-    if(Objects.nonNull(this.rawBodyPart)) {
+    if (Objects.nonNull(this.rawBodyPart)) {
       this.body = CommandBody.of(String.join(" ", this.rawBodyPart));
     }
   }

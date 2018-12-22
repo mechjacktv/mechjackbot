@@ -6,8 +6,8 @@ import javax.inject.Inject;
 
 import com.mechjacktv.keyvaluestore.BaseMessageStore;
 import com.mechjacktv.keyvaluestore.KeyValueStoreFactory;
-import com.mechjacktv.mechjackbot.AccessLevel;
-import com.mechjacktv.mechjackbot.CommandTrigger;
+import com.mechjacktv.mechjackbot.ChatCommandTrigger;
+import com.mechjacktv.mechjackbot.UserRole;
 import com.mechjacktv.proto.mechjackbot.command.custom.CustomComandDataStoreMessage.CustomCommand;
 import com.mechjacktv.proto.mechjackbot.command.custom.CustomComandDataStoreMessage.CustomCommandKey;
 import com.mechjacktv.util.ExecutionUtils;
@@ -37,19 +37,19 @@ public class DefaultCustomCommandDataStore extends BaseMessageStore<CustomComman
   }
 
   @Override
-  public CustomCommandKey createCustomCommandKey(final CommandTrigger trigger) {
+  public CustomCommandKey createCustomCommandKey(final ChatCommandTrigger trigger) {
     Objects.requireNonNull(trigger, this.executionUtils.nullMessageForName("trigger"));
     return CustomCommandKey.newBuilder().setTrigger(trigger.value).build();
   }
 
   @Override
-  public CustomCommand createCustomCommand(final CommandTrigger trigger, final CommandBody commandBody,
-      final AccessLevel accessLevel) {
+  public CustomCommand createCustomCommand(final ChatCommandTrigger trigger, final CommandBody commandBody,
+      final UserRole userRole) {
     Objects.requireNonNull(trigger, this.executionUtils.nullMessageForName("trigger"));
     Objects.requireNonNull(commandBody, this.executionUtils.nullMessageForName("commandBody"));
-    Objects.requireNonNull(accessLevel, this.executionUtils.nullMessageForName("accessLevel"));
+    Objects.requireNonNull(userRole, this.executionUtils.nullMessageForName("userRole"));
     return CustomCommand.newBuilder().setTrigger(trigger.value).setCommandBody(commandBody.value)
-        .setAccessLevel(accessLevel.toString()).build();
+        .setAccessLevel(userRole.toString()).build();
   }
 
 }

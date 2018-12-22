@@ -2,11 +2,11 @@ package com.mechjacktv.mechjackbot.chatbot.kicl;
 
 import javax.inject.Inject;
 
+import org.kitteh.irc.client.library.element.User;
+
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.ChatUser;
 import com.mechjacktv.mechjackbot.chatbot.ChatUserFactory;
-
-import org.kitteh.irc.client.library.element.User;
 
 public class KiclChatUserFactory implements ChatUserFactory<User> {
 

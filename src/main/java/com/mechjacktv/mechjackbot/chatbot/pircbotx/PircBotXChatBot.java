@@ -5,6 +5,9 @@ import java.util.function.Function;
 
 import javax.inject.Inject;
 
+import org.pircbotx.PircBotX;
+import org.pircbotx.hooks.Listener;
+
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.ChatBot;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
@@ -12,9 +15,6 @@ import com.mechjacktv.mechjackbot.ChatChannel;
 import com.mechjacktv.mechjackbot.ChatMessage;
 import com.mechjacktv.mechjackbot.chatbot.ChatBotStartupException;
 import com.mechjacktv.util.ExecutionUtils;
-
-import org.pircbotx.PircBotX;
-import org.pircbotx.hooks.Listener;
 
 public final class PircBotXChatBot implements ChatBot {
 

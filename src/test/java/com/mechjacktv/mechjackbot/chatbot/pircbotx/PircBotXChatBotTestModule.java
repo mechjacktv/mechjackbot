@@ -9,8 +9,8 @@ import org.pircbotx.User;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import com.mechjacktv.mechjackbot.chatbot.ChatBotFactory;
-import com.mechjacktv.mechjackbot.chatbot.ChatUserFactory;
 import com.mechjacktv.mechjackbot.chatbot.ChatMessageEventFactory;
+import com.mechjacktv.mechjackbot.chatbot.ChatUserFactory;
 
 public class PircBotXChatBotTestModule extends AbstractModule {
 

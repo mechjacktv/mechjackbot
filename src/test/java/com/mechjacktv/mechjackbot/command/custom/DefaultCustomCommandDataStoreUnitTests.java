@@ -3,10 +3,10 @@ package com.mechjacktv.mechjackbot.command.custom;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mechjacktv.keyvaluestore.ChatMessageStoreContractTests;
 import com.mechjacktv.keyvaluestore.MapKeyValueStore;
-import com.mechjacktv.keyvaluestore.MessageStoreContractTests;
-import com.mechjacktv.mechjackbot.AccessLevel;
-import com.mechjacktv.mechjackbot.CommandTrigger;
+import com.mechjacktv.mechjackbot.ChatCommandTrigger;
+import com.mechjacktv.mechjackbot.UserRole;
 import com.mechjacktv.proto.mechjackbot.command.custom.CustomComandDataStoreMessage.CustomCommand;
 import com.mechjacktv.proto.mechjackbot.command.custom.CustomComandDataStoreMessage.CustomCommandKey;
 import com.mechjacktv.util.ExecutionUtils;
@@ -18,7 +18,8 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-public class DefaultCustomCommandDataStoreUnitTests extends MessageStoreContractTests<CustomCommandKey, CustomCommand> {
+public class DefaultCustomCommandDataStoreUnitTests extends
+    ChatMessageStoreContractTests<CustomCommandKey, CustomCommand> {
 
   @Override
   protected DefaultCustomCommandDataStore givenASubjectToTest() {
@@ -51,7 +52,7 @@ public class DefaultCustomCommandDataStoreUnitTests extends MessageStoreContract
     return CustomCommand.newBuilder()
         .setTrigger(this.testFrameworkRule.getArbitraryString())
         .setCommandBody(this.testFrameworkRule.getArbitraryString())
-        .setAccessLevel(AccessLevel.FOLLOWER.toString())
+        .setAccessLevel(UserRole.FOLLOWER.toString())
         .build();
   }
 
@@ -71,7 +72,7 @@ public class DefaultCustomCommandDataStoreUnitTests extends MessageStoreContract
     final String trigger = this.testFrameworkRule.getArbitraryString();
     final DefaultCustomCommandDataStore subjectUnderTest = this.givenASubjectToTest();
 
-    final CustomCommandKey result = subjectUnderTest.createCustomCommandKey(CommandTrigger.of(trigger));
+    final CustomCommandKey result = subjectUnderTest.createCustomCommandKey(ChatCommandTrigger.of(trigger));
 
     assertThat(result.getTrigger()).isEqualTo(trigger);
   }
@@ -82,7 +83,7 @@ public class DefaultCustomCommandDataStoreUnitTests extends MessageStoreContract
     final DefaultCustomCommandDataStore subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.createCustomCommand(null,
-        CommandBody.of(this.testFrameworkRule.getArbitraryString()), AccessLevel.FOLLOWER));
+        CommandBody.of(this.testFrameworkRule.getArbitraryString()), UserRole.FOLLOWER));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "trigger");
   }
@@ -93,7 +94,7 @@ public class DefaultCustomCommandDataStoreUnitTests extends MessageStoreContract
     final DefaultCustomCommandDataStore subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.createCustomCommand(
-        CommandTrigger.of(this.testFrameworkRule.getArbitraryString()), null, AccessLevel.FOLLOWER));
+        ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString()), null, UserRole.FOLLOWER));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "commandBody");
   }
@@ -104,10 +105,10 @@ public class DefaultCustomCommandDataStoreUnitTests extends MessageStoreContract
     final DefaultCustomCommandDataStore subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.createCustomCommand(
-        CommandTrigger.of(this.testFrameworkRule.getArbitraryString()),
+        ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString()),
         CommandBody.of(this.testFrameworkRule.getArbitraryString()), null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "accessLevel");
+    this.testFrameworkRule.assertNullPointerException(thrown, "userRole");
   }
 
   @Test
@@ -117,13 +118,13 @@ public class DefaultCustomCommandDataStoreUnitTests extends MessageStoreContract
     final String commandBody = this.testFrameworkRule.getArbitraryString();
     final DefaultCustomCommandDataStore subjectUnderTest = this.givenASubjectToTest();
 
-    final CustomCommand result = subjectUnderTest.createCustomCommand(CommandTrigger.of(trigger),
-        CommandBody.of(commandBody), AccessLevel.FOLLOWER);
+    final CustomCommand result = subjectUnderTest.createCustomCommand(ChatCommandTrigger.of(trigger),
+        CommandBody.of(commandBody), UserRole.FOLLOWER);
 
     final SoftAssertions softly = new SoftAssertions();
     softly.assertThat(result.getTrigger()).isEqualTo(trigger);
     softly.assertThat(result.getCommandBody()).isEqualTo(commandBody);
-    softly.assertThat(result.getAccessLevel()).isEqualTo(AccessLevel.FOLLOWER.toString());
+    softly.assertThat(result.getAccessLevel()).isEqualTo(UserRole.FOLLOWER.toString());
     softly.assertAll();
   }
 

@@ -5,8 +5,6 @@ import com.google.inject.Scopes;
 
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 
-import com.mechjacktv.mechjackbot.ChatBotConfiguration;
-
 public class ChatBotTestModule extends AbstractModule {
 
   @Override

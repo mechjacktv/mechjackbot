@@ -3,17 +3,17 @@ package com.mechjacktv.mechjackbot.chatbot.kicl;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import org.kitteh.irc.client.library.event.channel.ChannelJoinEvent;
+import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
+
+import net.engio.mbassy.listener.Handler;
+
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.ChatBot;
 import com.mechjacktv.mechjackbot.ChatChannel;
 import com.mechjacktv.mechjackbot.ChatMessage;
 import com.mechjacktv.mechjackbot.ChatMessageEventHandler;
 import com.mechjacktv.mechjackbot.chatbot.ChatMessageEventFactory;
-
-import org.kitteh.irc.client.library.event.channel.ChannelJoinEvent;
-import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
-
-import net.engio.mbassy.listener.Handler;
 
 final class KiclChatBotListener {
 

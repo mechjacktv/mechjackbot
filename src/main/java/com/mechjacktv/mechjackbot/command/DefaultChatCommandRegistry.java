@@ -9,13 +9,13 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mechjacktv.mechjackbot.ChatCommand;
 import com.mechjacktv.mechjackbot.ChatCommandRegistry;
 import com.mechjacktv.mechjackbot.ChatCommandTrigger;
 import com.mechjacktv.util.ExecutionUtils;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class DefaultChatCommandRegistry implements ChatCommandRegistry {
 
@@ -49,6 +49,18 @@ public final class DefaultChatCommandRegistry implements ChatCommandRegistry {
     }
     this.commands.put(chatCommand.getTrigger(), chatCommand);
     log.info(String.format("Added chatCommand, %s, with trigger, %s", chatCommand.getName(), chatCommand.getTrigger()));
+  }
+
+  @Override
+  public boolean hasCommand(final ChatCommandTrigger trigger) {
+    Objects.requireNonNull(trigger, this.executionUtils.nullMessageForName("trigger"));
+    return this.commands.containsKey(trigger);
+  }
+
+  @Override
+  public boolean removeCommand(final ChatCommandTrigger trigger) {
+    Objects.requireNonNull(trigger, this.executionUtils.nullMessageForName("trigger"));
+    return this.commands.remove(trigger) != null;
   }
 
 }

@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import com.google.inject.multibindings.Multibinder;
 
-import com.mechjacktv.mechjackbot.Command;
+import com.mechjacktv.mechjackbot.ChatCommand;
 
 public class CustomCommandModule extends AbstractModule {
 
@@ -12,7 +12,7 @@ public class CustomCommandModule extends AbstractModule {
   protected void configure() {
     this.bind(CustomCommandDataStore.class).to(DefaultCustomCommandDataStore.class).in(Scopes.SINGLETON);
 
-    Multibinder.newSetBinder(this.binder(), Command.class).addBinding().to(SetCommandCommand.class)
+    Multibinder.newSetBinder(this.binder(), ChatCommand.class).addBinding().to(SetCommandChatCommand.class)
         .in(Scopes.SINGLETON);
   }
 

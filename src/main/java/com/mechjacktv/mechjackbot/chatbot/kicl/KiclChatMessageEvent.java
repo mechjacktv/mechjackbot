@@ -2,6 +2,9 @@ package com.mechjacktv.mechjackbot.chatbot.kicl;
 
 import java.util.Objects;
 
+import org.kitteh.irc.client.library.element.User;
+import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
+
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.ChatBot;
 import com.mechjacktv.mechjackbot.ChatMessage;
@@ -9,9 +12,6 @@ import com.mechjacktv.mechjackbot.ChatMessageEvent;
 import com.mechjacktv.mechjackbot.ChatUser;
 import com.mechjacktv.mechjackbot.chatbot.ChatUserFactory;
 import com.mechjacktv.util.ExecutionUtils;
-
-import org.kitteh.irc.client.library.element.User;
-import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 
 public class KiclChatMessageEvent implements ChatMessageEvent {
 

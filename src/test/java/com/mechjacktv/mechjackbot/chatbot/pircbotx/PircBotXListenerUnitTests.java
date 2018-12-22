@@ -53,7 +53,8 @@ public class PircBotXListenerUnitTests {
   private PircBotXListener givenASubjectToTest(final ChatMessageEventHandler chatMessageEventHandler) {
     return new PircBotXListener(this.testFrameworkRule.getInstance(Configuration.class),
         this.testFrameworkRule.getInstance(Key.get(new TypeLiteral<ChatBotFactory<PircBotX>>() {
-        })), this.testFrameworkRule.getInstance(Key.get(new TypeLiteral<ChatMessageEventFactory<GenericMessageEvent>>() {
+        })),
+        this.testFrameworkRule.getInstance(Key.get(new TypeLiteral<ChatMessageEventFactory<GenericMessageEvent>>() {
         })), chatMessageEventHandler);
   }
 

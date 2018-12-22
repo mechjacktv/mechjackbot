@@ -2,11 +2,11 @@ package com.mechjacktv.mechjackbot.chatbot.pircbotx;
 
 import javax.inject.Inject;
 
+import org.pircbotx.User;
+
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.ChatUser;
 import com.mechjacktv.mechjackbot.chatbot.ChatUserFactory;
-
-import org.pircbotx.User;
 
 class PircBotXChatUserFactory implements ChatUserFactory<User> {
 

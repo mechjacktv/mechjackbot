@@ -1,19 +1,19 @@
 package com.mechjacktv.mechjackbot;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-
 import java.util.Collection;
 import java.util.Optional;
-
-import org.assertj.core.api.Condition;
-import org.junit.Rule;
-import org.junit.Test;
 
 import com.mechjacktv.configuration.ConfigurationTestModule;
 import com.mechjacktv.mechjackbot.command.CommandTestModule;
 import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.util.UtilTestModule;
+
+import org.assertj.core.api.Condition;
+import org.junit.Rule;
+import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 public abstract class ChatCommandRegistryContractTests {
 
@@ -72,7 +72,7 @@ public abstract class ChatCommandRegistryContractTests {
   @Test
   public final void hasCommand_nullTrigger_throwsNullPointerException() {
     this.installModules();
-    final CommandRegistry subjectUnderTest = this.givenASubjectToTest();
+    final ChatCommandRegistry subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.hasCommand(null));
 
@@ -82,9 +82,10 @@ public abstract class ChatCommandRegistryContractTests {
   @Test
   public final void hasCommand_noCommandRegistered_resultIsFalse() {
     this.installModules();
-    final CommandRegistry subjectUnderTest = this.givenASubjectToTest();
+    final ChatCommandRegistry subjectUnderTest = this.givenASubjectToTest();
 
-    final boolean result = subjectUnderTest.hasCommand(CommandTrigger.of(this.testFrameworkRule.getArbitraryString()));
+    final boolean result = subjectUnderTest
+        .hasCommand(ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString()));
 
     assertThat(result).isFalse();
   }
@@ -92,8 +93,8 @@ public abstract class ChatCommandRegistryContractTests {
   @Test
   public final void hasCommand_commandRegistered_resultIsTrue() {
     this.installModules();
-    final Command command = this.testFrameworkRule.getInstance(Command.class);
-    final CommandRegistry subjectUnderTest = this.givenASubjectToTest();
+    final ChatCommand command = this.testFrameworkRule.getInstance(ChatCommand.class);
+    final ChatCommandRegistry subjectUnderTest = this.givenASubjectToTest();
     subjectUnderTest.addCommand(command);
 
     final boolean result = subjectUnderTest.hasCommand(command.getTrigger());
@@ -104,7 +105,7 @@ public abstract class ChatCommandRegistryContractTests {
   @Test
   public final void removeCommand_nullTrigger_throwsNullPointerException() {
     this.installModules();
-    final CommandRegistry subjectUnderTest = this.givenASubjectToTest();
+    final ChatCommandRegistry subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.removeCommand(null));
 
@@ -114,10 +115,10 @@ public abstract class ChatCommandRegistryContractTests {
   @Test
   public final void removeCommand_noCommandRegistered_resultIsFalse() {
     this.installModules();
-    final CommandRegistry subjectUnderTest = this.givenASubjectToTest();
+    final ChatCommandRegistry subjectUnderTest = this.givenASubjectToTest();
 
     final boolean result = subjectUnderTest
-        .removeCommand(CommandTrigger.of(this.testFrameworkRule.getArbitraryString()));
+        .removeCommand(ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString()));
 
     assertThat(result).isFalse();
   }
@@ -125,8 +126,8 @@ public abstract class ChatCommandRegistryContractTests {
   @Test
   public final void removeCommand_commandRegistered_resultIsTrue() {
     this.installModules();
-    final Command command = this.testFrameworkRule.getInstance(Command.class);
-    final CommandRegistry subjectUnderTest = this.givenASubjectToTest();
+    final ChatCommand command = this.testFrameworkRule.getInstance(ChatCommand.class);
+    final ChatCommandRegistry subjectUnderTest = this.givenASubjectToTest();
     subjectUnderTest.addCommand(command);
 
     final boolean result = subjectUnderTest.removeCommand(command.getTrigger());
