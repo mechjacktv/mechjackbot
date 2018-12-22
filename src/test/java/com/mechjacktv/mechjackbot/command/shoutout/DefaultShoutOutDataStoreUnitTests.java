@@ -22,8 +22,8 @@ import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.ConfigurationTestModule;
 import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.keyvaluestore.ChatMessageStoreContractTests;
 import com.mechjacktv.keyvaluestore.MapKeyValueStore;
-import com.mechjacktv.keyvaluestore.MessageStoreContractTests;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.chatbot.ChatBotTestModule;
 import com.mechjacktv.mechjackbot.command.CommandTestModule;
@@ -40,7 +40,7 @@ import com.mechjacktv.util.scheduleservice.ScheduleService;
 import com.mechjacktv.util.scheduleservice.ScheduleServiceTestModule;
 import com.mechjacktv.util.scheduleservice.TestScheduleService;
 
-public class DefaultShoutOutDataStoreUnitTests extends MessageStoreContractTests<CasterKey, Caster> {
+public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractTests<CasterKey, Caster> {
 
   @Override
   protected void installModules() {

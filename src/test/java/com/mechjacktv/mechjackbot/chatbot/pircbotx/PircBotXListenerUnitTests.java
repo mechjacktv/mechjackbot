@@ -13,7 +13,6 @@ import com.google.inject.TypeLiteral;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.pircbotx.Channel;
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.PingEvent;
@@ -23,10 +22,10 @@ import org.pircbotx.output.OutputIRC;
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.ConfigurationTestModule;
 import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.mechjackbot.Message;
-import com.mechjacktv.mechjackbot.MessageEvent;
-import com.mechjacktv.mechjackbot.MessageEventHandler;
-import com.mechjacktv.mechjackbot.TwitchChannel;
+import com.mechjacktv.mechjackbot.ChatChannel;
+import com.mechjacktv.mechjackbot.ChatMessage;
+import com.mechjacktv.mechjackbot.ChatMessageEvent;
+import com.mechjacktv.mechjackbot.ChatMessageEventHandler;
 import com.mechjacktv.mechjackbot.chatbot.ChatBotFactory;
 import com.mechjacktv.mechjackbot.chatbot.ChatBotTestModule;
 import com.mechjacktv.mechjackbot.chatbot.MessageEventFactory;
@@ -48,14 +47,14 @@ public class PircBotXListenerUnitTests {
   }
 
   private PircBotXListener givenASubjectToTest() {
-    return this.givenASubjectToTest(mock(MessageEventHandler.class));
+    return this.givenASubjectToTest(mock(ChatMessageEventHandler.class));
   }
 
-  private PircBotXListener givenASubjectToTest(final MessageEventHandler messageEventHandler) {
+  private PircBotXListener givenASubjectToTest(final ChatMessageEventHandler chatMessageEventHandler) {
     return new PircBotXListener(this.testFrameworkRule.getInstance(Configuration.class),
         this.testFrameworkRule.getInstance(Key.get(new TypeLiteral<ChatBotFactory<PircBotX>>() {
         })), this.testFrameworkRule.getInstance(Key.get(new TypeLiteral<MessageEventFactory<GenericMessageEvent>>() {
-        })), messageEventHandler);
+        })), chatMessageEventHandler);
   }
 
   @Test
@@ -74,12 +73,12 @@ public class PircBotXListenerUnitTests {
   @Test
   public final void onGenericMessageEvent_forEvent_callsMessageEventHandler() {
     this.installModules();
-    final MessageEventHandler messageEventHandler = mock(MessageEventHandler.class);
-    final PircBotXListener subjectUnderTest = this.givenASubjectToTest(messageEventHandler);
+    final ChatMessageEventHandler chatMessageEventHandler = mock(ChatMessageEventHandler.class);
+    final PircBotXListener subjectUnderTest = this.givenASubjectToTest(chatMessageEventHandler);
 
     subjectUnderTest.onGenericMessage(mock(GenericMessageEvent.class));
 
-    verify(messageEventHandler).handleMessageEvent(isA(MessageEvent.class));
+    verify(chatMessageEventHandler).handleMessageEvent(isA(ChatMessageEvent.class));
   }
 
   @Test
@@ -90,7 +89,7 @@ public class PircBotXListenerUnitTests {
     configuration.set(JOIN_EVENT_MESSAGE_KEY, joinMessage);
     configuration.set(CHAT_BOT_MESSAGE_FORMAT_KEY, "%s");
     final JoinEvent joinEvent = mock(JoinEvent.class);
-    final Channel channel = mock(Channel.class);
+    final org.pircbotx.Channel channel = mock(org.pircbotx.Channel.class);
     final String channelName = this.testFrameworkRule.getArbitraryString();
     when(joinEvent.getChannel()).thenReturn(channel);
     when(channel.getName()).thenReturn(channelName);
@@ -102,7 +101,7 @@ public class PircBotXListenerUnitTests {
 
     subjectUnderTest.onJoin(joinEvent);
 
-    verify(outputIRC).message(eq(TwitchChannel.of(channelName).value), eq(Message.of(joinMessage).value));
+    verify(outputIRC).message(eq(ChatChannel.of(channelName).value), eq(ChatMessage.of(joinMessage).value));
   }
 
 }

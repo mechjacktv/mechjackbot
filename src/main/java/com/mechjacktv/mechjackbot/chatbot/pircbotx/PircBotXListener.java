@@ -9,9 +9,9 @@ import org.pircbotx.hooks.events.PingEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.mechjackbot.Message;
-import com.mechjacktv.mechjackbot.MessageEventHandler;
-import com.mechjacktv.mechjackbot.TwitchChannel;
+import com.mechjacktv.mechjackbot.ChatChannel;
+import com.mechjacktv.mechjackbot.ChatMessage;
+import com.mechjacktv.mechjackbot.ChatMessageEventHandler;
 import com.mechjacktv.mechjackbot.chatbot.ChatBotFactory;
 import com.mechjacktv.mechjackbot.chatbot.MessageEventFactory;
 
@@ -23,16 +23,16 @@ public final class PircBotXListener extends ListenerAdapter {
   private final Configuration configuration;
   private final ChatBotFactory<PircBotX> chatBotFactory;
   private final MessageEventFactory<GenericMessageEvent> messageEventFactory;
-  private final MessageEventHandler messageEventHandler;
+  private final ChatMessageEventHandler chatMessageEventHandler;
 
   @Inject
   PircBotXListener(final Configuration configuration, final ChatBotFactory<PircBotX> chatBotFactory,
       final MessageEventFactory<GenericMessageEvent> messageEventFactory,
-      final MessageEventHandler messageEventHandler) {
+      final ChatMessageEventHandler chatMessageEventHandler) {
     this.configuration = configuration;
     this.chatBotFactory = chatBotFactory;
     this.messageEventFactory = messageEventFactory;
-    this.messageEventHandler = messageEventHandler;
+    this.chatMessageEventHandler = chatMessageEventHandler;
   }
 
   @Override
@@ -42,12 +42,12 @@ public final class PircBotXListener extends ListenerAdapter {
 
   @Override
   public final void onGenericMessage(final GenericMessageEvent event) {
-    this.messageEventHandler.handleMessageEvent(this.messageEventFactory.create(event));
+    this.chatMessageEventHandler.handleMessageEvent(this.messageEventFactory.create(event));
   }
 
   @Override
   public void onJoin(final JoinEvent event) {
-    this.chatBotFactory.create(event.getBot()).sendMessage(TwitchChannel.of(event.getChannel().getName()),
-        Message.of(this.configuration.get(JOIN_EVENT_MESSAGE_KEY, JOIN_EVENT_MESSAGE_DEFAULT)));
+    this.chatBotFactory.create(event.getBot()).sendMessage(ChatChannel.of(event.getChannel().getName()),
+        ChatMessage.of(this.configuration.get(JOIN_EVENT_MESSAGE_KEY, JOIN_EVENT_MESSAGE_DEFAULT)));
   }
 }

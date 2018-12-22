@@ -1,17 +1,20 @@
 package com.mechjacktv.mechjackbot.chatbot.pircbotx;
 
-import static com.mechjacktv.mechjackbot.chatbot.pircbotx.PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_KEY;
-import static com.mechjacktv.mechjackbot.chatbot.pircbotx.PircBotXChatBot.SHUTDOWN_MESSAGE_KEY;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.io.IOException;
 import java.util.function.Function;
+
+import com.mechjacktv.configuration.Configuration;
+import com.mechjacktv.configuration.ConfigurationTestModule;
+import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.mechjackbot.ChatBotConfiguration;
+import com.mechjacktv.mechjackbot.ChatChannel;
+import com.mechjacktv.mechjackbot.ChatMessage;
+import com.mechjacktv.mechjackbot.chatbot.ChatBotStartupException;
+import com.mechjacktv.mechjackbot.chatbot.ChatBotTestModule;
+import com.mechjacktv.mechjackbot.command.CommandTestModule;
+import com.mechjacktv.testframework.TestFrameworkRule;
+import com.mechjacktv.util.ExecutionUtils;
+import com.mechjacktv.util.UtilTestModule;
 
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Rule;
@@ -22,18 +25,15 @@ import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.Listener;
 import org.pircbotx.output.OutputIRC;
 
-import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.configuration.ConfigurationTestModule;
-import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.mechjackbot.ChatBotConfiguration;
-import com.mechjacktv.mechjackbot.Message;
-import com.mechjacktv.mechjackbot.TwitchChannel;
-import com.mechjacktv.mechjackbot.chatbot.ChatBotStartupException;
-import com.mechjacktv.mechjackbot.chatbot.ChatBotTestModule;
-import com.mechjacktv.mechjackbot.command.CommandTestModule;
-import com.mechjacktv.testframework.TestFrameworkRule;
-import com.mechjacktv.util.ExecutionUtils;
-import com.mechjacktv.util.UtilTestModule;
+import static com.mechjacktv.mechjackbot.chatbot.pircbotx.PircBotXChatBot.CHAT_BOT_MESSAGE_FORMAT_KEY;
+import static com.mechjacktv.mechjackbot.chatbot.pircbotx.PircBotXChatBot.SHUTDOWN_MESSAGE_KEY;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class PircBotXChatBotUnitTests {
 
@@ -99,9 +99,9 @@ public class PircBotXChatBotUnitTests {
     softly.assertThat(result.getName()).isEqualTo(chatBotConfiguration.getTwitchLogin().value);
     softly.assertThat(serverEntry.getHostname()).isEqualTo(PircBotXChatBot.TWITCH_IRC_SERVER_HOST);
     softly.assertThat(serverEntry.getPort()).isEqualTo(PircBotXChatBot.TWITCH_IRC_SERVER_PORT);
-    softly.assertThat(result.getServerPassword()).isEqualTo(chatBotConfiguration.getTwitchPassword().value);
+    softly.assertThat(result.getServerPassword()).isEqualTo(chatBotConfiguration.getUserPassword().value);
     softly.assertThat(result.getListenerManager().getListeners()).contains(listener);
-    softly.assertThat(result.getAutoJoinChannels()).containsKey("#" + chatBotConfiguration.getTwitchChannel().value);
+    softly.assertThat(result.getAutoJoinChannels()).containsKey("#" + chatBotConfiguration.getChatChannel().value);
     softly.assertAll();
   }
 
@@ -146,9 +146,9 @@ public class PircBotXChatBotUnitTests {
     final PircBotXChatBot subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.sendMessage(null,
-        Message.of(this.testFrameworkRule.getArbitraryString())));
+        ChatMessage.of(this.testFrameworkRule.getArbitraryString())));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "channel");
+    this.testFrameworkRule.assertNullPointerException(thrown, "chatChannel");
   }
 
   @Test
@@ -157,9 +157,9 @@ public class PircBotXChatBotUnitTests {
     final PircBotXChatBot subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.sendMessage(
-        TwitchChannel.of(this.testFrameworkRule.getArbitraryString()), null));
+        ChatChannel.of(this.testFrameworkRule.getArbitraryString()), null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "message");
+    this.testFrameworkRule.assertNullPointerException(thrown, "chatMessage");
   }
 
   @Test
@@ -169,13 +169,13 @@ public class PircBotXChatBotUnitTests {
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(CHAT_BOT_MESSAGE_FORMAT_KEY, messageFormat);
     final OutputIRC outputIRC = mock(OutputIRC.class);
-    final TwitchChannel channel = TwitchChannel.of(this.testFrameworkRule.getArbitraryString());
-    final Message message = Message.of(this.testFrameworkRule.getArbitraryString());
+    final ChatChannel chatChannel = ChatChannel.of(this.testFrameworkRule.getArbitraryString());
+    final ChatMessage chatMessage = ChatMessage.of(this.testFrameworkRule.getArbitraryString());
     final PircBotXChatBot subjectUnderTest = this.givenASubjectToTest(this.givenAFakePircBotX(outputIRC));
 
-    subjectUnderTest.sendMessage(channel, message);
+    subjectUnderTest.sendMessage(chatChannel, chatMessage);
 
-    verify(outputIRC).message(eq(channel.value), eq(String.format(messageFormat, message)));
+    verify(outputIRC).message(eq(chatChannel.value), eq(String.format(messageFormat, chatMessage)));
   }
 
   @Test

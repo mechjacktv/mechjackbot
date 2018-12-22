@@ -2,9 +2,9 @@ package com.mechjacktv.mechjackbot.chatbot.pircbotx;
 
 import org.pircbotx.User;
 
-import com.mechjacktv.mechjackbot.AccessLevel;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.ChatUser;
+import com.mechjacktv.mechjackbot.UserRole;
 import com.mechjacktv.twitchclient.TwitchLogin;
 
 final class PircBotXChatUser implements ChatUser {
@@ -23,8 +23,8 @@ final class PircBotXChatUser implements ChatUser {
   }
 
   @Override
-  public boolean hasAccessLevel(AccessLevel accessLevel) {
-    return this.chatBotConfiguration.getTwitchChannel().value.equalsIgnoreCase(this.getTwitchLogin().value);
+  public boolean hasAccessLevel(UserRole userRole) {
+    return this.chatBotConfiguration.getChatChannel().value.equalsIgnoreCase(this.getTwitchLogin().value);
   }
 
 }

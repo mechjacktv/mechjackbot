@@ -6,10 +6,10 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.mechjackbot.CommandDescription;
-import com.mechjacktv.mechjackbot.CommandTrigger;
-import com.mechjacktv.mechjackbot.CommandUsage;
-import com.mechjacktv.mechjackbot.CommandUtils;
+import com.mechjacktv.mechjackbot.ChatCommandDescription;
+import com.mechjacktv.mechjackbot.ChatCommandTrigger;
+import com.mechjacktv.mechjackbot.ChatCommandUsage;
+import com.mechjacktv.mechjackbot.ChatCommandUtils;
 import com.mechjacktv.util.ExecutionUtils;
 
 public final class DefaultCommandConfigurationBuilder implements CommandConfigurationBuilder {
@@ -19,7 +19,7 @@ public final class DefaultCommandConfigurationBuilder implements CommandConfigur
   public static final boolean UNSET_TRIGGERABLE = false;
   public static final String UNSET_USAGE = "";
 
-  private final CommandUtils commandUtils;
+  private final ChatCommandUtils chatCommandUtils;
   private final Configuration configuration;
   private final ExecutionUtils executionUtils;
 
@@ -30,9 +30,9 @@ public final class DefaultCommandConfigurationBuilder implements CommandConfigur
   private String usage;
 
   @Inject
-  DefaultCommandConfigurationBuilder(final CommandUtils commandUtils, final Configuration configuration,
+  DefaultCommandConfigurationBuilder(final ChatCommandUtils chatCommandUtils, final Configuration configuration,
       final ExecutionUtils executionUtils) {
-    this.commandUtils = commandUtils;
+    this.chatCommandUtils = chatCommandUtils;
     this.configuration = configuration;
     this.executionUtils = executionUtils;
   }
@@ -72,9 +72,9 @@ public final class DefaultCommandConfigurationBuilder implements CommandConfigur
 
   @Override
   public CommandConfiguration build() {
-    return new DefaultCommandConfiguration(this.commandUtils, this.configuration, this.executionUtils,
-        CommandDescription.of(this.getDescription()), CommandMessageFormat.of(this.getMessageFormat()),
-        CommandTrigger.of(this.getTrigger()), this.isTriggerable(), CommandUsage.of(this.getUsage()));
+    return new DefaultCommandConfiguration(this.chatCommandUtils, this.configuration, this.executionUtils,
+        ChatCommandDescription.of(this.getDescription()), CommandMessageFormat.of(this.getMessageFormat()),
+        ChatCommandTrigger.of(this.getTrigger()), this.isTriggerable(), ChatCommandUsage.of(this.getUsage()));
   }
 
   private String getDescription() {

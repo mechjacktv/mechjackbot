@@ -1,10 +1,10 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
-import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.ChatMessageEvent;
 
 @FunctionalInterface
 public interface MessageEventFactory<E> {
 
-  MessageEvent create(E event);
+  ChatMessageEvent create(E event);
 
 }

@@ -11,8 +11,8 @@ import org.pircbotx.hooks.Listener;
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.ChatBot;
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
-import com.mechjacktv.mechjackbot.Message;
-import com.mechjacktv.mechjackbot.TwitchChannel;
+import com.mechjacktv.mechjackbot.ChatChannel;
+import com.mechjacktv.mechjackbot.ChatMessage;
 import com.mechjacktv.mechjackbot.chatbot.ChatBotStartupException;
 import com.mechjacktv.util.ExecutionUtils;
 
@@ -43,9 +43,9 @@ public final class PircBotXChatBot implements ChatBot {
     final org.pircbotx.Configuration configuration = new org.pircbotx.Configuration.Builder()
         .setName(chatBotConfiguration.getTwitchLogin().value)
         .addServer(TWITCH_IRC_SERVER_HOST, TWITCH_IRC_SERVER_PORT)
-        .setServerPassword(chatBotConfiguration.getTwitchPassword().value)
+        .setServerPassword(chatBotConfiguration.getUserPassword().value)
         .addListener(listener)
-        .addAutoJoinChannel("#" + chatBotConfiguration.getTwitchChannel().value)
+        .addAutoJoinChannel("#" + chatBotConfiguration.getChatChannel().value)
         .buildConfiguration();
 
     this.configuration = appConfiguration;
@@ -61,11 +61,11 @@ public final class PircBotXChatBot implements ChatBot {
   }
 
   @Override
-  public void sendMessage(final TwitchChannel channel, final Message message) {
-    Objects.requireNonNull(channel, this.executionUtils.nullMessageForName("channel"));
-    Objects.requireNonNull(message, this.executionUtils.nullMessageForName("message"));
-    this.pircBotX.sendIRC().message(channel.value, String.format(this.configuration.get(CHAT_BOT_MESSAGE_FORMAT_KEY,
-        CHAT_BOT_MESSAGE_FORMAT_DEFAULT), message));
+  public void sendMessage(final ChatChannel chatChannel, final ChatMessage chatMessage) {
+    Objects.requireNonNull(chatChannel, this.executionUtils.nullMessageForName("chatChannel"));
+    Objects.requireNonNull(chatMessage, this.executionUtils.nullMessageForName("chatMessage"));
+    this.pircBotX.sendIRC().message(chatChannel.value, String.format(this.configuration.get(CHAT_BOT_MESSAGE_FORMAT_KEY,
+        CHAT_BOT_MESSAGE_FORMAT_DEFAULT), chatMessage));
   }
 
   @Override

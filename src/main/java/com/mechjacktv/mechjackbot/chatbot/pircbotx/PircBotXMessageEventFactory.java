@@ -7,7 +7,7 @@ import org.pircbotx.User;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.ChatMessageEvent;
 import com.mechjacktv.mechjackbot.chatbot.ChatBotFactory;
 import com.mechjacktv.mechjackbot.chatbot.ChatUserFactory;
 import com.mechjacktv.mechjackbot.chatbot.MessageEventFactory;
@@ -30,8 +30,8 @@ class PircBotXMessageEventFactory implements MessageEventFactory<GenericMessageE
   }
 
   @Override
-  public final MessageEvent create(final GenericMessageEvent event) {
-    return new PircBotXMessageEvent(this.configuration, this.chatBotFactory, this.chatUserFactory,
+  public final ChatMessageEvent create(final GenericMessageEvent event) {
+    return new PircBotXChatMessageEvent(this.configuration, this.chatBotFactory, this.chatUserFactory,
         this.executionUtils, event);
   }
 

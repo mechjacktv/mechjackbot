@@ -4,22 +4,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.inject.Inject;
 
-import com.mechjacktv.mechjackbot.Command;
-import com.mechjacktv.mechjackbot.CommandUtils;
-import com.mechjacktv.mechjackbot.Message;
-import com.mechjacktv.mechjackbot.MessageEvent;
+import com.mechjacktv.mechjackbot.ChatCommand;
+import com.mechjacktv.mechjackbot.ChatCommandUtils;
+import com.mechjacktv.mechjackbot.ChatMessage;
+import com.mechjacktv.mechjackbot.ChatMessageEvent;
 
 public class CommandAssertionsUtils {
 
-  private final CommandUtils commandUtils;
+  private final ChatCommandUtils chatCommandUtils;
 
   @Inject
-  CommandAssertionsUtils(final CommandUtils commandUtils) {
-    this.commandUtils = commandUtils;
+  CommandAssertionsUtils(final ChatCommandUtils chatCommandUtils) {
+    this.chatCommandUtils = chatCommandUtils;
   }
 
-  public final void assertUsageMessageForCommand(final Message result, final Command subjectUnderTest,
-      final MessageEvent messageEvent) {
-    assertThat(result).isEqualTo(this.commandUtils.createUsageMessage(subjectUnderTest, messageEvent));
+  public final void assertUsageMessageForCommand(final ChatMessage result, final ChatCommand subjectUnderTest,
+      final ChatMessageEvent chatMessageEvent) {
+    assertThat(result).isEqualTo(this.chatCommandUtils.createUsageMessage(subjectUnderTest, chatMessageEvent));
   }
 }

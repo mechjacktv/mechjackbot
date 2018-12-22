@@ -1,28 +1,28 @@
 package com.mechjacktv.mechjackbot.command;
 
 import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.mechjackbot.CommandDescription;
-import com.mechjacktv.mechjackbot.CommandTrigger;
-import com.mechjacktv.mechjackbot.CommandUsage;
-import com.mechjacktv.mechjackbot.CommandUtils;
+import com.mechjacktv.mechjackbot.ChatCommandDescription;
+import com.mechjacktv.mechjackbot.ChatCommandTrigger;
+import com.mechjacktv.mechjackbot.ChatCommandUsage;
+import com.mechjacktv.mechjackbot.ChatCommandUtils;
 import com.mechjacktv.util.ExecutionUtils;
 
 public interface CommandConfiguration {
 
-  CommandUtils getCommandUtils();
+  ChatCommandUtils getChatCommandUtils();
 
   Configuration getConfiguration();
 
   ExecutionUtils getExecutionUtils();
 
-  CommandDescription getDescription();
+  ChatCommandDescription getDescription();
 
   CommandMessageFormat getMessageFormat();
 
-  CommandTrigger getTrigger();
+  ChatCommandTrigger getTrigger();
 
   boolean isTriggerable();
 
-  CommandUsage getUsage();
+  ChatCommandUsage getUsage();
 
 }

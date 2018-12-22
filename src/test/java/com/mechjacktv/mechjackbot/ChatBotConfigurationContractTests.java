@@ -85,9 +85,9 @@ public abstract class ChatBotConfigurationContractTests {
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
     final ChatBotConfiguration subjectUnderTest = this.givenASubjectToTest(properties);
 
-    final TwitchChannel result = subjectUnderTest.getTwitchChannel();
+    final ChatChannel result = subjectUnderTest.getChatChannel();
 
-    assertThat(result).isEqualTo(TwitchChannel.of(properties.get(TWITCH_CHANNEL_KEY)));
+    assertThat(result).isEqualTo(ChatChannel.of(properties.get(TWITCH_CHANNEL_KEY)));
   }
 
   @Test
@@ -95,9 +95,9 @@ public abstract class ChatBotConfigurationContractTests {
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
     final ChatBotConfiguration subjectUnderTest = this.givenASubjectToTest(properties);
 
-    final TwitchPassword result = subjectUnderTest.getTwitchPassword();
+    final UserPassword result = subjectUnderTest.getUserPassword();
 
-    assertThat(result).isEqualTo(TwitchPassword.of(properties.get(TWITCH_PASSWORD_KEY)));
+    assertThat(result).isEqualTo(UserPassword.of(properties.get(TWITCH_PASSWORD_KEY)));
   }
 
   @Test

@@ -2,30 +2,30 @@ package com.mechjacktv.mechjackbot;
 
 public class TestChatBot implements ChatBot {
 
-  private Message message;
+  private ChatMessage chatMessage;
   private boolean started;
   private boolean stopped;
-  private TwitchChannel twitchChannel;
+  private ChatChannel chatChannel;
 
   public TestChatBot() {
-    this.message = null;
+    this.chatMessage = null;
     this.started = false;
     this.stopped = false;
-    this.twitchChannel = null;
+    this.chatChannel = null;
   }
 
-  public Message getMessage() {
-    return this.message;
+  public ChatMessage getChatMessage() {
+    return this.chatMessage;
   }
 
-  public TwitchChannel getTwitchChannel() {
-    return this.twitchChannel;
+  public ChatChannel getChatChannel() {
+    return this.chatChannel;
   }
 
   @Override
-  public void sendMessage(final TwitchChannel twitchChannel, final Message message) {
-    this.message = message;
-    this.twitchChannel = twitchChannel;
+  public void sendMessage(final ChatChannel chatChannel, final ChatMessage chatMessage) {
+    this.chatMessage = chatMessage;
+    this.chatChannel = chatChannel;
   }
 
   @Override
