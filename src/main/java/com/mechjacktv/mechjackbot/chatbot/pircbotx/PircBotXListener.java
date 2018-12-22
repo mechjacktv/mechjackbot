@@ -2,18 +2,18 @@ package com.mechjacktv.mechjackbot.chatbot.pircbotx;
 
 import javax.inject.Inject;
 
-import org.pircbotx.PircBotX;
-import org.pircbotx.hooks.ListenerAdapter;
-import org.pircbotx.hooks.events.JoinEvent;
-import org.pircbotx.hooks.events.PingEvent;
-import org.pircbotx.hooks.types.GenericMessageEvent;
-
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.ChatChannel;
 import com.mechjacktv.mechjackbot.ChatMessage;
 import com.mechjacktv.mechjackbot.ChatMessageEventHandler;
 import com.mechjacktv.mechjackbot.chatbot.ChatBotFactory;
-import com.mechjacktv.mechjackbot.chatbot.MessageEventFactory;
+import com.mechjacktv.mechjackbot.chatbot.ChatMessageEventFactory;
+
+import org.pircbotx.PircBotX;
+import org.pircbotx.hooks.ListenerAdapter;
+import org.pircbotx.hooks.events.JoinEvent;
+import org.pircbotx.hooks.events.PingEvent;
+import org.pircbotx.hooks.types.GenericMessageEvent;
 
 public final class PircBotXListener extends ListenerAdapter {
 
@@ -22,12 +22,12 @@ public final class PircBotXListener extends ListenerAdapter {
 
   private final Configuration configuration;
   private final ChatBotFactory<PircBotX> chatBotFactory;
-  private final MessageEventFactory<GenericMessageEvent> messageEventFactory;
+  private final ChatMessageEventFactory<GenericMessageEvent> messageEventFactory;
   private final ChatMessageEventHandler chatMessageEventHandler;
 
   @Inject
   PircBotXListener(final Configuration configuration, final ChatBotFactory<PircBotX> chatBotFactory,
-      final MessageEventFactory<GenericMessageEvent> messageEventFactory,
+      final ChatMessageEventFactory<GenericMessageEvent> messageEventFactory,
       final ChatMessageEventHandler chatMessageEventHandler) {
     this.configuration = configuration;
     this.chatBotFactory = chatBotFactory;

@@ -28,7 +28,7 @@ import com.mechjacktv.mechjackbot.ChatMessageEvent;
 import com.mechjacktv.mechjackbot.ChatMessageEventHandler;
 import com.mechjacktv.mechjackbot.chatbot.ChatBotFactory;
 import com.mechjacktv.mechjackbot.chatbot.ChatBotTestModule;
-import com.mechjacktv.mechjackbot.chatbot.MessageEventFactory;
+import com.mechjacktv.mechjackbot.chatbot.ChatMessageEventFactory;
 import com.mechjacktv.mechjackbot.command.CommandTestModule;
 import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.util.UtilTestModule;
@@ -53,7 +53,7 @@ public class PircBotXListenerUnitTests {
   private PircBotXListener givenASubjectToTest(final ChatMessageEventHandler chatMessageEventHandler) {
     return new PircBotXListener(this.testFrameworkRule.getInstance(Configuration.class),
         this.testFrameworkRule.getInstance(Key.get(new TypeLiteral<ChatBotFactory<PircBotX>>() {
-        })), this.testFrameworkRule.getInstance(Key.get(new TypeLiteral<MessageEventFactory<GenericMessageEvent>>() {
+        })), this.testFrameworkRule.getInstance(Key.get(new TypeLiteral<ChatMessageEventFactory<GenericMessageEvent>>() {
         })), chatMessageEventHandler);
   }
 

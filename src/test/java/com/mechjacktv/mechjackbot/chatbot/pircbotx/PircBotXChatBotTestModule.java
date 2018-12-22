@@ -10,7 +10,7 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import com.mechjacktv.mechjackbot.chatbot.ChatBotFactory;
 import com.mechjacktv.mechjackbot.chatbot.ChatUserFactory;
-import com.mechjacktv.mechjackbot.chatbot.MessageEventFactory;
+import com.mechjacktv.mechjackbot.chatbot.ChatMessageEventFactory;
 
 public class PircBotXChatBotTestModule extends AbstractModule {
 
@@ -22,7 +22,7 @@ public class PircBotXChatBotTestModule extends AbstractModule {
     this.bind(new TypeLiteral<ChatUserFactory<User>>() {
     }).to(PircBotXChatUserFactory.class).in(Scopes.SINGLETON);
 
-    this.bind(new TypeLiteral<MessageEventFactory<GenericMessageEvent>>() {
+    this.bind(new TypeLiteral<ChatMessageEventFactory<GenericMessageEvent>>() {
     }).to(PircBotXMessageEventFactory.class).in(Scopes.SINGLETON);
   }
 
