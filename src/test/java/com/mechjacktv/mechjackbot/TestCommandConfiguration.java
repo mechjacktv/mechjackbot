@@ -6,14 +6,14 @@ import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
 public final class TestCommandConfiguration {
 
   private final CommandConfigurationBuilder commandConfigurationBuilder;
-  private final CommandDescription defaultDescription;
+  private final ChatCommandDescription defaultDescription;
   private final CommandMessageFormat defaultMessageFormat;
-  private final CommandTrigger defaultTrigger;
-  private final CommandUsage usage;
+  private final ChatCommandTrigger defaultTrigger;
+  private final ChatCommandUsage usage;
 
   public TestCommandConfiguration(final CommandConfigurationBuilder commandConfigurationBuilder,
-      final CommandDescription defaultDescription, final CommandMessageFormat defaultMessageFormat,
-      final CommandTrigger defaultTrigger, final CommandUsage usage) {
+      final ChatCommandDescription defaultDescription, final CommandMessageFormat defaultMessageFormat,
+      final ChatCommandTrigger defaultTrigger, final ChatCommandUsage usage) {
     this.commandConfigurationBuilder = commandConfigurationBuilder;
     this.commandConfigurationBuilder.setDescription(defaultDescription.value)
         .setMessageFormat(defaultMessageFormat.value)
@@ -29,7 +29,7 @@ public final class TestCommandConfiguration {
     return this.commandConfigurationBuilder;
   }
 
-  public final CommandDescription getDefaultDescription() {
+  public final ChatCommandDescription getDefaultDescription() {
     return this.defaultDescription;
   }
 
@@ -37,11 +37,11 @@ public final class TestCommandConfiguration {
     return this.defaultMessageFormat;
   }
 
-  public final CommandTrigger getDefaultTrigger() {
+  public final ChatCommandTrigger getDefaultTrigger() {
     return this.defaultTrigger;
   }
 
-  public final CommandUsage getUsage() {
+  public final ChatCommandUsage getUsage() {
     return this.usage;
   }
 

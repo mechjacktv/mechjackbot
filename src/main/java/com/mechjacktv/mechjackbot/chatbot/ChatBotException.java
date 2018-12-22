@@ -1,6 +1,6 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
-class ChatBotException extends RuntimeException {
+public class ChatBotException extends RuntimeException {
 
   private static final long serialVersionUID = -2526517027015909574L;
 

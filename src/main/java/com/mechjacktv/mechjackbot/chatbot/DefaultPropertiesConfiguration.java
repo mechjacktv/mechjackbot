@@ -10,7 +10,7 @@ import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.FilePropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
-class DefaultPropertiesConfiguration extends PropertiesConfiguration {
+public class DefaultPropertiesConfiguration extends PropertiesConfiguration {
 
   private static final String CONFIG_PROPERTIES_FILE_NAME = "application.config";
 

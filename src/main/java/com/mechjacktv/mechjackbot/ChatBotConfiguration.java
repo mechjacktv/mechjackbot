@@ -6,9 +6,9 @@ public interface ChatBotConfiguration {
 
   DataLocation getDataLocation();
 
-  TwitchChannel getTwitchChannel();
+  ChatChannel getChatChannel();
 
-  TwitchPassword getTwitchPassword();
+  UserPassword getUserPassword();
 
   TwitchLogin getTwitchLogin();
 

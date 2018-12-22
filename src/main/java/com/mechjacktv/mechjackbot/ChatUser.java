@@ -6,6 +6,6 @@ public interface ChatUser {
 
   TwitchLogin getTwitchLogin();
 
-  boolean hasAccessLevel(AccessLevel accessLevel);
+  boolean hasAccessLevel(UserRole userRole);
 
 }
