@@ -1,6 +1,7 @@
 package com.mechjacktv.mechjackbot.main;
 
 import com.google.inject.AbstractModule;
+
 import com.mechjacktv.gson.GsonModule;
 import com.mechjacktv.keyvaluestore.KeyValueStoreModule;
 import com.mechjacktv.mechjackbot.chatbot.kicl.KiclChatBotModule;
@@ -20,7 +21,6 @@ final class MainModule extends AbstractModule {
     this.install(new GsonModule());
     this.install(new KeyValueStoreModule());
     this.install(new KiclChatBotModule());
-    // this.install(new PircBotXChatBotModule());
     this.install(new ScheduleServiceModule());
     this.install(new ShoutOutCommandModule());
     this.install(new TwitchClientModule());
