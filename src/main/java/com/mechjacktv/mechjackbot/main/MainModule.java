@@ -1,7 +1,6 @@
 package com.mechjacktv.mechjackbot.main;
 
 import com.google.inject.AbstractModule;
-
 import com.mechjacktv.gson.GsonModule;
 import com.mechjacktv.keyvaluestore.KeyValueStoreModule;
 import com.mechjacktv.mechjackbot.chatbot.kicl.KiclChatBotModule;

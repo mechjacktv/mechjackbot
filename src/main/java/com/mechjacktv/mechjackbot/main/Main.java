@@ -8,8 +8,6 @@ import com.mechjacktv.mechjackbot.ChatBot;
 final class Main extends GuiceApplication {
 
   public static void main(final String[] args) {
-    System.setProperty("org.slf4j.simpleLogger.log.org.pircbotx", "warn");
-    System.setProperty("org.slf4j.simpleLogger.log.org.pircbotx.PircBotX", "info");
     new Main().start();
   }
 
