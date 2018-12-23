@@ -155,4 +155,5 @@ public class PircBotXChatMessageEventUnitTests {
     verify(genericMessageEvent).respondWith(eq(
         String.format(RESPONSE_MESSAGE_FORMAT_DEFAULT, chatMessage.value)));
   }
+
 }

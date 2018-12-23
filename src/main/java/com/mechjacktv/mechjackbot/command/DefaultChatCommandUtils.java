@@ -52,7 +52,7 @@ public final class DefaultChatCommandUtils implements ChatCommandUtils {
   }
 
   private boolean hasAccessLevel(final ChatMessageEvent chatMessageEvent, final UserRole userRole) {
-    return chatMessageEvent.getChatUser().hasAccessLevel(userRole);
+    return chatMessageEvent.getChatUser().hasUserRole(userRole);
   }
 
   @Override

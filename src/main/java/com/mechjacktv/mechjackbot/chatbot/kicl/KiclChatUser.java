@@ -23,7 +23,7 @@ public class KiclChatUser implements ChatUser {
   }
 
   @Override
-  public boolean hasAccessLevel(UserRole userRole) {
+  public boolean hasUserRole(UserRole userRole) {
     return this.chatBotConfiguration.getChatChannel().value.equalsIgnoreCase(this.getTwitchLogin().value);
   }
 

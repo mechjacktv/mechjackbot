@@ -21,7 +21,7 @@ public class TestChatUser implements ChatUser {
   }
 
   @Override
-  public boolean hasAccessLevel(final UserRole userRole) {
+  public boolean hasUserRole(final UserRole userRole) {
     return accessLevelCheck.apply(userRole);
   }
 
