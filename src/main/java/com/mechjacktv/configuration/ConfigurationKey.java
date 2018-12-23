@@ -9,7 +9,7 @@ public final class ConfigurationKey extends TypedString {
   }
 
   public static ConfigurationKey of(final String value, final Class<?> scope) {
-    return ConfigurationKey.of(String.format("%s.%s", scope.getCanonicalName(), value));
+    return ConfigurationKey.of(String.format("%s#%s", scope.getCanonicalName(), value));
   }
 
   private ConfigurationKey(final String value) {
