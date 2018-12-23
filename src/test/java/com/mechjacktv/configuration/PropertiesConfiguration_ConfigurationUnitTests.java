@@ -8,7 +8,7 @@ import com.mechjacktv.util.PropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 import com.mechjacktv.util.scheduleservice.ScheduleServiceTestModule;
 
-public class PropertiesAppConfiguration_ConfigurationUnitTests extends ConfigurationContractTests {
+public class PropertiesConfiguration_ConfigurationUnitTests extends ConfigurationContractTests {
 
   @Override
   protected void installModules() {

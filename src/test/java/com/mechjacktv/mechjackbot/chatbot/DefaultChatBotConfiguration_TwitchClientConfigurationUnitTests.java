@@ -11,18 +11,18 @@ import com.mechjacktv.twitchclient.TwitchClientConfigurationContractTests;
 import com.mechjacktv.util.MapPropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
-public class PropertiesChatBotConfiguration_TwitchClientConfigurationUnitTests extends
+public class DefaultChatBotConfiguration_TwitchClientConfigurationUnitTests extends
     TwitchClientConfigurationContractTests {
 
   @Override
   protected TwitchClientConfiguration givenASubjectToTest(Optional<String> clientId) {
     final Map<String, String> properties = new HashMap<>();
 
-    clientId.ifPresent((value) -> properties.put(PropertiesChatBotConfiguration.TWITCH_CLIENT_ID_KEY, value));
-    properties.put(PropertiesChatBotConfiguration.TWITCH_CHANNEL_KEY, this.testFrameworkRule.getArbitraryString());
-    properties.put(PropertiesChatBotConfiguration.TWITCH_PASSWORD_KEY, this.testFrameworkRule.getArbitraryString());
-    properties.put(PropertiesChatBotConfiguration.TWITCH_LOGIN_KEY, this.testFrameworkRule.getArbitraryString());
-    return new PropertiesChatBotConfiguration(this.testFrameworkRule.getArbitraryString(),
+    clientId.ifPresent((value) -> properties.put(DefaultChatBotConfiguration.TWITCH_CLIENT_ID_KEY, value));
+    properties.put(DefaultChatBotConfiguration.TWITCH_CHANNEL_KEY, this.testFrameworkRule.getArbitraryString());
+    properties.put(DefaultChatBotConfiguration.TWITCH_PASSWORD_KEY, this.testFrameworkRule.getArbitraryString());
+    properties.put(DefaultChatBotConfiguration.TWITCH_LOGIN_KEY, this.testFrameworkRule.getArbitraryString());
+    return new DefaultChatBotConfiguration(this.testFrameworkRule.getArbitraryString(),
         new MapPropertiesSource(properties), mock(ScheduleService.class));
   }
 

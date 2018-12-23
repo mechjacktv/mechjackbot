@@ -11,10 +11,10 @@ public class ChatBotModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    this.bind(PropertiesChatBotConfiguration.class).in(Scopes.SINGLETON);
-    this.bind(ChatBotConfiguration.class).to(PropertiesChatBotConfiguration.class);
-    this.bind(TwitchClientConfiguration.class).to(PropertiesChatBotConfiguration.class);
-    this.bind(Configuration.class).to(DefaultPropertiesConfiguration.class).in(Scopes.SINGLETON);
+    this.bind(DefaultChatBotConfiguration.class).in(Scopes.SINGLETON);
+    this.bind(ChatBotConfiguration.class).to(DefaultChatBotConfiguration.class);
+    this.bind(TwitchClientConfiguration.class).to(DefaultChatBotConfiguration.class);
+    this.bind(Configuration.class).to(DefaultConfiguration.class).in(Scopes.SINGLETON);
   }
 
 }

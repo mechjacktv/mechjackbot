@@ -1,9 +1,9 @@
 package com.mechjacktv.mechjackbot.chatbot;
 
-import static com.mechjacktv.mechjackbot.chatbot.PropertiesChatBotConfiguration.TWITCH_CHANNEL_KEY;
-import static com.mechjacktv.mechjackbot.chatbot.PropertiesChatBotConfiguration.TWITCH_CLIENT_ID_KEY;
-import static com.mechjacktv.mechjackbot.chatbot.PropertiesChatBotConfiguration.TWITCH_LOGIN_KEY;
-import static com.mechjacktv.mechjackbot.chatbot.PropertiesChatBotConfiguration.TWITCH_PASSWORD_KEY;
+import static com.mechjacktv.mechjackbot.chatbot.DefaultChatBotConfiguration.TWITCH_CHANNEL_KEY;
+import static com.mechjacktv.mechjackbot.chatbot.DefaultChatBotConfiguration.TWITCH_CLIENT_ID_KEY;
+import static com.mechjacktv.mechjackbot.chatbot.DefaultChatBotConfiguration.TWITCH_LOGIN_KEY;
+import static com.mechjacktv.mechjackbot.chatbot.DefaultChatBotConfiguration.TWITCH_PASSWORD_KEY;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,12 +12,12 @@ import com.mechjacktv.util.HotUpdatePropertiesWrapperContractTests;
 import com.mechjacktv.util.PropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
-public class PropertiesChatBotConfiguration_HotUpdatePropertiesWrapperUnitTests
+public class DefaultChatBotConfiguration_HotUpdateDefaultWrapperUnitTests
     extends HotUpdatePropertiesWrapperContractTests {
 
   @Override
-  protected PropertiesChatBotConfiguration givenASubjectToTest(final PropertiesSource propertiesSource) {
-    return new PropertiesChatBotConfiguration(this.testFrameworkRule.getArbitraryString(), propertiesSource,
+  protected DefaultChatBotConfiguration givenASubjectToTest(final PropertiesSource propertiesSource) {
+    return new DefaultChatBotConfiguration(this.testFrameworkRule.getArbitraryString(), propertiesSource,
         this.testFrameworkRule.getInstance(ScheduleService.class));
   }
 

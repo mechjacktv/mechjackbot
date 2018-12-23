@@ -19,8 +19,9 @@ public abstract class GuiceApplication {
 
   protected GuiceApplication(final Collection<Module> modules) {
     final Set<Module> allModules = new HashSet<>(modules);
+
     allModules.add(new GuiceModule());
-    this.injector = Guice.createInjector(modules);
+    this.injector = Guice.createInjector(allModules);
     DefaultInjectorBridge.INSTANCE.setInjector(this.injector);
   }
 
