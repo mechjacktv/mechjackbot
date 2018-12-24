@@ -1,19 +1,6 @@
 package com.mechjacktv.mechjackbot;
 
-import static com.mechjacktv.mechjackbot.ChatCommandUtils.DEFAULT_COMMAND_COOL_DOWN;
-import static com.mechjacktv.mechjackbot.ChatCommandUtils.DEFAULT_USAGE_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.ChatCommandUtils.DEFAULT_USER_COOL_DOWN;
-import static com.mechjacktv.mechjackbot.ChatCommandUtils.KEY_COMMAND_COOL_DOWN;
-import static com.mechjacktv.mechjackbot.ChatCommandUtils.KEY_USAGE_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.ChatCommandUtils.KEY_USER_COOL_DOWN;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.Mockito.mock;
-
 import java.util.concurrent.TimeUnit;
-
-import org.junit.Rule;
-import org.junit.Test;
 
 import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.ConfigurationTestModule;
@@ -23,6 +10,19 @@ import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 import com.mechjacktv.mechjackbot.command.CommandTestModule;
 import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.util.UtilTestModule;
+
+import org.junit.Rule;
+import org.junit.Test;
+
+import static com.mechjacktv.mechjackbot.ChatCommandUtils.DEFAULT_COMMAND_COOL_DOWN;
+import static com.mechjacktv.mechjackbot.ChatCommandUtils.DEFAULT_USAGE_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.ChatCommandUtils.DEFAULT_USER_COOL_DOWN;
+import static com.mechjacktv.mechjackbot.ChatCommandUtils.KEY_COMMAND_COOL_DOWN;
+import static com.mechjacktv.mechjackbot.ChatCommandUtils.KEY_USAGE_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.ChatCommandUtils.KEY_USER_COOL_DOWN;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.Mockito.mock;
 
 public abstract class ChatCommandUtilsContractTests {
 
@@ -136,8 +136,7 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatBotConfiguration chatBotConfiguration = this.testFrameworkRule.getInstance(ChatBotConfiguration.class);
     final ChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
     final TestChatUser chatUser = (TestChatUser) chatMessageEvent.getChatUser();
-    // chatUser is FOLLOWER
-    chatUser.setAccessLevelCheck(accessLevel -> UserRole.FOLLOWER.value() <= accessLevel.value());
+    chatUser.setAccessLevelCheck(accessLevel -> UserRole.VIEWER.value() <= accessLevel.value());
     final ChatCommand chatCommand = new RequiresAccessLevelSubscriberChatCommand(
         this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class));
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();

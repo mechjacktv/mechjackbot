@@ -1,83 +1,111 @@
 package com.mechjacktv.mechjackbot.command.custom;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.inject.Inject;
 
-import picocli.CommandLine;
-
+import com.google.common.collect.Sets;
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.ConfigurationKey;
-import com.mechjacktv.mechjackbot.ChatCommandUtils;
-import com.mechjacktv.mechjackbot.ChatMessage;
+import com.mechjacktv.mechjackbot.ChatCommandTrigger;
 import com.mechjacktv.mechjackbot.ChatMessageEvent;
+import com.mechjacktv.mechjackbot.RequiresUserRole;
+import com.mechjacktv.mechjackbot.UserRole;
 import com.mechjacktv.mechjackbot.command.BaseChatCommand;
 import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
-import com.mechjacktv.proto.mechjackbot.command.custom.CustomComandDataStoreMessage.CustomCommandKey;
+
+import picocli.CommandLine.Model.OptionSpec;
+import picocli.CommandLine.Model.PositionalParamSpec;
+import picocli.CommandLine.ParseResult;
 
 public class SetCommandChatCommand extends BaseChatCommand {
 
   public static final String DEFAULT_DESCRIPTION = "Set a custom command body and/or access level.";
-  public static final String DEFAULT_MESSAGE_FORMAT = "Command set for trigger, %2$s";
+  public static final String DEFAULT_MESSAGE_FORMAT = "Command set, %2$s";
   public static final String DEFAULT_BODY_REQUIRED_MESSAGE_FORMAT = "%2$s failed: body required";
   public static final String DEFAULT_TRIGGER = "!setcommand";
   public static final String KEY_BODY_REQUIRED_MESSAGE_FORMAT = "body_required_message_format";
-  public static final String USAGE = "<trigger> [(-a|--access-level) "
-      + "(owner|moderator|vip|subscriber|follower|everyone)] [<body>]";
+  public static final String USAGE = String.format("<trigger> [(-u|--user-role)=(%s)] [<body>]",
+      Arrays.stream(UserRole.values()).map(Object::toString).collect(Collectors.joining("|")));
 
-  private final ChatCommandUtils commandUtils;
+  public static final String KEY_USER_ROLE_SPEC = "KEY_USER_ROLE_SPEC";
+  public static final String KEY_TRIGGER_SPEC = "KEY_TRIGGER_SPEC";
+  public static final String KEY_BODY_SPEC = "KEY_BODY_SPEC";
+
   private final Configuration configuration;
-  private final CustomCommandDataStore customCommandDataStore;
-  private final CommandMessageFormat bodyRequiredMessageFormatDefault;
+  private final CustomChatCommandService customChatCommandService;
   private final ConfigurationKey bodyRequiredMessageFormatKey;
 
   @Inject
   protected SetCommandChatCommand(
-      final CommandConfigurationBuilder commandConfigurationBuilder, final ChatCommandUtils commandUtils,
-      final Configuration configuration, final CustomCommandDataStore customCommandDataStore) {
+      final CommandConfigurationBuilder commandConfigurationBuilder, final Configuration configuration,
+      final CustomChatCommandService customChatCommandService) {
     super(commandConfigurationBuilder.setTrigger(DEFAULT_TRIGGER)
         .setDescription(DEFAULT_DESCRIPTION)
         .setMessageFormat(DEFAULT_MESSAGE_FORMAT)
         .setUsage(USAGE));
-    this.commandUtils = commandUtils;
     this.configuration = configuration;
-    this.customCommandDataStore = customCommandDataStore;
-    this.bodyRequiredMessageFormatDefault = CommandMessageFormat.of(DEFAULT_BODY_REQUIRED_MESSAGE_FORMAT);
+    this.customChatCommandService = customChatCommandService;
     this.bodyRequiredMessageFormatKey = ConfigurationKey.of(KEY_BODY_REQUIRED_MESSAGE_FORMAT, this.getClass());
   }
 
   @Override
+  @RequiresUserRole(UserRole.MODERATOR)
   public void handleMessageEvent(final ChatMessageEvent messageEvent) {
-    final ChatMessage rawMessage = this.commandUtils.stripTriggerFromMessage(this, messageEvent);
+    final OptionSpec userRoleOption = PicoCliUtil.createUserRoleOptionSpec(false);
+    final PositionalParamSpec triggerParam = PicoCliUtil.createTriggerPositionalParamSpec(true);
+    final PositionalParamSpec bodyParam = PicoCliUtil.createBodyPositionalParamSpec(false);
 
-    if ("".equals(rawMessage.value.trim())) {
-      this.sendUsage(messageEvent);
-      return;
+    this.parseArguments(Sets.newHashSet(userRoleOption, triggerParam, bodyParam), messageEvent, parseResult -> {
+      try {
+        final ChatCommandTrigger trigger = ChatCommandTrigger.of(triggerParam.getValue());
+        final CommandBody commandBody = this.handleBodyParam(bodyParam, parseResult);
+        final UserRole userRole = this.handleUserRoleOption(userRoleOption, parseResult);
+
+        if(this.customChatCommandService.isExistingCustomChatCommand(trigger)) {
+          this.customChatCommandService.updateCustomChatCommand(trigger, commandBody, userRole);
+        } else {
+          if(commandBody == null) {
+            this.sendResponse(messageEvent, this.getBodyRequiredMessageFormat(), this.getTrigger());
+            return false;
+          }
+          this.customChatCommandService.createCustomChatCommand(trigger, commandBody, userRole);
+        }
+        this.sendResponse(messageEvent, trigger);
+        return true;
+      } catch (final UsageException e) {
+        this.sendUsage(messageEvent);
+        return false;
+      }
+    });
+  }
+
+  private UserRole handleUserRoleOption(final OptionSpec option, final ParseResult parseResult) {
+    if (parseResult.hasMatchedOption(option)) {
+      try {
+        return UserRole.valueOf(option.getValue());
+      } catch (final IllegalArgumentException e) {
+        throw new UsageException(e.getMessage(), e);
+      }
     }
+    return null;
+  }
 
-    final String[] arguments = rawMessage.value.split("\\s+");
-    final SetCommandMessage setCommandMessage = new SetCommandMessage();
+  private CommandBody handleBodyParam(final PositionalParamSpec param, final ParseResult parseResult) {
+    if (parseResult.hasMatchedPositional(param)) {
+      final List<String> bodyParts = param.getValue();
 
-    try {
-      CommandLine.populateCommand(setCommandMessage, arguments);
-      setCommandMessage.validate();
-    } catch (final RuntimeException e) {
-      this.sendUsage(messageEvent);
-      return;
+      return CommandBody.of(String.join(" ", bodyParts));
     }
-
-    final CustomCommandKey key = this.customCommandDataStore
-        .createCustomCommandKey(setCommandMessage.getTrigger());
-
-    if (!this.customCommandDataStore.containsKey(key) && !setCommandMessage.getBody().isPresent()) {
-      this.sendResponse(messageEvent, this.getBodyRequiredMessageFormat(), this.getTrigger());
-    } else {
-      this.sendResponse(messageEvent, setCommandMessage.getTrigger());
-    }
+    return null;
   }
 
   private CommandMessageFormat getBodyRequiredMessageFormat() {
-    return CommandMessageFormat.of(this.configuration.get(this.bodyRequiredMessageFormatKey.value,
-        this.bodyRequiredMessageFormatDefault.value));
+    return CommandMessageFormat.of(this.configuration.get(this.bodyRequiredMessageFormatKey,
+        DEFAULT_BODY_REQUIRED_MESSAGE_FORMAT));
   }
 
 }

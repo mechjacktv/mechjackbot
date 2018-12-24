@@ -2,6 +2,7 @@ package com.mechjacktv.mechjackbot.command.custom;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
@@ -9,7 +10,7 @@ import picocli.CommandLine.Parameters;
 import com.mechjacktv.mechjackbot.ChatCommandTrigger;
 import com.mechjacktv.mechjackbot.UserRole;
 
-public class SetCommandMessage {
+public class SetCommandMessage implements Callable<SetCommandMessage> {
 
   @Option(names = { "-a", "--access-level" })
   private String rawAccessLevel = null;
@@ -47,6 +48,12 @@ public class SetCommandMessage {
     if (Objects.nonNull(this.rawBodyPart)) {
       this.body = CommandBody.of(String.join(" ", this.rawBodyPart));
     }
+  }
+
+  @Override
+  public SetCommandMessage call() {
+    this.validate();
+    return this;
   }
 
 }

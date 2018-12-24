@@ -7,14 +7,15 @@ import java.util.function.Function;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mechjacktv.mechjackbot.ChatCommand;
 import com.mechjacktv.mechjackbot.ChatCommandRegistry;
 import com.mechjacktv.mechjackbot.ChatCommandUtils;
+import com.mechjacktv.mechjackbot.ChatMessage;
 import com.mechjacktv.mechjackbot.ChatMessageEvent;
 import com.mechjacktv.mechjackbot.ChatMessageEventHandler;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class DefaultChatMessageEventHandler implements ChatMessageEventHandler {
 
@@ -58,6 +59,9 @@ public final class DefaultChatMessageEventHandler implements ChatMessageEventHan
                   chatMessageEvent.getChatUser().getTwitchLogin(),
                   chatMessageEvent.getChatMessage()),
               t);
+          // TODO (2018-12-23 mechjack): Decide if we want to report errors in chat like this
+          chatMessageEvent.sendResponse(ChatMessage.of(String.format("%s, %s -> %s",
+              chatMessageEvent.getChatUser().getTwitchLogin(), chatCommand.getTrigger(), t.getMessage())));
         }
       }
     }

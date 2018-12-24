@@ -1,15 +1,27 @@
 package com.mechjacktv.mechjackbot.command;
 
+import java.util.Collection;
 import java.util.Objects;
-
-import org.apache.commons.lang3.ArrayUtils;
 
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.ConfigurationKey;
-import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.ChatCommandDescription;
+import com.mechjacktv.mechjackbot.ChatCommandName;
+import com.mechjacktv.mechjackbot.ChatCommandTrigger;
+import com.mechjacktv.mechjackbot.ChatCommandUsage;
+import com.mechjacktv.mechjackbot.ChatCommandUtils;
+import com.mechjacktv.mechjackbot.ChatMessage;
+import com.mechjacktv.mechjackbot.ChatMessageEvent;
 import com.mechjacktv.util.ExecutionUtils;
 
-public abstract class BaseChatCommand implements ChatCommand {
+import org.apache.commons.lang3.ArrayUtils;
+
+import picocli.CommandLine;
+import picocli.CommandLine.IParseResultHandler2;
+import picocli.CommandLine.Model.ArgSpec;
+import picocli.CommandLine.Model.CommandSpec;
+
+public abstract class BaseChatCommand implements PicoCliCommandParser, RespondingChatCommand {
 
   public static final String KEY_DESCRIPTION = "description";
   public static final String KEY_MESSAGE_FORMAT = "message_format";
@@ -75,14 +87,16 @@ public abstract class BaseChatCommand implements ChatCommand {
     return this.chatCommandUtils.isTriggered(this, chatMessageEvent);
   }
 
-  protected final void sendResponse(final ChatMessageEvent chatMessageEvent, Object... args) {
+  @Override
+  public final void sendResponse(final ChatMessageEvent chatMessageEvent, final Object... args) {
     final CommandMessageFormat messageFormat = CommandMessageFormat.of(
         this.configuration.get(this.messageFormatKey.value, this.messageFormatDefault.value));
 
     this.sendResponse(chatMessageEvent, messageFormat, args);
   }
 
-  protected final void sendResponse(final ChatMessageEvent chatMessageEvent, final CommandMessageFormat messageFormat,
+  @Override
+  public final void sendResponse(final ChatMessageEvent chatMessageEvent, final CommandMessageFormat messageFormat,
       final Object... args) {
     Objects.requireNonNull(chatMessageEvent, this.executionUtils.nullMessageForName("chatMessageEvent"));
     Objects.requireNonNull(messageFormat, this.executionUtils.nullMessageForName("messageFormat"));
@@ -91,9 +105,35 @@ public abstract class BaseChatCommand implements ChatCommand {
         ArrayUtils.addAll(new Object[] { chatMessageEvent.getChatUser().getTwitchLogin() }, args))));
   }
 
-  protected final void sendUsage(final ChatMessageEvent chatMessageEvent) {
+  @Override
+  public final void sendUsage(final ChatMessageEvent chatMessageEvent) {
     this.sendResponse(chatMessageEvent, CommandMessageFormat.of(
         this.chatCommandUtils.createUsageMessage(this, chatMessageEvent).value));
+  }
+
+  @Override
+  public boolean parseArguments(final Collection<ArgSpec> argSpecs, final ChatMessageEvent messageEvent,
+      final IParseResultHandler2<Boolean> handler) {
+    final CommandSpec commandSpec = CommandSpec.create();
+
+    for(final ArgSpec argSpec : argSpecs) {
+      commandSpec.add(argSpec);
+    }
+    return this.parseArguments(commandSpec, messageEvent, handler);
+  }
+
+  @Override
+  public boolean parseArguments(final CommandSpec commandSpec, final ChatMessageEvent messageEvent,
+      final IParseResultHandler2<Boolean> handler) {
+    final ChatMessage cleanMessage = this.chatCommandUtils.stripTriggerFromMessage(this, messageEvent);
+    final CommandLine commandLine = new CommandLine(commandSpec);
+
+    if("".equals(cleanMessage.value)) {
+      this.sendUsage(messageEvent);
+      return false;
+    }
+    return commandLine.parseWithHandlers(handler, new ShowUsagePicoCliExceptionHandler(this, messageEvent),
+        cleanMessage.value.split("\\s+"));
   }
 
 }

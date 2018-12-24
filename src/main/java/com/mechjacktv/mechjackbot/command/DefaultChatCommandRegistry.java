@@ -2,20 +2,20 @@ package com.mechjacktv.mechjackbot.command;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mechjacktv.mechjackbot.ChatCommand;
 import com.mechjacktv.mechjackbot.ChatCommandRegistry;
 import com.mechjacktv.mechjackbot.ChatCommandTrigger;
 import com.mechjacktv.util.ExecutionUtils;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class DefaultChatCommandRegistry implements ChatCommandRegistry {
 
@@ -26,7 +26,7 @@ public final class DefaultChatCommandRegistry implements ChatCommandRegistry {
 
   @Inject
   DefaultChatCommandRegistry(final ExecutionUtils executionUtils) {
-    this.commands = new HashMap<>();
+    this.commands = new ConcurrentHashMap<>();
     this.executionUtils = executionUtils;
   }
 

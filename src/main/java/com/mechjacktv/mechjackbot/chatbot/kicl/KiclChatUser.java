@@ -1,11 +1,11 @@
 package com.mechjacktv.mechjackbot.chatbot.kicl;
 
-import org.kitteh.irc.client.library.element.User;
-
 import com.mechjacktv.mechjackbot.ChatBotConfiguration;
 import com.mechjacktv.mechjackbot.ChatUser;
 import com.mechjacktv.mechjackbot.UserRole;
 import com.mechjacktv.twitchclient.TwitchLogin;
+
+import org.kitteh.irc.client.library.element.User;
 
 public class KiclChatUser implements ChatUser {
 
@@ -23,8 +23,9 @@ public class KiclChatUser implements ChatUser {
   }
 
   @Override
-  public boolean hasUserRole(UserRole userRole) {
-    return this.chatBotConfiguration.getChatChannel().value.equalsIgnoreCase(this.getTwitchLogin().value);
+  public boolean hasUserRole(final UserRole userRole) {
+    return UserRole.VIEWER.equals(userRole) || this.chatBotConfiguration.getChatChannel().value
+        .equalsIgnoreCase(this.getTwitchLogin().value);
   }
 
 }

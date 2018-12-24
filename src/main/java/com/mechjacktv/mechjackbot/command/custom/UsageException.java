@@ -10,4 +10,8 @@ public final class UsageException extends ChatCommandException {
     super(message);
   }
 
+  public UsageException(final String message, final Throwable cause) {
+    super(message, cause);
+  }
+
 }
