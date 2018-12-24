@@ -11,7 +11,7 @@ public interface ChatCommandUtils {
   String KEY_USAGE_MESSAGE_FORMAT = "command.usage_message_format";
   String DEFAULT_USAGE_MESSAGE_FORMAT = "@%s, usage: %s %s";
 
-  boolean hasAccessLevel(ChatCommand chatCommand, ChatMessageEvent chatMessageEvent);
+  boolean hasUserRole(ChatCommand chatCommand, ChatMessageEvent chatMessageEvent);
 
   boolean isCooledDown(ChatCommand chatCommand, ChatMessageEvent chatMessageEvent);
 

@@ -16,6 +16,7 @@ import com.mechjacktv.mechjackbot.UserRole;
 import com.mechjacktv.mechjackbot.command.BaseChatCommand;
 import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
+import com.mechjacktv.mechjackbot.command.PicoCliUtil;
 
 import picocli.CommandLine.Model.OptionSpec;
 import picocli.CommandLine.Model.PositionalParamSpec;
@@ -55,9 +56,9 @@ public class SetCommandChatCommand extends BaseChatCommand {
   @Override
   @RequiresUserRole(UserRole.MODERATOR)
   public void handleMessageEvent(final ChatMessageEvent messageEvent) {
-    final OptionSpec userRoleOption = PicoCliUtil.createUserRoleOptionSpec(false);
-    final PositionalParamSpec triggerParam = PicoCliUtil.createTriggerPositionalParamSpec(true);
-    final PositionalParamSpec bodyParam = PicoCliUtil.createBodyPositionalParamSpec(false);
+    final OptionSpec userRoleOption = PicoCliUtil.createStringOption(false, "-r", "--user-role");
+    final PositionalParamSpec triggerParam = PicoCliUtil.createStringParam(true, "0");
+    final PositionalParamSpec bodyParam = PicoCliUtil.createStringListParam(false, "1..*");
 
     this.parseArguments(Sets.newHashSet(userRoleOption, triggerParam, bodyParam), messageEvent, parseResult -> {
       try {
@@ -65,10 +66,10 @@ public class SetCommandChatCommand extends BaseChatCommand {
         final CommandBody commandBody = this.handleBodyParam(bodyParam, parseResult);
         final UserRole userRole = this.handleUserRoleOption(userRoleOption, parseResult);
 
-        if(this.customChatCommandService.isExistingCustomChatCommand(trigger)) {
+        if (this.customChatCommandService.isExistingCustomChatCommand(trigger)) {
           this.customChatCommandService.updateCustomChatCommand(trigger, commandBody, userRole);
         } else {
-          if(commandBody == null) {
+          if (commandBody == null) {
             this.sendResponse(messageEvent, this.getBodyRequiredMessageFormat(), this.getTrigger());
             return false;
           }
@@ -76,7 +77,7 @@ public class SetCommandChatCommand extends BaseChatCommand {
         }
         this.sendResponse(messageEvent, trigger);
         return true;
-      } catch (final UsageException e) {
+      } catch (final IllegalArgumentException e) {
         this.sendUsage(messageEvent);
         return false;
       }
@@ -85,11 +86,7 @@ public class SetCommandChatCommand extends BaseChatCommand {
 
   private UserRole handleUserRoleOption(final OptionSpec option, final ParseResult parseResult) {
     if (parseResult.hasMatchedOption(option)) {
-      try {
         return UserRole.valueOf(option.getValue());
-      } catch (final IllegalArgumentException e) {
-        throw new UsageException(e.getMessage(), e);
-      }
     }
     return null;
   }

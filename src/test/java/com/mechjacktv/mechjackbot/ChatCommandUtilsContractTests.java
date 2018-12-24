@@ -1,19 +1,5 @@
 package com.mechjacktv.mechjackbot;
 
-import java.util.concurrent.TimeUnit;
-
-import com.mechjacktv.configuration.ConfigurationKey;
-import com.mechjacktv.configuration.ConfigurationTestModule;
-import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.mechjackbot.chatbot.ChatBotTestModule;
-import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
-import com.mechjacktv.mechjackbot.command.CommandTestModule;
-import com.mechjacktv.testframework.TestFrameworkRule;
-import com.mechjacktv.util.UtilTestModule;
-
-import org.junit.Rule;
-import org.junit.Test;
-
 import static com.mechjacktv.mechjackbot.ChatCommandUtils.DEFAULT_COMMAND_COOL_DOWN;
 import static com.mechjacktv.mechjackbot.ChatCommandUtils.DEFAULT_USAGE_MESSAGE_FORMAT;
 import static com.mechjacktv.mechjackbot.ChatCommandUtils.DEFAULT_USER_COOL_DOWN;
@@ -23,6 +9,20 @@ import static com.mechjacktv.mechjackbot.ChatCommandUtils.KEY_USER_COOL_DOWN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.mock;
+
+import java.util.concurrent.TimeUnit;
+
+import org.junit.Rule;
+import org.junit.Test;
+
+import com.mechjacktv.configuration.ConfigurationKey;
+import com.mechjacktv.configuration.ConfigurationTestModule;
+import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.mechjackbot.chatbot.ChatBotTestModule;
+import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
+import com.mechjacktv.mechjackbot.command.CommandTestModule;
+import com.mechjacktv.testframework.TestFrameworkRule;
+import com.mechjacktv.util.UtilTestModule;
 
 public abstract class ChatCommandUtilsContractTests {
 
@@ -68,7 +68,7 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.hasAccessLevel(null, chatMessageEvent));
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.hasUserRole(null, chatMessageEvent));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "chatCommand");
   }
@@ -79,7 +79,7 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatCommand chatCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.hasAccessLevel(chatCommand, null));
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.hasUserRole(chatCommand, null));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "chatMessageEvent");
   }
@@ -91,7 +91,7 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final boolean result = subjectUnderTest.hasAccessLevel(chatCommand, chatMessageEvent);
+    final boolean result = subjectUnderTest.hasUserRole(chatCommand, chatMessageEvent);
 
     assertThat(result).isTrue();
   }
@@ -108,7 +108,7 @@ public abstract class ChatCommandUtilsContractTests {
         this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class));
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final boolean result = subjectUnderTest.hasAccessLevel(chatCommand, chatMessageEvent);
+    final boolean result = subjectUnderTest.hasUserRole(chatCommand, chatMessageEvent);
 
     assertThat(result).isTrue();
   }
@@ -125,7 +125,7 @@ public abstract class ChatCommandUtilsContractTests {
         this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class));
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final boolean result = subjectUnderTest.hasAccessLevel(chatCommand, chatMessageEvent);
+    final boolean result = subjectUnderTest.hasUserRole(chatCommand, chatMessageEvent);
 
     assertThat(result).isTrue();
   }
@@ -141,7 +141,7 @@ public abstract class ChatCommandUtilsContractTests {
         this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class));
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final boolean result = subjectUnderTest.hasAccessLevel(chatCommand, chatMessageEvent);
+    final boolean result = subjectUnderTest.hasUserRole(chatCommand, chatMessageEvent);
 
     assertThat(result).isFalse();
   }

@@ -45,8 +45,11 @@ public class DeleteCommandChatCommand extends BaseChatCommand {
     final ChatMessage cleanChatMessage = this.chatCommandUtils.stripTriggerFromMessage(this, chatMessageEvent);
     final ChatCommandTrigger trigger = ChatCommandTrigger.of(cleanChatMessage.value);
 
-    if (this.customChatCommandService.isExistingCustomChatCommand(trigger)) {
+    if ("".equals(cleanChatMessage.value)) {
+      this.sendUsage(chatMessageEvent);
+    } else if (this.customChatCommandService.isExistingCustomChatCommand(trigger)) {
       this.customChatCommandService.removeCustomChatCommand(trigger);
+      this.sendResponse(chatMessageEvent, trigger);
     } else {
       this.sendResponse(chatMessageEvent, this.getNotCustomCommandMessageFormat(), trigger);
     }

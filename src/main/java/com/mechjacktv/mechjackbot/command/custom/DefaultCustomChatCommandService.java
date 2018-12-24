@@ -4,12 +4,11 @@ import java.util.Objects;
 import java.util.Optional;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 import com.mechjacktv.mechjackbot.ChatCommandRegistry;
 import com.mechjacktv.mechjackbot.ChatCommandTrigger;
+import com.mechjacktv.mechjackbot.ChatCommandUtils;
 import com.mechjacktv.mechjackbot.UserRole;
-import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 import com.mechjacktv.proto.mechjackbot.command.custom.CustomComandDataStoreMessage.CustomCommand;
 import com.mechjacktv.proto.mechjackbot.command.custom.CustomComandDataStoreMessage.CustomCommandKey;
 import com.mechjacktv.util.ExecutionUtils;
@@ -21,16 +20,16 @@ public final class DefaultCustomChatCommandService implements CustomChatCommandS
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DefaultCustomChatCommandService.class);
 
-  private final Provider<CommandConfigurationBuilder> chatCommandConfigurationBuilderProvider;
+  private final ChatCommandUtils chatCommandUtils;
   private final ChatCommandRegistry chatCommandRegistry;
   private final CustomCommandDataStore customCommandDataStore;
   private final ExecutionUtils executionUtils;
 
   @Inject
-  DefaultCustomChatCommandService(final Provider<CommandConfigurationBuilder> chatCommandConfigurationBuilderProvider,
+  DefaultCustomChatCommandService(final ChatCommandUtils chatCommandUtils,
       final ChatCommandRegistry chatCommandRegistry, final CustomCommandDataStore customCommandDataStore,
       final ExecutionUtils executionUtils) {
-    this.chatCommandConfigurationBuilderProvider = chatCommandConfigurationBuilderProvider;
+    this.chatCommandUtils = chatCommandUtils;
     this.chatCommandRegistry = chatCommandRegistry;
     this.customCommandDataStore = customCommandDataStore;
     this.executionUtils = executionUtils;
@@ -50,8 +49,7 @@ public final class DefaultCustomChatCommandService implements CustomChatCommandS
   }
 
   private void addCommand(final ChatCommandTrigger trigger, CommandBody commandBody, UserRole userRole) {
-    this.chatCommandRegistry.addCommand(new CustomChatCommand(this.chatCommandConfigurationBuilderProvider.get(),
-        trigger, commandBody, userRole));
+    this.chatCommandRegistry.addCommand(new CustomChatCommand(this.chatCommandUtils, trigger, commandBody, userRole));
   }
 
   @Override
@@ -97,8 +95,8 @@ public final class DefaultCustomChatCommandService implements CustomChatCommandS
 
     if (optionalCustomCommand.isPresent()) {
       final CustomCommand customCommand = optionalCustomCommand.get();
-      final CommandBody actualCommandBody = commandBody == null ? CommandBody.of(customCommand.getCommandBody()) :
-          commandBody;
+      final CommandBody actualCommandBody = commandBody == null ? CommandBody.of(customCommand.getCommandBody())
+          : commandBody;
       final UserRole actualUserRole = userRole == null ? UserRole.valueOf(customCommand.getAccessLevel()) : userRole;
 
       this.customCommandDataStore.put(key,

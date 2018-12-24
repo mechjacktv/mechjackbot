@@ -2,11 +2,11 @@ package com.mechjacktv.mechjackbot.command;
 
 import java.util.Collection;
 
-import com.mechjacktv.mechjackbot.ChatMessageEvent;
-
 import picocli.CommandLine.IParseResultHandler2;
 import picocli.CommandLine.Model.ArgSpec;
 import picocli.CommandLine.Model.CommandSpec;
+
+import com.mechjacktv.mechjackbot.ChatMessageEvent;
 
 public interface PicoCliCommandParser {
 

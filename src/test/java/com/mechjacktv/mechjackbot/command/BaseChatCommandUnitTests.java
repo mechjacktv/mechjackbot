@@ -1,15 +1,6 @@
 package com.mechjacktv.mechjackbot.command;
 
-import static com.mechjacktv.mechjackbot.TestChatCommand.DEFAULT_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.TestChatCommand.DEFAULT_TRIGGER;
-import static com.mechjacktv.mechjackbot.TestChatCommand.KEY_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.TestChatCommand.KEY_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.TestChatCommand.KEY_TRIGGER;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-
-import org.junit.Test;
-
+import com.google.common.collect.Sets;
 import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.mechjackbot.ChatCommandDescription;
@@ -18,6 +9,19 @@ import com.mechjacktv.mechjackbot.ChatMessage;
 import com.mechjacktv.mechjackbot.TestChatCommand;
 import com.mechjacktv.mechjackbot.TestChatMessageEvent;
 import com.mechjacktv.mechjackbot.TestCommandConfigurationBuilder;
+
+import org.junit.Test;
+
+import picocli.CommandLine.Model.OptionSpec;
+import picocli.CommandLine.Model.PositionalParamSpec;
+
+import static com.mechjacktv.mechjackbot.TestChatCommand.DEFAULT_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.TestChatCommand.DEFAULT_TRIGGER;
+import static com.mechjacktv.mechjackbot.TestChatCommand.KEY_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.TestChatCommand.KEY_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.TestChatCommand.KEY_TRIGGER;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
 
@@ -118,6 +122,61 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
 
     assertThat(result).isEqualTo(ChatMessage.of(String.format(customMessageFormat,
         messageEvent.getChatUser().getTwitchLogin())));
+  }
+
+  @Test
+  public final void parseArguments_noMessageBody_resultIsFalse() {
+    this.installModules();
+    final PositionalParamSpec stringListParam = PicoCliUtil.createStringListParam(false, "0..*");
+
+    final TestChatCommand subjectUnderTest = this.givenASubjectToTest();
+    final TestChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    chatMessageEvent.setChatMessage(ChatMessage.of(subjectUnderTest.getTrigger().value));
+
+    final boolean result = subjectUnderTest.parseArguments(Sets.newHashSet(stringListParam),
+        chatMessageEvent,
+        parseResult -> true);
+
+    assertThat(result).isFalse();
+  }
+
+  @Test
+  public final void parseArguments_properlyFormattedCommand_resultIsTrue() {
+    this.installModules();
+    final OptionSpec stringOption = PicoCliUtil.createStringOption(true, "-r");
+    final PositionalParamSpec stringParam = PicoCliUtil.createStringParam(true, "0");
+    final PositionalParamSpec stringListParam = PicoCliUtil.createStringListParam(true, "1..*");
+
+    final TestChatCommand subjectUnderTest = this.givenASubjectToTest();
+    final TestChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    chatMessageEvent.setChatMessage(ChatMessage.of(String.format("%s %s -r %s %s", subjectUnderTest.getTrigger(),
+        this.testFrameworkRule.getArbitraryString(), this.testFrameworkRule.getArbitraryString(),
+        this.testFrameworkRule.getArbitraryString())));
+
+    final boolean result = subjectUnderTest.parseArguments(Sets.newHashSet(stringOption, stringParam, stringListParam),
+        chatMessageEvent,
+        parseResult -> true);
+
+    assertThat(result).isTrue();
+  }
+
+  @Test
+  public final void parseArguments_improperlyFormattedCommand_resultIsFalse() {
+    this.installModules();
+    final OptionSpec stringOption = PicoCliUtil.createStringOption(true, "-r");
+    final PositionalParamSpec stringParam = PicoCliUtil.createStringParam(true, "0");
+    final PositionalParamSpec stringListParam = PicoCliUtil.createStringListParam(true, "1..*");
+
+    final TestChatCommand subjectUnderTest = this.givenASubjectToTest();
+    final TestChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    chatMessageEvent.setChatMessage(ChatMessage.of(String.format("%s %s %s", subjectUnderTest.getTrigger(),
+        this.testFrameworkRule.getArbitraryString(), this.testFrameworkRule.getArbitraryString())));
+
+    final boolean result = subjectUnderTest.parseArguments(Sets.newHashSet(stringOption, stringParam, stringListParam),
+        chatMessageEvent,
+        parseResult -> true);
+
+    assertThat(result).isFalse();
   }
 
 }

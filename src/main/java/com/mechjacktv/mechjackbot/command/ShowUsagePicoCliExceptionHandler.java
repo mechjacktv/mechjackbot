@@ -1,11 +1,11 @@
 package com.mechjacktv.mechjackbot.command;
 
-import com.mechjacktv.mechjackbot.ChatMessageEvent;
-
 import picocli.CommandLine.ExecutionException;
 import picocli.CommandLine.IExceptionHandler2;
 import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.ParseResult;
+
+import com.mechjacktv.mechjackbot.ChatMessageEvent;
 
 public class ShowUsagePicoCliExceptionHandler implements IExceptionHandler2<Boolean> {
 

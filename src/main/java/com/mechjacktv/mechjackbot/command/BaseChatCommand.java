@@ -3,6 +3,13 @@ package com.mechjacktv.mechjackbot.command;
 import java.util.Collection;
 import java.util.Objects;
 
+import org.apache.commons.lang3.ArrayUtils;
+
+import picocli.CommandLine;
+import picocli.CommandLine.IParseResultHandler2;
+import picocli.CommandLine.Model.ArgSpec;
+import picocli.CommandLine.Model.CommandSpec;
+
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.mechjackbot.ChatCommandDescription;
@@ -13,13 +20,6 @@ import com.mechjacktv.mechjackbot.ChatCommandUtils;
 import com.mechjacktv.mechjackbot.ChatMessage;
 import com.mechjacktv.mechjackbot.ChatMessageEvent;
 import com.mechjacktv.util.ExecutionUtils;
-
-import org.apache.commons.lang3.ArrayUtils;
-
-import picocli.CommandLine;
-import picocli.CommandLine.IParseResultHandler2;
-import picocli.CommandLine.Model.ArgSpec;
-import picocli.CommandLine.Model.CommandSpec;
 
 public abstract class BaseChatCommand implements PicoCliCommandParser, RespondingChatCommand {
 
@@ -116,7 +116,7 @@ public abstract class BaseChatCommand implements PicoCliCommandParser, Respondin
       final IParseResultHandler2<Boolean> handler) {
     final CommandSpec commandSpec = CommandSpec.create();
 
-    for(final ArgSpec argSpec : argSpecs) {
+    for (final ArgSpec argSpec : argSpecs) {
       commandSpec.add(argSpec);
     }
     return this.parseArguments(commandSpec, messageEvent, handler);
@@ -128,7 +128,7 @@ public abstract class BaseChatCommand implements PicoCliCommandParser, Respondin
     final ChatMessage cleanMessage = this.chatCommandUtils.stripTriggerFromMessage(this, messageEvent);
     final CommandLine commandLine = new CommandLine(commandSpec);
 
-    if("".equals(cleanMessage.value)) {
+    if ("".equals(cleanMessage.value)) {
       this.sendUsage(messageEvent);
       return false;
     }
