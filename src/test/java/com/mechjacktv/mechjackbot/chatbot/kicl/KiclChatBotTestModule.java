@@ -1,13 +1,13 @@
 package com.mechjacktv.mechjackbot.chatbot.kicl;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 
 import com.google.inject.Provides;
 import com.google.inject.Scopes;
 import com.google.inject.Singleton;
-import com.mechjacktv.mechjackbot.ChatBot;
-import com.mechjacktv.mechjackbot.chatbot.ChatBotTestModule;
-import com.mechjacktv.testframework.ArbitraryDataGenerator;
 
 import org.kitteh.irc.client.library.Client;
 import org.kitteh.irc.client.library.element.Channel;
@@ -15,8 +15,9 @@ import org.kitteh.irc.client.library.element.User;
 import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 import org.mockito.Mockito;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import com.mechjacktv.mechjackbot.ChatBot;
+import com.mechjacktv.mechjackbot.chatbot.ChatBotTestModule;
+import com.mechjacktv.testframework.ArbitraryDataGenerator;
 
 public class KiclChatBotTestModule extends ChatBotTestModule {
 
