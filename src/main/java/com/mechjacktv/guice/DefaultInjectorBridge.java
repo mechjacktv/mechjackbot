@@ -11,7 +11,7 @@ public final class DefaultInjectorBridge implements InjectorBridge {
   private Injector injector;
 
   DefaultInjectorBridge() {
-    // give constructor package visibility
+    /* no-op (2018-12-23 mechjack) gives constructor package visibility */
   }
 
   void setInjector(final Injector injector) {

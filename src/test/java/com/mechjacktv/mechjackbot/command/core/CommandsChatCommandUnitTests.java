@@ -87,15 +87,13 @@ public class CommandsChatCommandUnitTests extends BaseChatCommandContractTests {
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
     assertThat(result).isEqualTo(ChatMessage.of(String.format(this.getMessageFormatDefault().value,
-        messageEvent.getChatUser().getTwitchLogin(), chatCommands
-            .stream().map(command -> command.getTrigger().value)
-            .sorted().collect(Collectors.joining(" ")))));
+        chatCommands.stream().map(command -> command.getTrigger().value).sorted().collect(Collectors.joining(" ")))));
   }
 
   @Test
   public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + ": %2$s %1$s";
+    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + ": %s";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
     final Set<ChatCommand> chatCommands = this.givenASetOfCommands();
@@ -108,9 +106,10 @@ public class CommandsChatCommandUnitTests extends BaseChatCommandContractTests {
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
     assertThat(result).isEqualTo(ChatMessage.of(String.format(customMessageFormat,
-        messageEvent.getChatUser().getTwitchLogin(), chatCommands
-            .stream().map(command -> command.getTrigger().value)
-            .sorted().collect(Collectors.joining(" ")))));
+        chatCommands.stream()
+            .map(command -> command.getTrigger().value)
+            .sorted()
+            .collect(Collectors.joining(" ")))));
   }
 
   @Test
@@ -128,13 +127,11 @@ public class CommandsChatCommandUnitTests extends BaseChatCommandContractTests {
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    System.out.println(chatCommands
-        .stream().map(command -> command.getTrigger().value)
-        .sorted().collect(Collectors.joining(" ")));
     assertThat(result).isEqualTo(ChatMessage.of(String.format(this.getMessageFormatDefault().value,
-        messageEvent.getChatUser().getTwitchLogin(), chatCommands
-            .stream().map(command -> command.getTrigger().value)
-            .sorted().collect(Collectors.joining(" ")))));
+        chatCommands.stream()
+            .map(command -> command.getTrigger().value)
+            .sorted()
+            .collect(Collectors.joining(" ")))));
   }
 
 }

@@ -101,14 +101,16 @@ public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    assertThat(result.value).isEqualTo(String.format(this.getMessageFormatDefault().value,
-        messageEvent.getChatUser().getTwitchLogin(), command.getTrigger(), command.getDescription()));
+    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(command, messageEvent,
+        ChatMessage.of(String.format(this.getMessageFormatDefault().value, command.getTrigger(),
+            command.getDescription()))));
   }
 
   @Test
   public final void handleMessageEvent_customMessageFormatConfiguredWithTriggerableCommand_resultIsCustomMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + " %s %s %s";
+    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + " $(user) %s %s";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
     final TestChatCommand command = this.testFrameworkRule.getInstance(TestChatCommand.class);
@@ -122,8 +124,9 @@ public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    assertThat(result.value).isEqualTo(String.format(customMessageFormat,
-        messageEvent.getChatUser().getTwitchLogin(), command.getTrigger(), command.getDescription()));
+    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(command, messageEvent,
+        ChatMessage.of(String.format(customMessageFormat, command.getTrigger(), command.getDescription()))));
   }
 
   @Test
@@ -138,14 +141,15 @@ public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    assertThat(result.value).isEqualTo(String.format(this.getMissingMessageFormatDefault().value,
-        messageEvent.getChatUser().getTwitchLogin(), command.getTrigger()));
+    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(command, messageEvent,
+        ChatMessage.of(String.format(this.getMissingMessageFormatDefault().value, command.getTrigger()))));
   }
 
   @Test
   public final void handleMessageEvent_customMissingMessageFormatConfigured_resultIsCustomMissingMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + " %s %s";
+    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + " $(user) %s";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(this.getMissingMessageFormatKey(), customMessageFormat);
     final TestChatCommand command = this.testFrameworkRule.getInstance(TestChatCommand.class);
@@ -157,8 +161,9 @@ public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    assertThat(result.value).isEqualTo(String.format(customMessageFormat,
-        messageEvent.getChatUser().getTwitchLogin(), command.getTrigger()));
+    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(command, messageEvent,
+        ChatMessage.of(String.format(customMessageFormat, command.getTrigger()))));
   }
 
   @Test
@@ -176,8 +181,9 @@ public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    assertThat(result.value).isEqualTo(String.format(this.getMissingMessageFormatDefault().value,
-        messageEvent.getChatUser().getTwitchLogin(), command.getTrigger()));
+    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(command, messageEvent,
+        ChatMessage.of(String.format(this.getMissingMessageFormatDefault().value, command.getTrigger()))));
   }
 
 }

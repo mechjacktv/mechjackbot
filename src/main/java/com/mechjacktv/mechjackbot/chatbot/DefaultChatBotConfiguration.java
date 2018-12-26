@@ -21,10 +21,10 @@ import com.mechjacktv.util.HotUpdatePropertiesWrapper;
 import com.mechjacktv.util.PropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
-public final class PropertiesChatBotConfiguration extends HotUpdatePropertiesWrapper
+public final class DefaultChatBotConfiguration extends HotUpdatePropertiesWrapper
     implements ChatBotConfiguration, TwitchClientConfiguration {
 
-  private static final Logger log = LoggerFactory.getLogger(PropertiesChatBotConfiguration.class);
+  private static final Logger log = LoggerFactory.getLogger(DefaultChatBotConfiguration.class);
 
   private static final String DATA_LOCATION_KEY = "mechjackbot.data_location";
   private static final String DATA_LOCATION_DEFAULT = System.getProperty("user.home") + "/.mechjackbot";
@@ -38,13 +38,13 @@ public final class PropertiesChatBotConfiguration extends HotUpdatePropertiesWra
   private final DataLocation dataLocation;
 
   @Inject
-  PropertiesChatBotConfiguration(final ScheduleService scheduleService) {
+  DefaultChatBotConfiguration(final ScheduleService scheduleService) {
     this(System.getProperty(DATA_LOCATION_KEY, DATA_LOCATION_DEFAULT), new FilePropertiesSource(
         new File(System.getProperty(DATA_LOCATION_KEY, DATA_LOCATION_DEFAULT), CONFIG_PROPERTIES_FILE_NAME)),
         scheduleService);
   }
 
-  PropertiesChatBotConfiguration(final String dataLocation, final PropertiesSource propertiesSource,
+  DefaultChatBotConfiguration(final String dataLocation, final PropertiesSource propertiesSource,
       final ScheduleService scheduleService) {
     super(propertiesSource, scheduleService, log);
     if (this.isMissingRequiredValues()) {

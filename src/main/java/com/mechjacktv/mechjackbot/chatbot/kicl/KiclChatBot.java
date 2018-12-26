@@ -4,14 +4,13 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
+import org.kitteh.irc.client.library.Client;
+
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.mechjackbot.ChatBot;
 import com.mechjacktv.mechjackbot.ChatChannel;
 import com.mechjacktv.mechjackbot.ChatMessage;
-import com.mechjacktv.mechjackbot.chatbot.ChatBotStartupException;
 import com.mechjacktv.util.ExecutionUtils;
-
-import org.kitteh.irc.client.library.Client;
 
 public class KiclChatBot implements ChatBot {
 
@@ -41,7 +40,7 @@ public class KiclChatBot implements ChatBot {
 
   @Override
   public void start() {
-    this.executionUtils.softenException(this.ircClient::connect, ChatBotStartupException.class);
+    this.ircClient.connect();
   }
 
   @Override

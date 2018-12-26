@@ -2,10 +2,10 @@ package com.mechjacktv.mechjackbot.command;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
 
@@ -26,7 +26,7 @@ public final class DefaultChatCommandRegistry implements ChatCommandRegistry {
 
   @Inject
   DefaultChatCommandRegistry(final ExecutionUtils executionUtils) {
-    this.commands = new HashMap<>();
+    this.commands = new ConcurrentHashMap<>();
     this.executionUtils = executionUtils;
   }
 
@@ -43,12 +43,30 @@ public final class DefaultChatCommandRegistry implements ChatCommandRegistry {
   @Override
   public final void addCommand(final ChatCommand chatCommand) {
     Objects.requireNonNull(chatCommand, this.executionUtils.nullMessageForName("chatCommand"));
-    if (this.commands.containsKey(chatCommand.getTrigger())) {
+    if (this.hasCommand(chatCommand.getTrigger())) {
       log.warn(String.format("ChatCommand, %s, with trigger, %s, was already registered. Replacing with %s",
           this.commands.get(chatCommand.getTrigger()).getName(), chatCommand.getTrigger(), chatCommand.getName()));
     }
     this.commands.put(chatCommand.getTrigger(), chatCommand);
     log.info(String.format("Added chatCommand, %s, with trigger, %s", chatCommand.getName(), chatCommand.getTrigger()));
+  }
+
+  @Override
+  public boolean hasCommand(final ChatCommandTrigger trigger) {
+    Objects.requireNonNull(trigger, this.executionUtils.nullMessageForName("trigger"));
+    return this.commands.containsKey(trigger);
+  }
+
+  @Override
+  public boolean removeCommand(final ChatCommandTrigger trigger) {
+    Objects.requireNonNull(trigger, this.executionUtils.nullMessageForName("trigger"));
+    final ChatCommand chatCommand = this.commands.remove(trigger);
+    if (Objects.nonNull(chatCommand)) {
+      log.info(String.format("Removed chatCommand, %s, with trigger, %s", chatCommand.getName(),
+          chatCommand.getTrigger()));
+      return true;
+    }
+    return false;
   }
 
 }

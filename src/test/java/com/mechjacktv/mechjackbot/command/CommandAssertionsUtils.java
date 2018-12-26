@@ -20,6 +20,10 @@ public class CommandAssertionsUtils {
 
   public final void assertUsageMessageForCommand(final ChatMessage result, final ChatCommand subjectUnderTest,
       final ChatMessageEvent chatMessageEvent) {
-    assertThat(result).isEqualTo(this.chatCommandUtils.createUsageMessage(subjectUnderTest, chatMessageEvent));
+    final ChatMessage usageMessage = this.chatCommandUtils.createUsageMessage(subjectUnderTest, chatMessageEvent);
+
+    assertThat(result).isEqualTo(this.chatCommandUtils.replaceChatMessageVariables(subjectUnderTest, chatMessageEvent,
+        usageMessage));
   }
+
 }

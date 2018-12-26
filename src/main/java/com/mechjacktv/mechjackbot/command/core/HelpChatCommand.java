@@ -16,8 +16,8 @@ import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
 public final class HelpChatCommand extends BaseChatCommand {
 
   public static final String DEFAULT_DESCRIPTION = "Returns the description for a command.";
-  public static final String DEFAULT_MESSAGE_FORMAT = "@%s, %s -> %s";
-  public static final String DEFAULT_MISSING_MESSAGE_FORMAT = "@%s, I don't see a command triggered by %s.";
+  public static final String DEFAULT_MESSAGE_FORMAT = "@$(user), %s -> %s";
+  public static final String DEFAULT_MISSING_MESSAGE_FORMAT = "@$(user), I don't see a command triggered by %s.";
   public static final String DEFAULT_TRIGGER = "!help";
   public static final String KEY_MISSING_MESSAGE_FORMAT = "missing_message_format";
   public static final String USAGE = "<commandTrigger>";

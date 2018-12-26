@@ -9,7 +9,7 @@ import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 public final class PingChatCommand extends BaseChatCommand {
 
   public static final String DEFAULT_DESCRIPTION = "A simple check to see if the chat bot is running.";
-  public static final String DEFAULT_MESSAGE_FORMAT = "Don't worry, @%s. I'm here.";
+  public static final String DEFAULT_MESSAGE_FORMAT = "Don't worry, @$(user). I'm here.";
   public static final String DEFAULT_TRIGGER = "!ping";
 
   @Inject

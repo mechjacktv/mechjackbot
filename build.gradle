@@ -35,15 +35,17 @@ dependencies {
     implementation group: 'com.google.inject', name: 'guice', version: '4.+'
     implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.+'
     implementation group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.+'
+    implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
     implementation group: 'org.mapdb', name: 'mapdb', version: '3.+'
     implementation group: 'org.kitteh.irc', name: 'client-lib', version: '4.+'
     implementation group: 'org.pircbotx', name: 'pircbotx', version: '2.+'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
-    implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'
+    runtimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'
     testImplementation group: 'junit', name: 'junit', version: '4.+'
     testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.+'
     testImplementation group: 'pl.pragmatists', name: 'JUnitParams', version: '1.+'
+    testRuntimeOnly group: 'org.slf4j', name: 'slf4j-nop', version: '1.+'
 }
 
 build.dependsOn 'jacocoTestReport', 'spotlessApply'

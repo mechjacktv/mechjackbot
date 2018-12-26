@@ -2,12 +2,11 @@ package com.mechjacktv.mechjackbot;
 
 public enum UserRole {
 
-  OWNER(1),
+  BROADCASTER(1),
   MODERATOR(2),
   VIP(3),
   SUBSCRIBER(4),
-  FOLLOWER(5),
-  EVERYONE(6);
+  VIEWER(5);
 
   private final Integer value;
 
@@ -18,4 +17,5 @@ public enum UserRole {
   public final Integer value() {
     return this.value;
   }
+
 }

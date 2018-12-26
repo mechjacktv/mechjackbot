@@ -25,7 +25,7 @@ public final class QuitChatCommand extends BaseChatCommand {
   }
 
   @Override
-  @RequiresUserRole(UserRole.OWNER)
+  @RequiresUserRole(UserRole.BROADCASTER)
   public void handleMessageEvent(final ChatMessageEvent chatMessageEvent) {
     this.sendResponse(chatMessageEvent);
     this.scheduleService.stop();

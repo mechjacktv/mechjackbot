@@ -11,4 +11,8 @@ public interface ChatCommandRegistry {
 
   void addCommand(ChatCommand chatCommand);
 
+  boolean hasCommand(ChatCommandTrigger trigger);
+
+  boolean removeCommand(ChatCommandTrigger trigger);
+
 }

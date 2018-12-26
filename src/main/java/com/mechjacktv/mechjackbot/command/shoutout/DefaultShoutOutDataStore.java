@@ -35,7 +35,6 @@ public final class DefaultShoutOutDataStore extends BaseMessageStore<CasterKey, 
   public static final String DEFAULT_UPDATE_PERIOD = "10";
 
   private static final Logger log = LoggerFactory.getLogger(DefaultShoutOutDataStore.class);
-  private static final String KEY_VALUE_STORE_NAME = DefaultShoutOutDataStore.class.getCanonicalName();
 
   private final ExecutionUtils executionUtils;
 
@@ -44,7 +43,8 @@ public final class DefaultShoutOutDataStore extends BaseMessageStore<CasterKey, 
       final KeyValueStoreFactory keyValueStoreFactory, final ExecutionUtils executionUtils,
       final ProtobufUtils protobufUtils, final ScheduleService scheduleService,
       final TwitchClient twitchClient) {
-    super(keyValueStoreFactory.createOrOpenKeyValueStore(KEY_VALUE_STORE_NAME), executionUtils, protobufUtils);
+    super(keyValueStoreFactory.createOrOpenKeyValueStore(DefaultShoutOutDataStore.class.getCanonicalName()),
+        executionUtils, protobufUtils);
     this.executionUtils = executionUtils;
     scheduleService.schedule(() -> this.updateCasters(chatBotConfiguration, twitchClient),
         Integer.parseInt(configuration.get(KEY_UPDATE_PERIOD, DEFAULT_UPDATE_PERIOD)), TimeUnit.MINUTES);

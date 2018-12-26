@@ -10,31 +10,31 @@ import com.mechjacktv.mechjackbot.ChatBotConfigurationContractTests;
 import com.mechjacktv.util.MapPropertiesSource;
 import com.mechjacktv.util.scheduleservice.ScheduleService;
 
-public class PropertiesChatBotConfiguration_ChatBotConfigurationUnitTests extends ChatBotConfigurationContractTests {
+public class DefaultChatBotConfiguration_ChatBotConfigurationUnitTests extends ChatBotConfigurationContractTests {
 
   @Override
   protected ChatBotConfiguration givenASubjectToTest(final String dataLocation, final Map<String, String> properties) {
     final Map<String, String> mappedProperties = this.mapKeysForProperties(properties);
 
-    return new PropertiesChatBotConfiguration(dataLocation, new MapPropertiesSource(mappedProperties),
+    return new DefaultChatBotConfiguration(dataLocation, new MapPropertiesSource(mappedProperties),
         mock(ScheduleService.class));
   }
 
   private Map<String, String> mapKeysForProperties(final Map<String, String> properties) {
     final Map<String, String> realProperties = new HashMap<>();
 
-    realProperties.put(PropertiesChatBotConfiguration.TWITCH_CLIENT_ID_KEY,
+    realProperties.put(DefaultChatBotConfiguration.TWITCH_CLIENT_ID_KEY,
         this.testFrameworkRule.getArbitraryString());
     if (properties.containsKey(ChatBotConfigurationContractTests.TWITCH_CHANNEL_KEY)) {
-      realProperties.put(PropertiesChatBotConfiguration.TWITCH_CHANNEL_KEY,
+      realProperties.put(DefaultChatBotConfiguration.TWITCH_CHANNEL_KEY,
           properties.get(ChatBotConfigurationContractTests.TWITCH_CHANNEL_KEY));
     }
     if (properties.containsKey(ChatBotConfigurationContractTests.TWITCH_PASSWORD_KEY)) {
-      realProperties.put(PropertiesChatBotConfiguration.TWITCH_PASSWORD_KEY,
+      realProperties.put(DefaultChatBotConfiguration.TWITCH_PASSWORD_KEY,
           properties.get(ChatBotConfigurationContractTests.TWITCH_PASSWORD_KEY));
     }
     if (properties.containsKey(ChatBotConfigurationContractTests.TWITCH_LOGIN_KEY)) {
-      realProperties.put(PropertiesChatBotConfiguration.TWITCH_LOGIN_KEY,
+      realProperties.put(DefaultChatBotConfiguration.TWITCH_LOGIN_KEY,
           properties.get(ChatBotConfigurationContractTests.TWITCH_LOGIN_KEY));
     }
     return realProperties;

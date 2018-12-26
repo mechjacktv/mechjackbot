@@ -8,14 +8,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.google.inject.Key;
-import com.google.inject.TypeLiteral;
-
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Rule;
 import org.junit.Test;
-import org.pircbotx.PircBotX;
-import org.pircbotx.User;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import com.mechjacktv.configuration.Configuration;
@@ -23,9 +18,7 @@ import com.mechjacktv.configuration.ConfigurationTestModule;
 import com.mechjacktv.mechjackbot.ChatBot;
 import com.mechjacktv.mechjackbot.ChatMessage;
 import com.mechjacktv.mechjackbot.ChatUser;
-import com.mechjacktv.mechjackbot.chatbot.ChatBotFactory;
 import com.mechjacktv.mechjackbot.chatbot.ChatBotTestModule;
-import com.mechjacktv.mechjackbot.chatbot.ChatUserFactory;
 import com.mechjacktv.mechjackbot.command.CommandTestModule;
 import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.util.ExecutionUtils;
@@ -50,10 +43,8 @@ public class PircBotXChatMessageEventUnitTests {
 
   private PircBotXChatMessageEvent givenASubjectToTest(final GenericMessageEvent genericMessageEvent) {
     return new PircBotXChatMessageEvent(this.testFrameworkRule.getInstance(Configuration.class),
-        this.testFrameworkRule.getInstance(Key.get(new TypeLiteral<ChatBotFactory<PircBotX>>() {
-        })),
-        this.testFrameworkRule.getInstance(Key.get(new TypeLiteral<ChatUserFactory<User>>() {
-        })),
+        this.testFrameworkRule.getInstance(PircBotXChatBotFactory.class),
+        this.testFrameworkRule.getInstance(PircBotXChatUserFactory.class),
         this.testFrameworkRule.getInstance(ExecutionUtils.class), genericMessageEvent);
   }
 
@@ -164,4 +155,5 @@ public class PircBotXChatMessageEventUnitTests {
     verify(genericMessageEvent).respondWith(eq(
         String.format(RESPONSE_MESSAGE_FORMAT_DEFAULT, chatMessage.value)));
   }
+
 }

@@ -8,11 +8,11 @@ import com.mechjacktv.twitchclient.TwitchLogin;
 public class TestChatUser implements ChatUser {
 
   private TwitchLogin twitchLogin;
-  private Function<UserRole, Boolean> accessLevelCheck;
+  private Function<UserRole, Boolean> hasUserRoleHandler;
 
   public TestChatUser(final ArbitraryDataGenerator arbitraryDataGenerator) {
     this.twitchLogin = TwitchLogin.of(arbitraryDataGenerator.getString());
-    this.accessLevelCheck = (accessLevel -> false);
+    this.hasUserRoleHandler = UserRole.VIEWER::equals;
   }
 
   @Override
@@ -21,12 +21,12 @@ public class TestChatUser implements ChatUser {
   }
 
   @Override
-  public boolean hasAccessLevel(final UserRole userRole) {
-    return accessLevelCheck.apply(userRole);
+  public boolean hasUserRole(final UserRole userRole) {
+    return this.hasUserRoleHandler.apply(userRole);
   }
 
-  public void setAccessLevelCheck(final Function<UserRole, Boolean> accessLevelCheck) {
-    this.accessLevelCheck = accessLevelCheck;
+  public void setHasUserRoleHandler(final Function<UserRole, Boolean> hasUserRoleHandler) {
+    this.hasUserRoleHandler = hasUserRoleHandler;
   }
 
   public void setTwitchLogin(final TwitchLogin twitchLogin) {

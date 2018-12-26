@@ -16,12 +16,6 @@ import com.mechjacktv.mechjackbot.ChatMessageEvent;
 
 public abstract class BaseChatCommandContractTests extends ChatCommandContractTests {
 
-  @Override
-  protected void installModules() {
-    super.installModules();
-    this.testFrameworkRule.installModule(new CommandTestModule());
-  }
-
   protected abstract ChatCommandDescription getDescriptionDefault();
 
   protected abstract ConfigurationKey getDescriptionKey();
