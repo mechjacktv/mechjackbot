@@ -23,7 +23,7 @@ apply plugin: 'java'
 
 mainClassName = 'com.mechjacktv.mechjackbot.main.Main'
 group = 'com.mechjacktv.mechjackbot'
-version = '0.4.0'
+version = System.getenv('BUILDVER') != null ? System.getenv('BUILDVER') : "SNAPSHOT"
 
 repositories {
     jcenter()
