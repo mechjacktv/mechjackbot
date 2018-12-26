@@ -65,7 +65,9 @@ public class CustomChatCommand implements ChatCommand {
   @Override
   public void handleMessageEvent(final ChatMessageEvent chatMessageEvent) {
     final ChatMessage cleanChatMessage = this.chatCommandUtils.stripTriggerFromMessage(this, chatMessageEvent);
-    final String responseBody = String.format(this.commandBody.value, cleanChatMessage.value.split("\\s+"));
+    final String[] args = cleanChatMessage.value.split("\\s+");
+
+    final String responseBody = String.format(this.commandBody.value, (Object[]) args);
 
     // TODO (2018-12-25 mechjack): replace {n} with %n$s
     chatMessageEvent.sendResponse(this.chatCommandUtils.replaceChatMessageVariables(this, chatMessageEvent,
