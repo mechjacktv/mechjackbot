@@ -1,15 +1,15 @@
 package com.mechjacktv.mechjackbot.command.custom;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.Test;
+
 import com.mechjacktv.mechjackbot.ChatCommandContractTests;
 import com.mechjacktv.mechjackbot.ChatCommandTrigger;
 import com.mechjacktv.mechjackbot.ChatCommandUtils;
 import com.mechjacktv.mechjackbot.ChatMessage;
 import com.mechjacktv.mechjackbot.TestChatMessageEvent;
 import com.mechjacktv.mechjackbot.UserRole;
-
-import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class CustomChatCommandUnitTests extends ChatCommandContractTests {
 

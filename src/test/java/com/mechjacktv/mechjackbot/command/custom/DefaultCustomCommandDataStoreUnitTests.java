@@ -1,7 +1,13 @@
 package com.mechjacktv.mechjackbot.command.custom;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import org.assertj.core.api.SoftAssertions;
+import org.junit.Test;
 
 import com.mechjacktv.keyvaluestore.ChatMessageStoreContractTests;
 import com.mechjacktv.keyvaluestore.MapKeyValueStore;
@@ -11,12 +17,6 @@ import com.mechjacktv.proto.mechjackbot.command.custom.CustomComandDataStoreMess
 import com.mechjacktv.proto.mechjackbot.command.custom.CustomComandDataStoreMessage.CustomCommandKey;
 import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.ProtobufUtils;
-
-import org.assertj.core.api.SoftAssertions;
-import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class DefaultCustomCommandDataStoreUnitTests extends
     ChatMessageStoreContractTests<CustomCommandKey, CustomCommand> {

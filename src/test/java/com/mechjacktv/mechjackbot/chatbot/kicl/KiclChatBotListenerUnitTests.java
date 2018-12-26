@@ -1,18 +1,18 @@
 package com.mechjacktv.mechjackbot.chatbot.kicl;
 
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.verify;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
+
 import com.mechjacktv.configuration.ConfigurationTestModule;
 import com.mechjacktv.mechjackbot.ChatMessageEvent;
 import com.mechjacktv.mechjackbot.ChatMessageEventHandler;
 import com.mechjacktv.mechjackbot.command.CommandTestModule;
 import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.util.UtilTestModule;
-
-import org.junit.Rule;
-import org.junit.Test;
-import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
-
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.verify;
 
 public class KiclChatBotListenerUnitTests {
 

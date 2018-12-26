@@ -5,6 +5,9 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mechjacktv.mechjackbot.ChatCommandRegistry;
 import com.mechjacktv.mechjackbot.ChatCommandTrigger;
 import com.mechjacktv.mechjackbot.ChatCommandUtils;
@@ -12,9 +15,6 @@ import com.mechjacktv.mechjackbot.UserRole;
 import com.mechjacktv.proto.mechjackbot.command.custom.CustomComandDataStoreMessage.CustomCommand;
 import com.mechjacktv.proto.mechjackbot.command.custom.CustomComandDataStoreMessage.CustomCommandKey;
 import com.mechjacktv.util.ExecutionUtils;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class DefaultCustomChatCommandService implements CustomChatCommandService {
 

@@ -1,5 +1,15 @@
 package com.mechjacktv.mechjackbot.chatbot.kicl;
 
+import static com.mechjacktv.mechjackbot.chatbot.kicl.KiclChatBot.KEY_CHAT_BOT_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.chatbot.kicl.KiclChatBot.KEY_SHUTDOWN_MESSAGE;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.kitteh.irc.client.library.Client;
+
 import com.mechjacktv.configuration.ConfigurationTestModule;
 import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.mechjackbot.ChatChannel;
@@ -7,16 +17,6 @@ import com.mechjacktv.mechjackbot.ChatMessage;
 import com.mechjacktv.mechjackbot.command.CommandTestModule;
 import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.util.UtilTestModule;
-
-import org.junit.Rule;
-import org.junit.Test;
-import org.kitteh.irc.client.library.Client;
-
-import static com.mechjacktv.mechjackbot.chatbot.kicl.KiclChatBot.KEY_CHAT_BOT_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.chatbot.kicl.KiclChatBot.KEY_SHUTDOWN_MESSAGE;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
 
 public class KiclChatBotUnitTests {
 

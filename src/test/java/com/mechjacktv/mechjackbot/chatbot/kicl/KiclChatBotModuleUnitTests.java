@@ -1,16 +1,16 @@
 package com.mechjacktv.mechjackbot.chatbot.kicl;
 
-import com.mechjacktv.configuration.ConfigurationTestModule;
-import com.mechjacktv.mechjackbot.ChatBotConfiguration;
-import com.mechjacktv.mechjackbot.command.CommandTestModule;
-import com.mechjacktv.testframework.TestFrameworkRule;
-import com.mechjacktv.util.UtilTestModule;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.kitteh.irc.client.library.Client;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.mechjacktv.configuration.ConfigurationTestModule;
+import com.mechjacktv.mechjackbot.ChatBotConfiguration;
+import com.mechjacktv.mechjackbot.command.CommandTestModule;
+import com.mechjacktv.testframework.TestFrameworkRule;
+import com.mechjacktv.util.UtilTestModule;
 
 public class KiclChatBotModuleUnitTests {
 
