@@ -25,8 +25,8 @@ import picocli.CommandLine.ParseResult;
 public class SetCommandChatCommand extends BaseChatCommand {
 
   public static final String DEFAULT_DESCRIPTION = "Set a custom command body and/or access level.";
-  public static final String DEFAULT_MESSAGE_FORMAT = "Command set, %2$s";
-  public static final String DEFAULT_BODY_REQUIRED_MESSAGE_FORMAT = "%2$s failed: body required";
+  public static final String DEFAULT_MESSAGE_FORMAT = "$(user), command set, %s";
+  public static final String DEFAULT_BODY_REQUIRED_MESSAGE_FORMAT = "$(user), $(trigger) failed: body required";
   public static final String DEFAULT_TRIGGER = "!setcommand";
   public static final ConfigurationKey KEY_BODY_REQUIRED_MESSAGE_FORMAT = ConfigurationKey
       .of("body_required_message_format", SetCommandChatCommand.class);
@@ -69,7 +69,7 @@ public class SetCommandChatCommand extends BaseChatCommand {
           this.customChatCommandService.updateCustomChatCommand(trigger, commandBody, userRole);
         } else {
           if (commandBody == null) {
-            this.sendResponse(messageEvent, this.getBodyRequiredMessageFormat(), this.getTrigger());
+            this.sendResponse(messageEvent, this.getBodyRequiredMessageFormat());
             return false;
           }
           this.customChatCommandService.createCustomChatCommand(trigger, commandBody, userRole);

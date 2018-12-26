@@ -3,13 +3,6 @@ package com.mechjacktv.mechjackbot.command;
 import java.util.Collection;
 import java.util.Objects;
 
-import org.apache.commons.lang3.ArrayUtils;
-
-import picocli.CommandLine;
-import picocli.CommandLine.IParseResultHandler2;
-import picocli.CommandLine.Model.ArgSpec;
-import picocli.CommandLine.Model.CommandSpec;
-
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.mechjackbot.ChatCommandDescription;
@@ -20,6 +13,11 @@ import com.mechjacktv.mechjackbot.ChatCommandUtils;
 import com.mechjacktv.mechjackbot.ChatMessage;
 import com.mechjacktv.mechjackbot.ChatMessageEvent;
 import com.mechjacktv.util.ExecutionUtils;
+
+import picocli.CommandLine;
+import picocli.CommandLine.IParseResultHandler2;
+import picocli.CommandLine.Model.ArgSpec;
+import picocli.CommandLine.Model.CommandSpec;
 
 public abstract class BaseChatCommand implements PicoCliCommandParser, RespondingChatCommand {
 
@@ -101,8 +99,8 @@ public abstract class BaseChatCommand implements PicoCliCommandParser, Respondin
     Objects.requireNonNull(chatMessageEvent, this.executionUtils.nullMessageForName("chatMessageEvent"));
     Objects.requireNonNull(messageFormat, this.executionUtils.nullMessageForName("messageFormat"));
 
-    chatMessageEvent.sendResponse(ChatMessage.of(String.format(messageFormat.value,
-        ArrayUtils.addAll(new Object[] { chatMessageEvent.getChatUser().getTwitchLogin() }, args))));
+    chatMessageEvent.sendResponse(this.chatCommandUtils.replaceChatMessageVariables(this, chatMessageEvent,
+        ChatMessage.of(String.format(messageFormat.value, args))));
   }
 
   @Override

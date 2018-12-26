@@ -1,19 +1,7 @@
 package com.mechjacktv.mechjackbot.command.shoutout;
 
-import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.DEFAULT_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.DEFAULT_FREQUENCY;
-import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.DEFAULT_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_FREQUENCY;
-import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_TRIGGER;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
-import org.assertj.core.api.Condition;
-import org.junit.Test;
 
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.ConfigurationKey;
@@ -21,6 +9,7 @@ import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.keyvaluestore.KeyValueStoreTestModule;
 import com.mechjacktv.mechjackbot.ChatCommandDescription;
 import com.mechjacktv.mechjackbot.ChatCommandTrigger;
+import com.mechjacktv.mechjackbot.ChatCommandUtils;
 import com.mechjacktv.mechjackbot.ChatMessage;
 import com.mechjacktv.mechjackbot.ChatMessageEvent;
 import com.mechjacktv.mechjackbot.TestChatMessageEvent;
@@ -34,6 +23,18 @@ import com.mechjacktv.twitchclient.TwitchClientTestModule;
 import com.mechjacktv.util.TestTimeUtils;
 import com.mechjacktv.util.TimeUtils;
 import com.mechjacktv.util.scheduleservice.ScheduleServiceTestModule;
+
+import org.assertj.core.api.Condition;
+import org.junit.Test;
+
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.DEFAULT_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.DEFAULT_FREQUENCY;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.DEFAULT_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_FREQUENCY;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_TRIGGER;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandContractTests {
 
@@ -186,14 +187,15 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    assertThat(result).isEqualTo(ChatMessage.of(String.format(this.getMessageFormatDefault().value,
-        messageEvent.getChatUser().getTwitchLogin())));
+    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
+        ChatMessage.of(this.getMessageFormatDefault().value)));
   }
 
   @Test
   public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + " %s";
+    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + " $(user)";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
@@ -202,8 +204,9 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    assertThat(result).isEqualTo(ChatMessage.of(String.format(customMessageFormat,
-        messageEvent.getChatUser().getTwitchLogin())));
+    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
+        ChatMessage.of(customMessageFormat)));
   }
 
   @Test

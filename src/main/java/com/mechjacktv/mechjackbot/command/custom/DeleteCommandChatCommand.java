@@ -15,8 +15,8 @@ import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
 public class DeleteCommandChatCommand extends BaseChatCommand {
 
   public static final String DEFAULT_DESCRIPTION = "Remove a custom command.";
-  public static final String DEFAULT_MESSAGE_FORMAT = "Command removed, %2$s";
-  public static final String DEFAULT_NOT_CUSTOM_COMMAND_MESSAGE_FORMAT = "%s, %s is not a custom command";
+  public static final String DEFAULT_MESSAGE_FORMAT = "$(user), command removed, %s";
+  public static final String DEFAULT_NOT_CUSTOM_COMMAND_MESSAGE_FORMAT = "$(user), %s is not a custom command";
   public static final String DEFAULT_TRIGGER = "!delcommand";
   public static final ConfigurationKey KEY_NOT_CUSTOM_COMMAND_MESSAGE_FORMAT = ConfigurationKey
       .of("not_custom_command_message_format", DeleteCommandChatCommand.class);

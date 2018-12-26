@@ -9,7 +9,7 @@ public interface ChatCommandUtils {
   String DEFAULT_USER_COOL_DOWN = "15";
 
   String KEY_USAGE_MESSAGE_FORMAT = "command.usage_message_format";
-  String DEFAULT_USAGE_MESSAGE_FORMAT = "@%s, usage: %s %s";
+  String DEFAULT_USAGE_MESSAGE_FORMAT = "@$(user), usage: $(trigger) %s";
 
   boolean hasUserRole(ChatCommand chatCommand, ChatMessageEvent chatMessageEvent);
 
@@ -18,6 +18,9 @@ public interface ChatCommandUtils {
   boolean isTriggered(ChatCommand chatCommand, ChatMessageEvent chatMessageEvent);
 
   ChatMessage createUsageMessage(ChatCommand chatCommand, ChatMessageEvent chatMessageEvent);
+
+  ChatMessage replaceChatMessageVariables(ChatCommand chatCommand, ChatMessageEvent chatMessageEvent,
+      ChatMessage responseChatMessage);
 
   ChatMessage stripTriggerFromMessage(ChatCommand chatCommand, ChatMessageEvent chatMessageEvent);
 

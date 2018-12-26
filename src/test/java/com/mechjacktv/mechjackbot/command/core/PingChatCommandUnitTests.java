@@ -1,5 +1,18 @@
 package com.mechjacktv.mechjackbot.command.core;
 
+import com.mechjacktv.configuration.ConfigurationKey;
+import com.mechjacktv.configuration.MapConfiguration;
+import com.mechjacktv.mechjackbot.ChatCommandDescription;
+import com.mechjacktv.mechjackbot.ChatCommandTrigger;
+import com.mechjacktv.mechjackbot.ChatCommandUtils;
+import com.mechjacktv.mechjackbot.ChatMessage;
+import com.mechjacktv.mechjackbot.TestChatMessageEvent;
+import com.mechjacktv.mechjackbot.command.BaseChatCommandContractTests;
+import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
+import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
+
+import org.junit.Test;
+
 import static com.mechjacktv.mechjackbot.command.core.PingChatCommand.DEFAULT_DESCRIPTION;
 import static com.mechjacktv.mechjackbot.command.core.PingChatCommand.DEFAULT_MESSAGE_FORMAT;
 import static com.mechjacktv.mechjackbot.command.core.PingChatCommand.DEFAULT_TRIGGER;
@@ -7,18 +20,6 @@ import static com.mechjacktv.mechjackbot.command.core.PingChatCommand.KEY_DESCRI
 import static com.mechjacktv.mechjackbot.command.core.PingChatCommand.KEY_MESSAGE_FORMAT;
 import static com.mechjacktv.mechjackbot.command.core.PingChatCommand.KEY_TRIGGER;
 import static org.assertj.core.api.Assertions.assertThat;
-
-import org.junit.Test;
-
-import com.mechjacktv.configuration.ConfigurationKey;
-import com.mechjacktv.configuration.MapConfiguration;
-import com.mechjacktv.mechjackbot.ChatCommandDescription;
-import com.mechjacktv.mechjackbot.ChatCommandTrigger;
-import com.mechjacktv.mechjackbot.ChatMessage;
-import com.mechjacktv.mechjackbot.TestChatMessageEvent;
-import com.mechjacktv.mechjackbot.command.BaseChatCommandContractTests;
-import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
-import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
 
 public class PingChatCommandUnitTests extends BaseChatCommandContractTests {
 
@@ -64,14 +65,15 @@ public class PingChatCommandUnitTests extends BaseChatCommandContractTests {
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    assertThat(result).isEqualTo(ChatMessage.of(String.format(this.getMessageFormatDefault().value,
-        messageEvent.getChatUser().getTwitchLogin())));
+    final ChatCommandUtils chatCommandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    assertThat(result).isEqualTo(chatCommandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
+        ChatMessage.of(this.getMessageFormatDefault().value)));
   }
 
   @Test
   public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + "%s";
+    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + "$(user)";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
@@ -80,8 +82,9 @@ public class PingChatCommandUnitTests extends BaseChatCommandContractTests {
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    assertThat(result).isEqualTo(ChatMessage.of(String.format(customMessageFormat,
-        messageEvent.getChatUser().getTwitchLogin())));
+    final ChatCommandUtils chatCommandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    assertThat(result).isEqualTo(chatCommandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
+        ChatMessage.of(customMessageFormat)));
   }
 
 }

@@ -59,7 +59,7 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
   }
 
   private CommandMessageFormat getMessageFormatDefault() {
-    return CommandMessageFormat.of("%s %s %s %s");
+    return CommandMessageFormat.of("%s %s %s");
   }
 
   private ConfigurationKey getMessageFormatKey() {
@@ -104,7 +104,7 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
     assertThat(result).isEqualTo(ChatMessage.of(String.format(subjectUnderTest.getDefaultMessageFormat().value,
-        messageEvent.getChatUser().getTwitchLogin(), responseArgs[0], responseArgs[1], responseArgs[2])));
+        responseArgs[0], responseArgs[1], responseArgs[2])));
   }
 
   @Test
@@ -113,15 +113,17 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
     final String customMessageFormat = "%s";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
+    final Object[] responseArgs = new Object[] { this.testFrameworkRule.getArbitraryString(),
+        this.testFrameworkRule.getArbitraryString(), this.testFrameworkRule.getArbitraryString() };
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     final TestChatCommand subjectUnderTest = this.givenASubjectToTest();
-    subjectUnderTest.setMessageEventHandler(event -> subjectUnderTest.sendResponse(event));
+    subjectUnderTest.setMessageEventHandler(event -> subjectUnderTest.sendResponse(event, responseArgs));
 
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
     assertThat(result).isEqualTo(ChatMessage.of(String.format(customMessageFormat,
-        messageEvent.getChatUser().getTwitchLogin())));
+        responseArgs[0])));
   }
 
   @Test

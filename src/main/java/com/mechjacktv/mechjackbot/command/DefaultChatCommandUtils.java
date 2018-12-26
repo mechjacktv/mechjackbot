@@ -11,7 +11,15 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.mechjackbot.*;
+import com.mechjacktv.mechjackbot.ChatCommand;
+import com.mechjacktv.mechjackbot.ChatCommandException;
+import com.mechjacktv.mechjackbot.ChatCommandTrigger;
+import com.mechjacktv.mechjackbot.ChatCommandUtils;
+import com.mechjacktv.mechjackbot.ChatMessage;
+import com.mechjacktv.mechjackbot.ChatMessageEvent;
+import com.mechjacktv.mechjackbot.NoCoolDown;
+import com.mechjacktv.mechjackbot.RequiresUserRole;
+import com.mechjacktv.mechjackbot.UserRole;
 import com.mechjacktv.twitchclient.TwitchLogin;
 import com.mechjacktv.util.ExecutionUtils;
 import com.mechjacktv.util.TimeUtils;
@@ -132,8 +140,25 @@ public final class DefaultChatCommandUtils implements ChatCommandUtils {
     final String messageFormat = this.configuration.get(KEY_USAGE_MESSAGE_FORMAT,
         DEFAULT_USAGE_MESSAGE_FORMAT);
 
-    return ChatMessage.of(String.format(messageFormat, chatMessageEvent.getChatUser().getTwitchLogin(),
-        chatCommand.getTrigger(), chatCommand.getUsage()));
+    return ChatMessage.of(String.format(messageFormat, chatCommand.getUsage()));
+  }
+
+  @Override
+  public ChatMessage replaceChatMessageVariables(final ChatCommand chatCommand,
+      final ChatMessageEvent chatMessageEvent, final ChatMessage chatMessage) {
+    Objects.requireNonNull(chatCommand, this.executionUtils.nullMessageForName("chatCommand"));
+    Objects.requireNonNull(chatMessageEvent, this.executionUtils.nullMessageForName("chatMessageEvent"));
+    Objects.requireNonNull(chatMessage, this.executionUtils.nullMessageForName("chatMessage"));
+
+    final Map<String, Object> replacements = new HashMap<>();
+    String chatMessageValue = chatMessage.value;
+
+    replacements.put("$(trigger)", chatCommand.getTrigger());
+    replacements.put("$(user)", chatMessageEvent.getChatUser().getTwitchLogin());
+    for (final String key : replacements.keySet()) {
+      chatMessageValue = chatMessageValue.replace(key, replacements.get(key).toString());
+    }
+    return ChatMessage.of(chatMessageValue);
   }
 
   @Override

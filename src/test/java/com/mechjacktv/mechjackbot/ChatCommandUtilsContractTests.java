@@ -1,19 +1,6 @@
 package com.mechjacktv.mechjackbot;
 
-import static com.mechjacktv.mechjackbot.ChatCommandUtils.DEFAULT_COMMAND_COOL_DOWN;
-import static com.mechjacktv.mechjackbot.ChatCommandUtils.DEFAULT_USAGE_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.ChatCommandUtils.DEFAULT_USER_COOL_DOWN;
-import static com.mechjacktv.mechjackbot.ChatCommandUtils.KEY_COMMAND_COOL_DOWN;
-import static com.mechjacktv.mechjackbot.ChatCommandUtils.KEY_USAGE_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.ChatCommandUtils.KEY_USER_COOL_DOWN;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.Mockito.mock;
-
 import java.util.concurrent.TimeUnit;
-
-import org.junit.Rule;
-import org.junit.Test;
 
 import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.ConfigurationTestModule;
@@ -23,6 +10,19 @@ import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 import com.mechjacktv.mechjackbot.command.CommandTestModule;
 import com.mechjacktv.testframework.TestFrameworkRule;
 import com.mechjacktv.util.UtilTestModule;
+
+import org.junit.Rule;
+import org.junit.Test;
+
+import static com.mechjacktv.mechjackbot.ChatCommandUtils.DEFAULT_COMMAND_COOL_DOWN;
+import static com.mechjacktv.mechjackbot.ChatCommandUtils.DEFAULT_USAGE_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.ChatCommandUtils.DEFAULT_USER_COOL_DOWN;
+import static com.mechjacktv.mechjackbot.ChatCommandUtils.KEY_COMMAND_COOL_DOWN;
+import static com.mechjacktv.mechjackbot.ChatCommandUtils.KEY_USAGE_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.ChatCommandUtils.KEY_USER_COOL_DOWN;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.Mockito.mock;
 
 public abstract class ChatCommandUtilsContractTests {
 
@@ -483,13 +483,13 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatMessage result = subjectUnderTest.createUsageMessage(chatCommand, messageEvent);
 
     assertThat(result).isEqualTo(ChatMessage.of(String.format(this.getUsageMessageFormatDefault(),
-        messageEvent.getChatUser().getTwitchLogin(), chatCommand.getTrigger(), chatCommand.getUsage())));
+        chatCommand.getUsage())));
   }
 
   @Test
   public final void createUsageMessage_customUsageMessageFormatConfigured_resultIsCustomUsageMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + "%s %s %s";
+    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + "$(user) $(trigger) %s";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(this.getUsageMessageFormatKey(), customMessageFormat);
     final ChatCommand chatCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
@@ -498,8 +498,103 @@ public abstract class ChatCommandUtilsContractTests {
 
     final ChatMessage result = subjectUnderTest.createUsageMessage(chatCommand, messageEvent);
 
-    assertThat(result).isEqualTo(ChatMessage.of(String.format(customMessageFormat,
-        messageEvent.getChatUser().getTwitchLogin(), chatCommand.getTrigger(), chatCommand.getUsage())));
+    assertThat(result).isEqualTo(ChatMessage.of(String.format(customMessageFormat, chatCommand.getUsage())));
+  }
+
+  @Test
+  public final void replaceChatMessageVariables_nullCommand_throwsNullPointerException() {
+    this.installModules();
+    final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
+
+    final Throwable thrown = catchThrowable(
+        () -> subjectUnderTest.replaceChatMessageVariables(null, mock(ChatMessageEvent.class),
+            ChatMessage.of(this.testFrameworkRule.getArbitraryString())));
+
+    this.testFrameworkRule.assertNullPointerException(thrown, "chatCommand");
+  }
+
+  @Test
+  public final void replaceChatMessageVariables_nullMessageEvent_throwsNullPointerException() {
+    this.installModules();
+    final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
+
+    final Throwable thrown = catchThrowable(
+        () -> subjectUnderTest.replaceChatMessageVariables(mock(ChatCommand.class), null,
+            ChatMessage.of(this.testFrameworkRule.getArbitraryString())));
+
+    this.testFrameworkRule.assertNullPointerException(thrown, "chatMessageEvent");
+  }
+
+  @Test
+  public final void replaceChatMessageVariables_nullChatMessage_throwsNullPointerException() {
+    this.installModules();
+    final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
+
+    final Throwable thrown = catchThrowable(
+        () -> subjectUnderTest.replaceChatMessageVariables(mock(ChatCommand.class), mock(ChatMessageEvent.class),
+            null));
+
+    this.testFrameworkRule.assertNullPointerException(thrown, "chatMessage");
+  }
+
+  @Test
+  public final void replaceChatMessageVariables_noVariablePresent_resultIsUnchangedMessage() {
+    this.installModules();
+    final ChatCommand chatCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
+    final ChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
+    final ChatMessage chatMessage = ChatMessage.of(this.testFrameworkRule.getArbitraryString());
+    final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
+
+    final ChatMessage result = subjectUnderTest.replaceChatMessageVariables(chatCommand, messageEvent, chatMessage);
+
+    assertThat(result).isEqualTo(chatMessage);
+  }
+
+  @Test
+  public final void replaceChatMessageVariables_triggerVariablePresent_resultIsTriggerVariableReplaced() {
+    this.installModules();
+    final String messageFormat = this.testFrameworkRule.getArbitraryString() + " %s";
+    final ChatCommand chatCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
+    final ChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
+    final String chatMessageBase = this.testFrameworkRule.getArbitraryString();
+    final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
+
+    final ChatMessage result = subjectUnderTest.replaceChatMessageVariables(chatCommand, messageEvent,
+        ChatMessage.of(String.format(messageFormat, "$(trigger)")));
+
+    assertThat(result).isEqualTo(ChatMessage.of(String.format(messageFormat, chatCommand.getTrigger())));
+  }
+
+  @Test
+  public final void replaceChatMessageVariables_userVariablePresent_resultIsUserVariableReplaced() {
+    this.installModules();
+    final String messageFormat = this.testFrameworkRule.getArbitraryString() + " %s";
+    final ChatCommand chatCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
+    final ChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
+    final String chatMessageBase = this.testFrameworkRule.getArbitraryString();
+    final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
+
+    final ChatMessage result = subjectUnderTest.replaceChatMessageVariables(chatCommand, messageEvent,
+        ChatMessage.of(String.format(messageFormat, "$(user)")));
+
+    assertThat(result).isEqualTo(ChatMessage.of(String.format(messageFormat,
+        messageEvent.getChatUser().getTwitchLogin())));
+  }
+
+  @Test
+  public final void replaceChatMessageVariables_multipleVariablesPresent_resultIsAllVariablesReplaced() {
+    this.installModules();
+    final String messageFormat = this.testFrameworkRule.getArbitraryString() + " %s %s";
+    final ChatCommand chatCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
+    final ChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
+    final String chatMessageBase = this.testFrameworkRule.getArbitraryString();
+    final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
+
+    final ChatMessage result = subjectUnderTest.replaceChatMessageVariables(chatCommand, messageEvent,
+        ChatMessage.of(String.format(messageFormat, "$(trigger)", "$(user)")));
+
+    assertThat(result).isEqualTo(ChatMessage.of(String.format(messageFormat, chatCommand.getTrigger(),
+        messageEvent.getChatUser().getTwitchLogin())));
   }
 
   @Test

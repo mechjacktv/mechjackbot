@@ -27,7 +27,8 @@ public class CommandTestModule extends AbstractModule {
     this.bind(ChatMessageEventHandler.class).toInstance(mock(ChatMessageEventHandler.class));
 
     this.bind(TestChatCommand.class);
-    Multibinder.newSetBinder(this.binder(), ChatCommand.class).addBinding().to(TestChatCommand.class);
+    Multibinder.newSetBinder(this.binder(), ChatCommand.class).addBinding().to(TestChatCommand.class)
+        .in(Scopes.SINGLETON);
 
   }
 

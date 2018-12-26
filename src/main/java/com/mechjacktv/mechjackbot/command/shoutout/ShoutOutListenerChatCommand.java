@@ -15,8 +15,8 @@ public final class ShoutOutListenerChatCommand extends BaseChatCommand {
 
   public static final String DEFAULT_DESCRIPTION = "Monitors chat looking for casters who are due for a shout out.";
   public static final String DEFAULT_FREQUENCY = "1";
-  public static final String DEFAULT_MESSAGE_FORMAT = "Fellow streamer in the stream! Everyone, please give a warm "
-      + "welcome to @%1$s. It would be great if you checked them out and gave them a follow. https://twitch.tv/%1$s";
+  public static final String DEFAULT_MESSAGE_FORMAT = "Fellow streamer in chat! Everyone, please give a warm welcome "
+    + "to @$(user). It would be great if you checked them out and gave them a follow. https://twitch.tv/$(user)";
   public static final String KEY_FREQUENCY = "frequency.hours";
 
   private final Configuration configuration;

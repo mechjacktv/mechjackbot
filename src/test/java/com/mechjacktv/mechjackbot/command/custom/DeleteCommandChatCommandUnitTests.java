@@ -82,7 +82,8 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
     final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
-    assertThat(result).isEqualTo(commandUtils.createUsageMessage(subjectUnderTest, messageEvent));
+    assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
+        commandUtils.createUsageMessage(subjectUnderTest, messageEvent)));
   }
 
   @Test
@@ -96,8 +97,9 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    assertThat(result).isEqualTo(ChatMessage.of(String.format(DEFAULT_NOT_CUSTOM_COMMAND_MESSAGE_FORMAT,
-        messageEvent.getChatUser().getTwitchLogin(), trigger)));
+    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
+        ChatMessage.of(String.format(DEFAULT_NOT_CUSTOM_COMMAND_MESSAGE_FORMAT, trigger))));
   }
 
   @Test
@@ -114,8 +116,9 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    assertThat(result).isEqualTo(ChatMessage.of(String.format(customMessageFormat,
-        messageEvent.getChatUser().getTwitchLogin(), trigger)));
+    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
+        ChatMessage.of(String.format(customMessageFormat, trigger))));
   }
 
   @Test
@@ -132,14 +135,15 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    assertThat(result).isEqualTo(ChatMessage.of(String.format(this.getMessageFormatDefault().value,
-        messageEvent.getChatUser().getTwitchLogin(), trigger)));
+    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
+        ChatMessage.of(String.format(this.getMessageFormatDefault().value, trigger))));
   }
 
   @Test
   public final void handleMessageEvent_existingCustomCommandWithCustomMessage_resultIsCustomMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + " %2$s";
+    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + " %s";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
     final String trigger = this.testFrameworkRule.getArbitraryString();
@@ -153,8 +157,9 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    assertThat(result).isEqualTo(ChatMessage.of(String.format(customMessageFormat,
-        messageEvent.getChatUser().getTwitchLogin(), trigger)));
+    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
+        ChatMessage.of(String.format(customMessageFormat, trigger))));
   }
 
 }

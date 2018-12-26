@@ -1,13 +1,13 @@
 package com.mechjacktv.mechjackbot.command;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import javax.inject.Inject;
 
 import com.mechjacktv.mechjackbot.ChatCommand;
 import com.mechjacktv.mechjackbot.ChatCommandUtils;
 import com.mechjacktv.mechjackbot.ChatMessage;
 import com.mechjacktv.mechjackbot.ChatMessageEvent;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CommandAssertionsUtils {
 
@@ -20,6 +20,10 @@ public class CommandAssertionsUtils {
 
   public final void assertUsageMessageForCommand(final ChatMessage result, final ChatCommand subjectUnderTest,
       final ChatMessageEvent chatMessageEvent) {
-    assertThat(result).isEqualTo(this.chatCommandUtils.createUsageMessage(subjectUnderTest, chatMessageEvent));
+    final ChatMessage usageMessage = this.chatCommandUtils.createUsageMessage(subjectUnderTest, chatMessageEvent);
+
+    assertThat(result).isEqualTo(this.chatCommandUtils.replaceChatMessageVariables(subjectUnderTest, chatMessageEvent,
+        usageMessage));
   }
+
 }

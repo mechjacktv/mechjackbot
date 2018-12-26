@@ -13,7 +13,7 @@ import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 public final class CommandsChatCommand extends BaseChatCommand {
 
   public static final String DEFAULT_DESCRIPTION = "Lists all the commands available to users.";
-  public static final String DEFAULT_MESSAGE_FORMAT = "Commands: %2$s";
+  public static final String DEFAULT_MESSAGE_FORMAT = "Commands: %s";
   public static final String DEFAULT_TRIGGER = "!commands";
 
   private final ChatCommandRegistry chatCommandRegistry;

@@ -1,18 +1,9 @@
 package com.mechjacktv.mechjackbot.command.core;
 
-import static com.mechjacktv.mechjackbot.command.core.CommandsChatCommand.DEFAULT_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.command.core.CommandsChatCommand.DEFAULT_TRIGGER;
-import static com.mechjacktv.mechjackbot.command.core.CommandsChatCommand.KEY_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.command.core.CommandsChatCommand.KEY_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.core.CommandsChatCommand.KEY_TRIGGER;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import org.junit.Test;
 
 import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.MapConfiguration;
@@ -27,6 +18,15 @@ import com.mechjacktv.mechjackbot.TestCommandConfigurationBuilder;
 import com.mechjacktv.mechjackbot.command.BaseChatCommandContractTests;
 import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
+
+import org.junit.Test;
+
+import static com.mechjacktv.mechjackbot.command.core.CommandsChatCommand.DEFAULT_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.core.CommandsChatCommand.DEFAULT_TRIGGER;
+import static com.mechjacktv.mechjackbot.command.core.CommandsChatCommand.KEY_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.core.CommandsChatCommand.KEY_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.core.CommandsChatCommand.KEY_TRIGGER;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CommandsChatCommandUnitTests extends BaseChatCommandContractTests {
 
@@ -87,15 +87,13 @@ public class CommandsChatCommandUnitTests extends BaseChatCommandContractTests {
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
     assertThat(result).isEqualTo(ChatMessage.of(String.format(this.getMessageFormatDefault().value,
-        messageEvent.getChatUser().getTwitchLogin(), chatCommands
-            .stream().map(command -> command.getTrigger().value)
-            .sorted().collect(Collectors.joining(" ")))));
+        chatCommands.stream().map(command -> command.getTrigger().value).sorted().collect(Collectors.joining(" ")))));
   }
 
   @Test
   public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + ": %2$s %1$s";
+    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + ": %s";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
     final Set<ChatCommand> chatCommands = this.givenASetOfCommands();
@@ -108,9 +106,10 @@ public class CommandsChatCommandUnitTests extends BaseChatCommandContractTests {
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
     assertThat(result).isEqualTo(ChatMessage.of(String.format(customMessageFormat,
-        messageEvent.getChatUser().getTwitchLogin(), chatCommands
-            .stream().map(command -> command.getTrigger().value)
-            .sorted().collect(Collectors.joining(" ")))));
+        chatCommands.stream()
+            .map(command -> command.getTrigger().value)
+            .sorted()
+            .collect(Collectors.joining(" ")))));
   }
 
   @Test
@@ -128,13 +127,11 @@ public class CommandsChatCommandUnitTests extends BaseChatCommandContractTests {
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    System.out.println(chatCommands
-        .stream().map(command -> command.getTrigger().value)
-        .sorted().collect(Collectors.joining(" ")));
     assertThat(result).isEqualTo(ChatMessage.of(String.format(this.getMessageFormatDefault().value,
-        messageEvent.getChatUser().getTwitchLogin(), chatCommands
-            .stream().map(command -> command.getTrigger().value)
-            .sorted().collect(Collectors.joining(" ")))));
+        chatCommands.stream()
+            .map(command -> command.getTrigger().value)
+            .sorted()
+            .collect(Collectors.joining(" ")))));
   }
 
 }
