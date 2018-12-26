@@ -1,5 +1,15 @@
 package com.mechjacktv.mechjackbot.command.custom;
 
+import static com.mechjacktv.mechjackbot.command.BaseChatCommand.KEY_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.BaseChatCommand.KEY_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.BaseChatCommand.KEY_TRIGGER;
+import static com.mechjacktv.mechjackbot.command.custom.DeleteCommandChatCommand.DEFAULT_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.custom.DeleteCommandChatCommand.DEFAULT_NOT_CUSTOM_COMMAND_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.custom.DeleteCommandChatCommand.KEY_NOT_CUSTOM_COMMAND_MESSAGE_FORMAT;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.Test;
+
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.ConfigurationTestModule;
@@ -14,16 +24,6 @@ import com.mechjacktv.mechjackbot.UserRole;
 import com.mechjacktv.mechjackbot.command.BaseChatCommandContractTests;
 import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
-
-import org.junit.Test;
-
-import static com.mechjacktv.mechjackbot.command.BaseChatCommand.KEY_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.command.BaseChatCommand.KEY_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.BaseChatCommand.KEY_TRIGGER;
-import static com.mechjacktv.mechjackbot.command.custom.DeleteCommandChatCommand.DEFAULT_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.custom.DeleteCommandChatCommand.DEFAULT_NOT_CUSTOM_COMMAND_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.custom.DeleteCommandChatCommand.KEY_NOT_CUSTOM_COMMAND_MESSAGE_FORMAT;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTests {
 

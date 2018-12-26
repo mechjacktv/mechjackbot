@@ -7,15 +7,15 @@ import java.util.function.Function;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mechjacktv.mechjackbot.ChatCommand;
 import com.mechjacktv.mechjackbot.ChatCommandRegistry;
 import com.mechjacktv.mechjackbot.ChatCommandUtils;
 import com.mechjacktv.mechjackbot.ChatMessage;
 import com.mechjacktv.mechjackbot.ChatMessageEvent;
 import com.mechjacktv.mechjackbot.ChatMessageEventHandler;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class DefaultChatMessageEventHandler implements ChatMessageEventHandler {
 

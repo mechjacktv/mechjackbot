@@ -1,5 +1,17 @@
 package com.mechjacktv.mechjackbot.command.core;
 
+import static com.mechjacktv.mechjackbot.command.core.HelpChatCommand.DEFAULT_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.core.HelpChatCommand.DEFAULT_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.core.HelpChatCommand.DEFAULT_MISSING_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.core.HelpChatCommand.DEFAULT_TRIGGER;
+import static com.mechjacktv.mechjackbot.command.core.HelpChatCommand.KEY_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.core.HelpChatCommand.KEY_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.core.HelpChatCommand.KEY_MISSING_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.core.HelpChatCommand.KEY_TRIGGER;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.Test;
+
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.MapConfiguration;
@@ -13,18 +25,6 @@ import com.mechjacktv.mechjackbot.TestChatMessageEvent;
 import com.mechjacktv.mechjackbot.command.BaseChatCommandContractTests;
 import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
-
-import org.junit.Test;
-
-import static com.mechjacktv.mechjackbot.command.core.HelpChatCommand.DEFAULT_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.command.core.HelpChatCommand.DEFAULT_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.core.HelpChatCommand.DEFAULT_MISSING_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.core.HelpChatCommand.DEFAULT_TRIGGER;
-import static com.mechjacktv.mechjackbot.command.core.HelpChatCommand.KEY_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.command.core.HelpChatCommand.KEY_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.core.HelpChatCommand.KEY_MISSING_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.core.HelpChatCommand.KEY_TRIGGER;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
 
@@ -161,7 +161,6 @@ public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-
     final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
     assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(command, messageEvent,
         ChatMessage.of(String.format(customMessageFormat, command.getTrigger()))));
@@ -181,7 +180,6 @@ public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
 
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
-
 
     final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
     assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(command, messageEvent,

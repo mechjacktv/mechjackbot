@@ -1,5 +1,15 @@
 package com.mechjacktv.mechjackbot.command.core;
 
+import static com.mechjacktv.mechjackbot.command.core.PingChatCommand.DEFAULT_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.core.PingChatCommand.DEFAULT_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.core.PingChatCommand.DEFAULT_TRIGGER;
+import static com.mechjacktv.mechjackbot.command.core.PingChatCommand.KEY_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.core.PingChatCommand.KEY_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.core.PingChatCommand.KEY_TRIGGER;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.Test;
+
 import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.mechjackbot.ChatCommandDescription;
@@ -10,16 +20,6 @@ import com.mechjacktv.mechjackbot.TestChatMessageEvent;
 import com.mechjacktv.mechjackbot.command.BaseChatCommandContractTests;
 import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
-
-import org.junit.Test;
-
-import static com.mechjacktv.mechjackbot.command.core.PingChatCommand.DEFAULT_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.command.core.PingChatCommand.DEFAULT_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.core.PingChatCommand.DEFAULT_TRIGGER;
-import static com.mechjacktv.mechjackbot.command.core.PingChatCommand.KEY_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.command.core.PingChatCommand.KEY_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.core.PingChatCommand.KEY_TRIGGER;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class PingChatCommandUnitTests extends BaseChatCommandContractTests {
 

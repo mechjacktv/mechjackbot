@@ -1,5 +1,12 @@
 package com.mechjacktv.mechjackbot.command.custom;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.mechjacktv.mechjackbot.ChatCommand;
 import com.mechjacktv.mechjackbot.ChatCommandDescription;
 import com.mechjacktv.mechjackbot.ChatCommandName;
@@ -12,11 +19,14 @@ import com.mechjacktv.mechjackbot.UserRole;
 
 public class CustomChatCommand implements ChatCommand {
 
+  public static final Pattern PATTERN_ARGUMENT = Pattern.compile("\\$\\{([\\w\\d-_]+)}");
+
   private final ChatCommandUtils chatCommandUtils;
   private final ChatCommandTrigger trigger;
   private final ChatCommandDescription description;
   private final ChatCommandUsage usage;
   private final CommandBody commandBody;
+  private final List<String> argumentNames;
   private final UserRole userRole;
 
   protected CustomChatCommand(final ChatCommandUtils chatCommandUtils, final ChatCommandTrigger trigger,
@@ -24,9 +34,33 @@ public class CustomChatCommand implements ChatCommand {
     this.chatCommandUtils = chatCommandUtils;
     this.trigger = trigger;
     this.description = ChatCommandDescription.of("This is a custom command.");
-    this.usage = ChatCommandUsage.of(String.format("%s %s", this.getTrigger(), "[<argument>...]"));
     this.commandBody = commandBody;
+    this.argumentNames = this.getArgumentNames(this.commandBody);
+    this.usage = this.createUsage(this.commandBody);
     this.userRole = userRole;
+  }
+
+  private List<String> getArgumentNames(final CommandBody commandBody) {
+    final List<String> arguments = new ArrayList<>();
+    final Matcher matcher = PATTERN_ARGUMENT.matcher(commandBody.value);
+
+    while (matcher.find()) {
+      final String match = matcher.group(1);
+
+      if (!arguments.contains(match)) {
+        arguments.add(match);
+      }
+    }
+    return arguments;
+  }
+
+  private ChatCommandUsage createUsage(final CommandBody commandBody) {
+    final StringBuilder builder = new StringBuilder();
+
+    for (final String name : this.getArgumentNames(commandBody)) {
+      builder.append(String.format(" <%s>", name));
+    }
+    return ChatCommandUsage.of(builder.toString().trim());
   }
 
   @Override
@@ -65,13 +99,31 @@ public class CustomChatCommand implements ChatCommand {
   @Override
   public void handleMessageEvent(final ChatMessageEvent chatMessageEvent) {
     final ChatMessage cleanChatMessage = this.chatCommandUtils.stripTriggerFromMessage(this, chatMessageEvent);
-    final String[] args = cleanChatMessage.value.split("\\s+");
+    final String[] arguments = cleanChatMessage.value.split("\\s+");
+    final Map<String, String> argReplacements = new HashMap<>();
 
-    final String responseBody = String.format(this.commandBody.value, (Object[]) args);
+    if (this.argumentNames.size() > 0 && ("".equals(cleanChatMessage.value.trim())
+        || this.argumentNames.size() > arguments.length)) {
+      final ChatMessage usageMessage = this.chatCommandUtils.createUsageMessage(this, chatMessageEvent);
 
-    // TODO (2018-12-25 mechjack): replace {n} with %n$s
+      chatMessageEvent.sendResponse(this.chatCommandUtils.replaceChatMessageVariables(this, chatMessageEvent,
+          usageMessage));
+      return;
+    }
+    for (int i = 0; i < this.argumentNames.size(); i++) {
+      argReplacements.put(String.format("${%s}", this.argumentNames.get(i)), arguments[i]);
+    }
     chatMessageEvent.sendResponse(this.chatCommandUtils.replaceChatMessageVariables(this, chatMessageEvent,
-        ChatMessage.of(responseBody)));
+        ChatMessage.of(this.replaceArguments(this.commandBody, argReplacements))));
+  }
+
+  private String replaceArguments(final CommandBody commandBody, final Map<String, String> replacements) {
+    String messageBody = commandBody.value;
+
+    for (final String key : replacements.keySet()) {
+      messageBody = messageBody.replace(key, replacements.get(key));
+    }
+    return messageBody;
   }
 
 }

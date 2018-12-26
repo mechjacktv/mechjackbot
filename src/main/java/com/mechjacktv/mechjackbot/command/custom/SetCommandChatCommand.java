@@ -7,6 +7,11 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import com.google.common.collect.Sets;
+
+import picocli.CommandLine.Model.OptionSpec;
+import picocli.CommandLine.Model.PositionalParamSpec;
+import picocli.CommandLine.ParseResult;
+
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.mechjackbot.ChatCommandTrigger;
@@ -17,10 +22,6 @@ import com.mechjacktv.mechjackbot.command.BaseChatCommand;
 import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
 import com.mechjacktv.mechjackbot.command.PicoCliUtil;
-
-import picocli.CommandLine.Model.OptionSpec;
-import picocli.CommandLine.Model.PositionalParamSpec;
-import picocli.CommandLine.ParseResult;
 
 public class SetCommandChatCommand extends BaseChatCommand {
 

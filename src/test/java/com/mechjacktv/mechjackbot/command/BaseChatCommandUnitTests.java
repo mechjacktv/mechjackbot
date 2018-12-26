@@ -1,6 +1,20 @@
 package com.mechjacktv.mechjackbot.command;
 
+import static com.mechjacktv.mechjackbot.TestChatCommand.DEFAULT_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.TestChatCommand.DEFAULT_TRIGGER;
+import static com.mechjacktv.mechjackbot.TestChatCommand.KEY_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.TestChatCommand.KEY_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.TestChatCommand.KEY_TRIGGER;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
 import com.google.common.collect.Sets;
+
+import org.junit.Test;
+
+import picocli.CommandLine.Model.OptionSpec;
+import picocli.CommandLine.Model.PositionalParamSpec;
+
 import com.mechjacktv.configuration.ConfigurationKey;
 import com.mechjacktv.configuration.MapConfiguration;
 import com.mechjacktv.mechjackbot.ChatCommandDescription;
@@ -9,19 +23,6 @@ import com.mechjacktv.mechjackbot.ChatMessage;
 import com.mechjacktv.mechjackbot.TestChatCommand;
 import com.mechjacktv.mechjackbot.TestChatMessageEvent;
 import com.mechjacktv.mechjackbot.TestCommandConfigurationBuilder;
-
-import org.junit.Test;
-
-import picocli.CommandLine.Model.OptionSpec;
-import picocli.CommandLine.Model.PositionalParamSpec;
-
-import static com.mechjacktv.mechjackbot.TestChatCommand.DEFAULT_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.TestChatCommand.DEFAULT_TRIGGER;
-import static com.mechjacktv.mechjackbot.TestChatCommand.KEY_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.TestChatCommand.KEY_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.TestChatCommand.KEY_TRIGGER;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
 

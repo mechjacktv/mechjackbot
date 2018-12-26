@@ -1,7 +1,19 @@
 package com.mechjacktv.mechjackbot.command.shoutout;
 
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.DEFAULT_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.DEFAULT_FREQUENCY;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.DEFAULT_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_FREQUENCY;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_TRIGGER;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+
+import org.assertj.core.api.Condition;
+import org.junit.Test;
 
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.ConfigurationKey;
@@ -23,18 +35,6 @@ import com.mechjacktv.twitchclient.TwitchClientTestModule;
 import com.mechjacktv.util.TestTimeUtils;
 import com.mechjacktv.util.TimeUtils;
 import com.mechjacktv.util.scheduleservice.ScheduleServiceTestModule;
-
-import org.assertj.core.api.Condition;
-import org.junit.Test;
-
-import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.DEFAULT_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.DEFAULT_FREQUENCY;
-import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.DEFAULT_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_FREQUENCY;
-import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_TRIGGER;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandContractTests {
 

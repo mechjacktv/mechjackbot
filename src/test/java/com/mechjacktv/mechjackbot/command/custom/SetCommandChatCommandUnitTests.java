@@ -1,6 +1,18 @@
 package com.mechjacktv.mechjackbot.command.custom;
 
+import static com.mechjacktv.mechjackbot.command.BaseChatCommand.KEY_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.BaseChatCommand.KEY_TRIGGER;
+import static com.mechjacktv.mechjackbot.command.custom.SetCommandChatCommand.DEFAULT_BODY_REQUIRED_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.custom.SetCommandChatCommand.DEFAULT_DESCRIPTION;
+import static com.mechjacktv.mechjackbot.command.custom.SetCommandChatCommand.DEFAULT_MESSAGE_FORMAT;
+import static com.mechjacktv.mechjackbot.command.custom.SetCommandChatCommand.DEFAULT_TRIGGER;
+import static com.mechjacktv.mechjackbot.command.custom.SetCommandChatCommand.KEY_BODY_REQUIRED_MESSAGE_FORMAT;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Optional;
+
+import org.assertj.core.api.Condition;
+import org.junit.Test;
 
 import com.mechjacktv.configuration.Configuration;
 import com.mechjacktv.configuration.ConfigurationKey;
@@ -17,18 +29,6 @@ import com.mechjacktv.mechjackbot.UserRole;
 import com.mechjacktv.mechjackbot.command.BaseChatCommandContractTests;
 import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 import com.mechjacktv.proto.mechjackbot.command.custom.CustomComandDataStoreMessage.CustomCommand;
-
-import org.assertj.core.api.Condition;
-import org.junit.Test;
-
-import static com.mechjacktv.mechjackbot.command.BaseChatCommand.KEY_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.command.BaseChatCommand.KEY_TRIGGER;
-import static com.mechjacktv.mechjackbot.command.custom.SetCommandChatCommand.DEFAULT_BODY_REQUIRED_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.custom.SetCommandChatCommand.DEFAULT_DESCRIPTION;
-import static com.mechjacktv.mechjackbot.command.custom.SetCommandChatCommand.DEFAULT_MESSAGE_FORMAT;
-import static com.mechjacktv.mechjackbot.command.custom.SetCommandChatCommand.DEFAULT_TRIGGER;
-import static com.mechjacktv.mechjackbot.command.custom.SetCommandChatCommand.KEY_BODY_REQUIRED_MESSAGE_FORMAT;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests {
 
