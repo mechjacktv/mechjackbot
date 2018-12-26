@@ -28,7 +28,8 @@ public class SetCommandChatCommand extends BaseChatCommand {
   public static final String DEFAULT_MESSAGE_FORMAT = "Command set, %2$s";
   public static final String DEFAULT_BODY_REQUIRED_MESSAGE_FORMAT = "%2$s failed: body required";
   public static final String DEFAULT_TRIGGER = "!setcommand";
-  public static final String KEY_BODY_REQUIRED_MESSAGE_FORMAT = "body_required_message_format";
+  public static final ConfigurationKey KEY_BODY_REQUIRED_MESSAGE_FORMAT = ConfigurationKey
+      .of("body_required_message_format", SetCommandChatCommand.class);
   public static final String USAGE = String.format("<trigger> [(-u|--user-role)=(%s)] [<body>]",
       Arrays.stream(UserRole.values()).map(Object::toString).collect(Collectors.joining("|")));
 
@@ -38,7 +39,6 @@ public class SetCommandChatCommand extends BaseChatCommand {
 
   private final Configuration configuration;
   private final CustomChatCommandService customChatCommandService;
-  private final ConfigurationKey bodyRequiredMessageFormatKey;
 
   @Inject
   protected SetCommandChatCommand(
@@ -50,7 +50,6 @@ public class SetCommandChatCommand extends BaseChatCommand {
         .setUsage(USAGE));
     this.configuration = configuration;
     this.customChatCommandService = customChatCommandService;
-    this.bodyRequiredMessageFormatKey = ConfigurationKey.of(KEY_BODY_REQUIRED_MESSAGE_FORMAT, this.getClass());
   }
 
   @Override
@@ -86,7 +85,7 @@ public class SetCommandChatCommand extends BaseChatCommand {
 
   private UserRole handleUserRoleOption(final OptionSpec option, final ParseResult parseResult) {
     if (parseResult.hasMatchedOption(option)) {
-        return UserRole.valueOf(option.getValue());
+      return UserRole.valueOf(option.getValue());
     }
     return null;
   }
@@ -101,7 +100,7 @@ public class SetCommandChatCommand extends BaseChatCommand {
   }
 
   private CommandMessageFormat getBodyRequiredMessageFormat() {
-    return CommandMessageFormat.of(this.configuration.get(this.bodyRequiredMessageFormatKey,
+    return CommandMessageFormat.of(this.configuration.get(KEY_BODY_REQUIRED_MESSAGE_FORMAT,
         DEFAULT_BODY_REQUIRED_MESSAGE_FORMAT));
   }
 

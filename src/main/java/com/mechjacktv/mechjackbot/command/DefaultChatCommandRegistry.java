@@ -43,7 +43,7 @@ public final class DefaultChatCommandRegistry implements ChatCommandRegistry {
   @Override
   public final void addCommand(final ChatCommand chatCommand) {
     Objects.requireNonNull(chatCommand, this.executionUtils.nullMessageForName("chatCommand"));
-    if (this.commands.containsKey(chatCommand.getTrigger())) {
+    if (this.hasCommand(chatCommand.getTrigger())) {
       log.warn(String.format("ChatCommand, %s, with trigger, %s, was already registered. Replacing with %s",
           this.commands.get(chatCommand.getTrigger()).getName(), chatCommand.getTrigger(), chatCommand.getName()));
     }
@@ -60,7 +60,13 @@ public final class DefaultChatCommandRegistry implements ChatCommandRegistry {
   @Override
   public boolean removeCommand(final ChatCommandTrigger trigger) {
     Objects.requireNonNull(trigger, this.executionUtils.nullMessageForName("trigger"));
-    return this.commands.remove(trigger) != null;
+    final ChatCommand chatCommand = this.commands.remove(trigger);
+    if (Objects.nonNull(chatCommand)) {
+      log.info(String.format("Removed chatCommand, %s, with trigger, %s", chatCommand.getName(),
+          chatCommand.getTrigger()));
+      return true;
+    }
+    return false;
   }
 
 }

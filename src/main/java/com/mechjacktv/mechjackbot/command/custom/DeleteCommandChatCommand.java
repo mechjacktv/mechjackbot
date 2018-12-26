@@ -18,18 +18,18 @@ public class DeleteCommandChatCommand extends BaseChatCommand {
   public static final String DEFAULT_MESSAGE_FORMAT = "Command removed, %2$s";
   public static final String DEFAULT_NOT_CUSTOM_COMMAND_MESSAGE_FORMAT = "%s, %s is not a custom command";
   public static final String DEFAULT_TRIGGER = "!delcommand";
-  public static final String KEY_NOT_CUSTOM_COMMAND_MESSAGE_FORMAT = "not_custom_command_message_format";
+  public static final ConfigurationKey KEY_NOT_CUSTOM_COMMAND_MESSAGE_FORMAT = ConfigurationKey
+      .of("not_custom_command_message_format", DeleteCommandChatCommand.class);
   public static final String USAGE = "<trigger>";
 
   private final Configuration configuration;
   private final ChatCommandUtils chatCommandUtils;
   private final CustomChatCommandService customChatCommandService;
-  private final ConfigurationKey notCustomCommandMessageFormatKey;
 
   @Inject
-  protected DeleteCommandChatCommand(final Configuration configuration,
-      final CommandConfigurationBuilder commandConfigurationBuilder,
-      final ChatCommandUtils chatCommandUtils, final CustomChatCommandService customChatCommandService) {
+  protected DeleteCommandChatCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
+      final Configuration configuration, final ChatCommandUtils chatCommandUtils,
+      final CustomChatCommandService customChatCommandService) {
     super(commandConfigurationBuilder.setTrigger(DEFAULT_TRIGGER)
         .setDescription(DEFAULT_DESCRIPTION)
         .setMessageFormat(DEFAULT_MESSAGE_FORMAT)
@@ -37,7 +37,6 @@ public class DeleteCommandChatCommand extends BaseChatCommand {
     this.configuration = configuration;
     this.chatCommandUtils = chatCommandUtils;
     this.customChatCommandService = customChatCommandService;
-    this.notCustomCommandMessageFormatKey = ConfigurationKey.of(KEY_NOT_CUSTOM_COMMAND_MESSAGE_FORMAT, this.getClass());
   }
 
   @Override
@@ -56,7 +55,7 @@ public class DeleteCommandChatCommand extends BaseChatCommand {
   }
 
   private CommandMessageFormat getNotCustomCommandMessageFormat() {
-    return CommandMessageFormat.of(this.configuration.get(this.notCustomCommandMessageFormatKey,
+    return CommandMessageFormat.of(this.configuration.get(KEY_NOT_CUSTOM_COMMAND_MESSAGE_FORMAT,
         DEFAULT_NOT_CUSTOM_COMMAND_MESSAGE_FORMAT));
   }
 

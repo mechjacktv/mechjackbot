@@ -86,7 +86,7 @@ public final class DefaultCustomChatCommandService implements CustomChatCommandS
     Objects.requireNonNull(trigger, this.executionUtils.nullMessageForName("trigger"));
 
     if (Objects.isNull(userRole) && Objects.isNull(commandBody)) {
-      LOGGER.info("No updates needed for custom chat command, " + trigger);
+      LOGGER.debug("No updates needed for custom chat command, " + trigger);
       return;
     }
 

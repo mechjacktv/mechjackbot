@@ -103,7 +103,7 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
     final TestChatUser chatUser = (TestChatUser) chatMessageEvent.getChatUser();
     chatUser.setTwitchLogin(chatBotConfiguration.getTwitchLogin());
-    chatUser.setAccessLevelCheck(accessLevel -> true);
+    chatUser.setHasUserRoleHandler(accessLevel -> true);
     final ChatCommand chatCommand = new RequiresAccessLevelSubscriberChatCommand(
         this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class));
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
@@ -120,7 +120,7 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
     final TestChatUser chatUser = (TestChatUser) chatMessageEvent.getChatUser();
     // chatUser is SUBSCRIBER
-    chatUser.setAccessLevelCheck(accessLevel -> UserRole.SUBSCRIBER.value() <= accessLevel.value());
+    chatUser.setHasUserRoleHandler(accessLevel -> UserRole.SUBSCRIBER.value() <= accessLevel.value());
     final ChatCommand chatCommand = new RequiresAccessLevelSubscriberChatCommand(
         this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class));
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
@@ -136,7 +136,7 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatBotConfiguration chatBotConfiguration = this.testFrameworkRule.getInstance(ChatBotConfiguration.class);
     final ChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
     final TestChatUser chatUser = (TestChatUser) chatMessageEvent.getChatUser();
-    chatUser.setAccessLevelCheck(accessLevel -> UserRole.VIEWER.value() <= accessLevel.value());
+    chatUser.setHasUserRoleHandler(accessLevel -> UserRole.VIEWER.value() <= accessLevel.value());
     final ChatCommand chatCommand = new RequiresAccessLevelSubscriberChatCommand(
         this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class));
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
@@ -304,7 +304,7 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
     final TestChatUser chatUser = (TestChatUser) chatMessageEvent.getChatUser();
     // chatUser is MODERATOR
-    chatUser.setAccessLevelCheck(accessLevel -> UserRole.MODERATOR.value() >= accessLevel.value());
+    chatUser.setHasUserRoleHandler(accessLevel -> UserRole.MODERATOR.value() >= accessLevel.value());
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
     // set lastTrigger for chatCommand and user
     subjectUnderTest.isCooledDown(chatCommand, chatMessageEvent);
