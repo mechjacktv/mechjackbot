@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package tv.mechjack.proto.mechjackbot.command.shoutout;
+
+message CasterKey {
+  string name = 1;
+}
+
+message Caster {
+  string name = 1;
+  int64 last_shout_out = 2;
+}
