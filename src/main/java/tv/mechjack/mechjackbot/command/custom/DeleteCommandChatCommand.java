@@ -2,29 +2,17 @@ package tv.mechjack.mechjackbot.command.custom;
 
 import javax.inject.Inject;
 
-<<<<<<< HEAD:src/main/java/tv/mechjack/mechjackbot/command/custom/DeleteCommandChatCommand.java
 import tv.mechjack.configuration.Configuration;
 import tv.mechjack.configuration.ConfigurationKey;
 import tv.mechjack.mechjackbot.ChatCommandTrigger;
 import tv.mechjack.mechjackbot.ChatCommandUtils;
 import tv.mechjack.mechjackbot.ChatMessage;
 import tv.mechjack.mechjackbot.ChatMessageEvent;
+import tv.mechjack.mechjackbot.RequiresUserRole;
+import tv.mechjack.mechjackbot.UserRole;
 import tv.mechjack.mechjackbot.command.BaseChatCommand;
 import tv.mechjack.mechjackbot.command.CommandConfigurationBuilder;
 import tv.mechjack.mechjackbot.command.CommandMessageFormat;
-=======
-import com.mechjacktv.configuration.Configuration;
-import com.mechjacktv.configuration.ConfigurationKey;
-import com.mechjacktv.mechjackbot.ChatCommandTrigger;
-import com.mechjacktv.mechjackbot.ChatCommandUtils;
-import com.mechjacktv.mechjackbot.ChatMessage;
-import com.mechjacktv.mechjackbot.ChatMessageEvent;
-import com.mechjacktv.mechjackbot.RequiresUserRole;
-import com.mechjacktv.mechjackbot.UserRole;
-import com.mechjacktv.mechjackbot.command.BaseChatCommand;
-import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
-import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
->>>>>>> develop:src/main/java/com/mechjacktv/mechjackbot/command/custom/DeleteCommandChatCommand.java
 
 public class DeleteCommandChatCommand extends BaseChatCommand {
 
