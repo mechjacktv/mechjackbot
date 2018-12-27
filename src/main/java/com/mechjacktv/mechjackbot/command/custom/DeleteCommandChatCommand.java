@@ -8,6 +8,8 @@ import com.mechjacktv.mechjackbot.ChatCommandTrigger;
 import com.mechjacktv.mechjackbot.ChatCommandUtils;
 import com.mechjacktv.mechjackbot.ChatMessage;
 import com.mechjacktv.mechjackbot.ChatMessageEvent;
+import com.mechjacktv.mechjackbot.RequiresUserRole;
+import com.mechjacktv.mechjackbot.UserRole;
 import com.mechjacktv.mechjackbot.command.BaseChatCommand;
 import com.mechjacktv.mechjackbot.command.CommandConfigurationBuilder;
 import com.mechjacktv.mechjackbot.command.CommandMessageFormat;
@@ -40,6 +42,7 @@ public class DeleteCommandChatCommand extends BaseChatCommand {
   }
 
   @Override
+  @RequiresUserRole(UserRole.MODERATOR)
   public void handleMessageEvent(final ChatMessageEvent chatMessageEvent) {
     final ChatMessage cleanChatMessage = this.chatCommandUtils.stripTriggerFromMessage(this, chatMessageEvent);
     final ChatCommandTrigger trigger = ChatCommandTrigger.of(cleanChatMessage.value);
