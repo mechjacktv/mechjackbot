@@ -21,8 +21,8 @@ apply plugin: 'idea'
 apply plugin: "jacoco"
 apply plugin: 'java'
 
-mainClassName = 'com.mechjacktv.mechjackbot.main.Main'
-group = 'com.mechjacktv.mechjackbot'
+mainClassName = 'tv.mechjack.mechjackbot.main.Main'
+group = 'tv.mechjack.mechjackbot'
 version = System.getenv('BUILDVER') != null ? System.getenv('BUILDVER') : "SNAPSHOT"
 
 repositories {
@@ -52,13 +52,13 @@ build.dependsOn 'jacocoTestReport', 'spotlessApply'
 jacocoTestReport {
     afterEvaluate {
         classDirectories = files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: 'com/mechjacktv/proto/**')
+            fileTree(dir: it, exclude: 'tv/mechjack/proto/**')
         })
     }
 }
 spotless {
     java {
-        importOrder 'java', 'javax', 'com', 'org', '', 'com.mechjacktv'
+        importOrder 'java', 'javax', 'com', 'org', '', 'tv.mechjack'
         eclipse().configFile rootProject.file('src/main/resource/eclipse_java_formatter_rules.xml')
         removeUnusedImports()
         trimTrailingWhitespace()
