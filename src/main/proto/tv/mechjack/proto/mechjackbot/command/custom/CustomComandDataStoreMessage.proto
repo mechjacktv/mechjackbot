@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package tv.mechjack.proto.mechjackbot.command.custom;
+
+message CustomCommandKey {
+  string trigger = 1;
+}
+
+message CustomCommand {
+  string trigger = 1;
+  string command_body = 2;
+  string access_level = 3;
+}
