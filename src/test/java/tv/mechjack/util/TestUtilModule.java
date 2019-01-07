@@ -9,7 +9,7 @@ import tv.mechjack.proto.util.UtilsMessage.TestValueMessage;
 import tv.mechjack.testframework.ArbitraryDataGenerator;
 import tv.mechjack.testframework.NullMessageForNameFactory;
 
-public class UtilTestModule extends AbstractModule {
+public class TestUtilModule extends AbstractModule {
 
   @Override
   protected void configure() {

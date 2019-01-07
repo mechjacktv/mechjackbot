@@ -23,7 +23,7 @@ public abstract class TwitchClientContractTests {
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
   protected void installModules() {
-    this.testFrameworkRule.installModule(new TwitchClientTestModule());
+    this.testFrameworkRule.installModule(new TestTwitchClientModule());
   }
 
   protected abstract TwitchClient givenASubjectToTest();

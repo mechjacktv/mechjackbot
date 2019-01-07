@@ -8,14 +8,14 @@ import org.junit.Test;
 import org.slf4j.Logger;
 
 import tv.mechjack.util.ExecutionUtils;
-import tv.mechjack.util.UtilTestModule;
+import tv.mechjack.util.TestUtilModule;
 
 public class DefaultTwitchClientUtilsUnitTests extends TwitchClientUtilsContractTests {
 
   @Override
   protected void installModules() {
     super.installModules();
-    this.testFrameworkRule.installModule(new UtilTestModule());
+    this.testFrameworkRule.installModule(new TestUtilModule());
   }
 
   @Override

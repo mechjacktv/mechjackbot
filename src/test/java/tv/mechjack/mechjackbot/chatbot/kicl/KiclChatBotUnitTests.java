@@ -10,13 +10,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.kitteh.irc.client.library.Client;
 
-import tv.mechjack.configuration.ConfigurationTestModule;
+import tv.mechjack.configuration.TestConfigurationModule;
 import tv.mechjack.configuration.MapConfiguration;
 import tv.mechjack.mechjackbot.ChatChannel;
 import tv.mechjack.mechjackbot.ChatMessage;
-import tv.mechjack.mechjackbot.command.CommandTestModule;
+import tv.mechjack.mechjackbot.command.TestCommandModule;
 import tv.mechjack.testframework.TestFrameworkRule;
-import tv.mechjack.util.UtilTestModule;
+import tv.mechjack.util.TestUtilModule;
 
 public class KiclChatBotUnitTests {
 
@@ -24,10 +24,10 @@ public class KiclChatBotUnitTests {
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
   private void installModules() {
-    this.testFrameworkRule.installModule(new CommandTestModule());
-    this.testFrameworkRule.installModule(new ConfigurationTestModule());
-    this.testFrameworkRule.installModule(new KiclChatBotTestModule());
-    this.testFrameworkRule.installModule(new UtilTestModule());
+    this.testFrameworkRule.installModule(new TestCommandModule());
+    this.testFrameworkRule.installModule(new TestConfigurationModule());
+    this.testFrameworkRule.installModule(new TestKiclChatBotModule());
+    this.testFrameworkRule.installModule(new TestUtilModule());
   }
 
   private KiclChatBot givenASubjectToTest() {

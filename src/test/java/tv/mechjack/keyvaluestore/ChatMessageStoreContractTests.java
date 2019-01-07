@@ -17,7 +17,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import tv.mechjack.testframework.TestFrameworkRule;
-import tv.mechjack.util.UtilTestModule;
+import tv.mechjack.util.TestUtilModule;
 
 public abstract class ChatMessageStoreContractTests<K extends Message, V extends Message> {
 
@@ -25,7 +25,7 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
   protected void installModules() {
-    this.testFrameworkRule.installModule(new UtilTestModule());
+    this.testFrameworkRule.installModule(new TestUtilModule());
   }
 
   protected abstract BaseMessageStore<K, V> givenASubjectToTest();

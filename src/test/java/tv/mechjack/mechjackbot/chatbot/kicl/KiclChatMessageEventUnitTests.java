@@ -11,15 +11,15 @@ import org.junit.Test;
 import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 
 import tv.mechjack.configuration.Configuration;
-import tv.mechjack.configuration.ConfigurationTestModule;
+import tv.mechjack.configuration.TestConfigurationModule;
 import tv.mechjack.mechjackbot.ChatBot;
 import tv.mechjack.mechjackbot.ChatMessage;
 import tv.mechjack.mechjackbot.ChatUser;
-import tv.mechjack.mechjackbot.chatbot.ChatBotTestModule;
-import tv.mechjack.mechjackbot.command.CommandTestModule;
+import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
+import tv.mechjack.mechjackbot.command.TestCommandModule;
 import tv.mechjack.testframework.TestFrameworkRule;
 import tv.mechjack.util.ExecutionUtils;
-import tv.mechjack.util.UtilTestModule;
+import tv.mechjack.util.TestUtilModule;
 
 public class KiclChatMessageEventUnitTests {
 
@@ -27,11 +27,11 @@ public class KiclChatMessageEventUnitTests {
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
   private void installModules() {
-    this.testFrameworkRule.installModule(new ChatBotTestModule());
-    this.testFrameworkRule.installModule(new CommandTestModule());
-    this.testFrameworkRule.installModule(new ConfigurationTestModule());
-    this.testFrameworkRule.installModule(new KiclChatBotTestModule());
-    this.testFrameworkRule.installModule(new UtilTestModule());
+    this.testFrameworkRule.installModule(new TestChatBotModule());
+    this.testFrameworkRule.installModule(new TestCommandModule());
+    this.testFrameworkRule.installModule(new TestConfigurationModule());
+    this.testFrameworkRule.installModule(new TestKiclChatBotModule());
+    this.testFrameworkRule.installModule(new TestUtilModule());
   }
 
   private KiclChatMessageEvent givenASubjectToTest() {

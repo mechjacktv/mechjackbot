@@ -12,9 +12,9 @@ import org.junit.Test;
 
 import tv.mechjack.configuration.Configuration;
 import tv.mechjack.configuration.ConfigurationKey;
-import tv.mechjack.configuration.ConfigurationTestModule;
+import tv.mechjack.configuration.TestConfigurationModule;
 import tv.mechjack.configuration.MapConfiguration;
-import tv.mechjack.keyvaluestore.KeyValueStoreTestModule;
+import tv.mechjack.keyvaluestore.TestKeyValueStoreModule;
 import tv.mechjack.mechjackbot.ChatCommandDescription;
 import tv.mechjack.mechjackbot.ChatCommandRegistry;
 import tv.mechjack.mechjackbot.ChatCommandTrigger;
@@ -31,9 +31,9 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
   @Override
   protected void installModules() {
     super.installModules();
-    this.testFrameworkRule.installModule(new ConfigurationTestModule());
+    this.testFrameworkRule.installModule(new TestConfigurationModule());
     this.testFrameworkRule.installModule(new CustomCommandTestModule());
-    this.testFrameworkRule.installModule(new KeyValueStoreTestModule());
+    this.testFrameworkRule.installModule(new TestKeyValueStoreModule());
   }
 
   @Override

@@ -14,7 +14,7 @@ public abstract class TimeUtilsContractTests {
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
   protected void installModules() {
-    this.testFrameworkRule.installModule(new UtilTestModule());
+    this.testFrameworkRule.installModule(new TestUtilModule());
   }
 
   abstract TimeUtils givenASubjectToTest();

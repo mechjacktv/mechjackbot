@@ -18,20 +18,20 @@ import org.junit.Test;
 import tv.mechjack.configuration.Configuration;
 import tv.mechjack.configuration.ConfigurationKey;
 import tv.mechjack.configuration.MapConfiguration;
-import tv.mechjack.keyvaluestore.KeyValueStoreTestModule;
+import tv.mechjack.keyvaluestore.TestKeyValueStoreModule;
 import tv.mechjack.mechjackbot.ChatCommandDescription;
 import tv.mechjack.mechjackbot.ChatCommandTrigger;
 import tv.mechjack.mechjackbot.ChatCommandUtils;
 import tv.mechjack.mechjackbot.ChatMessage;
 import tv.mechjack.mechjackbot.ChatMessageEvent;
 import tv.mechjack.mechjackbot.TestChatMessageEvent;
-import tv.mechjack.mechjackbot.chatbot.ChatBotTestModule;
+import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
 import tv.mechjack.mechjackbot.command.BaseChatCommandContractTests;
 import tv.mechjack.mechjackbot.command.CommandConfigurationBuilder;
 import tv.mechjack.mechjackbot.command.CommandMessageFormat;
 import tv.mechjack.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.Caster;
 import tv.mechjack.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.CasterKey;
-import tv.mechjack.twitchclient.TwitchClientTestModule;
+import tv.mechjack.twitchclient.TestTwitchClientModule;
 import tv.mechjack.util.TestTimeUtils;
 import tv.mechjack.util.TimeUtils;
 import tv.mechjack.util.scheduleservice.TestScheduleServiceModule;
@@ -40,11 +40,11 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
 
   protected final void installModules() {
     super.installModules();
-    this.testFrameworkRule.installModule(new ChatBotTestModule());
-    this.testFrameworkRule.installModule(new KeyValueStoreTestModule());
+    this.testFrameworkRule.installModule(new TestChatBotModule());
+    this.testFrameworkRule.installModule(new TestKeyValueStoreModule());
     this.testFrameworkRule.installModule(new TestScheduleServiceModule());
     this.testFrameworkRule.installModule(new ShoutOutCommandTestModule());
-    this.testFrameworkRule.installModule(new TwitchClientTestModule());
+    this.testFrameworkRule.installModule(new TestTwitchClientModule());
   }
 
   @Override

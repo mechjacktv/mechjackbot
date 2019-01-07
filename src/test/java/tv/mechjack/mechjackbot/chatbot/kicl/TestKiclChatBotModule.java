@@ -16,10 +16,10 @@ import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 import org.mockito.Mockito;
 
 import tv.mechjack.mechjackbot.ChatBot;
-import tv.mechjack.mechjackbot.chatbot.ChatBotTestModule;
+import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
 import tv.mechjack.testframework.ArbitraryDataGenerator;
 
-public class KiclChatBotTestModule extends ChatBotTestModule {
+public class TestKiclChatBotModule extends TestChatBotModule {
 
   @Override
   protected void configure() {

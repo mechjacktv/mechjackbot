@@ -14,7 +14,7 @@ import tv.mechjack.mechjackbot.ChatMessageEventHandler;
 import tv.mechjack.mechjackbot.TestChatCommand;
 import tv.mechjack.mechjackbot.TestChatMessageEvent;
 
-public class CommandTestModule extends AbstractModule {
+public class TestCommandModule extends AbstractModule {
 
   @Override
   protected void configure() {

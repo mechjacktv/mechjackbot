@@ -3,7 +3,7 @@ package tv.mechjack.twitchclient;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 
-public class TwitchClientTestModule extends AbstractModule {
+public class TestTwitchClientModule extends AbstractModule {
 
   @Override
   protected void configure() {

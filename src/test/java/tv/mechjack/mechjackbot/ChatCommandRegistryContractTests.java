@@ -11,10 +11,10 @@ import org.assertj.core.api.Condition;
 import org.junit.Rule;
 import org.junit.Test;
 
-import tv.mechjack.configuration.ConfigurationTestModule;
-import tv.mechjack.mechjackbot.command.CommandTestModule;
+import tv.mechjack.configuration.TestConfigurationModule;
+import tv.mechjack.mechjackbot.command.TestCommandModule;
 import tv.mechjack.testframework.TestFrameworkRule;
-import tv.mechjack.util.UtilTestModule;
+import tv.mechjack.util.TestUtilModule;
 
 public abstract class ChatCommandRegistryContractTests {
 
@@ -22,9 +22,9 @@ public abstract class ChatCommandRegistryContractTests {
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
   protected void installModules() {
-    this.testFrameworkRule.installModule(new CommandTestModule());
-    this.testFrameworkRule.installModule(new ConfigurationTestModule());
-    this.testFrameworkRule.installModule(new UtilTestModule());
+    this.testFrameworkRule.installModule(new TestCommandModule());
+    this.testFrameworkRule.installModule(new TestConfigurationModule());
+    this.testFrameworkRule.installModule(new TestUtilModule());
   }
 
   protected abstract ChatCommandRegistry givenASubjectToTest();

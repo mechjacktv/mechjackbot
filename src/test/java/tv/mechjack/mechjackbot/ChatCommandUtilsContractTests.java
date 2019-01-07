@@ -16,13 +16,13 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import tv.mechjack.configuration.ConfigurationKey;
-import tv.mechjack.configuration.ConfigurationTestModule;
+import tv.mechjack.configuration.TestConfigurationModule;
 import tv.mechjack.configuration.MapConfiguration;
-import tv.mechjack.mechjackbot.chatbot.ChatBotTestModule;
+import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
 import tv.mechjack.mechjackbot.command.CommandConfigurationBuilder;
-import tv.mechjack.mechjackbot.command.CommandTestModule;
+import tv.mechjack.mechjackbot.command.TestCommandModule;
 import tv.mechjack.testframework.TestFrameworkRule;
-import tv.mechjack.util.UtilTestModule;
+import tv.mechjack.util.TestUtilModule;
 
 public abstract class ChatCommandUtilsContractTests {
 
@@ -30,10 +30,10 @@ public abstract class ChatCommandUtilsContractTests {
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
   protected void installModules() {
-    this.testFrameworkRule.installModule(new ChatBotTestModule());
-    this.testFrameworkRule.installModule(new CommandTestModule());
-    this.testFrameworkRule.installModule(new ConfigurationTestModule());
-    this.testFrameworkRule.installModule(new UtilTestModule());
+    this.testFrameworkRule.installModule(new TestChatBotModule());
+    this.testFrameworkRule.installModule(new TestCommandModule());
+    this.testFrameworkRule.installModule(new TestConfigurationModule());
+    this.testFrameworkRule.installModule(new TestUtilModule());
   }
 
   protected abstract ChatCommandUtils givenASubjectToTest();

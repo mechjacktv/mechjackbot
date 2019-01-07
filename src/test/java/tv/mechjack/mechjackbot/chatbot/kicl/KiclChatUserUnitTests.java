@@ -10,13 +10,13 @@ import org.junit.Test;
 import org.kitteh.irc.client.library.Client;
 import org.kitteh.irc.client.library.element.User;
 
-import tv.mechjack.configuration.ConfigurationTestModule;
+import tv.mechjack.configuration.TestConfigurationModule;
 import tv.mechjack.mechjackbot.ChatBotConfiguration;
-import tv.mechjack.mechjackbot.chatbot.ChatBotTestModule;
-import tv.mechjack.mechjackbot.command.CommandTestModule;
+import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
+import tv.mechjack.mechjackbot.command.TestCommandModule;
 import tv.mechjack.testframework.TestFrameworkRule;
 import tv.mechjack.twitchclient.TwitchLogin;
-import tv.mechjack.util.UtilTestModule;
+import tv.mechjack.util.TestUtilModule;
 
 public class KiclChatUserUnitTests {
 
@@ -24,11 +24,11 @@ public class KiclChatUserUnitTests {
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
   private void installModules() {
-    this.testFrameworkRule.installModule(new ChatBotTestModule());
-    this.testFrameworkRule.installModule(new CommandTestModule());
-    this.testFrameworkRule.installModule(new ConfigurationTestModule());
-    this.testFrameworkRule.installModule(new KiclChatBotTestModule());
-    this.testFrameworkRule.installModule(new UtilTestModule());
+    this.testFrameworkRule.installModule(new TestChatBotModule());
+    this.testFrameworkRule.installModule(new TestCommandModule());
+    this.testFrameworkRule.installModule(new TestConfigurationModule());
+    this.testFrameworkRule.installModule(new TestKiclChatBotModule());
+    this.testFrameworkRule.installModule(new TestUtilModule());
   }
 
   private KiclChatUser givenIHaveASubjectToTest(final User user) {
