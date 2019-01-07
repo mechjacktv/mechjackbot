@@ -21,15 +21,11 @@ public abstract class ChatBotConfigurationContractTests {
   @Rule
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
-  private ChatBotConfiguration givenASubjectToTest(final String dataLocation) {
-    return this.givenASubjectToTest(dataLocation, this.givenIHaveAPropertiesMap());
+  protected void installModules() {
+    /* no-op (2019-01-06 mechjack) */
   }
 
-  private ChatBotConfiguration givenASubjectToTest(final Map<String, String> properties) {
-    return this.givenASubjectToTest(this.testFrameworkRule.getArbitraryString(), properties);
-  }
-
-  protected abstract ChatBotConfiguration givenASubjectToTest(String dataLocation, Map<String, String> properties);
+  protected abstract ChatBotConfiguration givenASubjectToTest(Map<String, String> properties);
 
   private Map<String, String> givenIHaveAPropertiesMap() {
     final Map<String, String> properties = new HashMap<>();
@@ -42,6 +38,7 @@ public abstract class ChatBotConfigurationContractTests {
 
   @Test
   public final void new_channelMissing_throwsIllegalStateException() {
+    this.installModules();
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
     properties.remove(TWITCH_CHANNEL_KEY);
 
@@ -52,6 +49,7 @@ public abstract class ChatBotConfigurationContractTests {
 
   @Test
   public final void new_passwordMissing_throwsIllegalStateException() {
+    this.installModules();
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
     properties.remove(TWITCH_PASSWORD_KEY);
 
@@ -62,6 +60,7 @@ public abstract class ChatBotConfigurationContractTests {
 
   @Test
   public final void new_usernameKeyMissing_throwsIllegalStateException() {
+    this.installModules();
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
     properties.remove(TWITCH_LOGIN_KEY);
 
@@ -71,17 +70,8 @@ public abstract class ChatBotConfigurationContractTests {
   }
 
   @Test
-  public final void getDataLocation_isPresent_returnsDataLocation() {
-    final String dataLocation = this.testFrameworkRule.getArbitraryString();
-    final ChatBotConfiguration subjectUnderTest = this.givenASubjectToTest(dataLocation);
-
-    final DataLocation result = subjectUnderTest.getDataLocation();
-
-    assertThat(result).isEqualTo(DataLocation.of(dataLocation));
-  }
-
-  @Test
   public final void getTwitchChannel_isPresent_returnsTwitchChannel() {
+    this.installModules();
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
     final ChatBotConfiguration subjectUnderTest = this.givenASubjectToTest(properties);
 
@@ -92,6 +82,7 @@ public abstract class ChatBotConfigurationContractTests {
 
   @Test
   public final void getTwitchPassword_isPresent_returnsTwitchPassword() {
+    this.installModules();
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
     final ChatBotConfiguration subjectUnderTest = this.givenASubjectToTest(properties);
 
@@ -102,6 +93,7 @@ public abstract class ChatBotConfigurationContractTests {
 
   @Test
   public final void getTwitchLogin_isPresent_returnsTwitchLogin() {
+    this.installModules();
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
     final ChatBotConfiguration subjectUnderTest = this.givenASubjectToTest(properties);
 

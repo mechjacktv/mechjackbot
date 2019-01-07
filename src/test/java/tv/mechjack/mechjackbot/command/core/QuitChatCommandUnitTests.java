@@ -19,14 +19,14 @@ import tv.mechjack.mechjackbot.command.BaseChatCommandContractTests;
 import tv.mechjack.mechjackbot.command.CommandConfigurationBuilder;
 import tv.mechjack.mechjackbot.command.CommandMessageFormat;
 import tv.mechjack.util.scheduleservice.ScheduleService;
-import tv.mechjack.util.scheduleservice.ScheduleServiceTestModule;
 import tv.mechjack.util.scheduleservice.TestScheduleService;
+import tv.mechjack.util.scheduleservice.TestScheduleServiceModule;
 
 public class QuitChatCommandUnitTests extends BaseChatCommandContractTests {
 
   protected final void installModules() {
     super.installModules();
-    this.testFrameworkRule.installModule(new ScheduleServiceTestModule());
+    this.testFrameworkRule.installModule(new TestScheduleServiceModule());
   }
 
   @Override

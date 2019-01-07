@@ -15,11 +15,15 @@ public abstract class TwitchClientConfigurationContractTests {
   @Rule
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
+  protected void installModules() {
+    /* no-op (2019-01-06 mechjack) */
+  }
+
   protected abstract TwitchClientConfiguration givenASubjectToTest(Optional<String> clientId);
 
   @Test
   public final void new_clientIdMissing_throwsIllegalStateException() {
-    // no assembly
+    this.installModules();
 
     final Throwable thrown = catchThrowable(() -> this.givenASubjectToTest(Optional.empty()));
 
@@ -28,6 +32,7 @@ public abstract class TwitchClientConfigurationContractTests {
 
   @Test
   public final void getTwitchClientId_isPresent_returnsTwitchClientId() {
+    this.installModules();
     final String clientId = this.testFrameworkRule.getArbitraryString();
     final TwitchClientConfiguration subjectUnderTest = this.givenASubjectToTest(Optional.of(clientId));
 

@@ -1,23 +1,30 @@
 package tv.mechjack.mechjackbot.chatbot;
 
-import static org.mockito.Mockito.mock;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import tv.mechjack.application.Application;
+import tv.mechjack.application.TestApplicationModule;
 import tv.mechjack.mechjackbot.ChatBotConfiguration;
 import tv.mechjack.mechjackbot.ChatBotConfigurationContractTests;
-import tv.mechjack.util.MapPropertiesSource;
+import tv.mechjack.util.scheduleservice.MapHotUpdatePropertiesSource;
 import tv.mechjack.util.scheduleservice.ScheduleService;
+import tv.mechjack.util.scheduleservice.TestScheduleServiceModule;
 
 public class DefaultChatBotConfiguration_ChatBotConfigurationUnitTests extends ChatBotConfigurationContractTests {
 
   @Override
-  protected ChatBotConfiguration givenASubjectToTest(final String dataLocation, final Map<String, String> properties) {
+  protected void installModules() {
+    this.testFrameworkRule.installModule(new TestApplicationModule());
+    this.testFrameworkRule.installModule(new TestScheduleServiceModule());
+  }
+
+  @Override
+  protected ChatBotConfiguration givenASubjectToTest(final Map<String, String> properties) {
     final Map<String, String> mappedProperties = this.mapKeysForProperties(properties);
 
-    return new DefaultChatBotConfiguration(dataLocation, new MapPropertiesSource(mappedProperties),
-        mock(ScheduleService.class));
+    return new DefaultChatBotConfiguration(this.testFrameworkRule.getInstance(Application.class),
+        new MapHotUpdatePropertiesSource(mappedProperties), this.testFrameworkRule.getInstance(ScheduleService.class));
   }
 
   private Map<String, String> mapKeysForProperties(final Map<String, String> properties) {

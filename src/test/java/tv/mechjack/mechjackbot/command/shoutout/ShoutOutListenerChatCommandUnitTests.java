@@ -34,7 +34,7 @@ import tv.mechjack.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.Cas
 import tv.mechjack.twitchclient.TwitchClientTestModule;
 import tv.mechjack.util.TestTimeUtils;
 import tv.mechjack.util.TimeUtils;
-import tv.mechjack.util.scheduleservice.ScheduleServiceTestModule;
+import tv.mechjack.util.scheduleservice.TestScheduleServiceModule;
 
 public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandContractTests {
 
@@ -42,7 +42,7 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
     super.installModules();
     this.testFrameworkRule.installModule(new ChatBotTestModule());
     this.testFrameworkRule.installModule(new KeyValueStoreTestModule());
-    this.testFrameworkRule.installModule(new ScheduleServiceTestModule());
+    this.testFrameworkRule.installModule(new TestScheduleServiceModule());
     this.testFrameworkRule.installModule(new ShoutOutCommandTestModule());
     this.testFrameworkRule.installModule(new TwitchClientTestModule());
   }

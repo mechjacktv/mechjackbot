@@ -1,4 +1,4 @@
-package tv.mechjack.util;
+package tv.mechjack.util.scheduleservice;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,13 +10,13 @@ import org.slf4j.LoggerFactory;
 
 import tv.mechjack.util.function.ConsumerWithException;
 
-public final class FilePropertiesSource implements PropertiesSource {
+public final class FileHotUpdatePropertiesSource implements HotUpdatePropertiesSource {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(FilePropertiesSource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FileHotUpdatePropertiesSource.class);
 
   private final File propertiesFile;
 
-  public FilePropertiesSource(final File propertiesFile) {
+  public FileHotUpdatePropertiesSource(final File propertiesFile) {
     this.propertiesFile = propertiesFile;
   }
 

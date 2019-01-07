@@ -1,4 +1,4 @@
-package tv.mechjack.util;
+package tv.mechjack.util.scheduleservice;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -7,11 +7,11 @@ import java.util.Map;
 
 import tv.mechjack.util.function.ConsumerWithException;
 
-public final class MapPropertiesSource implements PropertiesSource {
+public final class MapHotUpdatePropertiesSource implements HotUpdatePropertiesSource {
 
   private final Map<String, String> data;
 
-  public MapPropertiesSource(final Map<String, String> data) {
+  public MapHotUpdatePropertiesSource(final Map<String, String> data) {
     this.data = new HashMap<>(data);
   }
 

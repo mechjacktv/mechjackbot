@@ -3,26 +3,32 @@ package tv.mechjack.configuration;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import tv.mechjack.util.ExecutionUtils;
-import tv.mechjack.util.HotUpdatePropertiesWrapper;
-import tv.mechjack.util.PropertiesSource;
+import tv.mechjack.util.scheduleservice.HotUpdateProperties;
+import tv.mechjack.util.scheduleservice.HotUpdatePropertiesSource;
 import tv.mechjack.util.scheduleservice.ScheduleService;
 
-public class PropertiesConfiguration extends HotUpdatePropertiesWrapper implements Configuration {
-
-  private static final Logger log = LoggerFactory.getLogger(PropertiesConfiguration.class);
+public class PropertiesConfiguration implements Configuration {
 
   private final ExecutionUtils executionUtils;
+  private final Properties properties;
 
-  protected PropertiesConfiguration(final PropertiesSource propertiesSource, final ExecutionUtils executionUtils,
-      final ScheduleService scheduleService) {
-    super(propertiesSource, scheduleService, log);
+  protected PropertiesConfiguration(final HotUpdatePropertiesSource hotUpdatePropertiesSource,
+      final ExecutionUtils executionUtils, final ScheduleService scheduleService) {
+    this(hotUpdatePropertiesSource, executionUtils, scheduleService,
+        LoggerFactory.getLogger(PropertiesConfiguration.class));
+  }
+
+  protected PropertiesConfiguration(final HotUpdatePropertiesSource hotUpdatePropertiesSource,
+      final ExecutionUtils executionUtils, final ScheduleService scheduleService, final Logger logger) {
     this.executionUtils = executionUtils;
+    this.properties = new HotUpdateProperties(hotUpdatePropertiesSource, scheduleService, logger);
   }
 
   @Override
@@ -44,14 +50,14 @@ public class PropertiesConfiguration extends HotUpdatePropertiesWrapper implemen
   public final String get(final String key, final String defaultValue) {
     Objects.requireNonNull(key, this.executionUtils.nullMessageForName("key"));
 
-    final Object value = this.getProperties().get(key);
+    final Object value = this.properties.get(key);
 
     return value != null ? value.toString() : defaultValue;
   }
 
   @Override
   public final Collection<String> getKeys() {
-    return this.getProperties().keySet().stream().map(Object::toString).collect(Collectors.toSet());
+    return this.properties.keySet().stream().map(Object::toString).collect(Collectors.toSet());
   }
 
 }

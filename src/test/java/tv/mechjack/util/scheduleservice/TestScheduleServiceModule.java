@@ -3,7 +3,7 @@ package tv.mechjack.util.scheduleservice;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 
-public class ScheduleServiceTestModule extends AbstractModule {
+public class TestScheduleServiceModule extends AbstractModule {
 
   @Override
   protected void configure() {

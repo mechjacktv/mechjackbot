@@ -1,4 +1,4 @@
-package tv.mechjack.guice;
+package tv.mechjack.application;
 
 import com.google.inject.Injector;
 import com.google.inject.Key;

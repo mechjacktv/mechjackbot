@@ -37,8 +37,8 @@ import tv.mechjack.twitchclient.TwitchUserId;
 import tv.mechjack.util.ExecutionUtils;
 import tv.mechjack.util.ProtobufUtils;
 import tv.mechjack.util.scheduleservice.ScheduleService;
-import tv.mechjack.util.scheduleservice.ScheduleServiceTestModule;
 import tv.mechjack.util.scheduleservice.TestScheduleService;
+import tv.mechjack.util.scheduleservice.TestScheduleServiceModule;
 
 public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractTests<CasterKey, Caster> {
 
@@ -48,7 +48,7 @@ public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractT
     this.testFrameworkRule.installModule(new CommandTestModule());
     this.testFrameworkRule.installModule(new ConfigurationTestModule());
     this.testFrameworkRule.installModule(new ChatBotTestModule());
-    this.testFrameworkRule.installModule(new ScheduleServiceTestModule());
+    this.testFrameworkRule.installModule(new TestScheduleServiceModule());
     this.testFrameworkRule.installModule(new TwitchClientTestModule());
   }
 

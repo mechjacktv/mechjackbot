@@ -8,15 +8,15 @@ import org.mapdb.DB;
 import org.mapdb.DBMaker;
 import org.mapdb.Serializer;
 
-import tv.mechjack.mechjackbot.ChatBotConfiguration;
+import tv.mechjack.application.Application;
 
 public final class MapDbKeyValueStoreFactory implements KeyValueStoreFactory {
 
   private final DB db;
 
   @Inject
-  MapDbKeyValueStoreFactory(final ChatBotConfiguration chatBotConfiguration) {
-    this.db = DBMaker.fileDB(new File(chatBotConfiguration.getDataLocation().value, "mapdb.bin"))
+  MapDbKeyValueStoreFactory(final Application application) {
+    this.db = DBMaker.fileDB(new File(application.getApplicationDataLocation().value, "mapdb.bin"))
         .closeOnJvmShutdown()
         .make();
   }

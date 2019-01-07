@@ -6,7 +6,7 @@ import javax.inject.Inject;
 
 import tv.mechjack.util.ExecutionUtils;
 
-public final class MapConfiguration implements Configuration {
+public class MapConfiguration implements Configuration {
 
   private final ExecutionUtils executionUtils;
   private final Map<String, String> data;

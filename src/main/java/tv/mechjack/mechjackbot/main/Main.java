@@ -2,17 +2,19 @@ package tv.mechjack.mechjackbot.main;
 
 import com.google.inject.Injector;
 
-import tv.mechjack.guice.GuiceApplication;
+import tv.mechjack.application.GuiceApplication;
 import tv.mechjack.mechjackbot.ChatBot;
 
 final class Main extends GuiceApplication {
+
+  public static final String DEFAULT_DATA_LOCATION = System.getProperty("user.home") + "/.mechjackbot";
 
   public static void main(final String[] args) {
     new Main().start();
   }
 
   private Main() {
-    super(new MainModule());
+    super(DEFAULT_DATA_LOCATION, new MainModule());
   }
 
   @Override

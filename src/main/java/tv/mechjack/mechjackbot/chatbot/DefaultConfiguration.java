@@ -4,21 +4,32 @@ import java.io.File;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import tv.mechjack.application.Application;
 import tv.mechjack.configuration.PropertiesConfiguration;
-import tv.mechjack.mechjackbot.ChatBotConfiguration;
 import tv.mechjack.util.ExecutionUtils;
-import tv.mechjack.util.FilePropertiesSource;
+import tv.mechjack.util.scheduleservice.FileHotUpdatePropertiesSource;
+import tv.mechjack.util.scheduleservice.HotUpdatePropertiesSource;
 import tv.mechjack.util.scheduleservice.ScheduleService;
 
-public class DefaultConfiguration extends PropertiesConfiguration {
+public final class DefaultConfiguration extends PropertiesConfiguration {
 
-  private static final String CONFIG_PROPERTIES_FILE_NAME = "application.config";
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultConfiguration.class);
+
+  public static final String CONFIG_PROPERTIES_FILE_NAME = "application.config";
 
   @Inject
-  DefaultConfiguration(final ChatBotConfiguration chatBotConfiguration, final ExecutionUtils executionUtils,
+  DefaultConfiguration(final Application application, final ExecutionUtils executionUtils,
       final ScheduleService scheduleService) {
-    super(new FilePropertiesSource(new File(chatBotConfiguration.getDataLocation().value, CONFIG_PROPERTIES_FILE_NAME)),
-        executionUtils, scheduleService);
+    this(new FileHotUpdatePropertiesSource(new File(application.getApplicationDataLocation().value,
+        CONFIG_PROPERTIES_FILE_NAME)), executionUtils, scheduleService);
+  }
+
+  DefaultConfiguration(final HotUpdatePropertiesSource hotUpdatePropertiesSource, final ExecutionUtils executionUtils,
+      final ScheduleService scheduleService) {
+    super(hotUpdatePropertiesSource, executionUtils, scheduleService, LOGGER);
   }
 
 }
