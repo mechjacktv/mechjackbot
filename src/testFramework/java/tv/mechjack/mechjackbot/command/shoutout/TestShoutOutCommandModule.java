@@ -3,7 +3,7 @@ package tv.mechjack.mechjackbot.command.shoutout;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 
-public class ShoutOutCommandTestModule extends AbstractModule {
+public class TestShoutOutCommandModule extends AbstractModule {
 
   @Override
   protected void configure() {

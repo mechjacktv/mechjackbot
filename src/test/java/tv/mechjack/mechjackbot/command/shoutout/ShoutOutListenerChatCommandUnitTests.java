@@ -43,7 +43,7 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
     this.testFrameworkRule.installModule(new TestChatBotModule());
     this.testFrameworkRule.installModule(new TestKeyValueStoreModule());
     this.testFrameworkRule.installModule(new TestScheduleServiceModule());
-    this.testFrameworkRule.installModule(new ShoutOutCommandTestModule());
+    this.testFrameworkRule.installModule(new TestShoutOutCommandModule());
     this.testFrameworkRule.installModule(new TestTwitchClientModule());
   }
 

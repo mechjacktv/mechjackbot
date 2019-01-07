@@ -3,7 +3,7 @@ package tv.mechjack.mechjackbot.command.custom;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 
-public class CustomCommandTestModule extends AbstractModule {
+public class TestCustomCommandModule extends AbstractModule {
 
   @Override
   protected void configure() {

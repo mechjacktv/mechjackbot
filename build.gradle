@@ -29,6 +29,24 @@ repositories {
     jcenter()
 }
 
+sourceSets {
+    testFramework {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+    test {
+        compileClasspath += sourceSets.testFramework.output
+        runtimeClasspath += sourceSets.testFramework.output
+    }
+}
+
+configurations {
+    testFrameworkImplementation.extendsFrom implementation
+    testFrameworkRuntimeOnly.extendsFrom runtimeOnly
+    testImplementation.extendsFrom testFrameworkImplementation
+    testRuntimeOnly.extendsFrom testFrameworkRuntimeOnly
+}
+
 dependencies {
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.+'
     implementation group: 'com.google.guava', name: 'guava', version: '23.+'
@@ -40,10 +58,12 @@ dependencies {
     implementation group: 'org.kitteh.irc', name: 'client-lib', version: '4.+'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
     runtimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'
-    testImplementation group: 'junit', name: 'junit', version: '4.+'
-    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.+'
-    testImplementation group: 'pl.pragmatists', name: 'JUnitParams', version: '1.+'
+
+    testFrameworkImplementation group: 'junit', name: 'junit', version: '4.+'
+    testFrameworkImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
+    testFrameworkImplementation group: 'org.mockito', name: 'mockito-core', version: '2.+'
+    testFrameworkImplementation group: 'pl.pragmatists', name: 'JUnitParams', version: '1.+'
+
     testRuntimeOnly group: 'org.slf4j', name: 'slf4j-nop', version: '1.+'
 }
 

@@ -16,8 +16,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import tv.mechjack.configuration.ConfigurationKey;
-import tv.mechjack.configuration.TestConfigurationModule;
 import tv.mechjack.configuration.MapConfiguration;
+import tv.mechjack.configuration.TestConfigurationModule;
 import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
 import tv.mechjack.mechjackbot.command.CommandConfigurationBuilder;
 import tv.mechjack.mechjackbot.command.TestCommandModule;
