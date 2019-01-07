@@ -7,7 +7,7 @@ import tv.mechjack.configuration.ConfigurationKey;
 import tv.mechjack.mechjackbot.ChatMessageEvent;
 import tv.mechjack.mechjackbot.command.BaseChatCommand;
 import tv.mechjack.mechjackbot.command.CommandConfigurationBuilder;
-import tv.mechjack.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.CasterKey;
+import tv.mechjack.mechjackbot.command.shoutout.ProtoMessage.CasterKey;
 import tv.mechjack.twitchclient.TwitchLogin;
 import tv.mechjack.util.TimeUtils;
 

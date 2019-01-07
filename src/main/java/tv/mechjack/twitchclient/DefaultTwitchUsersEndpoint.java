@@ -10,8 +10,8 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 
-import tv.mechjack.proto.twitchclient.TwitchClientMessage.User;
-import tv.mechjack.proto.twitchclient.TwitchClientMessage.Users;
+import tv.mechjack.twitchclient.ProtoMessage.User;
+import tv.mechjack.twitchclient.ProtoMessage.Users;
 
 public final class DefaultTwitchUsersEndpoint implements TwitchUsersEndpoint {
 

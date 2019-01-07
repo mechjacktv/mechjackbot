@@ -6,7 +6,7 @@ import java.util.function.BiFunction;
 
 import javax.inject.Inject;
 
-import tv.mechjack.proto.twitchclient.TwitchClientMessage.Users;
+import tv.mechjack.twitchclient.ProtoMessage.Users;
 import tv.mechjack.util.ExecutionUtils;
 
 public class TestTwitchUsersEndpoint implements TwitchUsersEndpoint {

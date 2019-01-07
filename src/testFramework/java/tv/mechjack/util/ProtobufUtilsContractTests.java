@@ -11,8 +11,8 @@ import java.util.Set;
 import org.junit.Rule;
 import org.junit.Test;
 
-import tv.mechjack.proto.util.UtilsMessage.TestKeyMessage;
 import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.util.ProtoMessage.TestKeyMessage;
 
 public abstract class ProtobufUtilsContractTests {
 

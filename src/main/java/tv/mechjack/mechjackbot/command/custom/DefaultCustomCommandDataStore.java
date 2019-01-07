@@ -8,8 +8,8 @@ import tv.mechjack.keyvaluestore.BaseMessageStore;
 import tv.mechjack.keyvaluestore.KeyValueStoreFactory;
 import tv.mechjack.mechjackbot.ChatCommandTrigger;
 import tv.mechjack.mechjackbot.UserRole;
-import tv.mechjack.proto.mechjackbot.command.custom.CustomComandDataStoreMessage.CustomCommand;
-import tv.mechjack.proto.mechjackbot.command.custom.CustomComandDataStoreMessage.CustomCommandKey;
+import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommand;
+import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommandKey;
 import tv.mechjack.util.ExecutionUtils;
 import tv.mechjack.util.ProtobufUtils;
 

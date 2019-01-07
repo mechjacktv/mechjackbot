@@ -1,8 +1,8 @@
 package tv.mechjack.mechjackbot.command.shoutout;
 
 import tv.mechjack.keyvaluestore.MessageStore;
-import tv.mechjack.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.Caster;
-import tv.mechjack.proto.mechjackbot.command.shoutout.ShoutOutServiceMessage.CasterKey;
+import tv.mechjack.mechjackbot.command.shoutout.ProtoMessage.Caster;
+import tv.mechjack.mechjackbot.command.shoutout.ProtoMessage.CasterKey;
 
 public interface ShoutOutDataStore extends MessageStore<CasterKey, Caster> {
 

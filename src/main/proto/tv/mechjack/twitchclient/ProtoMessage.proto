@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package tv.mechjack.proto.twitchclient;
+package tv.mechjack.twitchclient;
 
 message User {
   string id = 1;

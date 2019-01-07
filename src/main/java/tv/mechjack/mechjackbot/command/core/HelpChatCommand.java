@@ -8,7 +8,6 @@ import com.google.common.base.Strings;
 
 import tv.mechjack.configuration.Configuration;
 import tv.mechjack.configuration.ConfigurationKey;
-import tv.mechjack.mechjackbot.*;
 import tv.mechjack.mechjackbot.ChatCommand;
 import tv.mechjack.mechjackbot.ChatCommandRegistry;
 import tv.mechjack.mechjackbot.ChatCommandTrigger;

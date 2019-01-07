@@ -24,7 +24,7 @@ import tv.mechjack.mechjackbot.TestChatMessageEvent;
 import tv.mechjack.mechjackbot.UserRole;
 import tv.mechjack.mechjackbot.command.BaseChatCommandContractTests;
 import tv.mechjack.mechjackbot.command.CommandConfigurationBuilder;
-import tv.mechjack.proto.mechjackbot.command.custom.CustomComandDataStoreMessage.CustomCommand;
+import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommand;
 
 public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests {
 

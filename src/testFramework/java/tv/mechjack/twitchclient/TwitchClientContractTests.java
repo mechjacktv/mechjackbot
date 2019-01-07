@@ -12,10 +12,10 @@ import org.assertj.core.api.Condition;
 import org.junit.Rule;
 import org.junit.Test;
 
-import tv.mechjack.proto.twitchclient.TwitchClientMessage.User;
-import tv.mechjack.proto.twitchclient.TwitchClientMessage.UserFollows;
-import tv.mechjack.proto.twitchclient.TwitchClientMessage.Users;
 import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.twitchclient.ProtoMessage.User;
+import tv.mechjack.twitchclient.ProtoMessage.UserFollows;
+import tv.mechjack.twitchclient.ProtoMessage.Users;
 
 public abstract class TwitchClientContractTests {
 

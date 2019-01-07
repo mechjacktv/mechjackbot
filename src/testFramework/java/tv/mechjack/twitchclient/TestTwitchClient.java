@@ -7,8 +7,8 @@ import java.util.function.Function;
 
 import javax.inject.Inject;
 
-import tv.mechjack.proto.twitchclient.TwitchClientMessage.UserFollows;
-import tv.mechjack.proto.twitchclient.TwitchClientMessage.Users;
+import tv.mechjack.twitchclient.ProtoMessage.UserFollows;
+import tv.mechjack.twitchclient.ProtoMessage.Users;
 
 public class TestTwitchClient implements TwitchClient {
 

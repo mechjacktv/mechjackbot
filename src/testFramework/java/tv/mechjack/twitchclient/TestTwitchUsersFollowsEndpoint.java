@@ -3,7 +3,7 @@ package tv.mechjack.twitchclient;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import tv.mechjack.proto.twitchclient.TwitchClientMessage.UserFollows;
+import tv.mechjack.twitchclient.ProtoMessage.UserFollows;
 
 public class TestTwitchUsersFollowsEndpoint implements TwitchUsersFollowsEndpoint {
 

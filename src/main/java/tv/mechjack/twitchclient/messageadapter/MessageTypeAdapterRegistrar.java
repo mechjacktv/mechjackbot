@@ -3,8 +3,8 @@ package tv.mechjack.twitchclient.messageadapter;
 import com.google.gson.GsonBuilder;
 
 import tv.mechjack.gson.TypeAdapterRegistrar;
-import tv.mechjack.proto.twitchclient.TwitchClientMessage.User;
-import tv.mechjack.proto.twitchclient.TwitchClientMessage.UserFollow;
+import tv.mechjack.twitchclient.ProtoMessage.User;
+import tv.mechjack.twitchclient.ProtoMessage.UserFollow;
 
 public final class MessageTypeAdapterRegistrar implements TypeAdapterRegistrar {
 

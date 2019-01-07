@@ -4,10 +4,10 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Scopes;
 
-import tv.mechjack.proto.util.UtilsMessage.TestKeyMessage;
-import tv.mechjack.proto.util.UtilsMessage.TestValueMessage;
 import tv.mechjack.testframework.ArbitraryDataGenerator;
 import tv.mechjack.testframework.NullMessageForNameFactory;
+import tv.mechjack.util.ProtoMessage.TestKeyMessage;
+import tv.mechjack.util.ProtoMessage.TestValueMessage;
 
 public class TestUtilModule extends AbstractModule {
 

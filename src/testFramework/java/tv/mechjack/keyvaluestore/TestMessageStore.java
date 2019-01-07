@@ -1,8 +1,8 @@
 package tv.mechjack.keyvaluestore;
 
-import tv.mechjack.proto.util.UtilsMessage.TestKeyMessage;
-import tv.mechjack.proto.util.UtilsMessage.TestValueMessage;
 import tv.mechjack.util.ExecutionUtils;
+import tv.mechjack.util.ProtoMessage.TestKeyMessage;
+import tv.mechjack.util.ProtoMessage.TestValueMessage;
 import tv.mechjack.util.ProtobufUtils;
 
 final class TestMessageStore extends BaseMessageStore<TestKeyMessage, TestValueMessage> {

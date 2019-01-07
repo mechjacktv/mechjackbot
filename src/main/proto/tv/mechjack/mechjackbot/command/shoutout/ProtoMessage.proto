@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package tv.mechjack.proto.mechjackbot.command.shoutout;
+package tv.mechjack.mechjackbot.command.shoutout;
 
 message CasterKey {
   string name = 1;

@@ -9,9 +9,9 @@ import javax.inject.Inject;
 
 import com.google.common.collect.Sets;
 
-import tv.mechjack.proto.twitchclient.TwitchClientMessage.User;
-import tv.mechjack.proto.twitchclient.TwitchClientMessage.UserFollows;
-import tv.mechjack.proto.twitchclient.TwitchClientMessage.Users;
+import tv.mechjack.twitchclient.ProtoMessage.User;
+import tv.mechjack.twitchclient.ProtoMessage.UserFollows;
+import tv.mechjack.twitchclient.ProtoMessage.Users;
 
 final class DefaultTwitchClient implements TwitchClient {
 

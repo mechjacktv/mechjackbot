@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package tv.mechjack.proto.util;
+package tv.mechjack.util;
 
 message TestKeyMessage {
     string value = 1;

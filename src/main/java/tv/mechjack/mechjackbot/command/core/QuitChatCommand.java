@@ -2,7 +2,6 @@ package tv.mechjack.mechjackbot.command.core;
 
 import javax.inject.Inject;
 
-import tv.mechjack.mechjackbot.*;
 import tv.mechjack.mechjackbot.ChatMessageEvent;
 import tv.mechjack.mechjackbot.RequiresUserRole;
 import tv.mechjack.mechjackbot.UserRole;

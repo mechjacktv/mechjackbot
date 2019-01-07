@@ -1,6 +1,6 @@
 package tv.mechjack.twitchclient;
 
-import tv.mechjack.proto.twitchclient.TwitchClientMessage.UserFollows;
+import tv.mechjack.twitchclient.ProtoMessage.UserFollows;
 
 public interface TwitchUsersFollowsEndpoint {
 

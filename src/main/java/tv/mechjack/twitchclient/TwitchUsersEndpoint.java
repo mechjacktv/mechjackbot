@@ -2,7 +2,7 @@ package tv.mechjack.twitchclient;
 
 import java.util.Set;
 
-import tv.mechjack.proto.twitchclient.TwitchClientMessage.Users;
+import tv.mechjack.twitchclient.ProtoMessage.Users;
 
 public interface TwitchUsersEndpoint {
 
