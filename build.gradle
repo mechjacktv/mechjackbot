@@ -92,11 +92,6 @@ subprojects {
         testFrameworkImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
         testFrameworkImplementation group: 'org.mockito', name: 'mockito-core', version: '2.+'
         testFrameworkImplementation group: 'pl.pragmatists', name: 'JUnitParams', version: '1.+'
-        testImplementation project(':testframework')
-        testImplementation group: 'junit', name: 'junit', version: '4.+'
-        testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
-        testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.+'
-        testImplementation group: 'pl.pragmatists', name: 'JUnitParams', version: '1.+'
         testRuntimeOnly group: 'org.slf4j', name: 'slf4j-nop', version: '1.+'
     }
 }
