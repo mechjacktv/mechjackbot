@@ -108,7 +108,6 @@ project(':testframework') {
 }
 
 project(':platform') {
-    println project(':testframework').buildDir
     dependencies {
         implementation group: 'org.mapdb', name: 'mapdb', version: '3.+'
     }
