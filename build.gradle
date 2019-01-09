@@ -14,11 +14,11 @@ buildscript {
 
 subprojects {
     apply plugin: 'ch.raffael.markdown-doclet'
-    apply plugin: "com.diffplug.gradle.spotless"
+    apply plugin: 'com.diffplug.gradle.spotless'
     apply plugin: 'com.google.protobuf'
     apply plugin: 'eclipse'
     apply plugin: 'idea'
-    apply plugin: "jacoco"
+    apply plugin: 'jacoco'
     apply plugin: 'java'
 
     archivesBaseName = "${rootProject.name}-${project.name}"
@@ -161,5 +161,13 @@ project(':all') {
         runtimeOnly project(':customcommands')
         runtimeOnly project(':shoutoutcommands')
         runtimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'
+    }
+
+    distributions {
+        main {
+            contents {
+                baseName = "mechjackbot-${project.getProperty('name')}"
+            }
+        }
     }
 }
