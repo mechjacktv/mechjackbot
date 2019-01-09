@@ -96,17 +96,20 @@ subprojects {
     }
 }
 
-project(':all') {
-    apply plugin: 'application'
+/*******************************
+ * APPLICATION BASE PROJECTS
+ */
 
-    mainClassName = 'tv.mechjack.mechjackbot.main.Main'
-    applicationDefaultJvmArgs = ["-Dmechjackbot.plugin_module_names=tv.mechjack.mechjackbot.command.custom.CustomCommandModule:tv.mechjack.mechjackbot.command.shoutout.ShoutOutCommandModule"]
-
+project(':testframework') {
     dependencies {
-        runtimeOnly project(':core')
-        runtimeOnly project(':customcommands')
-        runtimeOnly project(':shoutoutcommands')
-        runtimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'
+        implementation group: 'junit', name: 'junit', version: '4.+'
+        implementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
+    }
+}
+
+project(':platform') {
+    dependencies {
+        implementation group: 'org.mapdb', name: 'mapdb', version: '3.+'
     }
 }
 
@@ -119,6 +122,10 @@ project(':core') {
     }
 }
 
+/*******************************
+ * APPLICATION PLUGIN PROJECTS
+ */
+
 project(':customcommands') {
     dependencies {
         implementation project(':core')
@@ -129,25 +136,30 @@ project(':customcommands') {
     }
 }
 
-project(':platform') {
-    dependencies {
-        implementation group: 'org.mapdb', name: 'mapdb', version: '3.+'
-    }
-}
-
 project(':shoutoutcommands') {
-    dependencies {
-        implementation project(':core')
-        implementation project(':platform')
-        implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
-        testFrameworkImplementation project(path: ':core', configuration: 'testFramework')
-        testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
-    }
+  dependencies {
+    implementation project(':core')
+    implementation project(':platform')
+    implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
+    testFrameworkImplementation project(path: ':core', configuration: 'testFramework')
+    testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
+  }
 }
 
-project(':testframework') {
+/*******************************
+ * APPLICATION WITH ALL PLUGINS
+ */
+
+project(':all') {
+    apply plugin: 'application'
+
+    mainClassName = 'tv.mechjack.mechjackbot.main.Main'
+    applicationDefaultJvmArgs = ["-Dmechjackbot.plugin_module_names=tv.mechjack.mechjackbot.command.custom.CustomCommandModule:tv.mechjack.mechjackbot.command.shoutout.ShoutOutCommandModule"]
+
     dependencies {
-        implementation group: 'junit', name: 'junit', version: '4.+'
-        implementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
+        runtimeOnly project(':core')
+        runtimeOnly project(':customcommands')
+        runtimeOnly project(':shoutoutcommands')
+        runtimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'
     }
 }

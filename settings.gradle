@@ -1,2 +1,8 @@
-include 'all', 'core', 'customcommands', 'platform', 'shoutoutcommands', 'testframework'
+// APPLICATION BASE PROJECTS
+include 'testframework', 'platform','core'
+// APPLICATION PLUGIN PROJECTS
+include 'customcommands', 'shoutoutcommands'
+// APPLICATION WITH ALL PLUGINS
+include 'all'
+
 rootProject.name = 'mechjackbot'
