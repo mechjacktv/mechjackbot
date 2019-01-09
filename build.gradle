@@ -41,7 +41,7 @@ subprojects {
     spotless {
         java {
             importOrder 'java', 'javax', 'com', 'org', '', 'tv.mechjack'
-            eclipse().configFile rootProject.file('src/main/resource/eclipse_java_formatter_rules.xml')
+            eclipse().configFile rootProject.file('src/buildscript/eclipse_java_formatter_rules.xml')
             removeUnusedImports()
             trimTrailingWhitespace()
             endWithNewline()
