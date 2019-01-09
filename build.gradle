@@ -110,6 +110,7 @@ project(':testframework') {
 project(':platform') {
     dependencies {
         implementation group: 'org.mapdb', name: 'mapdb', version: '3.+'
+        testFrameworkImplementation project(':testframework')
     }
 }
 
