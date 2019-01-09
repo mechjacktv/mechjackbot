@@ -93,6 +93,7 @@ project(':all') {
 
     dependencies {
         implementation project(':application')
+        implementation project(':configuration')
         implementation project(':util')
         implementation group: 'com.google.code.gson', name: 'gson', version: '2.+'
         implementation group: 'com.google.guava', name: 'guava', version: '23.+'
@@ -107,6 +108,7 @@ project(':all') {
 
         testFrameworkImplementation project(':testFramework')
         testFrameworkImplementation project(path: ':application', configuration: 'testFramework')
+        testFrameworkImplementation project(path: ':configuration', configuration: 'testFramework')
         testFrameworkImplementation project(path: ':util', configuration: 'testFramework')
         testFrameworkImplementation group: 'junit', name: 'junit', version: '4.+'
         testFrameworkImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
@@ -150,7 +152,45 @@ project(':application') {
 
         testFrameworkImplementation project(':testFramework')
     }
+}
 
+project(':configuration') {
+    sourceSets {
+        testFramework {
+            compileClasspath += sourceSets.main.output
+            runtimeClasspath += sourceSets.main.output
+        }
+        test {
+            compileClasspath += sourceSets.testFramework.output
+            runtimeClasspath += sourceSets.testFramework.output
+        }
+    }
+    configurations {
+        testFramework
+        testFrameworkImplementation.extendsFrom implementation
+        testFrameworkRuntimeOnly.extendsFrom runtimeOnly
+        testImplementation.extendsFrom testFrameworkImplementation
+        testRuntimeOnly.extendsFrom testFrameworkRuntimeOnly
+    }
+    task jarTestFramework (type: Jar) {
+        from sourceSets.testFramework.output
+        classifier = 'testFramework'
+    }
+    artifacts {
+        testFramework jarTestFramework
+    }
+    assemble.dependsOn 'jarTestFramework'
+
+    dependencies {
+        implementation project(':util')
+        implementation group: 'com.google.inject', name: 'guice', version: '4.+'
+        implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
+
+        testFrameworkImplementation project(':testFramework')
+        testFrameworkImplementation project(path: ':util', configuration: 'testFramework')
+        testFrameworkImplementation group: 'junit', name: 'junit', version: '4.+'
+        testFrameworkImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
+    }
 }
 
 project(':testFramework') {
