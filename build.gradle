@@ -94,6 +94,7 @@ project(':all') {
     dependencies {
         implementation project(':application')
         implementation project(':configuration')
+        implementation project(':keyvaluestore')
         implementation project(':util')
         implementation group: 'com.google.code.gson', name: 'gson', version: '2.+'
         implementation group: 'com.google.guava', name: 'guava', version: '23.+'
@@ -101,7 +102,6 @@ project(':all') {
         implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.+'
         implementation group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.+'
         implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
-        implementation group: 'org.mapdb', name: 'mapdb', version: '3.+'
         implementation group: 'org.kitteh.irc', name: 'client-lib', version: '4.+'
         implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
         runtimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'
@@ -109,6 +109,7 @@ project(':all') {
         testFrameworkImplementation project(':testFramework')
         testFrameworkImplementation project(path: ':application', configuration: 'testFramework')
         testFrameworkImplementation project(path: ':configuration', configuration: 'testFramework')
+        testFrameworkImplementation project(path: ':keyvaluestore', configuration: 'testFramework')
         testFrameworkImplementation project(path: ':util', configuration: 'testFramework')
         testFrameworkImplementation group: 'junit', name: 'junit', version: '4.+'
         testFrameworkImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
@@ -187,6 +188,48 @@ project(':configuration') {
         implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
 
         testFrameworkImplementation project(':testFramework')
+        testFrameworkImplementation project(path: ':util', configuration: 'testFramework')
+        testFrameworkImplementation group: 'junit', name: 'junit', version: '4.+'
+        testFrameworkImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
+    }
+}
+
+project(':keyvaluestore') {
+    sourceSets {
+        testFramework {
+            compileClasspath += sourceSets.main.output
+            runtimeClasspath += sourceSets.main.output
+        }
+        test {
+            compileClasspath += sourceSets.testFramework.output
+            runtimeClasspath += sourceSets.testFramework.output
+        }
+    }
+    configurations {
+        testFramework
+        testFrameworkImplementation.extendsFrom implementation
+        testFrameworkRuntimeOnly.extendsFrom runtimeOnly
+        testImplementation.extendsFrom testFrameworkImplementation
+        testRuntimeOnly.extendsFrom testFrameworkRuntimeOnly
+    }
+    task jarTestFramework (type: Jar) {
+        from sourceSets.testFramework.output
+        classifier = 'testFramework'
+    }
+    artifacts {
+        testFramework jarTestFramework
+    }
+    assemble.dependsOn 'jarTestFramework'
+
+    dependencies {
+        implementation project(':application')
+        implementation project(':util')
+        implementation group: 'org.mapdb', name: 'mapdb', version: '3.+'
+        implementation group: 'com.google.inject', name: 'guice', version: '4.+'
+        implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.+'
+
+        testFrameworkImplementation project(':testFramework')
+        testFrameworkImplementation project(path: ':application', configuration: 'testFramework')
         testFrameworkImplementation project(path: ':util', configuration: 'testFramework')
         testFrameworkImplementation group: 'junit', name: 'junit', version: '4.+'
         testFrameworkImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
