@@ -20,7 +20,7 @@ public class TypedLongUnitTests extends StronglyTypedContractTests<Long> {
   private static final class TestTypedLong extends TypedLong {
 
     public static TestTypedLong of(final Long value) {
-      return TypedLong.of(TestTypedLong.class, value);
+      return of(TestTypedLong.class, value);
     }
 
     private TestTypedLong(final Long value) {

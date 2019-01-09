@@ -20,7 +20,7 @@ public class TypedFloatUnitTests extends StronglyTypedContractTests<Float> {
   private static final class TestTypedFloat extends TypedFloat {
 
     public static TestTypedFloat of(final Float value) {
-      return TypedFloat.of(TestTypedFloat.class, value);
+      return of(TestTypedFloat.class, value);
     }
 
     private TestTypedFloat(final Float value) {

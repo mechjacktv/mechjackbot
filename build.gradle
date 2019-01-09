@@ -12,94 +12,157 @@ buildscript {
 
 }
 
-apply plugin: 'application'
-apply plugin: 'ch.raffael.markdown-doclet'
-apply plugin: "com.diffplug.gradle.spotless"
-apply plugin: 'com.google.protobuf'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: "jacoco"
-apply plugin: 'java'
+subprojects {
+    apply plugin: 'ch.raffael.markdown-doclet'
+    apply plugin: "com.diffplug.gradle.spotless"
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    apply plugin: "jacoco"
+    apply plugin: 'java'
 
-mainClassName = 'tv.mechjack.mechjackbot.main.Main'
-group = 'tv.mechjack.mechjackbot'
-version = System.getenv("BUILDVER") != null ? System.getenv("BUILDVER") : 'DEV_SNAPSHOT'
+    archivesBaseName = "${rootProject.name}-${project.name}"
+    group = 'tv.mechjack.mechjackbot'
+    version = System.getenv("BUILDVER") != null ? System.getenv("BUILDVER") : 'DEV_SNAPSHOT'
 
-repositories {
-    jcenter()
-}
-
-sourceSets {
-    testFramework {
-        compileClasspath += sourceSets.main.output
-        runtimeClasspath += sourceSets.main.output
+    repositories {
+        jcenter()
     }
-    test {
-        compileClasspath += sourceSets.testFramework.output
-        runtimeClasspath += sourceSets.testFramework.output
+
+    jacocoTestReport {
+        afterEvaluate {
+            classDirectories = files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: '**/ProtoMessage**')
+            })
+        }
     }
-}
+    check.dependsOn 'jacocoTestReport'
 
-configurations {
-    testFramework
-    testFrameworkImplementation.extendsFrom implementation
-    testFrameworkRuntimeOnly.extendsFrom runtimeOnly
-    testImplementation.extendsFrom testFrameworkImplementation
-    testRuntimeOnly.extendsFrom testFrameworkRuntimeOnly
-}
+    spotless {
+        java {
+            importOrder 'java', 'javax', 'com', 'org', '', 'tv.mechjack'
+            eclipse().configFile rootProject.file('src/main/resource/eclipse_java_formatter_rules.xml')
+            removeUnusedImports()
+            trimTrailingWhitespace()
+            endWithNewline()
+        }
+        format 'misc', {
+            target '**/*.gradle', '**/*.md', '**/.gitignore', '**/*.proto'
+            trimTrailingWhitespace()
+            indentWithSpaces(2)
+            endWithNewline()
+        }
+    }
+    compileJava.dependsOn 'spotlessApply'
 
-dependencies {
-    implementation group: 'com.google.code.gson', name: 'gson', version: '2.+'
-    implementation group: 'com.google.guava', name: 'guava', version: '23.+'
-    implementation group: 'com.google.inject', name: 'guice', version: '4.+'
-    implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.+'
-    implementation group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.+'
-    implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
-    implementation group: 'org.mapdb', name: 'mapdb', version: '3.+'
-    implementation group: 'org.kitteh.irc', name: 'client-lib', version: '4.+'
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
-    runtimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'
-
-    testFrameworkImplementation group: 'junit', name: 'junit', version: '4.+'
-    testFrameworkImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
-    testFrameworkImplementation group: 'org.mockito', name: 'mockito-core', version: '2.+'
-    testFrameworkImplementation group: 'pl.pragmatists', name: 'JUnitParams', version: '1.+'
-
-    testRuntimeOnly group: 'org.slf4j', name: 'slf4j-nop', version: '1.+'
-}
-
-task jarTestFramework (type: Jar) {
-    from sourceSets.testFramework.output
-    classifier = 'testFramework'
-}
-
-artifacts {
-    testFramework jarTestFramework
-}
-
-assemble.dependsOn 'jarTestFramework'
-check.dependsOn 'jacocoTestReport'
-compileJava.dependsOn 'spotlessApply'
-
-jacocoTestReport {
-    afterEvaluate {
-        classDirectories = files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: '**/ProtoMessage**')
-        })
+    dependencies {
+        // nop
     }
 }
-spotless {
-    java {
-        importOrder 'java', 'javax', 'com', 'org', '', 'tv.mechjack'
-        eclipse().configFile rootProject.file('src/main/resource/eclipse_java_formatter_rules.xml')
-        removeUnusedImports()
-        trimTrailingWhitespace()
-        endWithNewline()
+
+project(':all') {
+    apply plugin: 'application'
+    apply plugin: 'com.google.protobuf'
+
+    mainClassName = 'tv.mechjack.mechjackbot.main.Main'
+
+    sourceSets {
+        testFramework {
+            compileClasspath += sourceSets.main.output
+            runtimeClasspath += sourceSets.main.output
+        }
+        test {
+            compileClasspath += sourceSets.testFramework.output
+            runtimeClasspath += sourceSets.testFramework.output
+        }
     }
-    format 'misc', {
-        target '**/*.gradle', '**/*.md', '**/.gitignore', '**/*.proto'
-        trimTrailingWhitespace()
-        indentWithSpaces(2)
-        endWithNewline()
+    configurations {
+        testFramework
+        testFrameworkImplementation.extendsFrom implementation
+        testFrameworkRuntimeOnly.extendsFrom runtimeOnly
+        testImplementation.extendsFrom testFrameworkImplementation
+        testRuntimeOnly.extendsFrom testFrameworkRuntimeOnly
+    }
+    task jarTestFramework (type: Jar) {
+        from sourceSets.testFramework.output
+        classifier = 'testFramework'
+    }
+    artifacts {
+        testFramework jarTestFramework
+    }
+    assemble.dependsOn 'jarTestFramework'
+
+    dependencies {
+        implementation project(':util')
+        // inherited?
+        implementation group: 'com.google.inject', name: 'guice', version: '4.+'
+        implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.+'
+        implementation group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.+'
+        implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
+
+        implementation group: 'com.google.guava', name: 'guava', version: '23.+'
+        implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
+        implementation group: 'com.google.code.gson', name: 'gson', version: '2.+'
+        implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
+        implementation group: 'org.mapdb', name: 'mapdb', version: '3.+'
+        implementation group: 'org.kitteh.irc', name: 'client-lib', version: '4.+'
+        runtimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'
+
+        testFrameworkImplementation project(':testFramework')
+        testFrameworkImplementation project(path: ':util', configuration: 'testFramework')
+        testFrameworkImplementation group: 'junit', name: 'junit', version: '4.+'
+        testFrameworkImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
+        testFrameworkImplementation group: 'org.mockito', name: 'mockito-core', version: '2.+'
+        testFrameworkImplementation group: 'pl.pragmatists', name: 'JUnitParams', version: '1.+'
+        testRuntimeOnly group: 'org.slf4j', name: 'slf4j-nop', version: '1.+'
+    }
+}
+
+project(':testFramework') {
+    dependencies {
+        implementation group: 'com.google.inject', name: 'guice', version: '4.+'
+        implementation group: 'junit', name: 'junit', version: '4.+'
+        implementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
+        implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
+    }
+}
+
+project(':util') {
+    apply plugin: 'com.google.protobuf'
+
+    sourceSets {
+        testFramework {
+            compileClasspath += sourceSets.main.output
+            runtimeClasspath += sourceSets.main.output
+        }
+        test {
+            compileClasspath += sourceSets.testFramework.output
+            runtimeClasspath += sourceSets.testFramework.output
+        }
+    }
+    configurations {
+        testFramework
+        testFrameworkImplementation.extendsFrom implementation
+        testFrameworkRuntimeOnly.extendsFrom runtimeOnly
+        testImplementation.extendsFrom testFrameworkImplementation
+        testRuntimeOnly.extendsFrom testFrameworkRuntimeOnly
+    }
+    task jarTestFramework (type: Jar) {
+        from sourceSets.testFramework.output
+        classifier = 'testFramework'
+    }
+    artifacts {
+        testFramework jarTestFramework
+    }
+    assemble.dependsOn 'jarTestFramework'
+
+    dependencies {
+        implementation group: 'com.google.inject', name: 'guice', version: '4.+'
+        implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.+'
+        implementation group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.+'
+        implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
+        testFrameworkImplementation project(':testFramework')
+        testFrameworkImplementation group: 'junit', name: 'junit', version: '4.+'
+        testFrameworkImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
+        testFrameworkImplementation group: 'org.mockito', name: 'mockito-core', version: '2.+'
     }
 }

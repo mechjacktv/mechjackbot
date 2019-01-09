@@ -20,7 +20,7 @@ public class TypedShortUnitTests extends StronglyTypedContractTests<Short> {
   private static final class TestTypedShort extends TypedShort {
 
     public static TestTypedShort of(final Short value) {
-      return TypedShort.of(TestTypedShort.class, value);
+      return of(TestTypedShort.class, value);
     }
 
     private TestTypedShort(final Short value) {

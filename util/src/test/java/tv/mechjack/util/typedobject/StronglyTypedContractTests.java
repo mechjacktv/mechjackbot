@@ -1,8 +1,8 @@
 package tv.mechjack.util.typedobject;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 public abstract class StronglyTypedContractTests<T> {
@@ -28,9 +28,9 @@ public abstract class StronglyTypedContractTests<T> {
 
   @Test
   public final void new_nullValue_throwsNullPointerException() {
-    final Throwable result = catchThrowable(() -> this.givenIHaveAStronglyTypedValue(null));
+    final Throwable result = Assertions.catchThrowable(() -> this.givenIHaveAStronglyTypedValue(null));
 
-    assertThat(result).isInstanceOf(NullPointerException.class);
+    Assertions.assertThat(result).isInstanceOf(NullPointerException.class);
   }
 
   @Test
@@ -39,7 +39,7 @@ public abstract class StronglyTypedContractTests<T> {
 
     final boolean result = subjectUnderTest.equals(null);
 
-    assertThat(result).isFalse();
+    Assertions.assertThat(result).isFalse();
   }
 
   @Test
@@ -48,7 +48,7 @@ public abstract class StronglyTypedContractTests<T> {
 
     final boolean result = subjectUnderTest.equals(new Object());
 
-    assertThat(result).isFalse();
+    Assertions.assertThat(result).isFalse();
   }
 
   @Test
@@ -58,7 +58,7 @@ public abstract class StronglyTypedContractTests<T> {
 
     final boolean result = subjectUnderTest.equals(objectToCompare);
 
-    assertThat(result).isFalse();
+    Assertions.assertThat(result).isFalse();
   }
 
   @Test
@@ -69,7 +69,7 @@ public abstract class StronglyTypedContractTests<T> {
 
     final boolean result = subjectUnderTest.equals(objectToCompare);
 
-    assertThat(result).isTrue();
+    Assertions.assertThat(result).isTrue();
   }
 
 }

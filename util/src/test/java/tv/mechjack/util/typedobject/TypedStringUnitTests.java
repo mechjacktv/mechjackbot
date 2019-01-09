@@ -20,7 +20,7 @@ public class TypedStringUnitTests extends StronglyTypedContractTests<String> {
   private static final class TestTypedString extends TypedString {
 
     public static TestTypedString of(final String value) {
-      return TypedString.of(TestTypedString.class, value);
+      return of(TestTypedString.class, value);
     }
 
     private TestTypedString(final String value) {
