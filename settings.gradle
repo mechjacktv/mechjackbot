@@ -1,2 +1,2 @@
-include 'all', 'application', 'configuration', 'keyvaluestore', 'testFramework', 'util'
+include 'all', 'application', 'configuration', 'core', 'customcommands', 'keyvaluestore', 'testframework', 'util'
 rootProject.name = 'mechjackbot'

@@ -61,9 +61,94 @@ subprojects {
 
 project(':all') {
     apply plugin: 'application'
-    apply plugin: 'com.google.protobuf'
 
     mainClassName = 'tv.mechjack.mechjackbot.main.Main'
+    applicationDefaultJvmArgs = ["-Dmechjackbot.plugin_module_names=tv.mechjack.mechjackbot.command.custom.CustomCommandModule:tv.mechjack.mechjackbot.command.shoutout.ShoutOutCommandModule"]
+
+    dependencies {
+        runtimeOnly project(':core')
+        runtimeOnly project(':customcommands')
+        runtimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'
+    }
+}
+
+project(':application') {
+    sourceSets {
+        testFramework {
+            compileClasspath += sourceSets.main.output
+            runtimeClasspath += sourceSets.main.output
+        }
+        test {
+            compileClasspath += sourceSets.testFramework.output
+            runtimeClasspath += sourceSets.testFramework.output
+        }
+    }
+    configurations {
+        testFramework
+        testFrameworkImplementation.extendsFrom implementation
+        testFrameworkRuntimeOnly.extendsFrom runtimeOnly
+        testImplementation.extendsFrom testFrameworkImplementation
+        testRuntimeOnly.extendsFrom testFrameworkRuntimeOnly
+    }
+    task jarTestFramework (type: Jar) {
+        from sourceSets.testFramework.output
+        classifier = 'testFramework'
+    }
+    artifacts {
+        testFramework jarTestFramework
+    }
+    assemble.dependsOn 'jarTestFramework'
+
+    dependencies {
+        implementation project(':util')
+        implementation group: 'com.google.inject', name: 'guice', version: '4.+'
+        implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
+
+        testFrameworkImplementation project(':testframework')
+    }
+}
+
+project(':configuration') {
+    sourceSets {
+        testFramework {
+            compileClasspath += sourceSets.main.output
+            runtimeClasspath += sourceSets.main.output
+        }
+        test {
+            compileClasspath += sourceSets.testFramework.output
+            runtimeClasspath += sourceSets.testFramework.output
+        }
+    }
+    configurations {
+        testFramework
+        testFrameworkImplementation.extendsFrom implementation
+        testFrameworkRuntimeOnly.extendsFrom runtimeOnly
+        testImplementation.extendsFrom testFrameworkImplementation
+        testRuntimeOnly.extendsFrom testFrameworkRuntimeOnly
+    }
+    task jarTestFramework (type: Jar) {
+        from sourceSets.testFramework.output
+        classifier = 'testFramework'
+    }
+    artifacts {
+        testFramework jarTestFramework
+    }
+    assemble.dependsOn 'jarTestFramework'
+
+    dependencies {
+        implementation project(':util')
+        implementation group: 'com.google.inject', name: 'guice', version: '4.+'
+        implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
+
+        testFrameworkImplementation project(':testframework')
+        testFrameworkImplementation project(path: ':util', configuration: 'testFramework')
+        testFrameworkImplementation group: 'junit', name: 'junit', version: '4.+'
+        testFrameworkImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
+    }
+}
+
+project(':core') {
+    apply plugin: 'com.google.protobuf'
 
     sourceSets {
         testFramework {
@@ -104,9 +189,8 @@ project(':all') {
         implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
         implementation group: 'org.kitteh.irc', name: 'client-lib', version: '4.+'
         implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
-        runtimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'
 
-        testFrameworkImplementation project(':testFramework')
+        testFrameworkImplementation project(':testframework')
         testFrameworkImplementation project(path: ':application', configuration: 'testFramework')
         testFrameworkImplementation project(path: ':configuration', configuration: 'testFramework')
         testFrameworkImplementation project(path: ':keyvaluestore', configuration: 'testFramework')
@@ -119,7 +203,9 @@ project(':all') {
     }
 }
 
-project(':application') {
+project(':customcommands') {
+    apply plugin: 'com.google.protobuf'
+
     sourceSets {
         testFramework {
             compileClasspath += sourceSets.main.output
@@ -147,50 +233,24 @@ project(':application') {
     assemble.dependsOn 'jarTestFramework'
 
     dependencies {
+        implementation project(':configuration')
+        implementation project(':core')
+        implementation project(':keyvaluestore')
         implementation project(':util')
         implementation group: 'com.google.inject', name: 'guice', version: '4.+'
+        implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.+'
+        implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
         implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
 
-        testFrameworkImplementation project(':testFramework')
-    }
-}
-
-project(':configuration') {
-    sourceSets {
-        testFramework {
-            compileClasspath += sourceSets.main.output
-            runtimeClasspath += sourceSets.main.output
-        }
-        test {
-            compileClasspath += sourceSets.testFramework.output
-            runtimeClasspath += sourceSets.testFramework.output
-        }
-    }
-    configurations {
-        testFramework
-        testFrameworkImplementation.extendsFrom implementation
-        testFrameworkRuntimeOnly.extendsFrom runtimeOnly
-        testImplementation.extendsFrom testFrameworkImplementation
-        testRuntimeOnly.extendsFrom testFrameworkRuntimeOnly
-    }
-    task jarTestFramework (type: Jar) {
-        from sourceSets.testFramework.output
-        classifier = 'testFramework'
-    }
-    artifacts {
-        testFramework jarTestFramework
-    }
-    assemble.dependsOn 'jarTestFramework'
-
-    dependencies {
-        implementation project(':util')
-        implementation group: 'com.google.inject', name: 'guice', version: '4.+'
-        implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
-
-        testFrameworkImplementation project(':testFramework')
+        testFrameworkImplementation project(':testframework')
+        testFrameworkImplementation project(path: ':configuration', configuration: 'testFramework')
+        testFrameworkImplementation project(path: ':core', configuration: 'testFramework')
+        testFrameworkImplementation project(path: ':keyvaluestore', configuration: 'testFramework')
         testFrameworkImplementation project(path: ':util', configuration: 'testFramework')
         testFrameworkImplementation group: 'junit', name: 'junit', version: '4.+'
         testFrameworkImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
+        testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.+'
+        testRuntimeOnly group: 'org.slf4j', name: 'slf4j-nop', version: '1.+'
     }
 }
 
@@ -228,7 +288,7 @@ project(':keyvaluestore') {
         implementation group: 'com.google.inject', name: 'guice', version: '4.+'
         implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.+'
 
-        testFrameworkImplementation project(':testFramework')
+        testFrameworkImplementation project(':testframework')
         testFrameworkImplementation project(path: ':application', configuration: 'testFramework')
         testFrameworkImplementation project(path: ':util', configuration: 'testFramework')
         testFrameworkImplementation group: 'junit', name: 'junit', version: '4.+'
@@ -236,7 +296,7 @@ project(':keyvaluestore') {
     }
 }
 
-project(':testFramework') {
+project(':testframework') {
     dependencies {
         implementation group: 'com.google.inject', name: 'guice', version: '4.+'
         implementation group: 'junit', name: 'junit', version: '4.+'
@@ -279,7 +339,7 @@ project(':util') {
         implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.+'
         implementation group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.+'
         implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
-        testFrameworkImplementation project(':testFramework')
+        testFrameworkImplementation project(':testframework')
         testFrameworkImplementation group: 'junit', name: 'junit', version: '4.+'
         testFrameworkImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
         testFrameworkImplementation group: 'org.mockito', name: 'mockito-core', version: '2.+'
