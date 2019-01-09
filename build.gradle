@@ -110,69 +110,38 @@ project(':all') {
     }
 }
 
-project(':application') {
-    dependencies {
-        implementation project(':util')
-    }
-}
-
-project(':configuration') {
-    dependencies {
-        implementation project(':util')
-        testFrameworkImplementation project(path: ':util', configuration: 'testFramework')
-    }
-}
-
 project(':core') {
     dependencies {
-        implementation project(':application')
-        implementation project(':configuration')
-        implementation project(':keyvaluestore')
-        implementation project(':util')
+        implementation project(':platform')
         implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
         implementation group: 'org.kitteh.irc', name: 'client-lib', version: '4.+'
-        testFrameworkImplementation project(path: ':application', configuration: 'testFramework')
-        testFrameworkImplementation project(path: ':configuration', configuration: 'testFramework')
-        testFrameworkImplementation project(path: ':keyvaluestore', configuration: 'testFramework')
-        testFrameworkImplementation project(path: ':util', configuration: 'testFramework')
+        testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
     }
 }
 
 project(':customcommands') {
     dependencies {
-        implementation project(':configuration')
         implementation project(':core')
-        implementation project(':keyvaluestore')
-        implementation project(':util')
+        implementation project(':platform')
         implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
-        testFrameworkImplementation project(path: ':configuration', configuration: 'testFramework')
         testFrameworkImplementation project(path: ':core', configuration: 'testFramework')
-        testFrameworkImplementation project(path: ':keyvaluestore', configuration: 'testFramework')
-        testFrameworkImplementation project(path: ':util', configuration: 'testFramework')
+        testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
     }
 }
 
-project(':keyvaluestore') {
+project(':platform') {
     dependencies {
-        implementation project(':application')
-        implementation project(':util')
         implementation group: 'org.mapdb', name: 'mapdb', version: '3.+'
-        testFrameworkImplementation project(path: ':application', configuration: 'testFramework')
-        testFrameworkImplementation project(path: ':util', configuration: 'testFramework')
     }
 }
 
 project(':shoutoutcommands') {
     dependencies {
-        implementation project(':configuration')
         implementation project(':core')
-        implementation project(':keyvaluestore')
-        implementation project(':util')
+        implementation project(':platform')
         implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
-        testFrameworkImplementation project(path: ':configuration', configuration: 'testFramework')
         testFrameworkImplementation project(path: ':core', configuration: 'testFramework')
-        testFrameworkImplementation project(path: ':keyvaluestore', configuration: 'testFramework')
-        testFrameworkImplementation project(path: ':util', configuration: 'testFramework')
+        testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
     }
 }
 
@@ -180,11 +149,5 @@ project(':testframework') {
     dependencies {
         implementation group: 'junit', name: 'junit', version: '4.+'
         implementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
-    }
-}
-
-project(':util') {
-    dependencies {
-        // empty
     }
 }
