@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Condition;
 import org.junit.Rule;
 import org.junit.Test;

@@ -6,7 +6,6 @@ import static tv.mechjack.mechjackbot.command.BaseChatCommand.KEY_TRIGGER;
 
 import java.util.Optional;
 
-import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Condition;
 import org.junit.Test;
 
@@ -108,8 +107,7 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
 
     final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
     assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
-        ChatMessage.of(
-            String.format(SetCommandChatCommand.DEFAULT_BODY_REQUIRED_MESSAGE_FORMAT, subjectUnderTest.getTrigger()))));
+        ChatMessage.of(SetCommandChatCommand.DEFAULT_BODY_REQUIRED_MESSAGE_FORMAT)));
   }
 
   @Test

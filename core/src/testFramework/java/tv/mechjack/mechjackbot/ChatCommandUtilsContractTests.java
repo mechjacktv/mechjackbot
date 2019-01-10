@@ -116,7 +116,6 @@ public abstract class ChatCommandUtilsContractTests {
   @Test
   public final void hasAccessLevel_messageEventIsFromUserWithRequiredRole_resultIsTrue() {
     this.installModules();
-    final ChatBotConfiguration chatBotConfiguration = this.testFrameworkRule.getInstance(ChatBotConfiguration.class);
     final ChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
     final TestChatUser chatUser = (TestChatUser) chatMessageEvent.getChatUser();
     // chatUser is SUBSCRIBER
@@ -133,7 +132,6 @@ public abstract class ChatCommandUtilsContractTests {
   @Test
   public final void hasAccessLevel_messageEventIsFromUserWithoutRequiredRole_resultIsFalse() {
     this.installModules();
-    final ChatBotConfiguration chatBotConfiguration = this.testFrameworkRule.getInstance(ChatBotConfiguration.class);
     final ChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
     final TestChatUser chatUser = (TestChatUser) chatMessageEvent.getChatUser();
     chatUser.setHasUserRoleHandler(accessLevel -> UserRole.VIEWER.value() <= accessLevel.value());
@@ -556,7 +554,6 @@ public abstract class ChatCommandUtilsContractTests {
     final String messageFormat = this.testFrameworkRule.getArbitraryString() + " %s";
     final ChatCommand chatCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
     final ChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
-    final String chatMessageBase = this.testFrameworkRule.getArbitraryString();
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final ChatMessage result = subjectUnderTest.replaceChatMessageVariables(chatCommand, messageEvent,
@@ -571,7 +568,6 @@ public abstract class ChatCommandUtilsContractTests {
     final String messageFormat = this.testFrameworkRule.getArbitraryString() + " %s";
     final ChatCommand chatCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
     final ChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
-    final String chatMessageBase = this.testFrameworkRule.getArbitraryString();
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final ChatMessage result = subjectUnderTest.replaceChatMessageVariables(chatCommand, messageEvent,
@@ -587,7 +583,6 @@ public abstract class ChatCommandUtilsContractTests {
     final String messageFormat = this.testFrameworkRule.getArbitraryString() + " %s %s";
     final ChatCommand chatCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
     final ChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
-    final String chatMessageBase = this.testFrameworkRule.getArbitraryString();
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final ChatMessage result = subjectUnderTest.replaceChatMessageVariables(chatCommand, messageEvent,

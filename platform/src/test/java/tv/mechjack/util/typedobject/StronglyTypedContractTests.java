@@ -34,15 +34,6 @@ public abstract class StronglyTypedContractTests<T> {
   }
 
   @Test
-  public final void equals_nullValue_returnsFalse() {
-    final StronglyTyped<?> subjectUnderTest = this.givenIHaveAStronglyTypedValue();
-
-    final boolean result = subjectUnderTest.equals(null);
-
-    assertThat(result).isFalse();
-  }
-
-  @Test
   public final void equals_objectNotOfSameType_returnsFalse() {
     final StronglyTyped<?> subjectUnderTest = this.givenIHaveAStronglyTypedValue();
 

@@ -87,10 +87,6 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
     return Integer.parseInt(DEFAULT_FREQUENCY);
   }
 
-  private ConfigurationKey getFrequencyKey() {
-    return ConfigurationKey.of(KEY_FREQUENCY, ShoutOutListenerChatCommand.class);
-  }
-
   @Test
   public final void isTriggered_notACaster_resultIsFalse() {
     this.installModules();

@@ -5,7 +5,6 @@ import static tv.mechjack.mechjackbot.command.core.QuitChatCommand.KEY_DESCRIPTI
 import static tv.mechjack.mechjackbot.command.core.QuitChatCommand.KEY_MESSAGE_FORMAT;
 import static tv.mechjack.mechjackbot.command.core.QuitChatCommand.KEY_TRIGGER;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import tv.mechjack.configuration.ConfigurationKey;

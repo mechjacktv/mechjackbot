@@ -256,7 +256,7 @@ public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractT
     scheduleService.setRunnableHandler(Runnable::run);
     final TestTwitchClient twitchClient = this.testFrameworkRule.getInstance(TestTwitchClient.class);
     twitchClient.setGetUserIdImpl(login -> {
-      throw new RuntimeException();
+      throw new IllegalArgumentException(this.testFrameworkRule.getArbitraryString());
     });
 
     final Throwable thrown = catchThrowable(this::givenASubjectToTest);
