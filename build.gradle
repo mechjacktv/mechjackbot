@@ -1,73 +1,174 @@
 buildscript {
-
     repositories {
         jcenter()
     }
-
     dependencies {
         classpath 'ch.raffael.markdown-doclet:markdown-doclet:1.4'
         classpath "com.diffplug.spotless:spotless-plugin-gradle:3.16.0"
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.4'
     }
-
 }
 
-apply plugin: 'application'
-apply plugin: 'ch.raffael.markdown-doclet'
-apply plugin: "com.diffplug.gradle.spotless"
-apply plugin: 'com.google.protobuf'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: "jacoco"
-apply plugin: 'java'
+subprojects {
+    apply plugin: 'ch.raffael.markdown-doclet'
+    apply plugin: 'com.diffplug.gradle.spotless'
+    apply plugin: 'com.google.protobuf'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    apply plugin: 'jacoco'
+    apply plugin: 'java'
 
-mainClassName = 'tv.mechjack.mechjackbot.main.Main'
-group = 'tv.mechjack.mechjackbot'
-version = System.getenv("BUILDVER") != null ? System.getenv("BUILDVER") : 'DEV_SNAPSHOT'
+    archivesBaseName = "${rootProject.name}-${project.name}"
+    group = 'tv.mechjack'
+    version = System.getenv("BUILDVER") != null ? System.getenv("BUILDVER") : 'DEV_SNAPSHOT'
 
-repositories {
-    jcenter()
+    jacocoTestReport {
+        afterEvaluate {
+            classDirectories = files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: '**/ProtoMessage**')
+            })
+        }
+    }
+    check.dependsOn 'jacocoTestReport'
+
+    spotless {
+        java {
+            importOrder 'java', 'javax', 'com', 'org', '', 'tv.mechjack'
+            eclipse().configFile rootProject.file('src/buildscript/eclipse_java_formatter_rules.xml')
+            removeUnusedImports()
+            trimTrailingWhitespace()
+            endWithNewline()
+        }
+        format 'misc', {
+            target '**/*.gradle', '**/*.md', '**/.gitignore', '**/*.proto'
+            trimTrailingWhitespace()
+            indentWithSpaces(2)
+            endWithNewline()
+        }
+    }
+    compileJava.dependsOn 'spotlessApply'
+
+    sourceSets {
+        testFramework {
+            compileClasspath += sourceSets.main.output
+            runtimeClasspath += sourceSets.main.output
+        }
+        test {
+            compileClasspath += sourceSets.testFramework.output
+            runtimeClasspath += sourceSets.testFramework.output
+        }
+    }
+    configurations {
+        testFramework
+        testFrameworkImplementation.extendsFrom implementation
+        testFrameworkRuntimeOnly.extendsFrom runtimeOnly
+        testImplementation.extendsFrom testFrameworkImplementation
+        testRuntimeOnly.extendsFrom testFrameworkRuntimeOnly
+    }
+    task jarTestFramework (type: Jar) {
+        from sourceSets.testFramework.output
+        classifier = 'testFramework'
+    }
+    artifacts {
+        testFramework jarTestFramework
+    }
+    assemble.dependsOn 'jarTestFramework'
+
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        implementation group: 'com.google.code.gson', name: 'gson', version: '2.+'
+        implementation group: 'com.google.guava', name: 'guava', version: '23.+'
+        implementation group: 'com.google.inject', name: 'guice', version: '4.+'
+        implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.+'
+        implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
+        testFrameworkImplementation project(':testframework')
+        testFrameworkImplementation group: 'junit', name: 'junit', version: '4.+'
+        testFrameworkImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
+        testFrameworkImplementation group: 'org.mockito', name: 'mockito-core', version: '2.+'
+        testFrameworkImplementation group: 'pl.pragmatists', name: 'JUnitParams', version: '1.+'
+        testRuntimeOnly group: 'org.slf4j', name: 'slf4j-nop', version: '1.+'
+    }
 }
 
-dependencies {
-    implementation group: 'com.google.code.gson', name: 'gson', version: '2.+'
-    implementation group: 'com.google.guava', name: 'guava', version: '23.+'
-    implementation group: 'com.google.inject', name: 'guice', version: '4.+'
-    implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.+'
-    implementation group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.+'
+/*******************************
+ * APPLICATION BASE PROJECTS
+ */
+
+project(':testframework') {
+    archivesBaseName = "mechjack-${project.name}"
+
+    dependencies {
+        implementation group: 'junit', name: 'junit', version: '4.+'
+        implementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
+    }
+}
+
+project(':platform') {
+    archivesBaseName = "mechjack-${project.name}"
+
+    dependencies {
+        implementation group: 'org.mapdb', name: 'mapdb', version: '3.+'
+    }
+}
+
+project(':core') {
+    dependencies {
+        implementation project(':platform')
+        implementation group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.+'
+        implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
+        implementation group: 'org.kitteh.irc', name: 'client-lib', version: '4.+'
+        testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
+    }
+}
+
+/*******************************
+ * APPLICATION PLUGIN PROJECTS
+ */
+
+project(':plugin:customcommands') {
+    dependencies {
+        implementation project(':core')
+        implementation project(':platform')
+        implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
+        testFrameworkImplementation project(path: ':core', configuration: 'testFramework')
+        testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
+    }
+}
+
+project(':plugin:shoutouts') {
+  dependencies {
+    implementation project(':core')
+    implementation project(':platform')
     implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
-    implementation group: 'org.mapdb', name: 'mapdb', version: '3.+'
-    implementation group: 'org.kitteh.irc', name: 'client-lib', version: '4.+'
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
-    runtimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'
-    testImplementation group: 'junit', name: 'junit', version: '4.+'
-    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.+'
-    testImplementation group: 'pl.pragmatists', name: 'JUnitParams', version: '1.+'
-    testRuntimeOnly group: 'org.slf4j', name: 'slf4j-nop', version: '1.+'
+    testFrameworkImplementation project(path: ':core', configuration: 'testFramework')
+    testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
+  }
 }
 
-build.dependsOn 'jacocoTestReport', 'spotlessApply'
+/*******************************
+ * APPLICATION WITH ALL PLUGINS
+ */
 
-jacocoTestReport {
-    afterEvaluate {
-        classDirectories = files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: 'tv/mechjack/proto/**')
-        })
+project(':all') {
+    apply plugin: 'application'
+
+    mainClassName = 'tv.mechjack.mechjackbot.main.Main'
+    applicationDefaultJvmArgs = ["-Dmechjackbot.plugin_module_names=tv.mechjack.mechjackbot.command.custom.CustomCommandModule:tv.mechjack.mechjackbot.command.shoutout.ShoutOutCommandModule"]
+
+    dependencies {
+        runtimeOnly project(':core')
+        runtimeOnly project(':plugin:customcommands')
+        runtimeOnly project(':plugin:shoutouts')
+        runtimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'
     }
-}
-spotless {
-    java {
-        importOrder 'java', 'javax', 'com', 'org', '', 'tv.mechjack'
-        eclipse().configFile rootProject.file('src/main/resource/eclipse_java_formatter_rules.xml')
-        removeUnusedImports()
-        trimTrailingWhitespace()
-        endWithNewline()
-    }
-    format 'misc', {
-        target '**/*.gradle', '**/*.md', '**/.gitignore', '**/*.proto'
-        trimTrailingWhitespace()
-        indentWithSpaces(2)
-        endWithNewline()
+
+    distributions {
+        main {
+            contents {
+                baseName = "mechjackbot-${project.getProperty('name')}"
+            }
+        }
     }
 }
