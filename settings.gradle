@@ -1,8 +1,8 @@
 // APPLICATION BASE PROJECTS
-include 'testframework', 'platform','core'
+include ':testframework', ':platform',':core'
 // APPLICATION PLUGIN PROJECTS
-include 'customcommands', 'shoutoutcommands'
+include ':plugin:customcommands', ':plugin:shoutouts'
 // APPLICATION WITH ALL PLUGINS
-include 'all'
+include ':all'
 
 rootProject.name = 'mechjackbot'
