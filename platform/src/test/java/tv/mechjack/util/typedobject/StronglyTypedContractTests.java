@@ -30,7 +30,7 @@ public abstract class StronglyTypedContractTests<T> {
   public final void new_nullValue_throwsNullPointerException() {
     final Throwable result = Assertions.catchThrowable(() -> this.givenIHaveAStronglyTypedValue(null));
 
-    Assertions.assertThat(result).isInstanceOf(NullPointerException.class);
+    assertThat(result).isInstanceOf(NullPointerException.class);
   }
 
   @Test
@@ -39,7 +39,7 @@ public abstract class StronglyTypedContractTests<T> {
 
     final boolean result = subjectUnderTest.equals(null);
 
-    Assertions.assertThat(result).isFalse();
+    assertThat(result).isFalse();
   }
 
   @Test
@@ -48,7 +48,7 @@ public abstract class StronglyTypedContractTests<T> {
 
     final boolean result = subjectUnderTest.equals(new Object());
 
-    Assertions.assertThat(result).isFalse();
+    assertThat(result).isFalse();
   }
 
   @Test
@@ -58,7 +58,7 @@ public abstract class StronglyTypedContractTests<T> {
 
     final boolean result = subjectUnderTest.equals(objectToCompare);
 
-    Assertions.assertThat(result).isFalse();
+    assertThat(result).isFalse();
   }
 
   @Test
@@ -69,7 +69,7 @@ public abstract class StronglyTypedContractTests<T> {
 
     final boolean result = subjectUnderTest.equals(objectToCompare);
 
-    Assertions.assertThat(result).isTrue();
+    assertThat(result).isTrue();
   }
 
 }

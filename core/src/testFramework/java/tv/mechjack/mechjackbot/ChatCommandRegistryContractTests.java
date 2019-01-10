@@ -48,7 +48,7 @@ public abstract class ChatCommandRegistryContractTests {
     subjectUnderTest.addCommand(chatCommand);
     final Collection<ChatCommand> result = subjectUnderTest.getCommands();
 
-    Assertions.assertThat(result).containsOnly(chatCommand);
+    assertThat(result).containsOnly(chatCommand);
   }
 
   @Test
@@ -60,7 +60,7 @@ public abstract class ChatCommandRegistryContractTests {
     subjectUnderTest.addCommand(chatCommand);
     final Optional<ChatCommand> result = subjectUnderTest.getCommand(chatCommand.getTrigger());
 
-    Assertions.assertThat(result).is(new Condition<Optional<ChatCommand>>() {
+    assertThat(result).is(new Condition<Optional<ChatCommand>>() {
 
       @Override
       public boolean matches(final Optional<ChatCommand> value) {

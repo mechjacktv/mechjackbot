@@ -159,7 +159,7 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
     subjectUnderTest.handleMessageEvent(messageEvent);
 
     final CustomCommandDataStore dataStore = this.testFrameworkRule.getInstance(CustomCommandDataStore.class);
-    Assertions.assertThat(dataStore.get(dataStore.createCustomCommandKey(customTrigger))).is(new Condition<>(
+    assertThat(dataStore.get(dataStore.createCustomCommandKey(customTrigger))).is(new Condition<>(
         command -> command.isPresent() && customBody.value.equals(command.get().getCommandBody()),
         "command was added with expected body"));
   }

@@ -98,7 +98,7 @@ public class QuitChatCommandUnitTests extends BaseChatCommandContractTests {
 
     subjectUnderTest.handleMessageEvent(messageEvent);
 
-    Assertions.assertThat(((TestChatBot) messageEvent.getChatBot()).wasStopped()).isTrue();
+    assertThat(((TestChatBot) messageEvent.getChatBot()).wasStopped()).isTrue();
   }
 
   @Test
