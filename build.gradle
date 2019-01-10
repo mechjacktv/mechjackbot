@@ -1,15 +1,12 @@
 buildscript {
-
     repositories {
         jcenter()
     }
-
     dependencies {
         classpath 'ch.raffael.markdown-doclet:markdown-doclet:1.4'
         classpath "com.diffplug.spotless:spotless-plugin-gradle:3.16.0"
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.4'
     }
-
 }
 
 subprojects {
@@ -24,10 +21,6 @@ subprojects {
     archivesBaseName = "${rootProject.name}-${project.name}"
     group = 'tv.mechjack'
     version = System.getenv("BUILDVER") != null ? System.getenv("BUILDVER") : 'DEV_SNAPSHOT'
-
-    repositories {
-        jcenter()
-    }
 
     jacocoTestReport {
         afterEvaluate {
@@ -81,11 +74,14 @@ subprojects {
     }
     assemble.dependsOn 'jarTestFramework'
 
+    repositories {
+        jcenter()
+    }
     dependencies {
+        implementation group: 'com.google.code.gson', name: 'gson', version: '2.+'
         implementation group: 'com.google.guava', name: 'guava', version: '23.+'
         implementation group: 'com.google.inject', name: 'guice', version: '4.+'
         implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.+'
-        implementation group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.+'
         implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
         testFrameworkImplementation project(':testframework')
         testFrameworkImplementation group: 'junit', name: 'junit', version: '4.+'
@@ -120,6 +116,7 @@ project(':platform') {
 project(':core') {
     dependencies {
         implementation project(':platform')
+        implementation group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.+'
         implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
         implementation group: 'org.kitteh.irc', name: 'client-lib', version: '4.+'
         testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
