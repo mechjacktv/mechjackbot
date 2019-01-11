@@ -1,17 +1,16 @@
-package tv.mechjack.mechjackbot.api;
+package tv.mechjack.mechjackbot.core;
 
 import java.util.List;
 
 import picocli.CommandLine.Model.OptionSpec;
 import picocli.CommandLine.Model.PositionalParamSpec;
 
-public final class PicoCliUtil {
+import tv.mechjack.mechjackbot.api.PicoCliUtils;
 
-  private PicoCliUtil() {
-    /* no-op (2018-12-23 mechjack) prevents instantiation */
-  }
+public final class DefaultPicoCliUtils implements PicoCliUtils {
 
-  public static OptionSpec createStringOption(final boolean required, final String name,
+  @Override
+  public OptionSpec createStringOption(final boolean required, final String name,
       final String... names) {
     return OptionSpec.builder(name, names)
         .required(required)
@@ -19,7 +18,8 @@ public final class PicoCliUtil {
         .build();
   }
 
-  public static PositionalParamSpec createStringParam(final boolean required, final String index) {
+  @Override
+  public PositionalParamSpec createStringParam(final boolean required, final String index) {
     return PositionalParamSpec.builder()
         .required(required)
         .index(index)
@@ -27,7 +27,8 @@ public final class PicoCliUtil {
         .build();
   }
 
-  public static PositionalParamSpec createStringListParam(final boolean required,
+  @Override
+  public PositionalParamSpec createStringListParam(final boolean required,
       final String index) {
     return PositionalParamSpec.builder()
         .required(required)

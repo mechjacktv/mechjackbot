@@ -1,7 +1,11 @@
 package tv.mechjack.mechjackbot.api;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import picocli.CommandLine;
 import picocli.CommandLine.IParseResultHandler2;
@@ -17,6 +21,8 @@ public abstract class BaseChatCommand implements PicoCliCommandParser, Respondin
   public static final String KEY_DESCRIPTION = "description";
   public static final String KEY_MESSAGE_FORMAT = "message_format";
   public static final String KEY_TRIGGER = "trigger";
+
+  public static final Pattern ARGUMENTS_PATTERN = Pattern.compile("(\"(.+)\"|(\\S+))");
 
   private final Configuration configuration;
   private final ChatCommandUtils chatCommandUtils;
@@ -123,8 +129,27 @@ public abstract class BaseChatCommand implements PicoCliCommandParser, Respondin
       this.sendUsage(messageEvent);
       return false;
     }
+
+    // !setcommand !trigger -r SUBSCRIBER -d "This is a description" This is a
+    // command body
     return commandLine.parseWithHandlers(handler, new ShowUsagePicoCliExceptionHandler(this, messageEvent),
-        cleanMessage.value.split("\\s+"));
+        this.splitArguments(cleanMessage.value));
+  }
+
+  private String[] splitArguments(final String argumentsLine) {
+    final List<String> arguments = new ArrayList<>();
+    final Matcher matcher = ARGUMENTS_PATTERN.matcher(argumentsLine);
+
+    while (matcher.find()) {
+      final String argument = matcher.group();
+
+      if (argument.startsWith("\"")) {
+        arguments.add(matcher.group(2));
+      } else {
+        arguments.add(argument);
+      }
+    }
+    return arguments.toArray(new String[0]);
   }
 
 }

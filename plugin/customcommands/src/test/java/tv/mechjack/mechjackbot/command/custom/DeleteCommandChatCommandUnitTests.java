@@ -124,7 +124,8 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
     final String trigger = this.testFrameworkRule.getArbitraryString();
     final CustomChatCommandService service = this.testFrameworkRule.getInstance(CustomChatCommandService.class);
     service.createCustomChatCommand(ChatCommandTrigger.of(trigger),
-        CommandBody.of(this.testFrameworkRule.getArbitraryString()), UserRole.VIEWER);
+        CommandBody.of(this.testFrameworkRule.getArbitraryString()),
+        ChatCommandDescription.of(this.testFrameworkRule.getArbitraryString()), UserRole.VIEWER);
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     final DeleteCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), trigger)));
@@ -146,7 +147,8 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
     final String trigger = this.testFrameworkRule.getArbitraryString();
     final CustomChatCommandService service = this.testFrameworkRule.getInstance(CustomChatCommandService.class);
     service.createCustomChatCommand(ChatCommandTrigger.of(trigger),
-        CommandBody.of(this.testFrameworkRule.getArbitraryString()), UserRole.VIEWER);
+        CommandBody.of(this.testFrameworkRule.getArbitraryString()),
+        ChatCommandDescription.of(this.testFrameworkRule.getArbitraryString()), UserRole.VIEWER);
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     final DeleteCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), trigger)));

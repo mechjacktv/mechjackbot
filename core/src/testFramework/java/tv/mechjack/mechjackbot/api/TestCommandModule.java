@@ -9,6 +9,7 @@ import com.google.inject.multibindings.Multibinder;
 import tv.mechjack.mechjackbot.core.DefaultChatCommandRegistry;
 import tv.mechjack.mechjackbot.core.DefaultChatCommandUtils;
 import tv.mechjack.mechjackbot.core.DefaultCommandConfigurationBuilder;
+import tv.mechjack.mechjackbot.core.DefaultPicoCliUtils;
 
 public class TestCommandModule extends AbstractModule {
 
@@ -22,6 +23,7 @@ public class TestCommandModule extends AbstractModule {
     this.bind(ChatMessageEvent.class).to(TestChatMessageEvent.class);
     // TODO (2019-01-10 mechjack): Create TestChatMessageEventHandler
     this.bind(ChatMessageEventHandler.class).toInstance(mock(ChatMessageEventHandler.class));
+    this.bind(PicoCliUtils.class).to(DefaultPicoCliUtils.class).in(Scopes.SINGLETON);
 
     this.bind(TestChatCommand.class);
     Multibinder.newSetBinder(this.binder(), ChatCommand.class).addBinding().to(TestChatCommand.class)

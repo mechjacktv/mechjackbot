@@ -5,9 +5,12 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import com.google.common.base.Strings;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import tv.mechjack.mechjackbot.api.ChatCommandDescription;
 import tv.mechjack.mechjackbot.api.ChatCommandRegistry;
 import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
 import tv.mechjack.mechjackbot.api.ChatCommandUtils;
@@ -19,6 +22,8 @@ import tv.mechjack.util.ExecutionUtils;
 public final class DefaultCustomChatCommandService implements CustomChatCommandService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DefaultCustomChatCommandService.class);
+
+  public static final String DEFAULT_COMMAND_DESCRIPTION = "This is a custom command.";
 
   private final ChatCommandUtils chatCommandUtils;
   private final ChatCommandRegistry chatCommandRegistry;
@@ -41,15 +46,27 @@ public final class DefaultCustomChatCommandService implements CustomChatCommandS
       this.customCommandDataStore.get(key).ifPresent(customCommand -> {
         final ChatCommandTrigger trigger = ChatCommandTrigger.of(customCommand.getTrigger());
         final CommandBody commandBody = CommandBody.of(customCommand.getCommandBody());
+        final ChatCommandDescription description = ChatCommandDescription.of(this.getCustomDescription(customCommand));
         final UserRole userRole = UserRole.valueOf(customCommand.getAccessLevel());
 
-        this.addCommand(trigger, commandBody, userRole);
+        this.addCommand(trigger, commandBody, description, userRole);
       });
     }
   }
 
-  private void addCommand(final ChatCommandTrigger trigger, CommandBody commandBody, UserRole userRole) {
-    this.chatCommandRegistry.addCommand(new CustomChatCommand(this.chatCommandUtils, trigger, commandBody, userRole));
+  private String getCustomDescription(final CustomCommand customCommand) {
+    final String configuredDescription = customCommand.getDescription();
+
+    if (Strings.isNullOrEmpty(configuredDescription)) {
+      return DEFAULT_COMMAND_DESCRIPTION;
+    }
+    return configuredDescription;
+  }
+
+  private void addCommand(final ChatCommandTrigger trigger, final CommandBody commandBody,
+      final ChatCommandDescription description, final UserRole userRole) {
+    this.chatCommandRegistry.addCommand(new CustomChatCommand(this.chatCommandUtils, trigger, commandBody,
+        description, userRole));
   }
 
   @Override
@@ -63,7 +80,7 @@ public final class DefaultCustomChatCommandService implements CustomChatCommandS
 
   @Override
   public final void createCustomChatCommand(final ChatCommandTrigger trigger, final CommandBody commandBody,
-      final UserRole userRole) {
+      final ChatCommandDescription description, final UserRole userRole) {
     Objects.requireNonNull(trigger, this.executionUtils.nullMessageForName("trigger"));
     Objects.requireNonNull(commandBody, this.executionUtils.nullMessageForName("commandBody"));
 
@@ -73,19 +90,22 @@ public final class DefaultCustomChatCommandService implements CustomChatCommandS
 
     final CustomCommandKey key = this.customCommandDataStore.createCustomCommandKey(trigger);
     final UserRole actualUserRole = userRole == null ? UserRole.VIEWER : userRole;
+    final ChatCommandDescription actualDescription = description == null
+        ? ChatCommandDescription.of(DEFAULT_COMMAND_DESCRIPTION)
+        : description;
 
     this.customCommandDataStore.put(key,
-        this.customCommandDataStore.createCustomCommand(trigger, commandBody, actualUserRole));
-    this.addCommand(trigger, commandBody, actualUserRole);
+        this.customCommandDataStore.createCustomCommand(trigger, commandBody, actualDescription, actualUserRole));
+    this.addCommand(trigger, commandBody, actualDescription, actualUserRole);
     LOGGER.info("Created custom command, " + trigger);
   }
 
   @Override
   public final void updateCustomChatCommand(final ChatCommandTrigger trigger, final CommandBody commandBody,
-      final UserRole userRole) {
+      final ChatCommandDescription description, final UserRole userRole) {
     Objects.requireNonNull(trigger, this.executionUtils.nullMessageForName("trigger"));
 
-    if (Objects.isNull(userRole) && Objects.isNull(commandBody)) {
+    if (Objects.isNull(description) && Objects.isNull(userRole) && Objects.isNull(commandBody)) {
       LOGGER.debug("No updates needed for custom chat command, " + trigger);
       return;
     }
@@ -97,12 +117,16 @@ public final class DefaultCustomChatCommandService implements CustomChatCommandS
       final CustomCommand customCommand = optionalCustomCommand.get();
       final CommandBody actualCommandBody = commandBody == null ? CommandBody.of(customCommand.getCommandBody())
           : commandBody;
+      final ChatCommandDescription actualDescription = description == null
+          ? ChatCommandDescription.of(customCommand.getDescription())
+          : description;
       final UserRole actualUserRole = userRole == null ? UserRole.valueOf(customCommand.getAccessLevel()) : userRole;
 
       this.customCommandDataStore.put(key,
-          this.customCommandDataStore.createCustomCommand(trigger, actualCommandBody, actualUserRole));
+          this.customCommandDataStore.createCustomCommand(trigger, actualCommandBody,
+              actualDescription, actualUserRole));
       this.chatCommandRegistry.removeCommand(trigger);
-      this.addCommand(trigger, actualCommandBody, actualUserRole);
+      this.addCommand(trigger, actualCommandBody, actualDescription, actualUserRole);
       LOGGER.info("Updated custom chat command, " + trigger);
     } else {
       throw new IllegalStateException("No existing custom command to update, " + trigger);

@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import tv.mechjack.keyvaluestore.ChatMessageStoreContractTests;
 import tv.mechjack.keyvaluestore.MapKeyValueStore;
+import tv.mechjack.mechjackbot.api.ChatCommandDescription;
 import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
 import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommand;
@@ -83,7 +84,8 @@ public class DefaultCustomCommandDataStoreUnitTests extends
     final DefaultCustomCommandDataStore subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.createCustomCommand(null,
-        CommandBody.of(this.testFrameworkRule.getArbitraryString()), UserRole.SUBSCRIBER));
+        CommandBody.of(this.testFrameworkRule.getArbitraryString()),
+        ChatCommandDescription.of(this.testFrameworkRule.getArbitraryString()), UserRole.SUBSCRIBER));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "trigger");
   }
@@ -94,9 +96,23 @@ public class DefaultCustomCommandDataStoreUnitTests extends
     final DefaultCustomCommandDataStore subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.createCustomCommand(
-        ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString()), null, UserRole.SUBSCRIBER));
+        ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString()), null,
+        ChatCommandDescription.of(this.testFrameworkRule.getArbitraryString()), UserRole.SUBSCRIBER));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "commandBody");
+  }
+
+  @Test
+  public final void createCustomCommand_nullDescription_throwsNullPointerException() {
+    this.installModules();
+    final DefaultCustomCommandDataStore subjectUnderTest = this.givenASubjectToTest();
+
+    final Throwable thrown = catchThrowable(() -> subjectUnderTest.createCustomCommand(
+        ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString()),
+        CommandBody.of(this.testFrameworkRule.getArbitraryString()),
+        null, UserRole.SUBSCRIBER));
+
+    this.testFrameworkRule.assertNullPointerException(thrown, "description");
   }
 
   @Test
@@ -106,7 +122,8 @@ public class DefaultCustomCommandDataStoreUnitTests extends
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.createCustomCommand(
         ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString()),
-        CommandBody.of(this.testFrameworkRule.getArbitraryString()), null));
+        CommandBody.of(this.testFrameworkRule.getArbitraryString()),
+        ChatCommandDescription.of(this.testFrameworkRule.getArbitraryString()), null));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "userRole");
   }
@@ -116,14 +133,16 @@ public class DefaultCustomCommandDataStoreUnitTests extends
     this.installModules();
     final String trigger = this.testFrameworkRule.getArbitraryString();
     final String commandBody = this.testFrameworkRule.getArbitraryString();
+    final String description = this.testFrameworkRule.getArbitraryString();
     final DefaultCustomCommandDataStore subjectUnderTest = this.givenASubjectToTest();
 
     final CustomCommand result = subjectUnderTest.createCustomCommand(ChatCommandTrigger.of(trigger),
-        CommandBody.of(commandBody), UserRole.SUBSCRIBER);
+        CommandBody.of(commandBody), ChatCommandDescription.of(description), UserRole.SUBSCRIBER);
 
     final SoftAssertions softly = new SoftAssertions();
     softly.assertThat(result.getTrigger()).isEqualTo(trigger);
     softly.assertThat(result.getCommandBody()).isEqualTo(commandBody);
+    softly.assertThat(result.getDescription()).isEqualTo(description);
     softly.assertThat(result.getAccessLevel()).isEqualTo(UserRole.SUBSCRIBER.toString());
     softly.assertAll();
   }

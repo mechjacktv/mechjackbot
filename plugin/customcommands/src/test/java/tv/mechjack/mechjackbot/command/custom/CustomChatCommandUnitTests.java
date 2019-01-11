@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Test;
 
 import tv.mechjack.mechjackbot.api.ChatCommandContractTests;
+import tv.mechjack.mechjackbot.api.ChatCommandDescription;
 import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
 import tv.mechjack.mechjackbot.api.ChatCommandUtils;
 import tv.mechjack.mechjackbot.api.ChatMessage;
@@ -20,7 +21,8 @@ public class CustomChatCommandUnitTests extends ChatCommandContractTests {
 
   private CustomChatCommand givenASubjectToTest(final CommandBody commandBody) {
     return new CustomChatCommand(this.testFrameworkRule.getInstance(ChatCommandUtils.class),
-        ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString()), commandBody, UserRole.VIEWER);
+        ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString()), commandBody,
+        ChatCommandDescription.of(this.testFrameworkRule.getArbitraryString()), UserRole.VIEWER);
   }
 
   @Test
@@ -29,7 +31,6 @@ public class CustomChatCommandUnitTests extends ChatCommandContractTests {
     final String bodyPart = this.testFrameworkRule.getArbitraryString();
     final CommandBody commandBody = CommandBody.of(bodyPart);
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
-    final String argumentValue = this.testFrameworkRule.getArbitraryString();
     final CustomChatCommand subjectUnderTest = this.givenASubjectToTest(commandBody);
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s", subjectUnderTest.getTrigger())));
 
@@ -103,7 +104,6 @@ public class CustomChatCommandUnitTests extends ChatCommandContractTests {
     final CommandBody commandBody = CommandBody.of(String.format("%s ${%s} ${%s}", bodyPart, argumentName1,
         argumentName2));
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
-    final String argumentValue = this.testFrameworkRule.getArbitraryString();
     final CustomChatCommand subjectUnderTest = this.givenASubjectToTest(commandBody);
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s", subjectUnderTest.getTrigger())));
 
