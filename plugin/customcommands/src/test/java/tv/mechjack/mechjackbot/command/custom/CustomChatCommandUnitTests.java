@@ -4,12 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
-import tv.mechjack.mechjackbot.ChatCommandContractTests;
-import tv.mechjack.mechjackbot.ChatCommandTrigger;
-import tv.mechjack.mechjackbot.ChatCommandUtils;
-import tv.mechjack.mechjackbot.ChatMessage;
-import tv.mechjack.mechjackbot.TestChatMessageEvent;
-import tv.mechjack.mechjackbot.UserRole;
+import tv.mechjack.mechjackbot.api.ChatCommandContractTests;
+import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
+import tv.mechjack.mechjackbot.api.ChatCommandUtils;
+import tv.mechjack.mechjackbot.api.ChatMessage;
+import tv.mechjack.mechjackbot.api.TestChatMessageEvent;
+import tv.mechjack.mechjackbot.api.UserRole;
 
 public class CustomChatCommandUnitTests extends ChatCommandContractTests {
 

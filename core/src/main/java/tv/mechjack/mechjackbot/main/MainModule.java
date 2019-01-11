@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import tv.mechjack.gson.GsonModule;
 import tv.mechjack.keyvaluestore.KeyValueStoreModule;
 import tv.mechjack.mechjackbot.chatbot.kicl.KiclChatBotModule;
-import tv.mechjack.mechjackbot.command.CommandModule;
+import tv.mechjack.mechjackbot.core.CommandModule;
 import tv.mechjack.twitchclient.TwitchClientModule;
 import tv.mechjack.util.UtilModule;
 import tv.mechjack.util.scheduleservice.ScheduleServiceModule;

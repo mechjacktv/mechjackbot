@@ -14,7 +14,7 @@ import org.kitteh.irc.client.library.element.Channel;
 import org.kitteh.irc.client.library.element.User;
 import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 
-import tv.mechjack.mechjackbot.ChatBot;
+import tv.mechjack.mechjackbot.api.ChatBot;
 import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
 import tv.mechjack.testframework.ArbitraryDataGenerator;
 

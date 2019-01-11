@@ -4,15 +4,15 @@ import javax.inject.Inject;
 
 import tv.mechjack.configuration.Configuration;
 import tv.mechjack.configuration.ConfigurationKey;
-import tv.mechjack.mechjackbot.ChatCommandTrigger;
-import tv.mechjack.mechjackbot.ChatCommandUtils;
-import tv.mechjack.mechjackbot.ChatMessage;
-import tv.mechjack.mechjackbot.ChatMessageEvent;
-import tv.mechjack.mechjackbot.RequiresUserRole;
-import tv.mechjack.mechjackbot.UserRole;
-import tv.mechjack.mechjackbot.command.BaseChatCommand;
-import tv.mechjack.mechjackbot.command.CommandConfigurationBuilder;
-import tv.mechjack.mechjackbot.command.CommandMessageFormat;
+import tv.mechjack.mechjackbot.api.BaseChatCommand;
+import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
+import tv.mechjack.mechjackbot.api.ChatCommandUtils;
+import tv.mechjack.mechjackbot.api.ChatMessage;
+import tv.mechjack.mechjackbot.api.ChatMessageEvent;
+import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
+import tv.mechjack.mechjackbot.api.CommandMessageFormat;
+import tv.mechjack.mechjackbot.api.RequiresUserRole;
+import tv.mechjack.mechjackbot.api.UserRole;
 
 public class DeleteCommandChatCommand extends BaseChatCommand {
 

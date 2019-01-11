@@ -10,9 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import tv.mechjack.application.Application;
-import tv.mechjack.mechjackbot.ChatBotConfiguration;
-import tv.mechjack.mechjackbot.ChatChannel;
-import tv.mechjack.mechjackbot.UserPassword;
+import tv.mechjack.mechjackbot.api.ChatBotConfiguration;
+import tv.mechjack.mechjackbot.api.ChatChannel;
+import tv.mechjack.mechjackbot.api.UserPassword;
 import tv.mechjack.twitchclient.TwitchClientConfiguration;
 import tv.mechjack.twitchclient.TwitchClientId;
 import tv.mechjack.twitchclient.TwitchLogin;

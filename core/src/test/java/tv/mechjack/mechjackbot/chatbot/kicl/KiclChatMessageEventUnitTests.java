@@ -12,11 +12,11 @@ import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 
 import tv.mechjack.configuration.Configuration;
 import tv.mechjack.configuration.TestConfigurationModule;
-import tv.mechjack.mechjackbot.ChatBot;
-import tv.mechjack.mechjackbot.ChatMessage;
-import tv.mechjack.mechjackbot.ChatUser;
+import tv.mechjack.mechjackbot.api.ChatBot;
+import tv.mechjack.mechjackbot.api.ChatMessage;
+import tv.mechjack.mechjackbot.api.ChatUser;
+import tv.mechjack.mechjackbot.api.TestCommandModule;
 import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
-import tv.mechjack.mechjackbot.command.TestCommandModule;
 import tv.mechjack.testframework.TestFrameworkRule;
 import tv.mechjack.util.ExecutionUtils;
 import tv.mechjack.util.TestUtilModule;

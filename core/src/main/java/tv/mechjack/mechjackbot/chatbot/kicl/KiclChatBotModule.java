@@ -11,8 +11,8 @@ import org.kitteh.irc.client.library.feature.twitch.TwitchListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tv.mechjack.mechjackbot.ChatBot;
-import tv.mechjack.mechjackbot.ChatBotConfiguration;
+import tv.mechjack.mechjackbot.api.ChatBot;
+import tv.mechjack.mechjackbot.api.ChatBotConfiguration;
 import tv.mechjack.mechjackbot.chatbot.ChatBotModule;
 
 public class KiclChatBotModule extends ChatBotModule {

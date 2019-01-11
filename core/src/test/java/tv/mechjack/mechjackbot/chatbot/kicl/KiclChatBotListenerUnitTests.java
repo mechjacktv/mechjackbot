@@ -8,9 +8,9 @@ import org.junit.Test;
 import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 
 import tv.mechjack.configuration.TestConfigurationModule;
-import tv.mechjack.mechjackbot.ChatMessageEvent;
-import tv.mechjack.mechjackbot.ChatMessageEventHandler;
-import tv.mechjack.mechjackbot.command.TestCommandModule;
+import tv.mechjack.mechjackbot.api.ChatMessageEvent;
+import tv.mechjack.mechjackbot.api.ChatMessageEventHandler;
+import tv.mechjack.mechjackbot.api.TestCommandModule;
 import tv.mechjack.testframework.TestFrameworkRule;
 import tv.mechjack.util.TestUtilModule;
 
