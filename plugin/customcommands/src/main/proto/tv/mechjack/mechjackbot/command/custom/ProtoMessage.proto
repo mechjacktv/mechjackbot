@@ -10,4 +10,5 @@ message CustomCommand {
   string trigger = 1;
   string command_body = 2;
   string access_level = 3;
+  string description = 4;
 }

@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import tv.mechjack.gson.GsonModule;
 import tv.mechjack.keyvaluestore.KeyValueStoreModule;
 import tv.mechjack.mechjackbot.chatbot.kicl.KiclChatBotModule;
-import tv.mechjack.mechjackbot.core.CommandModule;
+import tv.mechjack.mechjackbot.core.CoreCommandModule;
 import tv.mechjack.twitchclient.TwitchClientModule;
 import tv.mechjack.util.UtilModule;
 import tv.mechjack.util.scheduleservice.ScheduleServiceModule;
@@ -27,13 +27,11 @@ final class MainModule extends AbstractModule {
 
   @Override
   protected final void configure() {
-    this.install(new CommandModule());
-    // this.install(new CustomCommandModule());
+    this.install(new CoreCommandModule());
     this.install(new GsonModule());
     this.install(new KeyValueStoreModule());
     this.install(new KiclChatBotModule());
     this.install(new ScheduleServiceModule());
-    // this.install(new ShoutOutCommandModule());
     this.install(new TwitchClientModule());
     this.install(new UtilModule());
 

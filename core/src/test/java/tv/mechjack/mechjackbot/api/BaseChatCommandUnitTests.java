@@ -124,7 +124,8 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void parseArguments_noMessageBody_resultIsFalse() {
     this.installModules();
-    final PositionalParamSpec stringListParam = PicoCliUtil.createStringListParam(false, "0..*");
+    final PicoCliUtils picoCliUtils = this.testFrameworkRule.getInstance(PicoCliUtils.class);
+    final PositionalParamSpec stringListParam = picoCliUtils.createStringListParam(false, "0..*");
 
     final TestChatCommand subjectUnderTest = this.givenASubjectToTest();
     final TestChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
@@ -140,9 +141,10 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void parseArguments_properlyFormattedCommand_resultIsTrue() {
     this.installModules();
-    final OptionSpec stringOption = PicoCliUtil.createStringOption(true, "-r");
-    final PositionalParamSpec stringParam = PicoCliUtil.createStringParam(true, "0");
-    final PositionalParamSpec stringListParam = PicoCliUtil.createStringListParam(true, "1..*");
+    final PicoCliUtils picoCliUtils = this.testFrameworkRule.getInstance(PicoCliUtils.class);
+    final OptionSpec stringOption = picoCliUtils.createStringOption(true, "-r");
+    final PositionalParamSpec stringParam = picoCliUtils.createStringParam(true, "0");
+    final PositionalParamSpec stringListParam = picoCliUtils.createStringListParam(true, "1..*");
 
     final TestChatCommand subjectUnderTest = this.givenASubjectToTest();
     final TestChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
@@ -160,9 +162,10 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void parseArguments_improperlyFormattedCommand_resultIsFalse() {
     this.installModules();
-    final OptionSpec stringOption = PicoCliUtil.createStringOption(true, "-r");
-    final PositionalParamSpec stringParam = PicoCliUtil.createStringParam(true, "0");
-    final PositionalParamSpec stringListParam = PicoCliUtil.createStringListParam(true, "1..*");
+    final PicoCliUtils picoCliUtils = this.testFrameworkRule.getInstance(PicoCliUtils.class);
+    final OptionSpec stringOption = picoCliUtils.createStringOption(true, "-r");
+    final PositionalParamSpec stringParam = picoCliUtils.createStringParam(true, "0");
+    final PositionalParamSpec stringListParam = picoCliUtils.createStringListParam(true, "1..*");
 
     final TestChatCommand subjectUnderTest = this.givenASubjectToTest();
     final TestChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);

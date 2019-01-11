@@ -21,6 +21,7 @@ import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
 import tv.mechjack.mechjackbot.api.ChatCommandUtils;
 import tv.mechjack.mechjackbot.api.ChatMessage;
 import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
+import tv.mechjack.mechjackbot.api.PicoCliUtils;
 import tv.mechjack.mechjackbot.api.TestChatMessageEvent;
 import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommand;
@@ -59,7 +60,8 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
   protected SetCommandChatCommand givenASubjectToTest() {
     return new SetCommandChatCommand(this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class),
         this.testFrameworkRule.getInstance(Configuration.class),
-        this.testFrameworkRule.getInstance(CustomChatCommandService.class));
+        this.testFrameworkRule.getInstance(CustomChatCommandService.class),
+        this.testFrameworkRule.getInstance(PicoCliUtils.class));
   }
 
   @Test
@@ -181,6 +183,25 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
   }
 
   @Test
+  public final void handleMessageEvent_creatingCustomCommandSpecifiedDescription_resultIsNewCommandHasExpectDescription() {
+    this.installModules();
+    final ChatCommandTrigger customTrigger = ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString());
+    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final SetCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
+    final String description = this.testFrameworkRule.getArbitraryString();
+    messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s --description \"%s\" %s",
+        subjectUnderTest.getTrigger(), customTrigger, description, this.testFrameworkRule.getArbitraryString())));
+
+    subjectUnderTest.handleMessageEvent(messageEvent);
+
+    final CustomCommandDataStore dataStore = this.testFrameworkRule.getInstance(CustomCommandDataStore.class);
+    final Optional<CustomCommand> customCommand = dataStore.get(dataStore.createCustomCommandKey(customTrigger));
+    assertThat(customCommand).is(new Condition<>(
+        command -> command.isPresent() && description.equals(command.get().getDescription()),
+        "command was added with expected description"));
+  }
+
+  @Test
   public final void handleMessageEvent_creatingCustomCommand_resultIsSendSuccessMessage() {
     this.installModules();
     final ChatCommandTrigger customTrigger = ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString());
@@ -204,7 +225,8 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
     final CustomChatCommandService customChatCommandService = this.testFrameworkRule
         .getInstance(CustomChatCommandService.class);
     customChatCommandService.createCustomChatCommand(commandTrigger,
-        CommandBody.of(this.testFrameworkRule.getArbitraryString()), null);
+        CommandBody.of(this.testFrameworkRule.getArbitraryString()),
+        ChatCommandDescription.of(this.testFrameworkRule.getArbitraryString()), null);
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     final CommandBody commandBody = CommandBody.of(this.testFrameworkRule.getArbitraryString());
     final SetCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
@@ -227,7 +249,8 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
     final CustomChatCommandService customChatCommandService = this.testFrameworkRule
         .getInstance(CustomChatCommandService.class);
     customChatCommandService.createCustomChatCommand(commandTrigger,
-        CommandBody.of(this.testFrameworkRule.getArbitraryString()), null);
+        CommandBody.of(this.testFrameworkRule.getArbitraryString()),
+        ChatCommandDescription.of(this.testFrameworkRule.getArbitraryString()), null);
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     final SetCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s --user-role %s", subjectUnderTest.getTrigger(),
@@ -243,13 +266,38 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
   }
 
   @Test
+  public final void handleMessageEvent_updatingCustomCommandDescription_resultIsDescriptionUpdated() {
+    this.installModules();
+    final ChatCommandTrigger commandTrigger = ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString());
+    final CustomChatCommandService customChatCommandService = this.testFrameworkRule
+        .getInstance(CustomChatCommandService.class);
+    customChatCommandService.createCustomChatCommand(commandTrigger,
+        CommandBody.of(this.testFrameworkRule.getArbitraryString()),
+        ChatCommandDescription.of(this.testFrameworkRule.getArbitraryString()), null);
+    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final String newDescription = this.testFrameworkRule.getArbitraryString();
+    final SetCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
+    messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s --description %s", subjectUnderTest.getTrigger(),
+        commandTrigger, newDescription)));
+
+    subjectUnderTest.handleMessageEvent(messageEvent);
+
+    final CustomCommandDataStore dataStore = this.testFrameworkRule.getInstance(CustomCommandDataStore.class);
+    final Optional<CustomCommand> customCommand = dataStore.get(dataStore.createCustomCommandKey(commandTrigger));
+    assertThat(customCommand).is(new Condition<>(
+        command -> command.isPresent() && newDescription.equals(command.get().getDescription()),
+        "command was updated with expected description"));
+  }
+
+  @Test
   public final void handleMessageEvent_updatingCustomCommand_resultIsSendSuccessMessage() {
     this.installModules();
     final ChatCommandTrigger commandTrigger = ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString());
     final CustomChatCommandService customChatCommandService = this.testFrameworkRule
         .getInstance(CustomChatCommandService.class);
     customChatCommandService.createCustomChatCommand(commandTrigger,
-        CommandBody.of(this.testFrameworkRule.getArbitraryString()), null);
+        CommandBody.of(this.testFrameworkRule.getArbitraryString()),
+        ChatCommandDescription.of(this.testFrameworkRule.getArbitraryString()), null);
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     final SetCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s --user-role %s %s", subjectUnderTest.getTrigger(),
@@ -270,7 +318,8 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
     final CustomChatCommandService customChatCommandService = this.testFrameworkRule
         .getInstance(CustomChatCommandService.class);
     customChatCommandService.createCustomChatCommand(commandTrigger,
-        CommandBody.of(this.testFrameworkRule.getArbitraryString()), null);
+        CommandBody.of(this.testFrameworkRule.getArbitraryString()),
+        ChatCommandDescription.of(this.testFrameworkRule.getArbitraryString()), null);
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     final SetCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), commandTrigger)));

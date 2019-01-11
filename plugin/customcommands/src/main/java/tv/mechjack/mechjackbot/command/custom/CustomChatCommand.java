@@ -30,10 +30,10 @@ public class CustomChatCommand implements ChatCommand {
   private final UserRole userRole;
 
   protected CustomChatCommand(final ChatCommandUtils chatCommandUtils, final ChatCommandTrigger trigger,
-      final CommandBody commandBody, final UserRole userRole) {
+      final CommandBody commandBody, final ChatCommandDescription description, final UserRole userRole) {
     this.chatCommandUtils = chatCommandUtils;
     this.trigger = trigger;
-    this.description = ChatCommandDescription.of("This is a custom command.");
+    this.description = description;
     this.commandBody = commandBody;
     this.argumentNames = this.getArgumentNames(this.commandBody);
     this.usage = this.createUsage(this.commandBody);
