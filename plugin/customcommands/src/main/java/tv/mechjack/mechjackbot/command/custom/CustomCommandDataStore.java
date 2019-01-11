@@ -1,8 +1,8 @@
 package tv.mechjack.mechjackbot.command.custom;
 
 import tv.mechjack.keyvaluestore.MessageStore;
-import tv.mechjack.mechjackbot.ChatCommandTrigger;
-import tv.mechjack.mechjackbot.UserRole;
+import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
+import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommand;
 import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommandKey;
 

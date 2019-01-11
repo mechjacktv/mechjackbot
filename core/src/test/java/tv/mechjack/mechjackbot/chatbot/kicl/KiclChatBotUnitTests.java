@@ -12,9 +12,9 @@ import org.kitteh.irc.client.library.Client;
 
 import tv.mechjack.configuration.MapConfiguration;
 import tv.mechjack.configuration.TestConfigurationModule;
-import tv.mechjack.mechjackbot.ChatChannel;
-import tv.mechjack.mechjackbot.ChatMessage;
-import tv.mechjack.mechjackbot.command.TestCommandModule;
+import tv.mechjack.mechjackbot.api.ChatChannel;
+import tv.mechjack.mechjackbot.api.ChatMessage;
+import tv.mechjack.mechjackbot.api.TestCommandModule;
 import tv.mechjack.testframework.TestFrameworkRule;
 import tv.mechjack.util.TestUtilModule;
 

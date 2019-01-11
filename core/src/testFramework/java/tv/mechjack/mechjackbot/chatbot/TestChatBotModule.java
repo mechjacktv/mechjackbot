@@ -3,7 +3,7 @@ package tv.mechjack.mechjackbot.chatbot;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 
-import tv.mechjack.mechjackbot.ChatBotConfiguration;
+import tv.mechjack.mechjackbot.api.ChatBotConfiguration;
 
 public class TestChatBotModule extends AbstractModule {
 

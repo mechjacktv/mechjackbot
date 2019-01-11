@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import com.google.inject.multibindings.Multibinder;
 
-import tv.mechjack.mechjackbot.ChatCommand;
+import tv.mechjack.mechjackbot.api.ChatCommand;
 
 public class CustomCommandModule extends AbstractModule {
 

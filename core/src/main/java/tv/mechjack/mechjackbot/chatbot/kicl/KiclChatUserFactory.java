@@ -4,8 +4,8 @@ import javax.inject.Inject;
 
 import org.kitteh.irc.client.library.element.User;
 
-import tv.mechjack.mechjackbot.ChatBotConfiguration;
-import tv.mechjack.mechjackbot.ChatUser;
+import tv.mechjack.mechjackbot.api.ChatBotConfiguration;
+import tv.mechjack.mechjackbot.api.ChatUser;
 
 public class KiclChatUserFactory {
 

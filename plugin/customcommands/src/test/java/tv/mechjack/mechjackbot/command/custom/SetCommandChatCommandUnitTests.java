@@ -1,8 +1,8 @@
 package tv.mechjack.mechjackbot.command.custom;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static tv.mechjack.mechjackbot.command.BaseChatCommand.KEY_DESCRIPTION;
-import static tv.mechjack.mechjackbot.command.BaseChatCommand.KEY_TRIGGER;
+import static tv.mechjack.mechjackbot.api.BaseChatCommand.KEY_DESCRIPTION;
+import static tv.mechjack.mechjackbot.api.BaseChatCommand.KEY_TRIGGER;
 
 import java.util.Optional;
 
@@ -14,15 +14,15 @@ import tv.mechjack.configuration.ConfigurationKey;
 import tv.mechjack.configuration.MapConfiguration;
 import tv.mechjack.configuration.TestConfigurationModule;
 import tv.mechjack.keyvaluestore.TestKeyValueStoreModule;
-import tv.mechjack.mechjackbot.ChatCommandDescription;
-import tv.mechjack.mechjackbot.ChatCommandRegistry;
-import tv.mechjack.mechjackbot.ChatCommandTrigger;
-import tv.mechjack.mechjackbot.ChatCommandUtils;
-import tv.mechjack.mechjackbot.ChatMessage;
-import tv.mechjack.mechjackbot.TestChatMessageEvent;
-import tv.mechjack.mechjackbot.UserRole;
-import tv.mechjack.mechjackbot.command.BaseChatCommandContractTests;
-import tv.mechjack.mechjackbot.command.CommandConfigurationBuilder;
+import tv.mechjack.mechjackbot.api.BaseChatCommandContractTests;
+import tv.mechjack.mechjackbot.api.ChatCommandDescription;
+import tv.mechjack.mechjackbot.api.ChatCommandRegistry;
+import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
+import tv.mechjack.mechjackbot.api.ChatCommandUtils;
+import tv.mechjack.mechjackbot.api.ChatMessage;
+import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
+import tv.mechjack.mechjackbot.api.TestChatMessageEvent;
+import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommand;
 
 public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests {

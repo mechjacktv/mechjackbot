@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import tv.mechjack.configuration.Configuration;
 import tv.mechjack.keyvaluestore.BaseMessageStore;
 import tv.mechjack.keyvaluestore.KeyValueStoreFactory;
-import tv.mechjack.mechjackbot.ChatBotConfiguration;
+import tv.mechjack.mechjackbot.api.ChatBotConfiguration;
 import tv.mechjack.mechjackbot.command.shoutout.ProtoMessage.Caster;
 import tv.mechjack.mechjackbot.command.shoutout.ProtoMessage.CasterKey;
 import tv.mechjack.twitchclient.ProtoMessage.UserFollow;

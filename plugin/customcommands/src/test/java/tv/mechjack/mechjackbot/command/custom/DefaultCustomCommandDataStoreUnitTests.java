@@ -11,8 +11,8 @@ import org.junit.Test;
 
 import tv.mechjack.keyvaluestore.ChatMessageStoreContractTests;
 import tv.mechjack.keyvaluestore.MapKeyValueStore;
-import tv.mechjack.mechjackbot.ChatCommandTrigger;
-import tv.mechjack.mechjackbot.UserRole;
+import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
+import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommand;
 import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommandKey;
 import tv.mechjack.util.ExecutionUtils;

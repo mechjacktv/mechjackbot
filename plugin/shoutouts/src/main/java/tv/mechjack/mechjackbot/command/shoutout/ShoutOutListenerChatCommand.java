@@ -4,9 +4,9 @@ import javax.inject.Inject;
 
 import tv.mechjack.configuration.Configuration;
 import tv.mechjack.configuration.ConfigurationKey;
-import tv.mechjack.mechjackbot.ChatMessageEvent;
-import tv.mechjack.mechjackbot.command.BaseChatCommand;
-import tv.mechjack.mechjackbot.command.CommandConfigurationBuilder;
+import tv.mechjack.mechjackbot.api.BaseChatCommand;
+import tv.mechjack.mechjackbot.api.ChatMessageEvent;
+import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
 import tv.mechjack.mechjackbot.command.shoutout.ProtoMessage.CasterKey;
 import tv.mechjack.twitchclient.TwitchLogin;
 import tv.mechjack.util.TimeUtils;

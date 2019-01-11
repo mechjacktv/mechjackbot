@@ -2,9 +2,9 @@ package tv.mechjack.mechjackbot.chatbot.kicl;
 
 import org.kitteh.irc.client.library.element.User;
 
-import tv.mechjack.mechjackbot.ChatBotConfiguration;
-import tv.mechjack.mechjackbot.ChatUser;
-import tv.mechjack.mechjackbot.UserRole;
+import tv.mechjack.mechjackbot.api.ChatBotConfiguration;
+import tv.mechjack.mechjackbot.api.ChatUser;
+import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.twitchclient.TwitchLogin;
 
 public class KiclChatUser implements ChatUser {

@@ -7,8 +7,8 @@ import org.junit.Test;
 import org.kitteh.irc.client.library.Client;
 
 import tv.mechjack.configuration.TestConfigurationModule;
-import tv.mechjack.mechjackbot.ChatBotConfiguration;
-import tv.mechjack.mechjackbot.command.TestCommandModule;
+import tv.mechjack.mechjackbot.api.ChatBotConfiguration;
+import tv.mechjack.mechjackbot.api.TestCommandModule;
 import tv.mechjack.testframework.TestFrameworkRule;
 import tv.mechjack.util.TestUtilModule;
 

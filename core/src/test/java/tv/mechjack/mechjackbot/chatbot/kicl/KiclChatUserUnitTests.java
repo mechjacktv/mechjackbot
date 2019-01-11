@@ -11,9 +11,9 @@ import org.kitteh.irc.client.library.Client;
 import org.kitteh.irc.client.library.element.User;
 
 import tv.mechjack.configuration.TestConfigurationModule;
-import tv.mechjack.mechjackbot.ChatBotConfiguration;
+import tv.mechjack.mechjackbot.api.ChatBotConfiguration;
+import tv.mechjack.mechjackbot.api.TestCommandModule;
 import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
-import tv.mechjack.mechjackbot.command.TestCommandModule;
 import tv.mechjack.testframework.TestFrameworkRule;
 import tv.mechjack.twitchclient.TwitchLogin;
 import tv.mechjack.util.TestUtilModule;

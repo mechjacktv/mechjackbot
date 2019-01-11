@@ -8,10 +8,10 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tv.mechjack.mechjackbot.ChatCommandRegistry;
-import tv.mechjack.mechjackbot.ChatCommandTrigger;
-import tv.mechjack.mechjackbot.ChatCommandUtils;
-import tv.mechjack.mechjackbot.UserRole;
+import tv.mechjack.mechjackbot.api.ChatCommandRegistry;
+import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
+import tv.mechjack.mechjackbot.api.ChatCommandUtils;
+import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommand;
 import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommandKey;
 import tv.mechjack.util.ExecutionUtils;

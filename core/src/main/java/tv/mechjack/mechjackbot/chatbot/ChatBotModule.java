@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 
 import tv.mechjack.configuration.Configuration;
-import tv.mechjack.mechjackbot.ChatBotConfiguration;
+import tv.mechjack.mechjackbot.api.ChatBotConfiguration;
 import tv.mechjack.twitchclient.TwitchClientConfiguration;
 
 public class ChatBotModule extends AbstractModule {

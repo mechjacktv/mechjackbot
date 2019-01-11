@@ -7,15 +7,15 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import tv.mechjack.mechjackbot.ChatCommand;
-import tv.mechjack.mechjackbot.ChatCommandDescription;
-import tv.mechjack.mechjackbot.ChatCommandName;
-import tv.mechjack.mechjackbot.ChatCommandTrigger;
-import tv.mechjack.mechjackbot.ChatCommandUsage;
-import tv.mechjack.mechjackbot.ChatCommandUtils;
-import tv.mechjack.mechjackbot.ChatMessage;
-import tv.mechjack.mechjackbot.ChatMessageEvent;
-import tv.mechjack.mechjackbot.UserRole;
+import tv.mechjack.mechjackbot.api.ChatCommand;
+import tv.mechjack.mechjackbot.api.ChatCommandDescription;
+import tv.mechjack.mechjackbot.api.ChatCommandName;
+import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
+import tv.mechjack.mechjackbot.api.ChatCommandUsage;
+import tv.mechjack.mechjackbot.api.ChatCommandUtils;
+import tv.mechjack.mechjackbot.api.ChatMessage;
+import tv.mechjack.mechjackbot.api.ChatMessageEvent;
+import tv.mechjack.mechjackbot.api.UserRole;
 
 public class CustomChatCommand implements ChatCommand {
 

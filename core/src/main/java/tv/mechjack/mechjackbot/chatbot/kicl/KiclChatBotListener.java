@@ -6,7 +6,7 @@ import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 
 import net.engio.mbassy.listener.Handler;
 
-import tv.mechjack.mechjackbot.ChatMessageEventHandler;
+import tv.mechjack.mechjackbot.api.ChatMessageEventHandler;
 
 final class KiclChatBotListener {
 
