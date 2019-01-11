@@ -22,7 +22,7 @@ subprojects {
 
   archivesBaseName = "${rootProject.name}-${project.name}"
   group = 'tv.mechjack'
-  version = System.getenv("BUILD_VER") != null ? System.getenv("BUILDVER") : "DEVELOP+${System.getProperty("user.name")}.${System.currentTimeMillis()}"
+  version = System.getenv("BUILDVER") != null ? System.getenv("BUILDVER") : "DEVELOP+${System.getProperty("user.name")}.${System.currentTimeMillis()}"
 
   jacocoTestReport {
     afterEvaluate {
