@@ -32,7 +32,7 @@ public class SetCommandChatCommand extends BaseChatCommand {
   public static final String DEFAULT_TRIGGER = "!setcommand";
   public static final ConfigurationKey KEY_BODY_REQUIRED_MESSAGE_FORMAT = ConfigurationKey
       .of("body_required_message_format", SetCommandChatCommand.class);
-  public static final String USAGE = String.format("<trigger> [(-u|--user-role)=\"(%s)\"] [(-d|--description)"
+  public static final String USAGE = String.format("<trigger> [(-r|--user-role)=\"(%s)\"] [(-d|--description)"
       + "=\"<description>\"][<body>]",
       Arrays.stream(UserRole.values()).map(Object::toString).collect(Collectors.joining("|")));
 
