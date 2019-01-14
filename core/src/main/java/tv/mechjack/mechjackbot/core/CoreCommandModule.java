@@ -29,6 +29,8 @@ public final class CoreCommandModule extends AbstractModule {
         .in(Scopes.SINGLETON);
     Multibinder.newSetBinder(this.binder(), ChatCommand.class).addBinding().to(QuitChatCommand.class)
         .in(Scopes.SINGLETON);
+    Multibinder.newSetBinder(this.binder(), ChatCommand.class).addBinding().to(UsageChatCommand.class)
+        .in(Scopes.SINGLETON);
   }
 
 }
