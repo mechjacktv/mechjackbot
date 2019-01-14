@@ -1,11 +1,17 @@
 package tv.mechjack.mechjackbot.command.shoutout;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import tv.mechjack.configuration.Configuration;
 import tv.mechjack.configuration.ConfigurationKey;
 import tv.mechjack.mechjackbot.api.BaseChatCommand;
+import tv.mechjack.mechjackbot.api.ChatCommand;
+import tv.mechjack.mechjackbot.api.ChatCommandRegistry;
+import tv.mechjack.mechjackbot.api.ChatMessage;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
+import tv.mechjack.mechjackbot.api.ChatMessageEventWrapper;
 import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
 import tv.mechjack.mechjackbot.command.shoutout.ProtoMessage.CasterKey;
 import tv.mechjack.twitchclient.TwitchLogin;
@@ -15,10 +21,10 @@ public final class ShoutOutListenerChatCommand extends BaseChatCommand {
 
   public static final String DEFAULT_DESCRIPTION = "Monitors chat looking for casters who are due for a shout out.";
   public static final String DEFAULT_FREQUENCY = "1";
-  public static final String DEFAULT_MESSAGE_FORMAT = "Fellow streamer in chat! Everyone, please give a warm welcome "
-      + "to @$(user). It would be great if you checked them out and gave them a follow. https://twitch.tv/$(user)";
   public static final String KEY_FREQUENCY = "frequency.hours";
+  public static final String FORWARDED_MESSAGE_FORMAT = "%s %s";
 
+  private final ChatCommandRegistry chatCommandRegistry;
   private final Configuration configuration;
   private final ShoutOutDataStore shoutOutDataStore;
   private final TimeUtils timeUtils;
@@ -26,9 +32,10 @@ public final class ShoutOutListenerChatCommand extends BaseChatCommand {
 
   @Inject
   ShoutOutListenerChatCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
-      final Configuration configuration, final ShoutOutDataStore shoutOutDataStore, final TimeUtils timeUtils) {
-    super(commandConfigurationBuilder.setDescription(DEFAULT_DESCRIPTION)
-        .setMessageFormat(DEFAULT_MESSAGE_FORMAT));
+      final ChatCommandRegistry chatCommandRegistry, final Configuration configuration,
+      final ShoutOutDataStore shoutOutDataStore, final TimeUtils timeUtils) {
+    super(commandConfigurationBuilder.setDescription(DEFAULT_DESCRIPTION));
+    this.chatCommandRegistry = chatCommandRegistry;
     this.configuration = configuration;
     this.shoutOutDataStore = shoutOutDataStore;
     this.timeUtils = timeUtils;
@@ -53,10 +60,32 @@ public final class ShoutOutListenerChatCommand extends BaseChatCommand {
   @Override
   public void handleMessageEvent(final ChatMessageEvent chatMessageEvent) {
     final TwitchLogin twitchLogin = chatMessageEvent.getChatUser().getTwitchLogin();
+    final Optional<ChatCommand> shoutOutChatCommand = this.chatCommandRegistry.getCommand(ShoutOutChatCommand.class);
 
-    this.sendResponse(chatMessageEvent);
-    this.shoutOutDataStore.put(this.shoutOutDataStore.createCasterKey(twitchLogin.value),
-        this.shoutOutDataStore.createCaster(twitchLogin.value, this.timeUtils.currentTime()));
+    shoutOutChatCommand.ifPresent(chatCommand -> {
+      final ChatMessage chatMessage = ChatMessage
+          .of(String.format(FORWARDED_MESSAGE_FORMAT, chatCommand.getTrigger(), twitchLogin));
+
+      chatCommand.handleMessageEvent(new ShoutOutChatMessageEventWrapper(chatMessageEvent, chatMessage));
+      this.shoutOutDataStore.put(this.shoutOutDataStore.createCasterKey(twitchLogin.value),
+          this.shoutOutDataStore.createCaster(twitchLogin.value, this.timeUtils.currentTime()));
+    });
+  }
+
+  private static final class ShoutOutChatMessageEventWrapper extends ChatMessageEventWrapper {
+
+    private final ChatMessage chatMessage;
+
+    public ShoutOutChatMessageEventWrapper(final ChatMessageEvent chatMessageEvent, final ChatMessage chatMessage) {
+      super(chatMessageEvent);
+      this.chatMessage = chatMessage;
+    }
+
+    @Override
+    public ChatMessage getChatMessage() {
+      return this.chatMessage;
+    }
+
   }
 
 }

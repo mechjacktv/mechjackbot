@@ -7,6 +7,7 @@ public final class TwitchLogin extends TypedString {
   public static TwitchLogin of(final String value) {
     String sanitizedValue = value.trim().toLowerCase();
 
+    // TODO (2019-01-13 mechjack): Validate no illegal characters?
     if (sanitizedValue.startsWith("@")) {
       sanitizedValue = sanitizedValue.substring(1);
     }

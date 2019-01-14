@@ -12,6 +12,8 @@ public final class ShoutOutCommandModule extends AbstractModule {
   protected final void configure() {
     this.bind(ShoutOutDataStore.class).to(DefaultShoutOutDataStore.class).in(Scopes.SINGLETON);
 
+    Multibinder.newSetBinder(this.binder(), ChatCommand.class).addBinding().to(ShoutOutChatCommand.class)
+        .in(Scopes.SINGLETON);
     Multibinder.newSetBinder(this.binder(), ChatCommand.class).addBinding().to(ShoutOutListenerChatCommand.class)
         .in(Scopes.SINGLETON);
   }
