@@ -1,18 +1,22 @@
 package tv.mechjack.mechjackbot.command.shoutout;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static tv.mechjack.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.DEFAULT_DESCRIPTION;
 import static tv.mechjack.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.DEFAULT_FREQUENCY;
-import static tv.mechjack.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.DEFAULT_MESSAGE_FORMAT;
+import static tv.mechjack.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.FORWARDED_MESSAGE_FORMAT;
 import static tv.mechjack.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_DESCRIPTION;
 import static tv.mechjack.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_FREQUENCY;
-import static tv.mechjack.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_MESSAGE_FORMAT;
 import static tv.mechjack.mechjackbot.command.shoutout.ShoutOutListenerChatCommand.KEY_TRIGGER;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.assertj.core.api.Condition;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 
 import tv.mechjack.configuration.Configuration;
@@ -21,12 +25,12 @@ import tv.mechjack.configuration.MapConfiguration;
 import tv.mechjack.keyvaluestore.TestKeyValueStoreModule;
 import tv.mechjack.mechjackbot.api.BaseChatCommandContractTests;
 import tv.mechjack.mechjackbot.api.ChatCommandDescription;
+import tv.mechjack.mechjackbot.api.ChatCommandRegistry;
 import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
-import tv.mechjack.mechjackbot.api.ChatCommandUtils;
 import tv.mechjack.mechjackbot.api.ChatMessage;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
-import tv.mechjack.mechjackbot.api.CommandMessageFormat;
+import tv.mechjack.mechjackbot.api.TestChatCommand;
 import tv.mechjack.mechjackbot.api.TestChatMessageEvent;
 import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
 import tv.mechjack.mechjackbot.command.shoutout.ProtoMessage.Caster;
@@ -49,8 +53,12 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
 
   @Override
   protected final ShoutOutListenerChatCommand givenASubjectToTest() {
+    return this.givenASubjectToTest(this.testFrameworkRule.getInstance(ChatCommandRegistry.class));
+  }
+
+  private ShoutOutListenerChatCommand givenASubjectToTest(final ChatCommandRegistry chatCommandRegistry) {
     return new ShoutOutListenerChatCommand(this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class),
-        this.testFrameworkRule.getInstance(Configuration.class),
+        chatCommandRegistry, this.testFrameworkRule.getInstance(Configuration.class),
         this.testFrameworkRule.getInstance(ShoutOutDataStore.class),
         this.testFrameworkRule.getInstance(TimeUtils.class));
   }
@@ -73,14 +81,6 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
   @Override
   protected ConfigurationKey getTriggerKey() {
     return ConfigurationKey.of(KEY_TRIGGER, ShoutOutListenerChatCommand.class);
-  }
-
-  private CommandMessageFormat getMessageFormatDefault() {
-    return CommandMessageFormat.of(DEFAULT_MESSAGE_FORMAT);
-  }
-
-  private ConfigurationKey getMessageFormatKey() {
-    return ConfigurationKey.of(KEY_MESSAGE_FORMAT, ShoutOutListenerChatCommand.class);
   }
 
   private Integer getFrequencyDefault() {
@@ -177,32 +177,22 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
   @Test
   public final void handleMessageEvent_noMessageFormatConfigured_resultIsDefaultMessage() {
     this.installModules();
+    final ChatCommandRegistry fakeChatCommandRegistry = mock(ChatCommandRegistry.class);
+    final TestChatCommand chatCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
+    when(fakeChatCommandRegistry.getCommand(eq(ShoutOutChatCommand.class))).thenReturn(Optional.of(chatCommand));
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
-    final ShoutOutListenerChatCommand subjectUnderTest = this.givenASubjectToTest();
+    final ShoutOutListenerChatCommand subjectUnderTest = this.givenASubjectToTest(fakeChatCommandRegistry);
 
+    final ChatMessageEvent[] result = new ChatMessageEvent[1];
+    chatCommand.setMessageEventHandler(chatMessageEvent -> result[0] = chatMessageEvent);
     subjectUnderTest.handleMessageEvent(messageEvent);
-    final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
-    assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
-        ChatMessage.of(this.getMessageFormatDefault().value)));
-  }
-
-  @Test
-  public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
-    this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + " $(user)";
-    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
-    configuration.set(this.getMessageFormatKey(), customMessageFormat);
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
-    final ShoutOutListenerChatCommand subjectUnderTest = this.givenASubjectToTest();
-
-    subjectUnderTest.handleMessageEvent(messageEvent);
-    final ChatMessage result = messageEvent.getResponseChatMessage();
-
-    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
-    assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
-        ChatMessage.of(customMessageFormat)));
+    final SoftAssertions softly = new SoftAssertions();
+    softly.assertThat(result[0].getChatBot()).isEqualTo(messageEvent.getChatBot());
+    softly.assertThat(result[0].getChatUser()).isEqualTo(messageEvent.getChatUser());
+    softly.assertThat(result[0].getChatMessage()).isEqualTo(ChatMessage.of(String.format(FORWARDED_MESSAGE_FORMAT,
+        chatCommand.getTrigger(), messageEvent.getChatUser().getTwitchLogin())));
+    softly.assertAll();
   }
 
   @Test
@@ -216,8 +206,11 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
     final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getTwitchLogin().value);
     final Caster caster = shoutOutDataStore.createCaster(casterKey.getName(), 0L);
     shoutOutDataStore.put(casterKey, caster);
+    final ChatCommandRegistry fakeChatCommandRegistry = mock(ChatCommandRegistry.class);
+    final TestChatCommand chatCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
+    when(fakeChatCommandRegistry.getCommand(eq(ShoutOutChatCommand.class))).thenReturn(Optional.of(chatCommand));
 
-    final ShoutOutListenerChatCommand subjectUnderTest = this.givenASubjectToTest();
+    final ShoutOutListenerChatCommand subjectUnderTest = this.givenASubjectToTest(fakeChatCommandRegistry);
 
     subjectUnderTest.handleMessageEvent(messageEvent);
 

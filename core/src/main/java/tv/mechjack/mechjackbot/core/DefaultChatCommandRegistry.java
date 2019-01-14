@@ -21,23 +21,30 @@ public final class DefaultChatCommandRegistry implements ChatCommandRegistry {
 
   private static final Logger log = LoggerFactory.getLogger(DefaultChatCommandRegistry.class);
 
-  private final Map<ChatCommandTrigger, ChatCommand> commands;
+  private final Map<Class<? extends ChatCommand>, ChatCommand> commandByClass;
+  private final Map<ChatCommandTrigger, ChatCommand> commandsByTrigger;
   private final ExecutionUtils executionUtils;
 
   @Inject
   DefaultChatCommandRegistry(final ExecutionUtils executionUtils) {
-    this.commands = new ConcurrentHashMap<>();
+    this.commandByClass = new ConcurrentHashMap<>();
+    this.commandsByTrigger = new ConcurrentHashMap<>();
     this.executionUtils = executionUtils;
   }
 
   @Override
   public final Collection<ChatCommand> getCommands() {
-    return Collections.unmodifiableCollection(this.commands.values());
+    return Collections.unmodifiableCollection(this.commandsByTrigger.values());
   }
 
   @Override
   public final Optional<ChatCommand> getCommand(final ChatCommandTrigger chatCommandTrigger) {
-    return Optional.ofNullable(this.commands.get(chatCommandTrigger));
+    return Optional.ofNullable(this.commandsByTrigger.get(chatCommandTrigger));
+  }
+
+  @Override
+  public Optional<ChatCommand> getCommand(final Class<? extends ChatCommand> chatCommandClass) {
+    return Optional.ofNullable(this.commandByClass.get(chatCommandClass));
   }
 
   @Override
@@ -45,23 +52,28 @@ public final class DefaultChatCommandRegistry implements ChatCommandRegistry {
     Objects.requireNonNull(chatCommand, this.executionUtils.nullMessageForName("chatCommand"));
     if (this.hasCommand(chatCommand.getTrigger())) {
       log.warn(String.format("ChatCommand, %s, with trigger, %s, was already registered. Replacing with %s",
-          this.commands.get(chatCommand.getTrigger()).getName(), chatCommand.getTrigger(), chatCommand.getName()));
+          this.commandsByTrigger.get(chatCommand.getTrigger()).getName(), chatCommand.getTrigger(),
+          chatCommand.getName()));
     }
-    this.commands.put(chatCommand.getTrigger(), chatCommand);
+    this.commandsByTrigger.put(chatCommand.getTrigger(), chatCommand);
+    this.commandByClass.put(chatCommand.getClass(), chatCommand);
     log.info(String.format("Added chatCommand, %s, with trigger, %s", chatCommand.getName(), chatCommand.getTrigger()));
   }
 
   @Override
   public boolean hasCommand(final ChatCommandTrigger trigger) {
     Objects.requireNonNull(trigger, this.executionUtils.nullMessageForName("trigger"));
-    return this.commands.containsKey(trigger);
+    return this.commandsByTrigger.containsKey(trigger);
   }
 
   @Override
   public boolean removeCommand(final ChatCommandTrigger trigger) {
     Objects.requireNonNull(trigger, this.executionUtils.nullMessageForName("trigger"));
-    final ChatCommand chatCommand = this.commands.remove(trigger);
+
+    final ChatCommand chatCommand = this.commandsByTrigger.remove(trigger);
+
     if (Objects.nonNull(chatCommand)) {
+      this.commandByClass.remove(chatCommand.getClass());
       log.info(String.format("Removed chatCommand, %s, with trigger, %s", chatCommand.getName(),
           chatCommand.getTrigger()));
       return true;

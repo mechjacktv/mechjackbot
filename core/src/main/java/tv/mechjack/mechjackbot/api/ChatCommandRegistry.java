@@ -9,6 +9,8 @@ public interface ChatCommandRegistry {
 
   Optional<ChatCommand> getCommand(ChatCommandTrigger chatCommandTrigger);
 
+  Optional<ChatCommand> getCommand(Class<? extends ChatCommand> chatCommandClass);
+
   void addCommand(ChatCommand chatCommand);
 
   boolean hasCommand(ChatCommandTrigger trigger);
