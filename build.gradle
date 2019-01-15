@@ -167,7 +167,7 @@ project(':all') {
   apply plugin: 'application'
 
   mainClassName = 'tv.mechjack.mechjackbot.main.Main'
-  applicationDefaultJvmArgs = ["-Dmechjackbot.plugin_module_names=tv.mechjack.mechjackbot.command.custom.CustomCommandModule:tv.mechjack.mechjackbot.command.shoutout.ShoutOutCommandModule"]
+  // applicationDefaultJvmArgs = ["-Dmechjackbot.plugin_module_names=tv.mechjack.mechjackbot.command.custom.CustomCommandModule"]
 
   dependencies {
     runtimeOnly project(':core')

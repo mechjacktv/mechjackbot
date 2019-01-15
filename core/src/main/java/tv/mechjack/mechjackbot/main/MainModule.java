@@ -3,6 +3,8 @@ package tv.mechjack.mechjackbot.main;
 import static java.lang.Class.forName;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.google.inject.AbstractModule;
@@ -35,17 +37,32 @@ final class MainModule extends AbstractModule {
     this.install(new TwitchClientModule());
     this.install(new UtilModule());
 
-    Optional.ofNullable(System.getProperty(KEY_PLUGIN_MODULE_NAMES)).ifPresent(allPluginModuleNames -> {
-      final String[] pluginModuleNames = allPluginModuleNames.split(File.pathSeparator);
+    final List<String> desiredModuleNames = this.getDesiredModuleNames();
 
-      for (final String pluginModuleName : pluginModuleNames) {
-        try {
-          this.install((Module) forName(pluginModuleName).newInstance());
-        } catch (final InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-          LOGGER.warn("Failed to load plugin module", e);
-        }
+    if (desiredModuleNames.size() == 0) { // if nothing configured try loading everything
+      desiredModuleNames.add("tv.mechjack.mechjackbot.command.custom.CustomCommandModule");
+      desiredModuleNames.add("tv.mechjack.mechjackbot.command.shoutout.ShoutOutCommandModule");
+    }
+    for (final String desiredModuleName : desiredModuleNames) {
+      try {
+        this.install((Module) forName(desiredModuleName).newInstance());
+      } catch (final InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+        LOGGER.warn("Failed to load plugin module", e);
+      }
+    }
+  }
+
+  protected final List<String> getDesiredModuleNames() {
+    final List<String> desiredModuleNames = new ArrayList<>();
+
+    Optional.ofNullable(System.getProperty(KEY_PLUGIN_MODULE_NAMES)).ifPresent(configuredModulesString -> {
+      final String[] configuredModuleNames = configuredModulesString.split(File.pathSeparator);
+
+      for (final String configuredModuleName : configuredModuleNames) {
+        desiredModuleNames.add(configuredModuleName);
       }
     });
+    return desiredModuleNames;
   }
 
 }
