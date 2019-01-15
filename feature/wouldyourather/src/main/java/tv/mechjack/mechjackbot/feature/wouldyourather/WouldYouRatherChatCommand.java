@@ -15,10 +15,10 @@ import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tv.mechjack.application.Application;
 import tv.mechjack.mechjackbot.api.BaseChatCommand;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
+import tv.mechjack.platform.application.Application;
 
 public class WouldYouRatherChatCommand extends BaseChatCommand {
 

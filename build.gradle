@@ -147,7 +147,7 @@ project(':feature:shoutouts') {
   }
 }
 
-project(':plugin:wouldyourather') {
+project(':feature:wouldyourather') {
   dependencies {
     implementation project(':core')
     implementation project(':platform')

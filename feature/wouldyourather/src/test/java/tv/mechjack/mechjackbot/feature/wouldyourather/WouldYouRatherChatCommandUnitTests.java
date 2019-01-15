@@ -1,5 +1,8 @@
 package tv.mechjack.mechjackbot.feature.wouldyourather;
 
+import static tv.mechjack.mechjackbot.api.BaseChatCommand.KEY_DESCRIPTION;
+import static tv.mechjack.mechjackbot.api.BaseChatCommand.KEY_TRIGGER;
+
 import java.io.IOException;
 
 import tv.mechjack.application.Application;
@@ -13,9 +16,6 @@ import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
 import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
 import tv.mechjack.mechjackbot.api.TestCommandModule;
 import tv.mechjack.util.TestUtilModule;
-
-import static tv.mechjack.mechjackbot.api.BaseChatCommand.KEY_DESCRIPTION;
-import static tv.mechjack.mechjackbot.api.BaseChatCommand.KEY_TRIGGER;
 
 public class WouldYouRatherChatCommandUnitTests extends BaseChatCommandContractTests {
 
