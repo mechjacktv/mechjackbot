@@ -125,7 +125,7 @@ Things wrapped in `(` and `)` denote a list of values that can be selected from 
 
 #### Commands
 
-* Scope: `tv_mechjack_mechjackbot_core_commandschatcommand`.
+* Scope: `tv_mechjack_mechjackbot_feature_core_commandschatcommand`
 * Usage: `!commands`
 
 |Property Name|Default Value|Notes|
@@ -136,7 +136,7 @@ Things wrapped in `(` and `)` denote a list of values that can be selected from 
 
 #### Help
 
-* Scope: `tv_mechjack_mechjackbot_core_helpchatcommand`
+* Scope: `tv_mechjack_mechjackbot_feature_core_helpchatcommand`
 * Usage: `!help <trigger>`
 
 |Property Name|Default Value|Notes|
@@ -148,7 +148,7 @@ Things wrapped in `(` and `)` denote a list of values that can be selected from 
 
 #### Ping
 
-* Scope: `tv_mechjack_mechjackbot_core_pingchatcommand`.
+* Scope: `tv_mechjack_mechjackbot_feature_core_pingchatcommand`
 * Usage: `!ping`
 
 |Property Name|Default Value|Notes|
@@ -159,7 +159,7 @@ Things wrapped in `(` and `)` denote a list of values that can be selected from 
 
 #### Quit
 
-* Scope: `tv_mechjack_mechjackbot_core_quitchatcommand`.
+* Scope: `tv_mechjack_mechjackbot_feature_core_quitchatcommand`
 * Usage: `!quit`
 
 |Property Name|Default Value|Notes|
@@ -168,11 +168,23 @@ Things wrapped in `(` and `)` denote a list of values that can be selected from 
 |message_format|Powering down|This will be sent to chat before the bot shutsdown. You can change this to whatever you want.|
 |trigger|!quit|This is what a message must start with to trigger the command.|
 
+#### Usage
+
+* Scope: `tv_mechjack_mechjackbot_feature_core_udagechatcommand`
+* Usage: `!usage`
+
+|Property Name|Default Value|Notes|
+|--|--|--|
+|description|Returns the usage for a command.|You can change this to whatever you want, but generally it should be helpful to viewers.|
+|message_format|@$(user), usage: %s %s|The first `%s` will be replaced with the trigger specified. The second `%s` will be replaced with the usage for the specified command.|
+|missing_message_format|@$(user), I don't see a command triggered by %s.|This is the message sent if the usage command is requested for a command trigger that doesn't exist. The `%s` will be substituted with the command trigger usage was requested for.|
+|trigger|!usage|This is what a message must start with to trigger the command.|
+
 ### Custom Commands
 
 #### Delete Command
 
-* Scope: `tv_mechjack_mechjackbot_command_custom_deletecommandchatcommand`.
+* Scope: `tv_mechjack_mechjackbot_feature_custom_deletecommandchatcommand`
 * Usage: `!delcommand <trigger>`
 
 |Property Name|Default Value|Notes|
@@ -184,7 +196,7 @@ Things wrapped in `(` and `)` denote a list of values that can be selected from 
 
 #### Set Command
 
-* Scope: `tv_mechjack_mechjackbot_command_custom_setcommandchatcommand`.
+* Scope: `tv_mechjack_mechjackbot_feature_custom_setcommandchatcommand`
 * Usage: `!setcommand <trigger> [(-r|--user-role)=(BROADCASTER|MODERATOR|VIP|SUBSCRIBER|VIEWER)] [(-d|--description)=<description>] [<body>]`
     * Right now all user roles other than `VIEWER` roll up into `BROADCASTER`. The other levels haven't been implemented yet.
     * The command reports `-u|--user-role` in the usage. That is an error. It's really `-r|--user-role`.
@@ -200,20 +212,29 @@ Things wrapped in `(` and `)` denote a list of values that can be selected from 
 
 ### Shout Out Commands
 
+#### Shout Out Command
+
+* Scope: `tv_mechjack_mechjackbot_feature_shoutout_shoutoutchatcommand`
+* Usage: `!shoutout`
+
+|Property Name|Default Value|Notes|
+|--|--|--|
+|description|Shout out the specified caster.|You can change this to whatever you want, but generally it should be helpful to viewers.|
+|message_format|Fellow streamer in chat! Everyone, please give a warm welcome to %1$s. It would be great if you checked them out and gave them a follow. https://twitch.tv/%1$s|`%1$s` will be substituted with the name of the viewer being shouted out.|
+|trigger|!shoutout|This is what a message must start with to trigger the command.|
+
 #### Shout Out Listener
 
 This command is unlike the others in that is passively watches the chat for *active* participants in your chat that you also follow (lurkers can lurk). It will then shout them out if they haven't been shouted out with the configured number of hours (default `1`). You cannot trigger a shout out actively (this is coming in a future release).
 
 Who you follow is checked every `10` minutes.
 
-* Scope: `tv_mechjack_mechjackbot_command_shoutout_shoutoutlistenerchatcommand`.
-* Usage: `!blah`
+* Scope: `tv_mechjack_mechjackbot_feature_shoutout_shoutoutlistenerchatcommand`
 
 |Property Name|Default Value|Notes|
 |--|--|--|
 |description|Monitors chat looking for casters who are due for a shout out.|You can change this to whatever you want, but generally it should be helpful to viewers.|
 |frequency.hours|1|The number of hours between shout outs of an individual streamer.|
-|message_format|Fellow streamer in chat! Everyone, please give a warm welcome to %1$s. It would be great if you checked them out and gave them a follow. https://twitch.tv/%1$s|`%1$s` will be substituted with the name of the viewer being shouted out.|
 
 ### A Note About `%s` and `%1$s`
 
