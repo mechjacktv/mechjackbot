@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import tv.mechjack.application.Application;
-import tv.mechjack.application.TestApplicationModule;
+import tv.mechjack.platform.application.Application;
+import tv.mechjack.platform.application.TestApplicationModule;
+import tv.mechjack.platform.util.scheduleservice.MapHotUpdatePropertiesSource;
+import tv.mechjack.platform.util.scheduleservice.ScheduleService;
+import tv.mechjack.platform.util.scheduleservice.TestScheduleServiceModule;
 import tv.mechjack.twitchclient.TwitchClientConfiguration;
 import tv.mechjack.twitchclient.TwitchClientConfigurationContractTests;
-import tv.mechjack.util.scheduleservice.MapHotUpdatePropertiesSource;
-import tv.mechjack.util.scheduleservice.ScheduleService;
-import tv.mechjack.util.scheduleservice.TestScheduleServiceModule;
 
 public class DefaultChatBotConfiguration_TwitchClientConfigurationUnitTests extends
     TwitchClientConfigurationContractTests {

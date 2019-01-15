@@ -15,8 +15,8 @@ import org.junit.Test;
 import picocli.CommandLine.Model.OptionSpec;
 import picocli.CommandLine.Model.PositionalParamSpec;
 
-import tv.mechjack.configuration.ConfigurationKey;
-import tv.mechjack.configuration.MapConfiguration;
+import tv.mechjack.platform.configuration.ConfigurationKey;
+import tv.mechjack.platform.configuration.MapConfiguration;
 
 public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
 

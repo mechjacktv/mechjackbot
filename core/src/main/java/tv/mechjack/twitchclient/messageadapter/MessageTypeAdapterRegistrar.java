@@ -2,7 +2,7 @@ package tv.mechjack.twitchclient.messageadapter;
 
 import com.google.gson.GsonBuilder;
 
-import tv.mechjack.gson.TypeAdapterRegistrar;
+import tv.mechjack.platform.gson.TypeAdapterRegistrar;
 import tv.mechjack.twitchclient.ProtoMessage.User;
 import tv.mechjack.twitchclient.ProtoMessage.UserFollow;
 

@@ -7,8 +7,8 @@ import static org.mockito.Mockito.verify;
 import org.junit.Test;
 import org.slf4j.Logger;
 
-import tv.mechjack.util.ExecutionUtils;
-import tv.mechjack.util.TestUtilModule;
+import tv.mechjack.platform.util.ExecutionUtils;
+import tv.mechjack.platform.util.TestUtilModule;
 
 public class DefaultTwitchClientUtilsUnitTests extends TwitchClientUtilsContractTests {
 

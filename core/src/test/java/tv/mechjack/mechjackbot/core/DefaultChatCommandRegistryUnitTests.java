@@ -1,7 +1,7 @@
 package tv.mechjack.mechjackbot.core;
 
 import tv.mechjack.mechjackbot.api.ChatCommandRegistryContractTests;
-import tv.mechjack.util.ExecutionUtils;
+import tv.mechjack.platform.util.ExecutionUtils;
 
 public class DefaultChatCommandRegistryUnitTests extends ChatCommandRegistryContractTests {
 

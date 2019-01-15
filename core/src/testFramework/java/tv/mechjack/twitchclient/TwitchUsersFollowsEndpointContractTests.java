@@ -18,10 +18,10 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
+import tv.mechjack.platform.util.function.ConsumerWithException;
 import tv.mechjack.twitchclient.ProtoMessage.UserFollow;
 import tv.mechjack.twitchclient.ProtoMessage.UserFollows;
 import tv.mechjack.twitchclient.messageadapter.UserFollowMessageTypeAdapter;
-import tv.mechjack.util.function.ConsumerWithException;
 
 public abstract class TwitchUsersFollowsEndpointContractTests {
 

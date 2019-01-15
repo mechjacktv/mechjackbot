@@ -1,11 +1,10 @@
 buildscript {
   repositories {
     jcenter()
-    mavenLocal()
   }
   dependencies {
     classpath 'ch.raffael.markdown-doclet:markdown-doclet:1.4'
-    classpath "com.diffplug.spotless:spotless-plugin-gradle:3.16.0"
+    classpath 'com.diffplug.spotless:spotless-plugin-gradle:3.16.0'
     classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.4'
   }
 }
@@ -18,7 +17,6 @@ subprojects {
   apply plugin: 'idea'
   apply plugin: 'jacoco'
   apply plugin: 'java'
-  apply plugin: 'maven-publish'
 
   archivesBaseName = "${rootProject.name}-${project.name}"
   group = 'tv.mechjack'
@@ -92,16 +90,6 @@ subprojects {
     testFrameworkImplementation group: 'pl.pragmatists', name: 'JUnitParams', version: '1.+'
     testRuntimeOnly group: 'org.slf4j', name: 'slf4j-nop', version: '1.+'
   }
-
-  publishing {
-    publications {
-      mavenJava(MavenPublication) {
-        from components.java
-
-        artifact testFrameworkJar
-      }
-    }
-  }
 }
 
 /*******************************
@@ -139,7 +127,7 @@ project(':core') {
  * APPLICATION PLUGIN PROJECTS
  */
 
-project(':plugin:customcommands') {
+project(':feature:customcommands') {
   dependencies {
     implementation project(':core')
     implementation project(':platform')
@@ -149,7 +137,7 @@ project(':plugin:customcommands') {
   }
 }
 
-project(':plugin:shoutouts') {
+project(':feature:shoutouts') {
   dependencies {
     implementation project(':core')
     implementation project(':platform')
@@ -171,8 +159,8 @@ project(':all') {
 
   dependencies {
     runtimeOnly project(':core')
-    runtimeOnly project(':plugin:customcommands')
-    runtimeOnly project(':plugin:shoutouts')
+    runtimeOnly project(':feature:customcommands')
+    runtimeOnly project(':feature:shoutouts')
     runtimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'
   }
 

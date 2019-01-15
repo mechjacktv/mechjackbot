@@ -1,6 +1,6 @@
 package tv.mechjack.mechjackbot.core;
 
-import tv.mechjack.util.typedobject.TypedLong;
+import tv.mechjack.platform.util.typedobject.TypedLong;
 
 public final class LastTrigger extends TypedLong {
 

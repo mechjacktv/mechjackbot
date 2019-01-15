@@ -2,8 +2,8 @@ package tv.mechjack.mechjackbot.main;
 
 import com.google.inject.Injector;
 
-import tv.mechjack.application.GuiceApplication;
 import tv.mechjack.mechjackbot.api.ChatBot;
+import tv.mechjack.platform.application.GuiceApplication;
 
 final class Main extends GuiceApplication {
 

@@ -10,9 +10,9 @@ import org.assertj.core.api.Condition;
 import org.junit.Rule;
 import org.junit.Test;
 
-import tv.mechjack.configuration.TestConfigurationModule;
+import tv.mechjack.platform.configuration.TestConfigurationModule;
+import tv.mechjack.platform.util.TestUtilModule;
 import tv.mechjack.testframework.TestFrameworkRule;
-import tv.mechjack.util.TestUtilModule;
 
 public abstract class ChatCommandRegistryContractTests {
 

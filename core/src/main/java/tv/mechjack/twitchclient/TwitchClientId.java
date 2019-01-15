@@ -1,6 +1,6 @@
 package tv.mechjack.twitchclient;
 
-import tv.mechjack.util.typedobject.TypedString;
+import tv.mechjack.platform.util.typedobject.TypedString;
 
 public final class TwitchClientId extends TypedString {
 
