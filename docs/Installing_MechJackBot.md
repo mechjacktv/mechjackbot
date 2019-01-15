@@ -197,7 +197,7 @@ Things wrapped in `(` and `)` denote a list of values that can be selected from 
 #### Set Command
 
 * Scope: `tv_mechjack_mechjackbot_feature_custom_setcommandchatcommand`
-* Usage: `!setcommand <trigger> [(-r|--user-role)=(BROADCASTER|MODERATOR|VIP|SUBSCRIBER|VIEWER)] [(-d|--description)=<description>] [<body>]`
+* Usage: `!setcommand <trigger> [(-r|--user-role)="(BROADCASTER|MODERATOR|VIP|SUBSCRIBER|VIEWER)"] [(-d|--description)="<description>"] [<body>]`
     * Right now all user roles other than `VIEWER` roll up into `BROADCASTER`. The other levels haven't been implemented yet.
     * The command reports `-u|--user-role` in the usage. That is an error. It's really `-r|--user-role`.
     * The `<body>` is only optional if you are modifying an existing command and not creating a new one.
