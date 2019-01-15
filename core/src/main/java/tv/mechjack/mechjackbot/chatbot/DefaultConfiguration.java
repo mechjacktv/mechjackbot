@@ -7,12 +7,12 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tv.mechjack.application.Application;
-import tv.mechjack.configuration.PropertiesConfiguration;
-import tv.mechjack.util.ExecutionUtils;
-import tv.mechjack.util.scheduleservice.FileHotUpdatePropertiesSource;
-import tv.mechjack.util.scheduleservice.HotUpdatePropertiesSource;
-import tv.mechjack.util.scheduleservice.ScheduleService;
+import tv.mechjack.platform.application.Application;
+import tv.mechjack.platform.configuration.PropertiesConfiguration;
+import tv.mechjack.platform.util.ExecutionUtils;
+import tv.mechjack.platform.util.scheduleservice.FileHotUpdatePropertiesSource;
+import tv.mechjack.platform.util.scheduleservice.HotUpdatePropertiesSource;
+import tv.mechjack.platform.util.scheduleservice.ScheduleService;
 
 public final class DefaultConfiguration extends PropertiesConfiguration {
 

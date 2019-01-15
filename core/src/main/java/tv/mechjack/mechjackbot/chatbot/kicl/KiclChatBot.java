@@ -6,11 +6,11 @@ import javax.inject.Inject;
 
 import org.kitteh.irc.client.library.Client;
 
-import tv.mechjack.configuration.Configuration;
 import tv.mechjack.mechjackbot.api.ChatBot;
 import tv.mechjack.mechjackbot.api.ChatChannel;
 import tv.mechjack.mechjackbot.api.ChatMessage;
-import tv.mechjack.util.ExecutionUtils;
+import tv.mechjack.platform.configuration.Configuration;
+import tv.mechjack.platform.util.ExecutionUtils;
 
 public class KiclChatBot implements ChatBot {
 

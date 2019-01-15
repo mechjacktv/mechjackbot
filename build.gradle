@@ -4,7 +4,7 @@ buildscript {
   }
   dependencies {
     classpath 'ch.raffael.markdown-doclet:markdown-doclet:1.4'
-    classpath "com.diffplug.spotless:spotless-plugin-gradle:3.16.0"
+    classpath 'com.diffplug.spotless:spotless-plugin-gradle:3.16.0'
     classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.4'
   }
 }
@@ -127,7 +127,7 @@ project(':core') {
  * APPLICATION PLUGIN PROJECTS
  */
 
-project(':plugin:customcommands') {
+project(':feature:customcommands') {
   dependencies {
     implementation project(':core')
     implementation project(':platform')
@@ -137,7 +137,7 @@ project(':plugin:customcommands') {
   }
 }
 
-project(':plugin:shoutouts') {
+project(':feature:shoutouts') {
   dependencies {
     implementation project(':core')
     implementation project(':platform')
@@ -165,18 +165,13 @@ project(':all') {
   apply plugin: 'application'
 
   mainClassName = 'tv.mechjack.mechjackbot.main.Main'
-  // tv.mechjack.mechjackbot.command.custom.CustomCommandModule
-  // tv.mechjack.mechjackbot.command.shoutout.ShoutOutCommandModule
-  // tv.mechjack.mechjackbot.feature.wouldyourather.WouldYouRatherCommandModule
-
-  // applicationDefaultJvmArgs = ["-Dmechjackbot.plugin_module_names=tv.mechjack.mechjackbot.feature.wouldyourather.WouldYouRatherCommandModule"]
-  applicationDefaultJvmArgs = ["-Dtv.mechjack.mechjackbot.command.custom.CustomCommandModule:tv.mechjack.mechjackbot.command.shoutout.ShoutOutCommandModule:mechjackbot.plugin_module_names=tv.mechjack.mechjackbot.feature.wouldyourather.WouldYouRatherCommandModule"]
+  // applicationDefaultJvmArgs = ["-Dmechjackbot.plugin_module_names=tv.mechjack.mechjackbot.command.custom.CustomCommandModule"]
 
   dependencies {
     runtimeOnly project(':core')
-    runtimeOnly project(':plugin:customcommands')
-    runtimeOnly project(':plugin:shoutouts')
-    runtimeOnly project(':plugin:wouldyourather')
+    runtimeOnly project(':feature:customcommands')
+    runtimeOnly project(':feature:shoutouts')
+    runtimeOnly project(':feature:wouldyourather')
     runtimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'
   }
 

@@ -12,9 +12,9 @@ import picocli.CommandLine.IParseResultHandler2;
 import picocli.CommandLine.Model.ArgSpec;
 import picocli.CommandLine.Model.CommandSpec;
 
-import tv.mechjack.configuration.Configuration;
-import tv.mechjack.configuration.ConfigurationKey;
-import tv.mechjack.util.ExecutionUtils;
+import tv.mechjack.platform.configuration.Configuration;
+import tv.mechjack.platform.configuration.ConfigurationKey;
+import tv.mechjack.platform.util.ExecutionUtils;
 
 public abstract class BaseChatCommand implements PicoCliCommandParser, RespondingChatCommand {
 

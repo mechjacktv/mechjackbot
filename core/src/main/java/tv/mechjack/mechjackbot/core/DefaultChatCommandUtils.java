@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
-import tv.mechjack.configuration.Configuration;
 import tv.mechjack.mechjackbot.api.ChatCommand;
 import tv.mechjack.mechjackbot.api.ChatCommandException;
 import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
@@ -20,9 +19,10 @@ import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.mechjackbot.api.NoCoolDown;
 import tv.mechjack.mechjackbot.api.RequiresUserRole;
 import tv.mechjack.mechjackbot.api.UserRole;
+import tv.mechjack.platform.configuration.Configuration;
+import tv.mechjack.platform.util.ExecutionUtils;
+import tv.mechjack.platform.util.TimeUtils;
 import tv.mechjack.twitchclient.TwitchLogin;
-import tv.mechjack.util.ExecutionUtils;
-import tv.mechjack.util.TimeUtils;
 
 public final class DefaultChatCommandUtils implements ChatCommandUtils {
 

@@ -1,51 +1,47 @@
 package tv.mechjack.mechjackbot.main;
 
-import static java.lang.Class.forName;
-
 import java.io.File;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Optional;
+import java.util.ServiceLoader;
+import java.util.Set;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Module;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import tv.mechjack.gson.GsonModule;
-import tv.mechjack.keyvaluestore.KeyValueStoreModule;
-import tv.mechjack.mechjackbot.chatbot.kicl.KiclChatBotModule;
-import tv.mechjack.mechjackbot.core.CoreCommandModule;
-import tv.mechjack.twitchclient.TwitchClientModule;
-import tv.mechjack.util.UtilModule;
-import tv.mechjack.util.scheduleservice.ScheduleServiceModule;
+import tv.mechjack.mechjackbot.MechJackBotModule;
+import tv.mechjack.mechjackbot.api.FeatureModule;
+import tv.mechjack.platform.PlatformModule;
 
 final class MainModule extends AbstractModule {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(MainModule.class);
+  private static final ServiceLoader<FeatureModule> featureServiceLoader = ServiceLoader.load(FeatureModule.class);
 
-  public static final String KEY_PLUGIN_MODULE_NAMES = "mechjackbot.plugin_module_names";
+  public static final String KEY_EXCLUDE_FEATURE = "mechjackbot.exclude_feature";
 
   @Override
   protected final void configure() {
-    this.install(new CoreCommandModule());
-    this.install(new GsonModule());
-    this.install(new KeyValueStoreModule());
-    this.install(new KiclChatBotModule());
-    this.install(new ScheduleServiceModule());
-    this.install(new TwitchClientModule());
-    this.install(new UtilModule());
+    final Set<String> excludedFeatures = this.getExcludedFeatures();
+    final Iterator<FeatureModule> featureModules = featureServiceLoader.iterator();
 
-    Optional.ofNullable(System.getProperty(KEY_PLUGIN_MODULE_NAMES)).ifPresent(allPluginModuleNames -> {
-      final String[] pluginModuleNames = allPluginModuleNames.split(File.pathSeparator);
+    this.install(new PlatformModule());
+    this.install(new MechJackBotModule());
+    while (featureModules.hasNext()) {
+      final FeatureModule featureModule = featureModules.next();
 
-      for (final String pluginModuleName : pluginModuleNames) {
-        try {
-          this.install((Module) forName(pluginModuleName).newInstance());
-        } catch (final InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-          LOGGER.warn("Failed to load plugin module", e);
-        }
+      if (!excludedFeatures.contains(featureModule.getClass().getCanonicalName())) {
+        this.install(featureModule);
       }
-    });
+    }
+  }
+
+  private Set<String> getExcludedFeatures() {
+    final Set<String> excludedFeatures = new HashSet<>();
+
+    Optional.ofNullable(System.getProperty(KEY_EXCLUDE_FEATURE)).ifPresent(configuredModulesString -> excludedFeatures
+        .addAll(Arrays.asList(configuredModulesString.split(File.pathSeparator))));
+    return excludedFeatures;
   }
 
 }

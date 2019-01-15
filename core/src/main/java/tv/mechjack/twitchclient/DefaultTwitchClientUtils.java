@@ -10,8 +10,8 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tv.mechjack.util.ExecutionUtils;
-import tv.mechjack.util.function.ConsumerWithException;
+import tv.mechjack.platform.util.ExecutionUtils;
+import tv.mechjack.platform.util.function.ConsumerWithException;
 
 public final class DefaultTwitchClientUtils implements TwitchClientUtils {
 
