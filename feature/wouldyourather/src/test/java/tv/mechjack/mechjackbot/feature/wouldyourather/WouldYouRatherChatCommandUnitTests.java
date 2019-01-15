@@ -5,17 +5,17 @@ import static tv.mechjack.mechjackbot.api.BaseChatCommand.KEY_TRIGGER;
 
 import java.io.IOException;
 
-import tv.mechjack.application.Application;
-import tv.mechjack.application.TestApplicationModule;
-import tv.mechjack.configuration.ConfigurationKey;
-import tv.mechjack.configuration.TestConfigurationModule;
 import tv.mechjack.mechjackbot.api.BaseChatCommandContractTests;
 import tv.mechjack.mechjackbot.api.ChatCommand;
 import tv.mechjack.mechjackbot.api.ChatCommandDescription;
 import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
 import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
 import tv.mechjack.mechjackbot.api.TestCommandModule;
-import tv.mechjack.util.TestUtilModule;
+import tv.mechjack.platform.application.Application;
+import tv.mechjack.platform.application.TestApplicationModule;
+import tv.mechjack.platform.configuration.ConfigurationKey;
+import tv.mechjack.platform.configuration.TestConfigurationModule;
+import tv.mechjack.platform.util.TestUtilModule;
 
 public class WouldYouRatherChatCommandUnitTests extends BaseChatCommandContractTests {
 

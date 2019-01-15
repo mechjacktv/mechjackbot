@@ -177,9 +177,10 @@ project(':all') {
 
   distributions {
     main {
-      contents {
-        baseName = "mechjackbot-${project.getProperty('name')}"
-      }
+      baseName = "mechjackbot-${project.getProperty('name')}"
     }
+  }
+  startScripts {
+    applicationName = 'mechjackbot'
   }
 }

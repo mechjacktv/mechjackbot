@@ -77,7 +77,7 @@ This is where you'll put any configurations for MechJackBot when you aren't sati
 
 To start MechJackBot you need to execute a startup script that will handle all the details for you. There is one for OS X/Linux and one for Windows and they are located in the `bin` directory of the folder where you extracted MechJackBot.
 
-They are currently called `all` (OS X/Linux) and `all.bat` (Windows). They will eventually be renamed to `mechjackbot`. Double click the one appropriate for your platform. Alternatively, you can run them from `Terminal` or the `Command Prompt` respectivly.
+They are called `mechjackbot` (OS X/Linux) and `mechjackbot.bat` (Windows). Double click the one appropriate for your platform. Alternatively, you can run them from `Terminal` or the `Command Prompt` respectivly.
 
 ### OS X
 
