@@ -5,10 +5,10 @@ import javax.inject.Provider;
 
 import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 
-import tv.mechjack.configuration.Configuration;
 import tv.mechjack.mechjackbot.api.ChatBot;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
-import tv.mechjack.util.ExecutionUtils;
+import tv.mechjack.platform.configuration.Configuration;
+import tv.mechjack.platform.util.ExecutionUtils;
 
 public class KiclChatMessageEventFactory {
 

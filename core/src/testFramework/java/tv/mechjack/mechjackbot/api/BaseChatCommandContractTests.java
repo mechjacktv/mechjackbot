@@ -5,8 +5,8 @@ import static org.junit.Assume.assumeTrue;
 
 import org.junit.Test;
 
-import tv.mechjack.configuration.ConfigurationKey;
-import tv.mechjack.configuration.MapConfiguration;
+import tv.mechjack.platform.configuration.ConfigurationKey;
+import tv.mechjack.platform.configuration.MapConfiguration;
 
 public abstract class BaseChatCommandContractTests extends ChatCommandContractTests {
 

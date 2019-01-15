@@ -10,16 +10,16 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 
-import tv.mechjack.configuration.Configuration;
-import tv.mechjack.configuration.TestConfigurationModule;
 import tv.mechjack.mechjackbot.api.ChatBot;
 import tv.mechjack.mechjackbot.api.ChatMessage;
 import tv.mechjack.mechjackbot.api.ChatUser;
 import tv.mechjack.mechjackbot.api.TestCommandModule;
 import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
+import tv.mechjack.platform.configuration.Configuration;
+import tv.mechjack.platform.configuration.TestConfigurationModule;
+import tv.mechjack.platform.util.ExecutionUtils;
+import tv.mechjack.platform.util.TestUtilModule;
 import tv.mechjack.testframework.TestFrameworkRule;
-import tv.mechjack.util.ExecutionUtils;
-import tv.mechjack.util.TestUtilModule;
 
 public class KiclChatMessageEventUnitTests {
 

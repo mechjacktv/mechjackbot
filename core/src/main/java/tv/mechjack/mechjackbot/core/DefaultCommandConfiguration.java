@@ -1,13 +1,13 @@
 package tv.mechjack.mechjackbot.core;
 
-import tv.mechjack.configuration.Configuration;
 import tv.mechjack.mechjackbot.api.ChatCommandDescription;
 import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
 import tv.mechjack.mechjackbot.api.ChatCommandUsage;
 import tv.mechjack.mechjackbot.api.ChatCommandUtils;
 import tv.mechjack.mechjackbot.api.CommandConfiguration;
 import tv.mechjack.mechjackbot.api.CommandMessageFormat;
-import tv.mechjack.util.ExecutionUtils;
+import tv.mechjack.platform.configuration.Configuration;
+import tv.mechjack.platform.util.ExecutionUtils;
 
 public final class DefaultCommandConfiguration implements CommandConfiguration {
 

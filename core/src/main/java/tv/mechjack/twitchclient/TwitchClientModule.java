@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import com.google.inject.multibindings.Multibinder;
 
-import tv.mechjack.gson.TypeAdapterRegistrar;
+import tv.mechjack.platform.gson.TypeAdapterRegistrar;
 import tv.mechjack.twitchclient.messageadapter.MessageTypeAdapterRegistrar;
 
 public final class TwitchClientModule extends AbstractModule {

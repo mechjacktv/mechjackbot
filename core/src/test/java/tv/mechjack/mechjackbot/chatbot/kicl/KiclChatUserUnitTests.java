@@ -10,13 +10,13 @@ import org.junit.Test;
 import org.kitteh.irc.client.library.Client;
 import org.kitteh.irc.client.library.element.User;
 
-import tv.mechjack.configuration.TestConfigurationModule;
 import tv.mechjack.mechjackbot.api.ChatBotConfiguration;
 import tv.mechjack.mechjackbot.api.TestCommandModule;
 import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
+import tv.mechjack.platform.configuration.TestConfigurationModule;
+import tv.mechjack.platform.util.TestUtilModule;
 import tv.mechjack.testframework.TestFrameworkRule;
 import tv.mechjack.twitchclient.TwitchLogin;
-import tv.mechjack.util.TestUtilModule;
 
 public class KiclChatUserUnitTests {
 

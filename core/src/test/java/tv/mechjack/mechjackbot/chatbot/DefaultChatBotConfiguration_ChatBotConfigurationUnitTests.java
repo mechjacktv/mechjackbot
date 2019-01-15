@@ -3,13 +3,13 @@ package tv.mechjack.mechjackbot.chatbot;
 import java.util.HashMap;
 import java.util.Map;
 
-import tv.mechjack.application.Application;
-import tv.mechjack.application.TestApplicationModule;
 import tv.mechjack.mechjackbot.api.ChatBotConfiguration;
 import tv.mechjack.mechjackbot.api.ChatBotConfigurationContractTests;
-import tv.mechjack.util.scheduleservice.MapHotUpdatePropertiesSource;
-import tv.mechjack.util.scheduleservice.ScheduleService;
-import tv.mechjack.util.scheduleservice.TestScheduleServiceModule;
+import tv.mechjack.platform.application.Application;
+import tv.mechjack.platform.application.TestApplicationModule;
+import tv.mechjack.platform.util.scheduleservice.MapHotUpdatePropertiesSource;
+import tv.mechjack.platform.util.scheduleservice.ScheduleService;
+import tv.mechjack.platform.util.scheduleservice.TestScheduleServiceModule;
 
 public class DefaultChatBotConfiguration_ChatBotConfigurationUnitTests extends ChatBotConfigurationContractTests {
 

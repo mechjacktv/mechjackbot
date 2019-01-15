@@ -1,10 +1,10 @@
 package tv.mechjack.mechjackbot.core;
 
-import tv.mechjack.configuration.Configuration;
 import tv.mechjack.mechjackbot.api.ChatCommandUtils;
 import tv.mechjack.mechjackbot.api.ChatCommandUtilsContractTests;
-import tv.mechjack.util.ExecutionUtils;
-import tv.mechjack.util.TimeUtils;
+import tv.mechjack.platform.configuration.Configuration;
+import tv.mechjack.platform.util.ExecutionUtils;
+import tv.mechjack.platform.util.TimeUtils;
 
 public class DefaultChatCommandUtilsUnitTests extends ChatCommandUtilsContractTests {
 

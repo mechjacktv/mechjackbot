@@ -1,7 +1,7 @@
 package tv.mechjack.mechjackbot.api;
 
-import tv.mechjack.configuration.Configuration;
-import tv.mechjack.util.ExecutionUtils;
+import tv.mechjack.platform.configuration.Configuration;
+import tv.mechjack.platform.util.ExecutionUtils;
 
 public interface CommandConfiguration {
 

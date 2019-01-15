@@ -1,6 +1,6 @@
 package tv.mechjack.twitchclient;
 
-import tv.mechjack.util.TestUtilModule;
+import tv.mechjack.platform.util.TestUtilModule;
 
 public class DefaultTwitchClientUnitTests extends TwitchClientContractTests {
 

@@ -9,17 +9,17 @@ import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tv.mechjack.application.Application;
 import tv.mechjack.mechjackbot.api.ChatBotConfiguration;
 import tv.mechjack.mechjackbot.api.ChatChannel;
 import tv.mechjack.mechjackbot.api.UserPassword;
+import tv.mechjack.platform.application.Application;
+import tv.mechjack.platform.util.scheduleservice.FileHotUpdatePropertiesSource;
+import tv.mechjack.platform.util.scheduleservice.HotUpdateProperties;
+import tv.mechjack.platform.util.scheduleservice.HotUpdatePropertiesSource;
+import tv.mechjack.platform.util.scheduleservice.ScheduleService;
 import tv.mechjack.twitchclient.TwitchClientConfiguration;
 import tv.mechjack.twitchclient.TwitchClientId;
 import tv.mechjack.twitchclient.TwitchLogin;
-import tv.mechjack.util.scheduleservice.FileHotUpdatePropertiesSource;
-import tv.mechjack.util.scheduleservice.HotUpdateProperties;
-import tv.mechjack.util.scheduleservice.HotUpdatePropertiesSource;
-import tv.mechjack.util.scheduleservice.ScheduleService;
 
 public final class DefaultChatBotConfiguration implements ChatBotConfiguration, TwitchClientConfiguration {
 
