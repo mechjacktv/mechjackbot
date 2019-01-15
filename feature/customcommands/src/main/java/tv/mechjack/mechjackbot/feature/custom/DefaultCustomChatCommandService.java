@@ -113,12 +113,9 @@ public final class DefaultCustomChatCommandService implements CustomChatCommandS
 
     if (optionalCustomCommand.isPresent()) {
       final CustomCommand customCommand = optionalCustomCommand.get();
-      final CommandBody actualCommandBody = commandBody == null ? CommandBody.of(customCommand.getCommandBody())
-          : commandBody;
-      final ChatCommandDescription actualDescription = description == null
-          ? ChatCommandDescription.of(customCommand.getDescription())
-          : description;
-      final UserRole actualUserRole = userRole == null ? UserRole.valueOf(customCommand.getAccessLevel()) : userRole;
+      final CommandBody actualCommandBody = this.getCommandBody(customCommand, commandBody);
+      final ChatCommandDescription actualDescription = this.getChatCommandDescription(customCommand, description);
+      final UserRole actualUserRole = this.getUserRole(customCommand, userRole);
 
       this.customCommandDataStore.put(key,
           this.customCommandDataStore.createCustomCommand(trigger, actualCommandBody,
@@ -129,6 +126,19 @@ public final class DefaultCustomChatCommandService implements CustomChatCommandS
     } else {
       throw new IllegalStateException("No existing custom command to update, " + trigger);
     }
+  }
+
+  private CommandBody getCommandBody(final CustomCommand customCommand, final CommandBody commandBody) {
+    return commandBody == null ? CommandBody.of(customCommand.getCommandBody()) : commandBody;
+  }
+
+  private ChatCommandDescription getChatCommandDescription(final CustomCommand customCommand,
+      final ChatCommandDescription description) {
+    return description == null ? ChatCommandDescription.of(customCommand.getDescription()) : description;
+  }
+
+  private UserRole getUserRole(final CustomCommand customCommand, final UserRole userRole) {
+    return userRole == null ? UserRole.valueOf(customCommand.getAccessLevel()) : userRole;
   }
 
   @Override

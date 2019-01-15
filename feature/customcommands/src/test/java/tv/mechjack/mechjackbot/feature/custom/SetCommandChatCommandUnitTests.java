@@ -6,7 +6,6 @@ import static tv.mechjack.mechjackbot.api.BaseChatCommand.KEY_TRIGGER;
 
 import java.util.Optional;
 
-import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Condition;
 import org.junit.Test;
 
@@ -160,7 +159,7 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
     subjectUnderTest.handleMessageEvent(messageEvent);
 
     final CustomCommandDataStore dataStore = this.testFrameworkRule.getInstance(CustomCommandDataStore.class);
-    Assertions.assertThat(dataStore.get(dataStore.createCustomCommandKey(customTrigger))).is(new Condition<>(
+    assertThat(dataStore.get(dataStore.createCustomCommandKey(customTrigger))).is(new Condition<>(
         command -> command.isPresent() && customBody.value.equals(command.get().getCommandBody()),
         "command was added with expected body"));
   }
