@@ -39,19 +39,35 @@ public class TestCommandConfigurationBuilder {
   }
 
   public final TestCommandConfiguration build() {
-    final ChatCommandDescription defaultDescription = Objects.isNull(this.defaultDescription)
-        ? ChatCommandDescription.of(TestChatCommand.DEFAULT_DESCRIPTION)
-        : this.defaultDescription;
-    final CommandMessageFormat defaultMessageFormat = Objects.isNull(this.defaultMessageFormat)
-        ? CommandMessageFormat.of(TestChatCommand.DEFAULT_MESSAGE_FORMAT)
-        : this.defaultMessageFormat;
-    final ChatCommandTrigger defaultTrigger = Objects.isNull(this.defaultTrigger)
-        ? ChatCommandTrigger.of(TestChatCommand.DEFAULT_TRIGGER)
-        : this.defaultTrigger;
-    final ChatCommandUsage usage = Objects.isNull(this.usage) ? ChatCommandUsage.of(TestChatCommand.USAGE) : this.usage;
+    final ChatCommandDescription defaultDescription = this.getDefaultDescription();
+    final CommandMessageFormat defaultMessageFormat = this.getDefaultMessageFormat();
+    final ChatCommandTrigger defaultTrigger = this.getDefaultTrigger();
+    final ChatCommandUsage usage = this.getUsage();
 
     return new TestCommandConfiguration(this.commandConfigurationBuilder, defaultDescription, defaultMessageFormat,
         defaultTrigger, usage);
+  }
+
+  private ChatCommandDescription getDefaultDescription() {
+    return Objects.isNull(this.defaultDescription)
+        ? ChatCommandDescription.of(TestChatCommand.DEFAULT_DESCRIPTION)
+        : this.defaultDescription;
+  }
+
+  private CommandMessageFormat getDefaultMessageFormat() {
+    return Objects.isNull(this.defaultMessageFormat)
+        ? CommandMessageFormat.of(TestChatCommand.DEFAULT_MESSAGE_FORMAT)
+        : this.defaultMessageFormat;
+  }
+
+  private ChatCommandTrigger getDefaultTrigger() {
+    return Objects.isNull(this.defaultTrigger)
+        ? ChatCommandTrigger.of(TestChatCommand.DEFAULT_TRIGGER)
+        : this.defaultTrigger;
+  }
+
+  private ChatCommandUsage getUsage() {
+    return Objects.isNull(this.usage) ? ChatCommandUsage.of(TestChatCommand.USAGE) : this.usage;
   }
 
 }
