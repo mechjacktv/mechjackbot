@@ -16,7 +16,7 @@ import com.google.protobuf.Message;
 import org.junit.Rule;
 import org.junit.Test;
 
-import tv.mechjack.platform.util.TestUtilModule;
+import tv.mechjack.platform.utils.TestUtilsModule;
 import tv.mechjack.testframework.TestFrameworkRule;
 
 public abstract class ChatMessageStoreContractTests<K extends Message, V extends Message> {
@@ -25,7 +25,7 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
   protected void installModules() {
-    this.testFrameworkRule.installModule(new TestUtilModule());
+    this.testFrameworkRule.installModule(new TestUtilsModule());
   }
 
   protected abstract BaseMessageStore<K, V> givenASubjectToTest();

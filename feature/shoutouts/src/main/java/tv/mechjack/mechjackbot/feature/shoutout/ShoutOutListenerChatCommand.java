@@ -11,10 +11,10 @@ import tv.mechjack.mechjackbot.api.ChatMessage;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.mechjackbot.api.ChatMessageEventWrapper;
 import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
-import tv.mechjack.mechjackbot.command.shoutout.ProtoMessage.CasterKey;
+import tv.mechjack.mechjackbot.feature.shoutout.ProtoMessage.CasterKey;
 import tv.mechjack.platform.configuration.Configuration;
 import tv.mechjack.platform.configuration.ConfigurationKey;
-import tv.mechjack.platform.util.TimeUtils;
+import tv.mechjack.platform.utils.TimeUtils;
 import tv.mechjack.twitchclient.TwitchLogin;
 
 public final class ShoutOutListenerChatCommand extends BaseChatCommand {

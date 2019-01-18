@@ -17,9 +17,9 @@ import tv.mechjack.mechjackbot.api.TestChatBot;
 import tv.mechjack.mechjackbot.api.TestChatMessageEvent;
 import tv.mechjack.platform.configuration.ConfigurationKey;
 import tv.mechjack.platform.configuration.MapConfiguration;
-import tv.mechjack.platform.util.scheduleservice.ScheduleService;
-import tv.mechjack.platform.util.scheduleservice.TestScheduleService;
-import tv.mechjack.platform.util.scheduleservice.TestScheduleServiceModule;
+import tv.mechjack.platform.utils.scheduleservice.ScheduleService;
+import tv.mechjack.platform.utils.scheduleservice.TestScheduleService;
+import tv.mechjack.platform.utils.scheduleservice.TestScheduleServiceModule;
 
 public class QuitChatCommandUnitTests extends BaseChatCommandContractTests {
 

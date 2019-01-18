@@ -5,8 +5,8 @@ import com.google.inject.AbstractModule;
 import tv.mechjack.platform.application.ApplicationModule;
 import tv.mechjack.platform.gson.GsonModule;
 import tv.mechjack.platform.keyvaluestore.KeyValueStoreModule;
-import tv.mechjack.platform.util.UtilModule;
-import tv.mechjack.platform.util.scheduleservice.ScheduleServiceModule;
+import tv.mechjack.platform.utils.UtilsModule;
+import tv.mechjack.platform.utils.scheduleservice.ScheduleServiceModule;
 
 public class PlatformModule extends AbstractModule {
 
@@ -16,7 +16,7 @@ public class PlatformModule extends AbstractModule {
     this.install(new GsonModule());
     this.install(new KeyValueStoreModule());
     this.install(new ScheduleServiceModule());
-    this.install(new UtilModule());
+    this.install(new UtilsModule());
   }
 
 }

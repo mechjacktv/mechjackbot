@@ -11,8 +11,8 @@ import java.util.Optional;
 import org.junit.Rule;
 import org.junit.Test;
 
-import tv.mechjack.platform.util.OptionalByteArrayEqualsExpected;
-import tv.mechjack.platform.util.TestUtilModule;
+import tv.mechjack.platform.utils.OptionalByteArrayEqualsExpected;
+import tv.mechjack.platform.utils.TestUtilsModule;
 import tv.mechjack.testframework.TestFrameworkRule;
 
 public abstract class KeyValueStoreContractTests {
@@ -21,7 +21,7 @@ public abstract class KeyValueStoreContractTests {
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
   protected void installModules() {
-    this.testFrameworkRule.installModule(new TestUtilModule());
+    this.testFrameworkRule.installModule(new TestUtilsModule());
   }
 
   private KeyValueStore givenASubjectToTest() {

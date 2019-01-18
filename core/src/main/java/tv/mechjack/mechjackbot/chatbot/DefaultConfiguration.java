@@ -9,10 +9,10 @@ import org.slf4j.LoggerFactory;
 
 import tv.mechjack.platform.application.Application;
 import tv.mechjack.platform.configuration.PropertiesConfiguration;
-import tv.mechjack.platform.util.ExecutionUtils;
-import tv.mechjack.platform.util.scheduleservice.FileHotUpdatePropertiesSource;
-import tv.mechjack.platform.util.scheduleservice.HotUpdatePropertiesSource;
-import tv.mechjack.platform.util.scheduleservice.ScheduleService;
+import tv.mechjack.platform.utils.ExecutionUtils;
+import tv.mechjack.platform.utils.scheduleservice.FileHotUpdatePropertiesSource;
+import tv.mechjack.platform.utils.scheduleservice.HotUpdatePropertiesSource;
+import tv.mechjack.platform.utils.scheduleservice.ScheduleService;
 
 public final class DefaultConfiguration extends PropertiesConfiguration {
 

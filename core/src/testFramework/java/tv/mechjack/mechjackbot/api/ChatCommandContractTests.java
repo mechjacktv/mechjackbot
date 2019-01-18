@@ -7,7 +7,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import tv.mechjack.platform.configuration.TestConfigurationModule;
-import tv.mechjack.platform.util.TestUtilModule;
+import tv.mechjack.platform.utils.TestUtilsModule;
 import tv.mechjack.testframework.TestFrameworkRule;
 
 public abstract class ChatCommandContractTests {
@@ -18,7 +18,7 @@ public abstract class ChatCommandContractTests {
   protected void installModules() {
     this.testFrameworkRule.installModule(new TestConfigurationModule());
     this.testFrameworkRule.installModule(new TestCommandModule());
-    this.testFrameworkRule.installModule(new TestUtilModule());
+    this.testFrameworkRule.installModule(new TestUtilsModule());
   }
 
   protected abstract ChatCommand givenASubjectToTest();

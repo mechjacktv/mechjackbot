@@ -19,7 +19,7 @@ import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
 import tv.mechjack.platform.configuration.ConfigurationKey;
 import tv.mechjack.platform.configuration.MapConfiguration;
 import tv.mechjack.platform.configuration.TestConfigurationModule;
-import tv.mechjack.platform.util.TestUtilModule;
+import tv.mechjack.platform.utils.TestUtilsModule;
 import tv.mechjack.testframework.TestFrameworkRule;
 
 public abstract class ChatCommandUtilsContractTests {
@@ -31,7 +31,7 @@ public abstract class ChatCommandUtilsContractTests {
     this.testFrameworkRule.installModule(new TestChatBotModule());
     this.testFrameworkRule.installModule(new TestCommandModule());
     this.testFrameworkRule.installModule(new TestConfigurationModule());
-    this.testFrameworkRule.installModule(new TestUtilModule());
+    this.testFrameworkRule.installModule(new TestUtilsModule());
   }
 
   protected abstract ChatCommandUtils givenASubjectToTest();

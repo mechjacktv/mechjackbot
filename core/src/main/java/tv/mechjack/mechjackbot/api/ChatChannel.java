@@ -1,6 +1,6 @@
 package tv.mechjack.mechjackbot.api;
 
-import tv.mechjack.platform.util.typedobject.TypedString;
+import tv.mechjack.platform.utils.typedobject.TypedString;
 
 public final class ChatChannel extends TypedString {
 

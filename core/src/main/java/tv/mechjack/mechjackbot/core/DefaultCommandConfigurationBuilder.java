@@ -13,7 +13,7 @@ import tv.mechjack.mechjackbot.api.CommandConfiguration;
 import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
 import tv.mechjack.mechjackbot.api.CommandMessageFormat;
 import tv.mechjack.platform.configuration.Configuration;
-import tv.mechjack.platform.util.ExecutionUtils;
+import tv.mechjack.platform.utils.ExecutionUtils;
 
 public final class DefaultCommandConfigurationBuilder implements CommandConfigurationBuilder {
 

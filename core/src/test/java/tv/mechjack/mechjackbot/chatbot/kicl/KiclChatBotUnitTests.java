@@ -15,7 +15,7 @@ import tv.mechjack.mechjackbot.api.ChatMessage;
 import tv.mechjack.mechjackbot.api.TestCommandModule;
 import tv.mechjack.platform.configuration.MapConfiguration;
 import tv.mechjack.platform.configuration.TestConfigurationModule;
-import tv.mechjack.platform.util.TestUtilModule;
+import tv.mechjack.platform.utils.TestUtilsModule;
 import tv.mechjack.testframework.TestFrameworkRule;
 
 public class KiclChatBotUnitTests {
@@ -27,7 +27,7 @@ public class KiclChatBotUnitTests {
     this.testFrameworkRule.installModule(new TestCommandModule());
     this.testFrameworkRule.installModule(new TestConfigurationModule());
     this.testFrameworkRule.installModule(new TestKiclChatBotModule());
-    this.testFrameworkRule.installModule(new TestUtilModule());
+    this.testFrameworkRule.installModule(new TestUtilsModule());
   }
 
   private KiclChatBot givenASubjectToTest() {

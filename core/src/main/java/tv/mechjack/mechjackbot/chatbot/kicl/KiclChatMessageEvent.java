@@ -9,7 +9,7 @@ import tv.mechjack.mechjackbot.api.ChatMessage;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.mechjackbot.api.ChatUser;
 import tv.mechjack.platform.configuration.Configuration;
-import tv.mechjack.platform.util.ExecutionUtils;
+import tv.mechjack.platform.utils.ExecutionUtils;
 
 public class KiclChatMessageEvent implements ChatMessageEvent {
 

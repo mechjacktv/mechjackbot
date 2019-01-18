@@ -2,11 +2,11 @@ package tv.mechjack.platform.configuration;
 
 import java.util.Map;
 
-import tv.mechjack.platform.util.ExecutionUtils;
-import tv.mechjack.platform.util.scheduleservice.HotUpdatePropertiesSource;
-import tv.mechjack.platform.util.scheduleservice.MapHotUpdatePropertiesSource;
-import tv.mechjack.platform.util.scheduleservice.ScheduleService;
-import tv.mechjack.platform.util.scheduleservice.TestScheduleServiceModule;
+import tv.mechjack.platform.utils.ExecutionUtils;
+import tv.mechjack.platform.utils.scheduleservice.HotUpdatePropertiesSource;
+import tv.mechjack.platform.utils.scheduleservice.MapHotUpdatePropertiesSource;
+import tv.mechjack.platform.utils.scheduleservice.ScheduleService;
+import tv.mechjack.platform.utils.scheduleservice.TestScheduleServiceModule;
 
 public class PropertiesConfiguration_ConfigurationUnitTests extends ConfigurationContractTests {
 

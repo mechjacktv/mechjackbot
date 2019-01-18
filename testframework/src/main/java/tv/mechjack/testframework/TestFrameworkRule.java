@@ -11,22 +11,22 @@ import com.google.inject.Module;
 import com.google.inject.Provider;
 
 import org.junit.rules.ExternalResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class TestFrameworkRule extends ExternalResource {
 
   public static final int ARBITRARY_COLLECTION_SIZE = 10;
 
-  private final Logger logger = LoggerFactory.getLogger(TestFrameworkRule.class);
-
   private final Set<Module> modules = new HashSet<>();
+  private final TestClock testClock = new DefaultTestClock();
+  private final TestRandom testRandom = new DefaultTestRandom();
   private Injector injector = null;
 
   @Override
   protected final void before() {
     this.modules.clear();
-    this.installModule(new TestFrameworkModule());
+    this.testClock.reset();
+    this.testRandom.reset();
+    this.installModule(new TestFrameworkModule(this.testClock, this.testRandom));
   }
 
   @Override
@@ -43,7 +43,7 @@ public final class TestFrameworkRule extends ExternalResource {
   }
 
   public final void currentTimeDelta(final long delta, final TimeUnit unit, final long shift) {
-    this.getInstance(TestClock.class).currentTimeDelta(unit.toMillis(delta) + shift);
+    this.testClock.currentTimeDelta(unit.toMillis(delta) + shift);
   }
 
   public final byte[] getArbitraryByteArray() {
@@ -87,6 +87,10 @@ public final class TestFrameworkRule extends ExternalResource {
 
   public final void installModule(final Module module) {
     this.modules.add(module);
+  }
+
+  public final void nextRandomValue(final Long nextValue) {
+    this.testRandom.setNextValue(nextValue);
   }
 
 }

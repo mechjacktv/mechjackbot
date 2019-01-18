@@ -20,8 +20,8 @@ import tv.mechjack.mechjackbot.api.NoCoolDown;
 import tv.mechjack.mechjackbot.api.RequiresUserRole;
 import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.platform.configuration.Configuration;
-import tv.mechjack.platform.util.ExecutionUtils;
-import tv.mechjack.platform.util.TimeUtils;
+import tv.mechjack.platform.utils.ExecutionUtils;
+import tv.mechjack.platform.utils.TimeUtils;
 import tv.mechjack.twitchclient.TwitchLogin;
 
 public final class DefaultChatCommandUtils implements ChatCommandUtils {

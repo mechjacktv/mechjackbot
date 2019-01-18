@@ -9,7 +9,7 @@ import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 
-import tv.mechjack.platform.util.ExecutionUtils;
+import tv.mechjack.platform.utils.ExecutionUtils;
 
 public class MapConfigurationUnitTests extends ConfigurationContractTests {
 

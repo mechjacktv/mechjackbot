@@ -1,6 +1,6 @@
 package tv.mechjack.platform.application;
 
-import tv.mechjack.platform.util.typedobject.TypedString;
+import tv.mechjack.platform.utils.typedobject.TypedString;
 
 public final class ApplicationDataLocation extends TypedString {
 

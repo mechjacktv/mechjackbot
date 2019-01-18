@@ -6,8 +6,8 @@ import java.util.Optional;
 
 import com.google.protobuf.Message;
 
-import tv.mechjack.platform.util.ExecutionUtils;
-import tv.mechjack.platform.util.ProtobufUtils;
+import tv.mechjack.platform.utils.ExecutionUtils;
+import tv.mechjack.platform.utils.ProtobufUtils;
 
 public abstract class BaseMessageStore<K extends Message, V extends Message> implements MessageStore<K, V> {
 
