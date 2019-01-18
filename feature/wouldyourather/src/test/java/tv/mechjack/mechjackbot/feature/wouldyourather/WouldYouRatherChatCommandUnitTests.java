@@ -20,6 +20,7 @@ import tv.mechjack.mechjackbot.api.TestChatMessageEvent;
 import tv.mechjack.mechjackbot.api.TestCommandModule;
 import tv.mechjack.platform.TestPlatformModule;
 import tv.mechjack.platform.configuration.ConfigurationKey;
+import tv.mechjack.platform.utils.IORuntimeException;
 import tv.mechjack.platform.utils.RandomUtils;
 
 public class WouldYouRatherChatCommandUnitTests extends BaseChatCommandContractTests {
@@ -39,7 +40,7 @@ public class WouldYouRatherChatCommandUnitTests extends BaseChatCommandContractT
       when(questionsDataSource.getQuestions()).thenReturn(bufferedReader);
       return this.givenASubjectToTest(questionsDataSource);
     } catch (final IOException e) {
-      throw new RuntimeException(e.getMessage(), e);
+      throw new IORuntimeException(e.getMessage(), e);
     }
   }
 

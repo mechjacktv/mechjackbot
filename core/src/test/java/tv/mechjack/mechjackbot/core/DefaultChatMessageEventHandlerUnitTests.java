@@ -17,6 +17,7 @@ import tv.mechjack.mechjackbot.api.ChatCommandUtils;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.mechjackbot.api.ChatMessageEventHandlerContractTests;
 import tv.mechjack.mechjackbot.api.TestChatCommand;
+import tv.mechjack.platform.utils.typedobject.StronglyTypedInstantiationException;
 
 public class DefaultChatMessageEventHandlerUnitTests extends ChatMessageEventHandlerContractTests {
 
@@ -51,7 +52,7 @@ public class DefaultChatMessageEventHandlerUnitTests extends ChatMessageEventHan
     final TestChatCommand command = this.testFrameworkRule.getInstance(TestChatCommand.class);
     command.setTriggered(true);
     command.setMessageEventHandler(messageEvent -> {
-      throw new RuntimeException();
+      throw new StronglyTypedInstantiationException(new Exception());
     });
     final Logger logger = mock(Logger.class);
     final DefaultChatMessageEventHandler subjectUnderTest = this.givenASubjectToTest(Sets.newHashSet(command), logger);
