@@ -8,7 +8,7 @@ import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 import tv.mechjack.mechjackbot.api.ChatBot;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.platform.configuration.Configuration;
-import tv.mechjack.platform.util.ExecutionUtils;
+import tv.mechjack.platform.utils.ExecutionUtils;
 
 public class KiclChatMessageEventFactory {
 

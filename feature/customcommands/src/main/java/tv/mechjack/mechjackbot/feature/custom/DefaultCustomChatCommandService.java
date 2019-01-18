@@ -15,9 +15,9 @@ import tv.mechjack.mechjackbot.api.ChatCommandRegistry;
 import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
 import tv.mechjack.mechjackbot.api.ChatCommandUtils;
 import tv.mechjack.mechjackbot.api.UserRole;
-import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommand;
-import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommandKey;
-import tv.mechjack.platform.util.ExecutionUtils;
+import tv.mechjack.mechjackbot.feature.custom.ProtoMessage.CustomCommand;
+import tv.mechjack.mechjackbot.feature.custom.ProtoMessage.CustomCommandKey;
+import tv.mechjack.platform.utils.ExecutionUtils;
 
 public final class DefaultCustomChatCommandService implements CustomChatCommandService {
 

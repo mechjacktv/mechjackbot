@@ -3,8 +3,8 @@ package tv.mechjack.mechjackbot.feature.custom;
 import tv.mechjack.mechjackbot.api.ChatCommandDescription;
 import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
 import tv.mechjack.mechjackbot.api.UserRole;
-import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommand;
-import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommandKey;
+import tv.mechjack.mechjackbot.feature.custom.ProtoMessage.CustomCommand;
+import tv.mechjack.mechjackbot.feature.custom.ProtoMessage.CustomCommandKey;
 import tv.mechjack.platform.keyvaluestore.MessageStore;
 
 public interface CustomCommandDataStore extends MessageStore<CustomCommandKey, CustomCommand> {

@@ -2,7 +2,7 @@ package tv.mechjack.twitchclient;
 
 import java.io.Reader;
 
-import tv.mechjack.platform.util.function.ConsumerWithException;
+import tv.mechjack.platform.utils.function.ConsumerWithException;
 
 public interface TwitchClientUtils {
 

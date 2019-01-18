@@ -7,12 +7,12 @@ import javax.inject.Inject;
 import tv.mechjack.mechjackbot.api.ChatCommandDescription;
 import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
 import tv.mechjack.mechjackbot.api.UserRole;
-import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommand;
-import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommandKey;
+import tv.mechjack.mechjackbot.feature.custom.ProtoMessage.CustomCommand;
+import tv.mechjack.mechjackbot.feature.custom.ProtoMessage.CustomCommandKey;
 import tv.mechjack.platform.keyvaluestore.BaseMessageStore;
 import tv.mechjack.platform.keyvaluestore.KeyValueStoreFactory;
-import tv.mechjack.platform.util.ExecutionUtils;
-import tv.mechjack.platform.util.ProtobufUtils;
+import tv.mechjack.platform.utils.ExecutionUtils;
+import tv.mechjack.platform.utils.ProtobufUtils;
 
 public class DefaultCustomCommandDataStore extends BaseMessageStore<CustomCommandKey, CustomCommand>
     implements CustomCommandDataStore {

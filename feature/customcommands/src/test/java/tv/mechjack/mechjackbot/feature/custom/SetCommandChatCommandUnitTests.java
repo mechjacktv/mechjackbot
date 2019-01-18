@@ -19,7 +19,7 @@ import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
 import tv.mechjack.mechjackbot.api.PicoCliUtils;
 import tv.mechjack.mechjackbot.api.TestChatMessageEvent;
 import tv.mechjack.mechjackbot.api.UserRole;
-import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommand;
+import tv.mechjack.mechjackbot.feature.custom.ProtoMessage.CustomCommand;
 import tv.mechjack.platform.configuration.Configuration;
 import tv.mechjack.platform.configuration.ConfigurationKey;
 import tv.mechjack.platform.configuration.MapConfiguration;

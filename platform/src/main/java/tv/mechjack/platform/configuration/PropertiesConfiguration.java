@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tv.mechjack.platform.util.ExecutionUtils;
-import tv.mechjack.platform.util.scheduleservice.HotUpdateProperties;
-import tv.mechjack.platform.util.scheduleservice.HotUpdatePropertiesSource;
-import tv.mechjack.platform.util.scheduleservice.ScheduleService;
+import tv.mechjack.platform.utils.ExecutionUtils;
+import tv.mechjack.platform.utils.scheduleservice.HotUpdateProperties;
+import tv.mechjack.platform.utils.scheduleservice.HotUpdatePropertiesSource;
+import tv.mechjack.platform.utils.scheduleservice.ScheduleService;
 
 public class PropertiesConfiguration implements Configuration {
 

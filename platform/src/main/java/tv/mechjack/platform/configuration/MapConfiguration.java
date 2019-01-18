@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import tv.mechjack.platform.util.ExecutionUtils;
+import tv.mechjack.platform.utils.ExecutionUtils;
 
 public class MapConfiguration implements Configuration {
 

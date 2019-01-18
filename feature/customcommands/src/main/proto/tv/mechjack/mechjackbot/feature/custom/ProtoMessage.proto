@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package tv.mechjack.mechjackbot.command.custom;
+package tv.mechjack.mechjackbot.feature.custom;
 
 message CustomCommandKey {
   string trigger = 1;

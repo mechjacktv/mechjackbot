@@ -24,15 +24,15 @@ import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
 import tv.mechjack.mechjackbot.api.TestChatCommand;
 import tv.mechjack.mechjackbot.api.TestChatMessageEvent;
 import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
-import tv.mechjack.mechjackbot.command.shoutout.ProtoMessage.Caster;
-import tv.mechjack.mechjackbot.command.shoutout.ProtoMessage.CasterKey;
+import tv.mechjack.mechjackbot.feature.shoutout.ProtoMessage.Caster;
+import tv.mechjack.mechjackbot.feature.shoutout.ProtoMessage.CasterKey;
 import tv.mechjack.platform.configuration.Configuration;
 import tv.mechjack.platform.configuration.ConfigurationKey;
 import tv.mechjack.platform.configuration.MapConfiguration;
 import tv.mechjack.platform.keyvaluestore.TestKeyValueStoreModule;
-import tv.mechjack.platform.util.TestTimeUtils;
-import tv.mechjack.platform.util.TimeUtils;
-import tv.mechjack.platform.util.scheduleservice.TestScheduleServiceModule;
+import tv.mechjack.platform.utils.TestTimeUtils;
+import tv.mechjack.platform.utils.TimeUtils;
+import tv.mechjack.platform.utils.scheduleservice.TestScheduleServiceModule;
 import tv.mechjack.twitchclient.TestTwitchClientModule;
 
 public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandContractTests {

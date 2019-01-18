@@ -7,15 +7,15 @@ import static org.mockito.Mockito.verify;
 import org.junit.Test;
 import org.slf4j.Logger;
 
-import tv.mechjack.platform.util.ExecutionUtils;
-import tv.mechjack.platform.util.TestUtilModule;
+import tv.mechjack.platform.utils.ExecutionUtils;
+import tv.mechjack.platform.utils.TestUtilsModule;
 
 public class DefaultTwitchClientUtilsUnitTests extends TwitchClientUtilsContractTests {
 
   @Override
   protected void installModules() {
     super.installModules();
-    this.testFrameworkRule.installModule(new TestUtilModule());
+    this.testFrameworkRule.installModule(new TestUtilsModule());
   }
 
   @Override

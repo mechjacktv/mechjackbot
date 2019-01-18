@@ -7,7 +7,7 @@ import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
 import tv.mechjack.mechjackbot.api.RequiresUserRole;
 import tv.mechjack.mechjackbot.api.UserRole;
-import tv.mechjack.platform.util.scheduleservice.ScheduleService;
+import tv.mechjack.platform.utils.scheduleservice.ScheduleService;
 
 public final class QuitChatCommand extends BaseChatCommand {
 

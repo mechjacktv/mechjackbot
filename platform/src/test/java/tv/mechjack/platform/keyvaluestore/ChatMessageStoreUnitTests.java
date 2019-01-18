@@ -3,8 +3,8 @@ package tv.mechjack.platform.keyvaluestore;
 import java.util.HashMap;
 import java.util.Map;
 
-import tv.mechjack.platform.util.ExecutionUtils;
-import tv.mechjack.platform.util.ProtobufUtils;
+import tv.mechjack.platform.utils.ExecutionUtils;
+import tv.mechjack.platform.utils.ProtobufUtils;
 import tv.mechjack.util.ProtoMessage.TestKeyMessage;
 import tv.mechjack.util.ProtoMessage.TestValueMessage;
 

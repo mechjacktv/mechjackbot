@@ -12,12 +12,12 @@ import org.junit.Test;
 import tv.mechjack.mechjackbot.api.ChatCommandDescription;
 import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
 import tv.mechjack.mechjackbot.api.UserRole;
-import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommand;
-import tv.mechjack.mechjackbot.command.custom.ProtoMessage.CustomCommandKey;
+import tv.mechjack.mechjackbot.feature.custom.ProtoMessage.CustomCommand;
+import tv.mechjack.mechjackbot.feature.custom.ProtoMessage.CustomCommandKey;
 import tv.mechjack.platform.keyvaluestore.ChatMessageStoreContractTests;
 import tv.mechjack.platform.keyvaluestore.MapKeyValueStore;
-import tv.mechjack.platform.util.ExecutionUtils;
-import tv.mechjack.platform.util.ProtobufUtils;
+import tv.mechjack.platform.utils.ExecutionUtils;
+import tv.mechjack.platform.utils.ProtobufUtils;
 
 public class DefaultCustomCommandDataStoreUnitTests extends
     ChatMessageStoreContractTests<CustomCommandKey, CustomCommand> {

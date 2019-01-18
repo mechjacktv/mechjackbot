@@ -12,7 +12,7 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.Rule;
 import org.junit.Test;
 
-import tv.mechjack.platform.util.TestUtilModule;
+import tv.mechjack.platform.utils.TestUtilsModule;
 import tv.mechjack.testframework.TestFrameworkRule;
 
 public abstract class ConfigurationContractTests {
@@ -21,7 +21,7 @@ public abstract class ConfigurationContractTests {
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
   protected void installModules() {
-    this.testFrameworkRule.installModule(new TestUtilModule());
+    this.testFrameworkRule.installModule(new TestUtilsModule());
   }
 
   private Configuration givenASubjectToTest() throws Exception {

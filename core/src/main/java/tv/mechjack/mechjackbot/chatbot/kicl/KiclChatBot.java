@@ -10,7 +10,7 @@ import tv.mechjack.mechjackbot.api.ChatBot;
 import tv.mechjack.mechjackbot.api.ChatChannel;
 import tv.mechjack.mechjackbot.api.ChatMessage;
 import tv.mechjack.platform.configuration.Configuration;
-import tv.mechjack.platform.util.ExecutionUtils;
+import tv.mechjack.platform.utils.ExecutionUtils;
 
 public class KiclChatBot implements ChatBot {
 

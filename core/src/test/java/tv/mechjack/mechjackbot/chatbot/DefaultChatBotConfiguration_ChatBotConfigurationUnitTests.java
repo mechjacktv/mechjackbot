@@ -7,9 +7,9 @@ import tv.mechjack.mechjackbot.api.ChatBotConfiguration;
 import tv.mechjack.mechjackbot.api.ChatBotConfigurationContractTests;
 import tv.mechjack.platform.application.Application;
 import tv.mechjack.platform.application.TestApplicationModule;
-import tv.mechjack.platform.util.scheduleservice.MapHotUpdatePropertiesSource;
-import tv.mechjack.platform.util.scheduleservice.ScheduleService;
-import tv.mechjack.platform.util.scheduleservice.TestScheduleServiceModule;
+import tv.mechjack.platform.utils.scheduleservice.MapHotUpdatePropertiesSource;
+import tv.mechjack.platform.utils.scheduleservice.ScheduleService;
+import tv.mechjack.platform.utils.scheduleservice.TestScheduleServiceModule;
 
 public class DefaultChatBotConfiguration_ChatBotConfigurationUnitTests extends ChatBotConfigurationContractTests {
 

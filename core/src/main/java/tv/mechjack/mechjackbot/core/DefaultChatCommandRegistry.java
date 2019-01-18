@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import tv.mechjack.mechjackbot.api.ChatCommand;
 import tv.mechjack.mechjackbot.api.ChatCommandRegistry;
 import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
-import tv.mechjack.platform.util.ExecutionUtils;
+import tv.mechjack.platform.utils.ExecutionUtils;
 
 public final class DefaultChatCommandRegistry implements ChatCommandRegistry {
 

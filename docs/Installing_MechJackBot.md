@@ -236,6 +236,25 @@ Who you follow is checked every `10` minutes.
 |description|Monitors chat looking for casters who are due for a shout out.|You can change this to whatever you want, but generally it should be helpful to viewers.|
 |frequency.hours|1|The number of hours between shout outs of an individual streamer.|
 
+### Would You Rather Commands
+
+
+#### Shout Out Command
+
+To configure your questions for this command you need to create a `wouldyourather.questions` file in the same directory as `application.config`. Each line in this file is a separate question. You can add comments by playing a `#` character at the beginning of the line.
+
+This method of configuration will almost definitely change in the future.
+
+* Scope: `tv_mechjack_mechjackbot_feature_wouldyourather_wouldyouratherchatcommand`
+* Usage: `!wouldyourather`
+
+|Property Name|Default Value|Notes|
+|--|--|--|
+|description|Asks a 'would you rather' style question in chat.|
+|message_format|Would your rather %s?|`%s` will be substituted with the randomly selected question.|
+|trigger|!wouldyourather|This is what a message must start with to trigger the command.|
+
+
 ### A Note About `%s` and `%1$s`
 
 I know this is awkward and probably confusing. I fully intend to put something easier to use and understand in place in a future release.

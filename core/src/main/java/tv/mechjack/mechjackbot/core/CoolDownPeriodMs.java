@@ -1,6 +1,6 @@
 package tv.mechjack.mechjackbot.core;
 
-import tv.mechjack.platform.util.typedobject.TypedInteger;
+import tv.mechjack.platform.utils.typedobject.TypedInteger;
 
 public final class CoolDownPeriodMs extends TypedInteger {
 
