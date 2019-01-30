@@ -9,6 +9,7 @@ buildscript {
   }
 }
 
+
 subprojects {
   apply plugin: 'ch.raffael.markdown-doclet'
   apply plugin: 'com.diffplug.gradle.spotless'
@@ -16,6 +17,7 @@ subprojects {
   apply plugin: 'idea'
   apply plugin: 'jacoco'
   apply plugin: 'java'
+  apply plugin: tv.mechjack.gradle.testframework.TestFrameworkPlugin
 
   archivesBaseName = "${rootProject.name}-${project.name}"
   group = 'tv.mechjack'
@@ -23,9 +25,9 @@ subprojects {
 
   jacocoTestReport {
     afterEvaluate {
-      classDirectories = files(classDirectories.files.collect {
+      classDirectories.setFrom(files(classDirectories.files.collect {
         fileTree(dir: it, exclude: '**/ProtoMessage**')
-      })
+      }))
     }
   }
   check.dependsOn 'jacocoTestReport'
@@ -46,32 +48,6 @@ subprojects {
     }
   }
   compileJava.dependsOn 'spotlessApply'
-
-  sourceSets {
-    testFramework {
-      compileClasspath += sourceSets.main.output
-      runtimeClasspath += sourceSets.main.output
-    }
-    test {
-      compileClasspath += sourceSets.testFramework.output
-      runtimeClasspath += sourceSets.testFramework.output
-    }
-  }
-  configurations {
-    testFramework
-    testFrameworkImplementation.extendsFrom implementation
-    testFrameworkRuntimeOnly.extendsFrom runtimeOnly
-    testImplementation.extendsFrom testFrameworkImplementation
-    testRuntimeOnly.extendsFrom testFrameworkRuntimeOnly
-  }
-  task testFrameworkJar(type: Jar) {
-    from sourceSets.testFramework.output
-    classifier = 'testFramework'
-  }
-  artifacts {
-    testFramework testFrameworkJar
-  }
-  assemble.dependsOn 'testFrameworkJar'
 
   repositories {
     jcenter()
