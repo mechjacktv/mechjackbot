@@ -25,7 +25,7 @@ subprojects {
 
   jacocoTestReport {
     afterEvaluate {
-      classDirectories.from(files(classDirectories.files.collect {
+      classDirectories.setFrom(files(classDirectories.files.collect {
         fileTree(dir: it, exclude: '**/ProtoMessage**')
       }))
     }
