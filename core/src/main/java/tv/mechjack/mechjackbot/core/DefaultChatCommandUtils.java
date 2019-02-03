@@ -17,7 +17,7 @@ import tv.mechjack.mechjackbot.api.ChatCommandUtils;
 import tv.mechjack.mechjackbot.api.ChatMessage;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.mechjackbot.api.NoCoolDown;
-import tv.mechjack.mechjackbot.api.RequiresUserRole;
+import tv.mechjack.mechjackbot.api.RequiresAccessLevel;
 import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.platform.configuration.Configuration;
 import tv.mechjack.platform.utils.ExecutionUtils;
@@ -45,12 +45,12 @@ public final class DefaultChatCommandUtils implements ChatCommandUtils {
   }
 
   @Override
-  public boolean hasUserRole(final ChatCommand chatCommand, final ChatMessageEvent chatMessageEvent) {
+  public boolean hasAccessLevel(final ChatCommand chatCommand, final ChatMessageEvent chatMessageEvent) {
     Objects.requireNonNull(chatCommand, this.executionUtils.nullMessageForName("chatCommand"));
     Objects.requireNonNull(chatMessageEvent, this.executionUtils.nullMessageForName("chatMessageEvent"));
     return this.executionUtils.softenException(() -> {
       final Method method = chatCommand.getClass().getMethod("handleMessageEvent", ChatMessageEvent.class);
-      final RequiresUserRole roles = method.getAnnotation(RequiresUserRole.class);
+      final RequiresAccessLevel roles = method.getAnnotation(RequiresAccessLevel.class);
 
       if (Objects.isNull(roles)) {
         return true;
@@ -60,7 +60,7 @@ public final class DefaultChatCommandUtils implements ChatCommandUtils {
   }
 
   private boolean hasUserRole(final ChatMessageEvent chatMessageEvent, final UserRole userRole) {
-    return chatMessageEvent.getChatUser().hasUserRole(userRole);
+    return chatMessageEvent.getChatUser().hasAccessLevel(userRole);
   }
 
   @Override

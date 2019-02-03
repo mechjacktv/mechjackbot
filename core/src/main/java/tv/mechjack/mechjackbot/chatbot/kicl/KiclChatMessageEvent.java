@@ -39,7 +39,7 @@ public class KiclChatMessageEvent implements ChatMessageEvent {
 
   @Override
   public ChatUser getChatUser() {
-    return this.chatUserFactory.create(this.channelMessageEvent.getActor());
+    return this.chatUserFactory.create(this.channelMessageEvent);
   }
 
   @Override

@@ -8,14 +8,14 @@ public enum UserRole {
   SUBSCRIBER(4),
   VIEWER(5);
 
-  private final Integer value;
+  private final Integer accessLevel;
 
-  UserRole(final Integer value) {
-    this.value = value;
+  UserRole(final Integer accessLevel) {
+    this.accessLevel = accessLevel;
   }
 
-  public final Integer value() {
-    return this.value;
+  public final Integer accessLevel() {
+    return this.accessLevel;
   }
 
 }
