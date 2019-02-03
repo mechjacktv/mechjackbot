@@ -68,7 +68,7 @@ subprojects {
 }
 
 /*******************************
- * APPLICATION BASE PROJECTS
+ * BASE PROJECTS
  */
 
 project(':testframework') {
@@ -88,6 +88,10 @@ project(':platform') {
   }
 }
 
+/*******************************
+ * CORE PROJECT
+ */
+
 project(':core') {
   dependencies {
     implementation project(':platform')
@@ -99,7 +103,7 @@ project(':core') {
 }
 
 /*******************************
- * APPLICATION PLUGIN PROJECTS
+ * FEATURE PROJECTS
  */
 
 project(':feature:customcommands') {
@@ -133,14 +137,13 @@ project(':feature:wouldyourather') {
 }
 
 /*******************************
- * APPLICATION WITH ALL PLUGINS
+ * APPLICATION WITH ALL PROJECTS
  */
 
 project(':all') {
   apply plugin: 'application'
 
   mainClassName = 'tv.mechjack.mechjackbot.main.Main'
-  // applicationDefaultJvmArgs = ["-Dmechjackbot.plugin_module_names=tv.mechjack.mechjackbot.command.custom.CustomCommandModule"]
 
   dependencies {
     runtimeOnly project(':core')
