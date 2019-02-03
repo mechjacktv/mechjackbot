@@ -70,7 +70,7 @@ public final class DefaultChatMessageEventHandler implements ChatMessageEventHan
 
   private boolean isTriggered(final ChatCommand chatCommand, final ChatMessageEvent chatMessageEvent) {
     return chatCommand.isTriggered(chatMessageEvent)
-        && this.chatCommandUtils.hasUserRole(chatCommand, chatMessageEvent)
+        && this.chatCommandUtils.hasAccessLevel(chatCommand, chatMessageEvent)
         && this.chatCommandUtils.isCooledDown(chatCommand, chatMessageEvent);
   }
 

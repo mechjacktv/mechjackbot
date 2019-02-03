@@ -9,6 +9,8 @@ import tv.mechjack.mechjackbot.api.ChatCommandUtils;
 import tv.mechjack.mechjackbot.api.ChatMessage;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
+import tv.mechjack.mechjackbot.api.RequiresAccessLevel;
+import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.twitchclient.TwitchLogin;
 
 public final class ShoutOutChatCommand extends BaseChatCommand {
@@ -32,6 +34,7 @@ public final class ShoutOutChatCommand extends BaseChatCommand {
   }
 
   @Override
+  @RequiresAccessLevel(UserRole.MODERATOR)
   public void handleMessageEvent(final ChatMessageEvent chatMessageEvent) {
     final ChatMessage chatMessage = this.chatCommandUtils.stripTriggerFromMessage(this, chatMessageEvent);
 

@@ -91,7 +91,7 @@ public class CustomChatCommand implements ChatCommand {
   @Override
   public boolean isTriggered(final ChatMessageEvent chatMessageEvent) {
     if (this.chatCommandUtils.isTriggered(this, chatMessageEvent)) {
-      return chatMessageEvent.getChatUser().hasUserRole(this.userRole);
+      return chatMessageEvent.getChatUser().hasAccessLevel(this.userRole);
     }
     return false;
   }

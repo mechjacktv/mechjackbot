@@ -19,7 +19,7 @@ import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
 import tv.mechjack.mechjackbot.api.CommandMessageFormat;
 import tv.mechjack.mechjackbot.api.PicoCliUtils;
-import tv.mechjack.mechjackbot.api.RequiresUserRole;
+import tv.mechjack.mechjackbot.api.RequiresAccessLevel;
 import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.platform.configuration.Configuration;
 import tv.mechjack.platform.configuration.ConfigurationKey;
@@ -54,7 +54,7 @@ public class SetCommandChatCommand extends BaseChatCommand {
   }
 
   @Override
-  @RequiresUserRole(UserRole.MODERATOR)
+  @RequiresAccessLevel(UserRole.MODERATOR)
   public void handleMessageEvent(final ChatMessageEvent messageEvent) {
     final OptionSpec userRoleOption = this.picoCliUtils.createStringOption(false, "-r", "--user-role");
     final OptionSpec descriptionOption = this.picoCliUtils.createStringOption(false, "-d", "--description");
