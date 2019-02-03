@@ -2,17 +2,20 @@ package tv.mechjack.mechjackbot.api;
 
 import java.util.function.Function;
 
+import javax.inject.Inject;
+
 import tv.mechjack.testframework.ArbitraryDataGenerator;
 import tv.mechjack.twitchclient.TwitchLogin;
 
 public class TestChatUser implements ChatUser {
 
   private TwitchLogin twitchLogin;
-  private Function<UserRole, Boolean> hasUserRoleHandler;
+  private Function<UserRole, Boolean> hasAccessLevelHandler;
 
+  @Inject
   public TestChatUser(final ArbitraryDataGenerator arbitraryDataGenerator) {
     this.twitchLogin = TwitchLogin.of(arbitraryDataGenerator.getString());
-    this.hasUserRoleHandler = UserRole.VIEWER::equals;
+    this.hasAccessLevelHandler = UserRole.VIEWER::equals;
   }
 
   @Override
@@ -22,11 +25,11 @@ public class TestChatUser implements ChatUser {
 
   @Override
   public boolean hasAccessLevel(final UserRole userRole) {
-    return this.hasUserRoleHandler.apply(userRole);
+    return this.hasAccessLevelHandler.apply(userRole);
   }
 
-  public void setHasUserRoleHandler(final Function<UserRole, Boolean> hasUserRoleHandler) {
-    this.hasUserRoleHandler = hasUserRoleHandler;
+  public void setHasAccessLevelHandler(final Function<UserRole, Boolean> hasAccessLevelHandler) {
+    this.hasAccessLevelHandler = hasAccessLevelHandler;
   }
 
   public void setTwitchLogin(final TwitchLogin twitchLogin) {

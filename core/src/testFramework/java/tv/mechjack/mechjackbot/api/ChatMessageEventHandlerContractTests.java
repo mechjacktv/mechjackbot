@@ -97,6 +97,7 @@ public abstract class ChatMessageEventHandlerContractTests {
 
     @Override
     @NoCoolDown
+    @RequiresAccessLevel(UserRole.VIEWER)
     public void handleMessageEvent(ChatMessageEvent chatMessageEvent) {
       super.handleMessageEvent(chatMessageEvent);
     }

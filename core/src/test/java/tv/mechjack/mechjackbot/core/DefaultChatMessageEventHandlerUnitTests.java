@@ -1,5 +1,6 @@
 package tv.mechjack.mechjackbot.core;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -16,7 +17,11 @@ import tv.mechjack.mechjackbot.api.ChatCommandRegistry;
 import tv.mechjack.mechjackbot.api.ChatCommandUtils;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.mechjackbot.api.ChatMessageEventHandlerContractTests;
+import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
 import tv.mechjack.mechjackbot.api.TestChatCommand;
+import tv.mechjack.mechjackbot.api.TestChatMessageEvent;
+import tv.mechjack.mechjackbot.api.TestChatUser;
+import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.platform.utils.typedobject.StronglyTypedInstantiationException;
 
 public class DefaultChatMessageEventHandlerUnitTests extends ChatMessageEventHandlerContractTests {
@@ -61,6 +66,40 @@ public class DefaultChatMessageEventHandlerUnitTests extends ChatMessageEventHan
 
     verify(logger).info(isA(String.class));
     verify(logger).error(isA(String.class), isA(Throwable.class));
+  }
+
+  @Test
+  public final void handleMessageEvent_commandWithDefaultAccessLevel_resultIsRequiredModeratorAccessLevel() {
+    this.installModules();
+    final DefaultAccessLevelChatCommand command =
+        new DefaultAccessLevelChatCommand(this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class));
+    command.setTriggered(true);
+    final TestChatUser user = this.testFrameworkRule.getInstance(TestChatUser.class);
+    final TestChatMessageEvent event = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    event.setChatUser(user);
+    final DefaultChatMessageEventHandler subjectUnderTest = this.givenASubjectToTest(Sets.newHashSet(command));
+
+    final UserRole[] result = new UserRole[1];
+    user.setHasAccessLevelHandler(userRole -> {
+      result[0] = userRole;
+      return true;
+    });
+    subjectUnderTest.handleMessageEvent(event);
+
+    assertThat(result[0]).isEqualTo(UserRole.MODERATOR);
+  }
+
+  private static final class DefaultAccessLevelChatCommand extends TestChatCommand {
+
+    private DefaultAccessLevelChatCommand(final CommandConfigurationBuilder commandConfigurationBuilder) {
+      super(commandConfigurationBuilder);
+    }
+
+    @Override
+    public void handleMessageEvent(ChatMessageEvent chatMessageEvent) {
+      super.handleMessageEvent(chatMessageEvent);
+    }
+
   }
 
 }

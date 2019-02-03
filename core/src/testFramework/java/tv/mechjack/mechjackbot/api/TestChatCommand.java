@@ -65,6 +65,7 @@ public class TestChatCommand extends BaseChatCommand {
   }
 
   @Override
+  @RequiresAccessLevel(UserRole.VIEWER)
   public void handleMessageEvent(final ChatMessageEvent chatMessageEvent) {
     this.chatMessageEvent = chatMessageEvent;
     this.messageEventHandler.accept(chatMessageEvent);

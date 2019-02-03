@@ -9,6 +9,8 @@ import tv.mechjack.mechjackbot.api.ChatCommand;
 import tv.mechjack.mechjackbot.api.ChatCommandRegistry;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
+import tv.mechjack.mechjackbot.api.RequiresAccessLevel;
+import tv.mechjack.mechjackbot.api.UserRole;
 
 public final class CommandsChatCommand extends BaseChatCommand {
 
@@ -28,6 +30,7 @@ public final class CommandsChatCommand extends BaseChatCommand {
   }
 
   @Override
+  @RequiresAccessLevel(UserRole.VIEWER)
   public void handleMessageEvent(final ChatMessageEvent chatMessageEvent) {
     this.sendResponse(chatMessageEvent,
         this.chatCommandRegistry.getCommands().stream().filter(ChatCommand::isTriggerable)
