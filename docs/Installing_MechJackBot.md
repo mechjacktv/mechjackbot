@@ -89,9 +89,9 @@ The first time you run MechJackBot you'll get a prompt that Windows Defender has
 
 ## Smoke Test MechJackBot
 
-Give MechJackBot a few seconds to start and then check that it's running by typing `!commands` in your chat. You should see your bot reply with `MrDestructoid > Commands: !commands !delcommand !help !ping !quit !setcommand`.
+Give MechJackBot a few seconds to start and then check that it's running by typing `!commands` in your chat. You should see your bot reply with something like `MrDestructoid > Commands: !commands !help !ping !quit !usage`.
 
-If you see that you're good to go. If you can get support on Discord at [https://discord.gg/TbrF6g](https://discord.gg/TbrF6g), via email at [mechjacktv@gmail.com](mailto:mechjacktv@gmail.com) or by opening up a new issue on GitHub at [https://github.com/mechjacktv/mechjackbot/issues](https://github.com/mechjacktv/mechjackbot/issues).
+If you see that you're good to go. If you can't feel free to get support on Discord at [https://discord.gg/TbrF6g](https://discord.gg/TbrF6g), via email at [mechjacktv+mechjackbot@gmail.com](mailto:mechjacktv+mechjackbot@gmail.com). If you think you found a bug or would like to request an enhancement you can open a new issue on GitHub at [https://github.com/mechjacktv/mechjackbot/issues](https://github.com/mechjacktv/mechjackbot/issues).
 
 ## Optional Configuration
 
@@ -127,6 +127,7 @@ Things wrapped in `(` and `)` denote a list of values that can be selected from 
 
 * Scope: `tv_mechjack_mechjackbot_feature_core_commandschatcommand`
 * Usage: `!commands`
+* Access Level: `VIEWER`
 
 |Property Name|Default Value|Notes|
 |--|--|--|
@@ -138,6 +139,7 @@ Things wrapped in `(` and `)` denote a list of values that can be selected from 
 
 * Scope: `tv_mechjack_mechjackbot_feature_core_helpchatcommand`
 * Usage: `!help <trigger>`
+* Access Level: `VIEWER`
 
 |Property Name|Default Value|Notes|
 |--|--|--|
@@ -150,6 +152,7 @@ Things wrapped in `(` and `)` denote a list of values that can be selected from 
 
 * Scope: `tv_mechjack_mechjackbot_feature_core_pingchatcommand`
 * Usage: `!ping`
+* Access Level: `MODERATOR`
 
 |Property Name|Default Value|Notes|
 |--|--|--|
@@ -161,6 +164,7 @@ Things wrapped in `(` and `)` denote a list of values that can be selected from 
 
 * Scope: `tv_mechjack_mechjackbot_feature_core_quitchatcommand`
 * Usage: `!quit`
+* Access Level: `BROADCASTER`
 
 |Property Name|Default Value|Notes|
 |--|--|--|
@@ -172,6 +176,7 @@ Things wrapped in `(` and `)` denote a list of values that can be selected from 
 
 * Scope: `tv_mechjack_mechjackbot_feature_core_udagechatcommand`
 * Usage: `!usage`
+* Access Level: `VIEWER`
 
 |Property Name|Default Value|Notes|
 |--|--|--|
@@ -186,6 +191,7 @@ Things wrapped in `(` and `)` denote a list of values that can be selected from 
 
 * Scope: `tv_mechjack_mechjackbot_feature_custom_deletecommandchatcommand`
 * Usage: `!delcommand <trigger>`
+* Access Level: `MODERATOR`
 
 |Property Name|Default Value|Notes|
 |--|--|--|
@@ -197,11 +203,10 @@ Things wrapped in `(` and `)` denote a list of values that can be selected from 
 #### Set Command
 
 * Scope: `tv_mechjack_mechjackbot_feature_custom_setcommandchatcommand`
-* Usage: `!setcommand <trigger> [(-r|--user-role)="(BROADCASTER|MODERATOR|VIP|SUBSCRIBER|VIEWER)"] [(-d|--description)="<description>"] [<body>]`
-    * Right now all user roles other than `VIEWER` roll up into `BROADCASTER`. The other levels haven't been implemented yet.
-    * The command reports `-u|--user-role` in the usage. That is an error. It's really `-r|--user-role`.
+* Usage: `!setcommand <trigger> [(-a|--access-level)="(BROADCASTER|MODERATOR|VIP|SUBSCRIBER|VIEWER)"] [(-d|--description)="<description>"] [<body>]`
     * The `<body>` is only optional if you are modifying an existing command and not creating a new one.
     * The command body may optionally include named arguments in the format `${<name>}`. If the same name is used twice that argument value will be repeated in both places. The command arguments will be interpreted in the order the names occur in the body (ignoring duplicate names). For example if we had a `!hug` command with the body `$(user) hugs ${target}!` the usage for `!hug` would be `!hug <target>` and you'd call it with `!hug mechjack` to hug a user named "mechjack".
+* Access Level: `MODERATOR`
 
 |Property Name|Default Value|Notes|
 |--|--|--|
@@ -216,6 +221,7 @@ Things wrapped in `(` and `)` denote a list of values that can be selected from 
 
 * Scope: `tv_mechjack_mechjackbot_feature_shoutout_shoutoutchatcommand`
 * Usage: `!shoutout`
+* Access Level: `MODERATOR`
 
 |Property Name|Default Value|Notes|
 |--|--|--|
@@ -247,6 +253,7 @@ This method of configuration will almost definitely change in the future.
 
 * Scope: `tv_mechjack_mechjackbot_feature_wouldyourather_wouldyouratherchatcommand`
 * Usage: `!wouldyourather`
+* Access Level: `VIEWER`
 
 |Property Name|Default Value|Notes|
 |--|--|--|
