@@ -300,7 +300,7 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
     final TestChatUser chatUser = (TestChatUser) chatMessageEvent.getChatUser();
     // chatUser is MODERATOR
-    chatUser.setHasUserRoleHandler(accessLevel -> UserRole.MODERATOR.accessLevel() >= accessLevel.accessLevel());
+    chatUser.setHasUserRoleHandler(accessLevel -> UserRole.MODERATOR.accessLevel() <= accessLevel.accessLevel());
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
     // set lastTrigger for chatCommand and user
     subjectUnderTest.isCooledDown(chatCommand, chatMessageEvent);
