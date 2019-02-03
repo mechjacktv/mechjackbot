@@ -245,7 +245,7 @@ Who you follow is checked every `10` minutes.
 ### Would You Rather Commands
 
 
-#### Shout Out Command
+#### Would You Rather Command
 
 To configure your questions for this command you need to create a `wouldyourather.questions` file in the same directory as `application.config`. Each line in this file is a separate question. You can add comments by playing a `#` character at the beginning of the line.
 
