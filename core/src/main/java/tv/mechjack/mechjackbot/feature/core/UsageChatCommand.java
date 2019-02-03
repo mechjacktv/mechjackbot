@@ -15,6 +15,8 @@ import tv.mechjack.mechjackbot.api.ChatMessage;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
 import tv.mechjack.mechjackbot.api.CommandMessageFormat;
+import tv.mechjack.mechjackbot.api.RequiresAccessLevel;
+import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.platform.configuration.Configuration;
 import tv.mechjack.platform.configuration.ConfigurationKey;
 
@@ -49,6 +51,7 @@ public class UsageChatCommand extends BaseChatCommand {
   }
 
   @Override
+  @RequiresAccessLevel(UserRole.VIEWER)
   public void handleMessageEvent(final ChatMessageEvent chatMessageEvent) {
     final ChatMessage chatMessage = this.chatCommandUtils.stripTriggerFromMessage(this, chatMessageEvent);
 

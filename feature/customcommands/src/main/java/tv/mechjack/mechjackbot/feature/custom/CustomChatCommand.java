@@ -15,6 +15,7 @@ import tv.mechjack.mechjackbot.api.ChatCommandUsage;
 import tv.mechjack.mechjackbot.api.ChatCommandUtils;
 import tv.mechjack.mechjackbot.api.ChatMessage;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
+import tv.mechjack.mechjackbot.api.RequiresAccessLevel;
 import tv.mechjack.mechjackbot.api.UserRole;
 
 public class CustomChatCommand implements ChatCommand {
@@ -97,6 +98,7 @@ public class CustomChatCommand implements ChatCommand {
   }
 
   @Override
+  @RequiresAccessLevel(UserRole.VIEWER)
   public void handleMessageEvent(final ChatMessageEvent chatMessageEvent) {
     final ChatMessage cleanChatMessage = this.chatCommandUtils.stripTriggerFromMessage(this, chatMessageEvent);
     final String[] arguments = cleanChatMessage.value.split("\\s+");

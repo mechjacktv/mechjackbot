@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import tv.mechjack.mechjackbot.api.BaseChatCommand;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
+import tv.mechjack.mechjackbot.api.RequiresAccessLevel;
+import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.platform.application.Application;
 import tv.mechjack.platform.utils.RandomUtils;
 
@@ -69,6 +71,7 @@ public class WouldYouRatherChatCommand extends BaseChatCommand {
   }
 
   @Override
+  @RequiresAccessLevel(UserRole.VIEWER)
   public void handleMessageEvent(final ChatMessageEvent chatMessageEvent) {
     if (this.questions.size() > 0) {
       this.sendResponse(chatMessageEvent, this.questions.get(randomUtils.nextInteger(this.questions.size())));

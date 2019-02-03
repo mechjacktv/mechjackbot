@@ -53,13 +53,13 @@ public final class DefaultChatCommandUtils implements ChatCommandUtils {
       final RequiresAccessLevel roles = method.getAnnotation(RequiresAccessLevel.class);
 
       if (Objects.isNull(roles)) {
-        return true;
+        return this.hasAccessLevel(chatMessageEvent, UserRole.MODERATOR);
       }
-      return this.hasUserRole(chatMessageEvent, roles.value());
+      return this.hasAccessLevel(chatMessageEvent, roles.value());
     }, ChatCommandException.class);
   }
 
-  private boolean hasUserRole(final ChatMessageEvent chatMessageEvent, final UserRole userRole) {
+  private boolean hasAccessLevel(final ChatMessageEvent chatMessageEvent, final UserRole userRole) {
     return chatMessageEvent.getChatUser().hasAccessLevel(userRole);
   }
 
@@ -73,7 +73,7 @@ public final class DefaultChatCommandUtils implements ChatCommandUtils {
       final NoCoolDown noCoolDown = method.getAnnotation(NoCoolDown.class);
 
       if (Objects.nonNull(noCoolDown)
-          || this.hasUserRole(chatMessageEvent, UserRole.MODERATOR)) {
+          || this.hasAccessLevel(chatMessageEvent, UserRole.MODERATOR)) {
         return true;
       } else if (this.isCooledDown(chatCommand.getTrigger(), chatMessageEvent.getChatUser().getTwitchLogin(), now)) {
         this.commandLastTrigger.put(chatCommand.getTrigger(), LastTrigger.of(now));

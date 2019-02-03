@@ -11,6 +11,8 @@ import tv.mechjack.mechjackbot.api.ChatMessage;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.mechjackbot.api.ChatMessageEventWrapper;
 import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
+import tv.mechjack.mechjackbot.api.RequiresAccessLevel;
+import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.mechjackbot.feature.shoutout.ProtoMessage.CasterKey;
 import tv.mechjack.platform.configuration.Configuration;
 import tv.mechjack.platform.configuration.ConfigurationKey;
@@ -58,6 +60,7 @@ public final class ShoutOutListenerChatCommand extends BaseChatCommand {
   }
 
   @Override
+  @RequiresAccessLevel(UserRole.VIEWER)
   public void handleMessageEvent(final ChatMessageEvent chatMessageEvent) {
     final TwitchLogin twitchLogin = chatMessageEvent.getChatUser().getTwitchLogin();
     final Optional<ChatCommand> shoutOutChatCommand = this.chatCommandRegistry.getCommand(ShoutOutChatCommand.class);
