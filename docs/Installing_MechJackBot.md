@@ -109,7 +109,7 @@ For any output sent to chat you can include `$(user)` and the calling user login
 |command.viewer_cool_down.seconds|15|This is the number of seconds before a viewer can issue another command (broadcaster excluded).|
 |command.usage_message_format|@$(user), usage: $(trigger) %s|This is the message format used when incorrect arguments are passed to a command.|
 
-There are 7 commands included with MechJackBot right now. The name of a config property for commands uses the format of `<scope>.<name>`. Each command description below will give you the scope and available config options.
+There are 8 commands included with MechJackBot right now. The name of a config property for commands uses the format of `<scope>.<name>`. Each command description below will give you the scope and available config options.
 
 #### Reading Usage
 
@@ -245,7 +245,7 @@ Who you follow is checked every `10` minutes.
 ### Would You Rather Commands
 
 
-#### Shout Out Command
+#### Would You Rather Command
 
 To configure your questions for this command you need to create a `wouldyourather.questions` file in the same directory as `application.config`. Each line in this file is a separate question. You can add comments by playing a `#` character at the beginning of the line.
 
