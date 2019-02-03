@@ -144,9 +144,9 @@ project(':all') {
 
   dependencies {
     runtimeOnly project(':core')
-//    runtimeOnly project(':feature:customcommands')
-//    runtimeOnly project(':feature:shoutouts')
-//    runtimeOnly project(':feature:wouldyourather')
+    runtimeOnly project(':feature:customcommands')
+    runtimeOnly project(':feature:shoutouts')
+    runtimeOnly project(':feature:wouldyourather')
     runtimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'
   }
 
