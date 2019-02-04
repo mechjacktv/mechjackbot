@@ -56,7 +56,7 @@ public class SetCommandChatCommand extends BaseChatCommand {
   @Override
   @RequiresAccessLevel(UserRole.MODERATOR)
   public void handleMessageEvent(final ChatMessageEvent messageEvent) {
-    final OptionSpec userRoleOption = this.picoCliUtils.createStringOption(false, "-r", "--user-role");
+    final OptionSpec userRoleOption = this.picoCliUtils.createStringOption(false, "-a", "--access-level");
     final OptionSpec descriptionOption = this.picoCliUtils.createStringOption(false, "-d", "--description");
     final PositionalParamSpec triggerParam = this.picoCliUtils.createStringParam(true, "0");
     final PositionalParamSpec bodyParam = this.picoCliUtils.createStringListParam(false, "1..*");

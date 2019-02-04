@@ -71,8 +71,8 @@ public class DefaultChatMessageEventHandlerUnitTests extends ChatMessageEventHan
   @Test
   public final void handleMessageEvent_commandWithDefaultAccessLevel_resultIsRequiredModeratorAccessLevel() {
     this.installModules();
-    final DefaultAccessLevelChatCommand command =
-        new DefaultAccessLevelChatCommand(this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class));
+    final DefaultAccessLevelChatCommand command = new DefaultAccessLevelChatCommand(
+        this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class));
     command.setTriggered(true);
     final TestChatUser user = this.testFrameworkRule.getInstance(TestChatUser.class);
     final TestChatMessageEvent event = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
