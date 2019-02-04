@@ -85,7 +85,7 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
     this.installModules();
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     final SetCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
-    messageEvent.setChatMessage(ChatMessage.of(String.format("%s --user-role %s %s", subjectUnderTest.getTrigger(),
+    messageEvent.setChatMessage(ChatMessage.of(String.format("%s --access-level %s %s", subjectUnderTest.getTrigger(),
         this.testFrameworkRule.getArbitraryString(), this.testFrameworkRule.getArbitraryString())));
 
     subjectUnderTest.handleMessageEvent(messageEvent);
@@ -170,8 +170,9 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
     final ChatCommandTrigger customTrigger = ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString());
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     final SetCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
-    messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s --user-role %s %s", subjectUnderTest.getTrigger(),
-        customTrigger, UserRole.SUBSCRIBER, this.testFrameworkRule.getArbitraryString())));
+    messageEvent
+        .setChatMessage(ChatMessage.of(String.format("%s %s --access-level %s %s", subjectUnderTest.getTrigger(),
+            customTrigger, UserRole.SUBSCRIBER, this.testFrameworkRule.getArbitraryString())));
 
     subjectUnderTest.handleMessageEvent(messageEvent);
 
@@ -253,7 +254,7 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
         ChatCommandDescription.of(this.testFrameworkRule.getArbitraryString()), null);
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     final SetCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
-    messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s --user-role %s", subjectUnderTest.getTrigger(),
+    messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s --access-level %s", subjectUnderTest.getTrigger(),
         commandTrigger, UserRole.SUBSCRIBER)));
 
     subjectUnderTest.handleMessageEvent(messageEvent);
@@ -300,8 +301,9 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
         ChatCommandDescription.of(this.testFrameworkRule.getArbitraryString()), null);
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     final SetCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
-    messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s --user-role %s %s", subjectUnderTest.getTrigger(),
-        commandTrigger, UserRole.SUBSCRIBER, this.testFrameworkRule.getArbitraryString())));
+    messageEvent
+        .setChatMessage(ChatMessage.of(String.format("%s %s --access-level %s %s", subjectUnderTest.getTrigger(),
+            commandTrigger, UserRole.SUBSCRIBER, this.testFrameworkRule.getArbitraryString())));
 
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
