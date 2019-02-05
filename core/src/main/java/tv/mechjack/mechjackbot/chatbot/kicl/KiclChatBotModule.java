@@ -6,8 +6,7 @@ import com.google.inject.Singleton;
 
 import org.kitteh.irc.client.library.Client;
 import org.kitteh.irc.client.library.Client.Builder;
-import org.kitteh.irc.client.library.feature.twitch.TwitchDelaySender;
-import org.kitteh.irc.client.library.feature.twitch.TwitchListener;
+import org.kitteh.irc.client.library.feature.twitch.TwitchSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,18 +35,20 @@ public class KiclChatBotModule extends ChatBotModule {
     final Logger clientLogger = LoggerFactory.getLogger(Client.class);
     final Builder builder = Client.builder();
 
-    builder.serverHost(TWITCH_IRC_SERVER_HOST);
-    builder.serverPort(TWITCH_IRC_SERVER_PORT);
-    builder.serverPassword(chatBotConfiguration.getUserPassword().value);
     builder.nick(chatBotConfiguration.getTwitchLogin().value);
-    builder.messageSendingQueueSupplier(TwitchDelaySender.getSupplier(false));
-    builder.inputListener(clientLogger::trace);
-    builder.outputListener(clientLogger::trace);
-    builder.exceptionListener(throwable -> clientLogger.error(throwable.getMessage(), throwable));
+
+    builder.listeners()
+        .input(clientLogger::trace)
+        .output(clientLogger::trace)
+        .exception(throwable -> clientLogger.error(throwable.getMessage(), throwable));
+    builder.server()
+        .host(TWITCH_IRC_SERVER_HOST)
+        .port(TWITCH_IRC_SERVER_PORT)
+        .password(chatBotConfiguration.getUserPassword().value);
 
     final Client client = builder.build();
 
-    client.getEventManager().registerEventListener(new TwitchListener(client));
+    TwitchSupport.addSupport(client);
     client.getEventManager().registerEventListener(listener);
     client.addChannel("#" + chatBotConfiguration.getChatChannel().value);
     return client;
