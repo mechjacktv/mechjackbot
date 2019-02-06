@@ -1,7 +1,7 @@
 // APPLICATION BASE PROJECTS
-include ':testframework', ':platform',':core'
+include ':testframework', ':platform',':base'
 // APPLICATION PLUGIN PROJECTS
-include ':feature:customcommands', ':feature:shoutouts', ':feature:wouldyourather'
+include ':feature:core', ':feature:customcommands', ':feature:shoutouts', ':feature:wouldyourather'
 // APPLICATION WITH ALL PLUGINS
 include ':all'
 
