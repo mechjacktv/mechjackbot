@@ -2,9 +2,6 @@ package tv.mechjack.mechjackbot.chatbot.kicl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static tv.mechjack.mechjackbot.chatbot.kicl.KiclChatMessageEvent.DEFAULT_RESPONSE_MESSAGE_FORMAT;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,6 +12,7 @@ import tv.mechjack.mechjackbot.api.ChatMessage;
 import tv.mechjack.mechjackbot.api.ChatUser;
 import tv.mechjack.mechjackbot.api.TestCommandModule;
 import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
+import tv.mechjack.mechjackbot.chatbot.kicl.TestKiclChatBotModule.TestChannelMessageEvent;
 import tv.mechjack.platform.configuration.Configuration;
 import tv.mechjack.platform.configuration.TestConfigurationModule;
 import tv.mechjack.platform.utils.ExecutionUtils;
@@ -35,7 +33,7 @@ public class KiclChatMessageEventUnitTests {
   }
 
   private KiclChatMessageEvent givenASubjectToTest() {
-    return this.givenASubjectToTest(mock(ChannelMessageEvent.class));
+    return this.givenASubjectToTest(this.testFrameworkRule.getInstance(ChannelMessageEvent.class));
   }
 
   private KiclChatMessageEvent givenASubjectToTest(final ChannelMessageEvent channelMessageEvent) {
@@ -118,12 +116,13 @@ public class KiclChatMessageEventUnitTests {
   public final void sendResponse_forMessage_resultIsFormattedMessageSent() {
     this.installModules();
     final ChatMessage chatMessage = ChatMessage.of(this.testFrameworkRule.getArbitraryString());
-    final ChannelMessageEvent channelMessageEvent = this.givenAChannelMessageEvent();
+    final TestChannelMessageEvent channelMessageEvent = this.testFrameworkRule
+        .getInstance(TestChannelMessageEvent.class);
     final KiclChatMessageEvent subjectUnderTest = this.givenASubjectToTest(channelMessageEvent);
 
     subjectUnderTest.sendResponse(chatMessage);
 
-    verify(channelMessageEvent.getChannel()).sendMessage(String.format(DEFAULT_RESPONSE_MESSAGE_FORMAT, chatMessage));
+    assertThat(channelMessageEvent.wasSendReplyCalled()).isTrue();
   }
 
 }

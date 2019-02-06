@@ -1,5 +1,6 @@
 package tv.mechjack.testframework;
 
+import java.lang.reflect.InvocationHandler;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -11,6 +12,9 @@ import com.google.inject.Module;
 import com.google.inject.Provider;
 
 import org.junit.rules.ExternalResource;
+
+import tv.mechjack.testframework.fake.FakeBuilder;
+import tv.mechjack.testframework.fake.FakeFactory;
 
 public final class TestFrameworkRule extends ExternalResource {
 
@@ -44,6 +48,18 @@ public final class TestFrameworkRule extends ExternalResource {
 
   public final void currentTimeDelta(final long delta, final TimeUnit unit, final long shift) {
     this.testClock.currentTimeDelta(unit.toMillis(delta) + shift);
+  }
+
+  public final <T> T fake(Class<T> type) {
+    return this.getInstance(FakeFactory.class).fake(type);
+  }
+
+  public final <T> T fake(Class<T> type, InvocationHandler handler) {
+    return this.getInstance(FakeFactory.class).fake(type, handler);
+  }
+
+  public final <T> FakeBuilder<T> fakeBuilder(Class<T> type) {
+    return this.getInstance(FakeFactory.class).builder(type);
   }
 
   public final byte[] getArbitraryByteArray() {

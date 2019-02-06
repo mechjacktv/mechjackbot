@@ -1,13 +1,10 @@
 package tv.mechjack.mechjackbot.feature.wouldyourather;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static tv.mechjack.mechjackbot.api.BaseChatCommand.KEY_DESCRIPTION;
 import static tv.mechjack.mechjackbot.api.BaseChatCommand.KEY_TRIGGER;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.StringReader;
 
 import org.junit.Test;
 
@@ -20,8 +17,8 @@ import tv.mechjack.mechjackbot.api.TestChatMessageEvent;
 import tv.mechjack.mechjackbot.api.TestCommandModule;
 import tv.mechjack.platform.TestPlatformModule;
 import tv.mechjack.platform.configuration.ConfigurationKey;
-import tv.mechjack.platform.utils.IORuntimeException;
 import tv.mechjack.platform.utils.RandomUtils;
+import tv.mechjack.testframework.fake.FakeBuilder;
 
 public class WouldYouRatherChatCommandUnitTests extends BaseChatCommandContractTests {
 
@@ -33,15 +30,9 @@ public class WouldYouRatherChatCommandUnitTests extends BaseChatCommandContractT
 
   @Override
   protected WouldYouRatherChatCommand givenASubjectToTest() {
-    try {
-      final QuestionsDataSource questionsDataSource = mock(QuestionsDataSource.class);
-      final BufferedReader bufferedReader = mock(BufferedReader.class);
-
-      when(questionsDataSource.getQuestions()).thenReturn(bufferedReader);
-      return this.givenASubjectToTest(questionsDataSource);
-    } catch (final IOException e) {
-      throw new IORuntimeException(e.getMessage(), e);
-    }
+    final FakeBuilder<QuestionsDataSource> fakeBuilder = this.testFrameworkRule.fakeBuilder(QuestionsDataSource.class);
+    fakeBuilder.forMethod("getQuestions").addHandler(invocation -> new StringReader(""));
+    return this.givenASubjectToTest(fakeBuilder.build());
   }
 
   protected WouldYouRatherChatCommand givenASubjectToTest(final QuestionsDataSource questionsDataSource) {

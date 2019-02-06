@@ -1,10 +1,10 @@
 package tv.mechjack.mechjackbot.feature.wouldyourather;
 
-import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.Reader;
 
 public interface QuestionsDataSource {
 
-  BufferedReader getQuestions() throws IOException;
+  Reader getQuestions() throws IOException;
 
 }

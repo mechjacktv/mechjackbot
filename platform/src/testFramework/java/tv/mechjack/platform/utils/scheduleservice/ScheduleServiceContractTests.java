@@ -1,11 +1,7 @@
 package tv.mechjack.platform.utils.scheduleservice;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -14,6 +10,10 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.fake.FakeBuilder;
+import tv.mechjack.testframework.fake.FakeFactory;
+import tv.mechjack.testframework.fake.methodhandler.CountingMethodInvocationHandler;
+import tv.mechjack.testframework.fake.methodhandler.ValidatingMethodInvocationHandler;
 
 public abstract class ScheduleServiceContractTests {
 
@@ -24,7 +24,8 @@ public abstract class ScheduleServiceContractTests {
   private static final Boolean NO_DELAY = false;
 
   private ScheduleService givenASubjectToTest() {
-    return this.givenASubjectToTest(mock(ScheduledExecutorService.class));
+
+    return this.givenASubjectToTest(this.testFrameworkRule.fake(ScheduledExecutorService.class));
   }
 
   abstract ScheduleService givenASubjectToTest(ScheduledExecutorService scheduledExecutorService);
@@ -61,12 +62,21 @@ public abstract class ScheduleServiceContractTests {
 
   @Test
   public final void schedule_noDelaySpecified_schedulesWithNoDelay() {
-    final ScheduledExecutorService scheduledExecutorService = mock(ScheduledExecutorService.class);
+    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
+    final FakeBuilder<ScheduledExecutorService> fakeBuilder = fakeFactory.builder(ScheduledExecutorService.class);
+    final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
+    final ValidatingMethodInvocationHandler validatingHandler = new ValidatingMethodInvocationHandler(
+        invocation -> invocation.getArgument(1).equals(0L)
+            && invocation.getArgument(3).equals(TimeUnit.MINUTES),
+        countingHandler);
+    fakeBuilder.forMethod("scheduleAtFixedRate", new Class<?>[] { Runnable.class, long.class, long.class,
+        TimeUnit.class }).addHandler(validatingHandler);
+    final ScheduledExecutorService scheduledExecutorService = fakeBuilder.build();
     final ScheduleService subjectToTest = this.givenASubjectToTest(scheduledExecutorService);
 
     subjectToTest.schedule(System::currentTimeMillis, this.testFrameworkRule.getArbitraryInteger(), TimeUnit.MINUTES);
 
-    verify(scheduledExecutorService).scheduleAtFixedRate(isA(Runnable.class), eq(0L), anyLong(), eq(TimeUnit.MINUTES));
+    assertThat(countingHandler.getCallCount()).isEqualTo(1);
   }
 
   @Test
@@ -81,35 +91,57 @@ public abstract class ScheduleServiceContractTests {
 
   @Test
   public final void schedule_noDelay_schedulesWithNoDelay() {
-    final ScheduledExecutorService scheduledExecutorService = mock(ScheduledExecutorService.class);
+    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
+    final FakeBuilder<ScheduledExecutorService> fakeBuilder = fakeFactory.builder(ScheduledExecutorService.class);
+    final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
+    final ValidatingMethodInvocationHandler validatingHandler = new ValidatingMethodInvocationHandler(
+        invocation -> invocation.getArgument(1).equals(0L)
+            && invocation.getArgument(3).equals(TimeUnit.MINUTES),
+        countingHandler);
+    fakeBuilder.forMethod("scheduleAtFixedRate", new Class<?>[] { Runnable.class, long.class, long.class,
+        TimeUnit.class }).addHandler(validatingHandler);
+    final ScheduledExecutorService scheduledExecutorService = fakeBuilder.build();
     final ScheduleService subjectToTest = this.givenASubjectToTest(scheduledExecutorService);
 
-    subjectToTest
-        .schedule(System::currentTimeMillis, this.testFrameworkRule.getArbitraryInteger(), TimeUnit.MINUTES, NO_DELAY);
+    subjectToTest.schedule(System::currentTimeMillis, this.testFrameworkRule.getArbitraryInteger(), TimeUnit.MINUTES,
+        NO_DELAY);
 
-    verify(scheduledExecutorService).scheduleAtFixedRate(isA(Runnable.class), eq(0L), anyLong(), eq(TimeUnit.MINUTES));
+    assertThat(countingHandler.getCallCount()).isEqualTo(1);
   }
 
   @Test
   public final void schedule_withDelay_schedulesWithDelay() {
     final int period = this.testFrameworkRule.getArbitraryInteger();
-    final ScheduledExecutorService scheduledExecutorService = mock(ScheduledExecutorService.class);
+    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
+    final FakeBuilder<ScheduledExecutorService> fakeBuilder = fakeFactory.builder(ScheduledExecutorService.class);
+    final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
+    final ValidatingMethodInvocationHandler validatingHandler = new ValidatingMethodInvocationHandler(
+        invocation -> invocation.getArgument(1).equals((long) period)
+            && invocation.getArgument(3).equals(TimeUnit.MINUTES),
+        countingHandler);
+    fakeBuilder.forMethod("scheduleAtFixedRate", new Class<?>[] { Runnable.class, long.class, long.class,
+        TimeUnit.class }).addHandler(validatingHandler);
+    final ScheduledExecutorService scheduledExecutorService = fakeBuilder.build();
     final ScheduleService subjectToTest = this.givenASubjectToTest(scheduledExecutorService);
 
-    subjectToTest.schedule(System::currentTimeMillis, period, TimeUnit.MINUTES, DELAY);
+    subjectToTest.schedule(System::currentTimeMillis, period, TimeUnit.MINUTES,
+        DELAY);
 
-    verify(scheduledExecutorService).scheduleAtFixedRate(isA(Runnable.class), eq((long) period), eq((long) period),
-        eq(TimeUnit.MINUTES));
+    assertThat(countingHandler.getCallCount()).isEqualTo(1);
   }
 
   @Test
   public final void stop_called_shutsDownExecutor() {
-    final ScheduledExecutorService scheduledExecutorService = mock(ScheduledExecutorService.class);
+    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
+    final FakeBuilder<ScheduledExecutorService> fakeBuilder = fakeFactory.builder(ScheduledExecutorService.class);
+    final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
+    fakeBuilder.forMethod("shutdown").addHandler(countingHandler);
+    final ScheduledExecutorService scheduledExecutorService = fakeBuilder.build();
     final ScheduleService subjectToTest = this.givenASubjectToTest(scheduledExecutorService);
 
     subjectToTest.stop();
 
-    verify(scheduledExecutorService).shutdown();
+    assertThat(countingHandler.getCallCount()).isEqualTo(1);
   }
 
 }

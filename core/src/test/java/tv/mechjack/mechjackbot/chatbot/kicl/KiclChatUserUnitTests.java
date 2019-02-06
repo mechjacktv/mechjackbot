@@ -1,8 +1,6 @@
 package tv.mechjack.mechjackbot.chatbot.kicl;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
@@ -26,10 +24,19 @@ import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
 import tv.mechjack.platform.configuration.TestConfigurationModule;
 import tv.mechjack.platform.utils.TestUtilsModule;
 import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.fake.FakeBuilder;
 import tv.mechjack.twitchclient.TwitchLogin;
 
 @RunWith(JUnitParamsRunner.class)
 public class KiclChatUserUnitTests {
+
+  private static final String BROADCASTER_BADGE = "broadcaster/3,subscriber/12,turbo/1";
+  private static final String MODERATOR_BADGE = "moderator/1,bits-charity/1";
+  private static final String MODERATOR_SUBSCRIBER_BADGES = "moderator/1,subscriber/3,bits-charity/1";
+  private static final String NON_ROLE_BADGE = "turbo/1";
+  private static final String SUBSCRIBER_BADGE = "subscriber/3,turbo/1";
+  private static final String VIP_BADGE = "vip/1,turbo/1";
+  private static final String VIP_SUBSCRIBER_BADGE = "vip/1,subscriber/0,bits-charity/1";
 
   @Rule
   public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
@@ -51,50 +58,43 @@ public class KiclChatUserUnitTests {
   }
 
   private ChannelMessageEvent givenAFakeChannelMessageEvent(final ServerMessage serverMessage) {
-    return this.givenAFakeChannelMessageEvent(this.givenAFakeUser(this.testFrameworkRule.getArbitraryString()),
-        serverMessage);
+    return this.givenAFakeChannelMessageEvent(this.testFrameworkRule.getInstance(User.class), serverMessage);
   }
 
   private ChannelMessageEvent givenAFakeChannelMessageEvent(final User user, final ServerMessage serverMessage) {
     return new ChannelMessageEvent(this.testFrameworkRule.getInstance(Client.class),
-        Lists.newArrayList(serverMessage), user, this.givenAFakeChannel(), this.testFrameworkRule.getArbitraryString());
-  }
-
-  private Channel givenAFakeChannel() {
-    final Channel channel = mock(Channel.class);
-
-    when(channel.getClient()).thenReturn(this.testFrameworkRule.getInstance(Client.class));
-    return channel;
+        Lists.newArrayList(serverMessage), user, this.testFrameworkRule.getInstance(Channel.class),
+        this.testFrameworkRule.getArbitraryString());
   }
 
   private ServerMessage givenAFakeServerMessage(final String badgesTagValue) {
-    final ServerMessage serverMessage = mock(ServerMessage.class);
-    final MessageTag badgesTag = mock(MessageTag.class);
+    final FakeBuilder<MessageTag> messageTagFakeBuilder = this.testFrameworkRule.fakeBuilder(MessageTag.class);
 
-    when(serverMessage.getTag("badges")).thenReturn(Optional.of(badgesTag));
-    when(badgesTag.getName()).thenReturn("badges");
-    when(badgesTag.getValue()).thenReturn(Optional.ofNullable(badgesTagValue));
-    return serverMessage;
-  }
+    messageTagFakeBuilder.forMethod("getName").addHandler(invocation -> "badges");
+    messageTagFakeBuilder.forMethod("getValue").addHandler(invocation -> Optional.ofNullable(badgesTagValue));
 
-  private User givenAFakeUser(final String nick) {
-    final User user = mock(User.class);
+    final MessageTag messageTag = messageTagFakeBuilder.build();
+    final FakeBuilder<ServerMessage> serverMessageFakeBuilder = this.testFrameworkRule.fakeBuilder(ServerMessage.class);
 
-    when(user.getClient()).thenReturn(this.testFrameworkRule.getInstance(Client.class));
-    when(user.getNick()).thenReturn(nick);
-    return user;
+    serverMessageFakeBuilder.forMethod("getTag", new Class[] { String.class }).addHandler(invocation -> {
+      if ("badges".equals(invocation.getArgument(0))) {
+        return Optional.of(messageTag);
+      }
+      return null;
+    });
+    return serverMessageFakeBuilder.build();
   }
 
   @Test
   public final void getTwitchLogin_forNick_resultIsTwitchLoginWithNick() {
     this.installModules();
-    final String nick = this.testFrameworkRule.getArbitraryString();
-    final ChannelMessageEvent channelMessageEvent = this.givenAFakeChannelMessageEvent(this.givenAFakeUser(nick));
+    final User user = this.testFrameworkRule.getInstance(User.class);
+    final ChannelMessageEvent channelMessageEvent = this.givenAFakeChannelMessageEvent(user);
     final KiclChatUser subjectUnderTest = this.givenIHaveASubjectToTest(channelMessageEvent);
 
     final TwitchLogin result = subjectUnderTest.getTwitchLogin();
 
-    assertThat(result).isEqualTo(TwitchLogin.of(nick));
+    assertThat(result).isEqualTo(TwitchLogin.of(user.getNick()));
   }
 
   @Test
@@ -123,14 +123,6 @@ public class KiclChatUserUnitTests {
 
     assertThat(result).isEqualTo(expected);
   }
-
-  private static final String BROADCASTER_BADGE = "broadcaster/3,subscriber/12,turbo/1";
-  private static final String MODERATOR_BADGE = "moderator/1,bits-charity/1";
-  private static final String MODERATOR_SUBSCRIBER_BADGES = "moderator/1,subscriber/3,bits-charity/1";
-  private static final String NON_ROLE_BADGE = "turbo/1";
-  private static final String SUBSCRIBER_BADGE = "subscriber/3,turbo/1";
-  private static final String VIP_BADGE = "vip/1,turbo/1";
-  private static final String VIP_SUBSCRIBER_BADGE = "vip/1,subscriber/0,bits-charity/1";
 
   public final Object badgesToRole() {
     return new Object[] {

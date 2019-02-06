@@ -2,11 +2,6 @@ package tv.mechjack.twitchclient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -15,15 +10,22 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.assertj.core.api.SoftAssertions;
+import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 
 import tv.mechjack.platform.utils.function.ConsumerWithException;
+import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.fake.FakeBuilder;
+import tv.mechjack.testframework.fake.FakeFactory;
+import tv.mechjack.testframework.fake.methodhandler.CountingMethodInvocationHandler;
 import tv.mechjack.twitchclient.ProtoMessage.UserFollow;
 import tv.mechjack.twitchclient.ProtoMessage.UserFollows;
 import tv.mechjack.twitchclient.messageadapter.UserFollowMessageTypeAdapter;
 
 public abstract class TwitchUsersFollowsEndpointContractTests {
+
+  @Rule
+  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
   private static final String CURSOR = "CURSOR_CURSOR_CURSOR_CURSOR";
   private static final String FOLLOWED_AT = "2018-10-30T21:47:09Z";
@@ -61,8 +63,9 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
 
   @Test
   public final void getUserFollowsFromId_nullFromId_throwsNullPointerExceptionWithMessage() {
+    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
     final TwitchUsersFollowsEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-        mock(TwitchClientUtils.class));
+        fakeFactory.fake(TwitchClientUtils.class));
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.getUserFollowsFromId(null));
 
@@ -70,17 +73,18 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public final void getUserFollowsFromId_forFromId_returnsListOfUsersFollowed() {
-    final TwitchClientUtils twitchClientUtils = mock(TwitchClientUtils.class);
-    final TwitchUsersFollowsEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-        twitchClientUtils);
-    doAnswer((invocation) -> {
-      final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
+    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
+    final FakeBuilder<TwitchClientUtils> fakeBuilder = fakeFactory.builder(TwitchClientUtils.class);
+    fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
+        .addHandler(invocation -> {
+          final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
 
-      consumer.accept(new StringReader(RESPONSE_BODY));
-      return null;
-    }).when(twitchClientUtils).handleResponse(isA(TwitchUrl.class), isA(ConsumerWithException.class));
+          consumer.accept(new StringReader(RESPONSE_BODY));
+          return null;
+        });
+    final TwitchClientUtils twitchClientUtils = fakeBuilder.build();
+    final TwitchUsersFollowsEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(), twitchClientUtils);
 
     final UserFollows result = subjectUnderTest.getUserFollowsFromId(TwitchUserId.of(FROM_NAME));
 
@@ -98,62 +102,70 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public final void getUserFollowsFromId_forFromId_requestsFollowsForId() {
-    final TwitchClientUtils twitchClientUtils = mock(TwitchClientUtils.class);
-    final TwitchUsersFollowsEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-        twitchClientUtils);
-    final ArgumentCaptor<TwitchUrl> serviceUrl = ArgumentCaptor.forClass(TwitchUrl.class);
-    doAnswer((invocation) -> {
-      final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
+    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
+    final FakeBuilder<TwitchClientUtils> fakeBuilder = fakeFactory.builder(TwitchClientUtils.class);
+    final TwitchUrl[] twitchUrl = new TwitchUrl[1];
+    fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
+        .addHandler(invocation -> {
+          final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
 
-      consumer.accept(new StringReader(RESPONSE_BODY));
-      return null;
-    }).when(twitchClientUtils).handleResponse(serviceUrl.capture(), isA(ConsumerWithException.class));
+          twitchUrl[0] = invocation.getArgument(0);
+          consumer.accept(new StringReader(RESPONSE_BODY));
+          return null;
+        });
+    final TwitchClientUtils twitchClientUtils = fakeBuilder.build();
+    final TwitchUsersFollowsEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(), twitchClientUtils);
 
     subjectUnderTest.getUserFollowsFromId(TwitchUserId.of(FROM_ID));
 
-    assertThat(serviceUrl.getValue().value).contains("from_id=" + FROM_ID);
+    assertThat(twitchUrl[0].value).contains("from_id=" + FROM_ID);
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public final void getUserFollowsFromId_forFromIdAndCursor_requestsFollowsForIdAndCursor() {
-    final TwitchClientUtils twitchClientUtils = mock(TwitchClientUtils.class);
-    final TwitchUsersFollowsEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-        twitchClientUtils);
-    final ArgumentCaptor<TwitchUrl> serviceUrl = ArgumentCaptor.forClass(TwitchUrl.class);
-    doAnswer((invocation) -> {
-      final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
+    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
+    final FakeBuilder<TwitchClientUtils> fakeBuilder = fakeFactory.builder(TwitchClientUtils.class);
+    final TwitchUrl[] twitchUrl = new TwitchUrl[1];
+    fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
+        .addHandler(invocation -> {
+          final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
 
-      consumer.accept(new StringReader(RESPONSE_BODY));
-      return null;
-    }).when(twitchClientUtils).handleResponse(serviceUrl.capture(), isA(ConsumerWithException.class));
+          twitchUrl[0] = invocation.getArgument(0);
+          consumer.accept(new StringReader(RESPONSE_BODY));
+          return null;
+        });
+    final TwitchClientUtils twitchClientUtils = fakeBuilder.build();
+    final TwitchUsersFollowsEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(), twitchClientUtils);
 
     subjectUnderTest.getUserFollowsFromId(TwitchUserId.of(FROM_ID), TwitchUserFollowsCursor.of(CURSOR));
 
     final SoftAssertions softly = new SoftAssertions();
-    softly.assertThat(serviceUrl.getValue().value).contains("from_id=" + FROM_ID);
-    softly.assertThat(serviceUrl.getValue().value).contains("after=" + CURSOR);
+    softly.assertThat(twitchUrl[0].value).contains("from_id=" + FROM_ID);
+    softly.assertThat(twitchUrl[0].value).contains("after=" + CURSOR);
     softly.assertAll();
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public final void getUsers_invalidObjectNames_handlesInvalidObjectName() {
-    final TwitchClientUtils twitchClientUtils = mock(TwitchClientUtils.class);
+    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
+    final FakeBuilder<TwitchClientUtils> fakeBuilder = fakeFactory.builder(TwitchClientUtils.class);
+    final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
+    fakeBuilder.forMethod("handleUnknownObjectName", new Class[] { String.class }).addHandler(countingHandler);
+    fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
+        .addHandler(invocation -> {
+          final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
+
+          consumer.accept(new StringReader(RESPONSE_BODY));
+          return null;
+        });
+    final TwitchClientUtils twitchClientUtils = fakeBuilder.build();
     final TwitchUsersFollowsEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
         twitchClientUtils);
-    doAnswer((invocation) -> {
-      final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
-
-      consumer.accept(new StringReader(RESPONSE_BODY));
-      return null;
-    }).when(twitchClientUtils).handleResponse(isA(TwitchUrl.class), isA(ConsumerWithException.class));
 
     subjectUnderTest.getUserFollowsFromId(TwitchUserId.of(FROM_ID));
 
-    verify(twitchClientUtils, times(2)).handleUnknownObjectName(isA(String.class));
+    assertThat(countingHandler.getCallCount()).isEqualTo(2);
   }
 
 }
