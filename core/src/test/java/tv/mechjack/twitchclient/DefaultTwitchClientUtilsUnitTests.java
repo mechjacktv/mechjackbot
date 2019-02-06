@@ -1,14 +1,14 @@
 package tv.mechjack.twitchclient;
 
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 
 import tv.mechjack.platform.utils.ExecutionUtils;
 import tv.mechjack.platform.utils.TestUtilsModule;
+import tv.mechjack.testframework.fake.FakeBuilder;
+import tv.mechjack.testframework.fake.methodhandler.CountingMethodInvocationHandler;
 
 public class DefaultTwitchClientUtilsUnitTests extends TwitchClientUtilsContractTests {
 
@@ -20,7 +20,7 @@ public class DefaultTwitchClientUtilsUnitTests extends TwitchClientUtilsContract
 
   @Override
   protected TwitchClientUtils givenASubjectToTest() {
-    return this.givenASubjectToTest(mock(Logger.class));
+    return this.givenASubjectToTest(this.testFrameworkRule.fake(Logger.class));
   }
 
   private DefaultTwitchClientUtils givenASubjectToTest(final Logger logger) {
@@ -32,12 +32,14 @@ public class DefaultTwitchClientUtilsUnitTests extends TwitchClientUtilsContract
   @Test
   public final void handleUnknownObjectName_whenCalled_resultIsWarningLogged() {
     this.installModules();
-    final Logger logger = mock(Logger.class);
-    final DefaultTwitchClientUtils subjectUnderTest = this.givenASubjectToTest(logger);
+    final FakeBuilder<Logger> fakeBuilder = this.testFrameworkRule.fakeBuilder(Logger.class);
+    final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
+    fakeBuilder.forMethod("warn", new Class[] { String.class }).addHandler(countingHandler);
+    final DefaultTwitchClientUtils subjectUnderTest = this.givenASubjectToTest(fakeBuilder.build());
 
     subjectUnderTest.handleUnknownObjectName(this.testFrameworkRule.getArbitraryString());
 
-    verify(logger).warn(isA(String.class));
+    assertThat(countingHandler.getCallCount()).isOne();
   }
 
 }

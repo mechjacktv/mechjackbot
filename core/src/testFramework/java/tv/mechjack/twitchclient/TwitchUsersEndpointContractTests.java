@@ -2,10 +2,6 @@ package tv.mechjack.twitchclient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -16,15 +12,22 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.assertj.core.api.SoftAssertions;
+import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 
 import tv.mechjack.platform.utils.function.ConsumerWithException;
+import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.fake.FakeBuilder;
+import tv.mechjack.testframework.fake.FakeFactory;
+import tv.mechjack.testframework.fake.methodhandler.CountingMethodInvocationHandler;
 import tv.mechjack.twitchclient.ProtoMessage.User;
 import tv.mechjack.twitchclient.ProtoMessage.Users;
 import tv.mechjack.twitchclient.messageadapter.UserMessageTypeAdapter;
 
 public abstract class TwitchUsersEndpointContractTests {
+
+  @Rule
+  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
 
   private static final String USER_ID = "123456789";
   private static final String USER_DISPLAY_NAME = "TestUser";
@@ -81,7 +84,7 @@ public abstract class TwitchUsersEndpointContractTests {
   @Test
   public final void getUsers_nullLogins_throwsNullPointerExceptionWithMessage() {
     final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-        mock(TwitchClientUtils.class));
+        this.testFrameworkRule.fake(TwitchClientUtils.class));
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.getUsers(null,
         this.givenASetOfTwitchIds(1)));
@@ -92,7 +95,7 @@ public abstract class TwitchUsersEndpointContractTests {
   @Test
   public final void getUsers_nullIds_throwsNullPointerExceptionWithMessage() {
     final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-        mock(TwitchClientUtils.class));
+        this.testFrameworkRule.fake(TwitchClientUtils.class));
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.getUsers(this.givenASetOfTwitchLogins(1),
         null));
@@ -103,7 +106,7 @@ public abstract class TwitchUsersEndpointContractTests {
   @Test
   public final void getUsers_notEnoughLoginsAndIds_throwsIllegalArgumentExceptionWithMessage() {
     final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-        mock(TwitchClientUtils.class));
+        this.testFrameworkRule.fake(TwitchClientUtils.class));
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.getUsers(this.givenASetOfTwitchLogins(0),
         this.givenASetOfTwitchIds(0)));
@@ -115,7 +118,7 @@ public abstract class TwitchUsersEndpointContractTests {
   @Test
   public final void getUsers_tooManyLogins_throwsIllegalArgumentExceptionWithMessage() {
     final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-        mock(TwitchClientUtils.class));
+        this.testFrameworkRule.fake(TwitchClientUtils.class));
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.getUsers(this.givenASetOfTwitchLogins(101),
         this.givenASetOfTwitchIds(0)));
@@ -127,7 +130,7 @@ public abstract class TwitchUsersEndpointContractTests {
   @Test
   public final void getUsers_tooManyIds_throwsIllegalArgumentExceptionWithMessage() {
     final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-        mock(TwitchClientUtils.class));
+        this.testFrameworkRule.fake(TwitchClientUtils.class));
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.getUsers(this.givenASetOfTwitchLogins(0),
         this.givenASetOfTwitchIds(101)));
@@ -139,7 +142,7 @@ public abstract class TwitchUsersEndpointContractTests {
   @Test
   public final void getUsers_tooManyLoginsAndIds_throwsIllegalArgumentExceptionWithMessage() {
     final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-        mock(TwitchClientUtils.class));
+        this.testFrameworkRule.fake(TwitchClientUtils.class));
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.getUsers(this.givenASetOfTwitchLogins(51),
         this.givenASetOfTwitchIds(51)));
@@ -149,16 +152,18 @@ public abstract class TwitchUsersEndpointContractTests {
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public final void getUsers_forTwitchLogin_returnsAListWithOneUser() {
-    final TwitchClientUtils twitchClientUtils = mock(TwitchClientUtils.class);
-    final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(), twitchClientUtils);
-    doAnswer((invocation) -> {
-      final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
+    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
+    final FakeBuilder<TwitchClientUtils> fakeBuilder = fakeFactory.builder(TwitchClientUtils.class);
+    fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
+        .addHandler(invocation -> {
+          final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
 
-      consumer.accept(new StringReader(RESPONSE_BODY));
-      return null;
-    }).when(twitchClientUtils).handleResponse(isA(TwitchUrl.class), isA(ConsumerWithException.class));
+          consumer.accept(new StringReader(RESPONSE_BODY));
+          return null;
+        });
+    final TwitchClientUtils twitchClientUtils = fakeBuilder.build();
+    final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(), twitchClientUtils);
 
     final Users result = subjectUnderTest.getUsers(this.givenASetOfTwitchLogins(1),
         this.givenASetOfTwitchIds(0));
@@ -179,57 +184,67 @@ public abstract class TwitchUsersEndpointContractTests {
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public final void getUsers_forUserLogin_requestsUserForLogin() {
-    final TwitchClientUtils twitchClientUtils = mock(TwitchClientUtils.class);
-    final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(), twitchClientUtils);
-    final ArgumentCaptor<TwitchUrl> serviceUrl = ArgumentCaptor.forClass(TwitchUrl.class);
-    doAnswer((invocation) -> {
-      final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
+    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
+    final FakeBuilder<TwitchClientUtils> fakeBuilder = fakeFactory.builder(TwitchClientUtils.class);
+    final TwitchUrl[] twitchUrls = new TwitchUrl[1];
+    fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
+        .addHandler(invocation -> {
+          twitchUrls[0] = invocation.getArgument(0);
+          final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
 
-      consumer.accept(new StringReader(RESPONSE_BODY));
-      return null;
-    }).when(twitchClientUtils).handleResponse(serviceUrl.capture(), isA(ConsumerWithException.class));
+          consumer.accept(new StringReader(RESPONSE_BODY));
+          return null;
+        });
+    final TwitchClientUtils twitchClientUtils = fakeBuilder.build();
+    final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(), twitchClientUtils);
 
     subjectUnderTest.getUsers(Sets.newHashSet(TwitchLogin.of(USER_LOGIN)), this.givenASetOfTwitchIds(0));
 
-    assertThat(serviceUrl.getValue().value).contains("login=" + USER_LOGIN);
+    assertThat(twitchUrls[0].value).contains("login=" + USER_LOGIN);
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public final void getUsers_forUserId_requestsUserForId() {
-    final TwitchClientUtils twitchClientUtils = mock(TwitchClientUtils.class);
-    final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(), twitchClientUtils);
-    final ArgumentCaptor<TwitchUrl> serviceUrl = ArgumentCaptor.forClass(TwitchUrl.class);
-    doAnswer((invocation) -> {
-      final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
+    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
+    final FakeBuilder<TwitchClientUtils> fakeBuilder = fakeFactory.builder(TwitchClientUtils.class);
+    final TwitchUrl[] twitchUrls = new TwitchUrl[1];
+    fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
+        .addHandler(invocation -> {
+          twitchUrls[0] = invocation.getArgument(0);
+          final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
 
-      consumer.accept(new StringReader(RESPONSE_BODY));
-      return null;
-    }).when(twitchClientUtils).handleResponse(serviceUrl.capture(), isA(ConsumerWithException.class));
+          consumer.accept(new StringReader(RESPONSE_BODY));
+          return null;
+        });
+    final TwitchClientUtils twitchClientUtils = fakeBuilder.build();
+    final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(), twitchClientUtils);
 
     subjectUnderTest.getUsers(this.givenASetOfTwitchLogins(0), Sets.newHashSet(TwitchUserId.of(USER_ID)));
 
-    assertThat(serviceUrl.getValue().value).contains("id=" + USER_ID);
+    assertThat(twitchUrls[0].value).contains("id=" + USER_ID);
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public final void getUsers_invalidObjectName_handlesInvalidObjectName() {
-    final TwitchClientUtils twitchClientUtils = mock(TwitchClientUtils.class);
-    final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(),
-        twitchClientUtils);
-    doAnswer((invocation) -> {
-      final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
+    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
+    final FakeBuilder<TwitchClientUtils> fakeBuilder = fakeFactory.builder(TwitchClientUtils.class);
+    final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
+    fakeBuilder.forMethod("handleUnknownObjectName", new Class[] { String.class })
+        .addHandler(countingHandler);
+    fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
+        .addHandler(invocation -> {
+          final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
 
-      consumer.accept(new StringReader(RESPONSE_BODY));
-      return null;
-    }).when(twitchClientUtils).handleResponse(isA(TwitchUrl.class), isA(ConsumerWithException.class));
+          consumer.accept(new StringReader(RESPONSE_BODY));
+          return null;
+        });
+    final TwitchClientUtils twitchClientUtils = fakeBuilder.build();
+    final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(), twitchClientUtils);
 
     subjectUnderTest.getUsers(this.givenASetOfTwitchLogins(0), Sets.newHashSet(TwitchUserId.of(USER_ID)));
 
-    verify(twitchClientUtils).handleUnknownObjectName(isA(String.class));
+    assertThat(countingHandler.getCallCount()).isOne();
   }
 
 }

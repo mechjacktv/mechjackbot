@@ -1,14 +1,12 @@
 package tv.mechjack.mechjackbot.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 import java.util.Set;
 
 import com.google.common.collect.Sets;
 
+import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 import org.slf4j.Logger;
 
@@ -23,15 +21,17 @@ import tv.mechjack.mechjackbot.api.TestChatMessageEvent;
 import tv.mechjack.mechjackbot.api.TestChatUser;
 import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.platform.utils.typedobject.StronglyTypedInstantiationException;
+import tv.mechjack.testframework.fake.FakeBuilder;
+import tv.mechjack.testframework.fake.methodhandler.CountingMethodInvocationHandler;
 
 public class DefaultChatMessageEventHandlerUnitTests extends ChatMessageEventHandlerContractTests {
 
   @Override
   protected DefaultChatMessageEventHandler givenASubjectToTest(final Set<ChatCommand> chatCommands) {
-    return this.givenASubjectToTest(chatCommands, mock(Logger.class));
+    return this.givenASubjectToTest(chatCommands, this.testFrameworkRule.fake(Logger.class));
   }
 
-  protected DefaultChatMessageEventHandler givenASubjectToTest(final Set<ChatCommand> chatCommands,
+  private DefaultChatMessageEventHandler givenASubjectToTest(final Set<ChatCommand> chatCommands,
       final Logger logger) {
     return new DefaultChatMessageEventHandler(chatCommands,
         this.testFrameworkRule.getInstance(ChatCommandRegistry.class),
@@ -41,31 +41,42 @@ public class DefaultChatMessageEventHandlerUnitTests extends ChatMessageEventHan
   @Test
   public final void handleMessageEvent_isCalled_logsAnInfoLevelMessage() {
     this.installModules();
+    final FakeBuilder<Logger> fakeBuilder = this.testFrameworkRule.fakeBuilder(Logger.class);
+    final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
+    fakeBuilder.forMethod("info", new Class[] { String.class }).addHandler(countingHandler);
     final TestChatCommand command = this.testFrameworkRule.getInstance(TestChatCommand.class);
     command.setTriggered(true);
-    final Logger logger = mock(Logger.class);
-    final DefaultChatMessageEventHandler subjectUnderTest = this.givenASubjectToTest(Sets.newHashSet(command), logger);
+    final DefaultChatMessageEventHandler subjectUnderTest = this.givenASubjectToTest(Sets.newHashSet(command),
+        fakeBuilder.build());
 
     subjectUnderTest.handleMessageEvent(this.testFrameworkRule.getInstance(ChatMessageEvent.class));
 
-    verify(logger).info(isA(String.class));
+    assertThat(countingHandler.getCallCount()).isOne();
   }
 
   @Test
   public final void handleMessageEvent_commandThrowsException_logsAnInfoAndErrorLevelMessageWithSameLogger() {
     this.installModules();
+    final FakeBuilder<Logger> fakeBuilder = this.testFrameworkRule.fakeBuilder(Logger.class);
+    final CountingMethodInvocationHandler infoCountingHandler = new CountingMethodInvocationHandler();
+    final CountingMethodInvocationHandler errorCountingHandler = new CountingMethodInvocationHandler();
+    fakeBuilder.forMethod("info", new Class[] { String.class }).addHandler(infoCountingHandler);
+    fakeBuilder.forMethod("error", new Class[] { String.class, Throwable.class })
+        .addHandler(errorCountingHandler);
     final TestChatCommand command = this.testFrameworkRule.getInstance(TestChatCommand.class);
     command.setTriggered(true);
     command.setMessageEventHandler(messageEvent -> {
       throw new StronglyTypedInstantiationException(new Exception());
     });
-    final Logger logger = mock(Logger.class);
-    final DefaultChatMessageEventHandler subjectUnderTest = this.givenASubjectToTest(Sets.newHashSet(command), logger);
+    final DefaultChatMessageEventHandler subjectUnderTest = this.givenASubjectToTest(Sets.newHashSet(command),
+        fakeBuilder.build());
 
     subjectUnderTest.handleMessageEvent(this.testFrameworkRule.getInstance(ChatMessageEvent.class));
 
-    verify(logger).info(isA(String.class));
-    verify(logger).error(isA(String.class), isA(Throwable.class));
+    final SoftAssertions softly = new SoftAssertions();
+    softly.assertThat(infoCountingHandler.getCallCount()).isOne();
+    softly.assertThat(errorCountingHandler.getCallCount()).isOne();
+    softly.assertAll();
   }
 
   @Test

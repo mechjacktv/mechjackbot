@@ -48,7 +48,7 @@ public class WouldYouRatherChatCommand extends BaseChatCommand {
   }
 
   private void loadQuestions(final QuestionsDataSource questionsDataSource) {
-    try (final BufferedReader in = questionsDataSource.getQuestions()) {
+    try (final BufferedReader in = new BufferedReader(questionsDataSource.getQuestions())) {
       String line;
 
       while ((line = in.readLine()) != null) {

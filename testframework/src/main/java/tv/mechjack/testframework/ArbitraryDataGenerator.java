@@ -7,7 +7,7 @@ public final class ArbitraryDataGenerator {
   private final AtomicLong atomicLong;
 
   ArbitraryDataGenerator() {
-    this.atomicLong = new AtomicLong();
+    this.atomicLong = new AtomicLong(1);
   }
 
   public final byte[] getByteArray() {

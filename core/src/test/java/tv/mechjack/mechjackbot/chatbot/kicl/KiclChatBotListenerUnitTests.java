@@ -1,7 +1,6 @@
 package tv.mechjack.mechjackbot.chatbot.kicl;
 
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,6 +12,9 @@ import tv.mechjack.mechjackbot.api.TestCommandModule;
 import tv.mechjack.platform.configuration.TestConfigurationModule;
 import tv.mechjack.platform.utils.TestUtilsModule;
 import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.fake.FakeBuilder;
+import tv.mechjack.testframework.fake.FakeFactory;
+import tv.mechjack.testframework.fake.methodhandler.CountingMethodInvocationHandler;
 
 public class KiclChatBotListenerUnitTests {
 
@@ -26,19 +28,25 @@ public class KiclChatBotListenerUnitTests {
     this.testFrameworkRule.installModule(new TestUtilsModule());
   }
 
-  private KiclChatBotListener givenASubjectToTest() {
-    return this.testFrameworkRule.getInstance(KiclChatBotListener.class);
+  private KiclChatBotListener givenASubjectToTest(final ChatMessageEventHandler chatMessageEventHandler) {
+    return new KiclChatBotListener(this.testFrameworkRule.getInstance(KiclChatMessageEventFactory.class),
+        chatMessageEventHandler);
   }
 
   @Test
   public final void onChannelMessageEvent_isCalled_resultIsForwardsCallToChatMessageEventHandler() {
     this.installModules();
-    final KiclChatBotListener subjectUnderTest = this.givenASubjectToTest();
+    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
+    final FakeBuilder<ChatMessageEventHandler> fakeBuilder = fakeFactory.builder(ChatMessageEventHandler.class);
+    final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
+    fakeBuilder.forMethod("handleMessageEvent", new Class[] { ChatMessageEvent.class })
+        .addHandler(countingHandler);
+    final ChatMessageEventHandler chatMessageEventHandler = fakeBuilder.build();
+    final KiclChatBotListener subjectUnderTest = this.givenASubjectToTest(chatMessageEventHandler);
 
     subjectUnderTest.onChannelMessageEvent(this.testFrameworkRule.getInstance(ChannelMessageEvent.class));
 
-    verify(this.testFrameworkRule.getInstance(ChatMessageEventHandler.class))
-        .handleMessageEvent(isA(ChatMessageEvent.class));
+    assertThat(countingHandler.getCallCount()).isOne();
   }
 
 }

@@ -2,7 +2,6 @@ package tv.mechjack.mechjackbot.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.Mockito.mock;
 import static tv.mechjack.mechjackbot.api.ChatCommandUtils.DEFAULT_COMMAND_COOL_DOWN;
 import static tv.mechjack.mechjackbot.api.ChatCommandUtils.DEFAULT_USAGE_MESSAGE_FORMAT;
 import static tv.mechjack.mechjackbot.api.ChatCommandUtils.DEFAULT_USER_COOL_DOWN;
@@ -395,7 +394,8 @@ public abstract class ChatCommandUtilsContractTests {
     this.installModules();
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.isTriggered(null, mock(ChatMessageEvent.class)));
+    final Throwable thrown = catchThrowable(
+        () -> subjectUnderTest.isTriggered(null, this.testFrameworkRule.fake(ChatMessageEvent.class)));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "chatCommand");
   }
@@ -405,7 +405,8 @@ public abstract class ChatCommandUtilsContractTests {
     this.installModules();
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.isTriggered(mock(ChatCommand.class), null));
+    final Throwable thrown = catchThrowable(
+        () -> subjectUnderTest.isTriggered(this.testFrameworkRule.fake(ChatCommand.class), null));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "chatMessageEvent");
   }
@@ -454,7 +455,7 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.createUsageMessage(null, mock(ChatMessageEvent.class)));
+        () -> subjectUnderTest.createUsageMessage(null, this.testFrameworkRule.fake(ChatMessageEvent.class)));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "chatCommand");
   }
@@ -464,7 +465,8 @@ public abstract class ChatCommandUtilsContractTests {
     this.installModules();
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.createUsageMessage(mock(ChatCommand.class), null));
+    final Throwable thrown = catchThrowable(
+        () -> subjectUnderTest.createUsageMessage(this.testFrameworkRule.fake(ChatCommand.class), null));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "chatMessageEvent");
   }
@@ -503,7 +505,7 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.replaceChatMessageVariables(null, mock(ChatMessageEvent.class),
+        () -> subjectUnderTest.replaceChatMessageVariables(null, this.testFrameworkRule.fake(ChatMessageEvent.class),
             ChatMessage.of(this.testFrameworkRule.getArbitraryString())));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "chatCommand");
@@ -515,7 +517,7 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.replaceChatMessageVariables(mock(ChatCommand.class), null,
+        () -> subjectUnderTest.replaceChatMessageVariables(this.testFrameworkRule.fake(ChatCommand.class), null,
             ChatMessage.of(this.testFrameworkRule.getArbitraryString())));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "chatMessageEvent");
@@ -527,7 +529,8 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.replaceChatMessageVariables(mock(ChatCommand.class), mock(ChatMessageEvent.class),
+        () -> subjectUnderTest.replaceChatMessageVariables(this.testFrameworkRule.fake(ChatCommand.class),
+            this.testFrameworkRule.fake(ChatMessageEvent.class),
             null));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "chatMessage");
@@ -596,7 +599,7 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.stripTriggerFromMessage(null, mock(ChatMessageEvent.class)));
+        () -> subjectUnderTest.stripTriggerFromMessage(null, this.testFrameworkRule.fake(ChatMessageEvent.class)));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "chatCommand");
   }
@@ -607,7 +610,7 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.stripTriggerFromMessage(mock(ChatCommand.class), null));
+        () -> subjectUnderTest.stripTriggerFromMessage(this.testFrameworkRule.fake(ChatCommand.class), null));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "chatMessageEvent");
   }
