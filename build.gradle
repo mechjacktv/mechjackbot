@@ -1,14 +1,15 @@
 buildscript {
   repositories {
     jcenter()
+    maven { url "https://jitpack.io" }
   }
   dependencies {
     classpath 'ch.raffael.markdown-doclet:markdown-doclet:1.4'
     classpath 'com.diffplug.spotless:spotless-plugin-gradle:3.16.0'
     classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.8'
+    classpath 'com.github.mechjacktv:gradle-test-framework:master-SNAPSHOT'
   }
 }
-
 
 subprojects {
   apply plugin: 'ch.raffael.markdown-doclet'
@@ -17,7 +18,7 @@ subprojects {
   apply plugin: 'idea'
   apply plugin: 'jacoco'
   apply plugin: 'java'
-  apply plugin: tv.mechjack.gradle.testframework.TestFrameworkPlugin
+  apply plugin: 'tv.mechjack.gradle.testframework'
 
   archivesBaseName = "${rootProject.name}-${project.name}"
   group = 'tv.mechjack'
