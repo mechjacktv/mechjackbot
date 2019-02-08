@@ -1,5 +1,7 @@
 package tv.mechjack.gradle.testframework;
 
+import java.util.Objects;
+
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
@@ -13,7 +15,16 @@ public class TestFrameworkPlugin implements Plugin<Project> {
   public void apply(final Project project) {
     createTestFrameworkSourceSet(project);
     createTestFrameworkConfiguration(project);
-    createTestFrameworkJarTask(project);
+    project.getTasks().register(InitTestFrameworkTask.TASK_NAME, InitTestFrameworkTask.class, project);
+    project.getTasks().register(TestFrameworkJarTask.TASK_NAME, TestFrameworkJarTask.class, project);
+
+    final Task assembleTask = project.getTasks().findByPath("assemble");
+
+    if (Objects.nonNull(assembleTask)) {
+      assembleTask.dependsOn(project.getTasks().getByName(TestFrameworkJarTask.TASK_NAME));
+    }
+    project.getArtifacts().add("testFramework",
+        project.getTasks().getByName(TestFrameworkJarTask.TASK_NAME));
   }
 
   private void createTestFrameworkSourceSet(final Project project) {
@@ -46,19 +57,6 @@ public class TestFrameworkPlugin implements Plugin<Project> {
 
     project.getConfigurations().getByName("testRuntimeOnly")
         .extendsFrom(project.getConfigurations().getByName("testFrameworkRuntimeOnly"));
-  }
-
-  private void createTestFrameworkJarTask(final Project project) {
-    final JavaPluginConvention javaPluginConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
-    final Task testFrameworkJarTask = project.getTasks()
-        .create("testFrameworkJar", Jar.class, task -> {
-          task.from(javaPluginConvention.getSourceSets()
-              .getByName("testFramework").getOutput());
-          task.getArchiveClassifier().set("testFramework");
-        });
-
-    project.getTasks().getByName("assemble").dependsOn(testFrameworkJarTask);
-    project.getArtifacts().add("testFramework", testFrameworkJarTask);
   }
 
 }
