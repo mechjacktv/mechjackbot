@@ -11,9 +11,8 @@ import org.junit.Test;
 
 import tv.mechjack.testframework.TestFrameworkRule;
 import tv.mechjack.testframework.fake.FakeBuilder;
-import tv.mechjack.testframework.fake.FakeFactory;
+import tv.mechjack.testframework.fake.methodhandler.CapturingMethodInvocationHandler;
 import tv.mechjack.testframework.fake.methodhandler.CountingMethodInvocationHandler;
-import tv.mechjack.testframework.fake.methodhandler.ValidatingMethodInvocationHandler;
 
 public abstract class ScheduleServiceContractTests {
 
@@ -62,21 +61,18 @@ public abstract class ScheduleServiceContractTests {
 
   @Test
   public final void schedule_noDelaySpecified_schedulesWithNoDelay() {
-    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
-    final FakeBuilder<ScheduledExecutorService> fakeBuilder = fakeFactory.builder(ScheduledExecutorService.class);
-    final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
-    final ValidatingMethodInvocationHandler validatingHandler = new ValidatingMethodInvocationHandler(
-        invocation -> invocation.getArgument(1).equals(0L)
-            && invocation.getArgument(3).equals(TimeUnit.MINUTES),
-        countingHandler);
+    final FakeBuilder<ScheduledExecutorService> fakeBuilder = this.testFrameworkRule
+        .fakeBuilder(ScheduledExecutorService.class);
+    final CapturingMethodInvocationHandler capturingHandler = new CapturingMethodInvocationHandler(1);
     fakeBuilder.forMethod("scheduleAtFixedRate", new Class<?>[] { Runnable.class, long.class, long.class,
-        TimeUnit.class }).addHandler(validatingHandler);
+        TimeUnit.class }).addHandler(capturingHandler);
     final ScheduledExecutorService scheduledExecutorService = fakeBuilder.build();
     final ScheduleService subjectToTest = this.givenASubjectToTest(scheduledExecutorService);
 
     subjectToTest.schedule(System::currentTimeMillis, this.testFrameworkRule.getArbitraryInteger(), TimeUnit.MINUTES);
+    final Long result = capturingHandler.getValue();
 
-    assertThat(countingHandler.getCallCount()).isEqualTo(1);
+    assertThat(result).isEqualTo(0L);
   }
 
   @Test
@@ -91,49 +87,43 @@ public abstract class ScheduleServiceContractTests {
 
   @Test
   public final void schedule_noDelay_schedulesWithNoDelay() {
-    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
-    final FakeBuilder<ScheduledExecutorService> fakeBuilder = fakeFactory.builder(ScheduledExecutorService.class);
-    final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
-    final ValidatingMethodInvocationHandler validatingHandler = new ValidatingMethodInvocationHandler(
-        invocation -> invocation.getArgument(1).equals(0L)
-            && invocation.getArgument(3).equals(TimeUnit.MINUTES),
-        countingHandler);
+    final FakeBuilder<ScheduledExecutorService> fakeBuilder = this.testFrameworkRule
+        .fakeBuilder(ScheduledExecutorService.class);
+    final CapturingMethodInvocationHandler capturingHandler = new CapturingMethodInvocationHandler(1);
     fakeBuilder.forMethod("scheduleAtFixedRate", new Class<?>[] { Runnable.class, long.class, long.class,
-        TimeUnit.class }).addHandler(validatingHandler);
+        TimeUnit.class }).addHandler(capturingHandler);
     final ScheduledExecutorService scheduledExecutorService = fakeBuilder.build();
     final ScheduleService subjectToTest = this.givenASubjectToTest(scheduledExecutorService);
 
     subjectToTest.schedule(System::currentTimeMillis, this.testFrameworkRule.getArbitraryInteger(), TimeUnit.MINUTES,
         NO_DELAY);
+    final Long result = capturingHandler.getValue();
 
-    assertThat(countingHandler.getCallCount()).isEqualTo(1);
+    assertThat(result).isEqualTo(0L);
   }
 
   @Test
   public final void schedule_withDelay_schedulesWithDelay() {
     final int period = this.testFrameworkRule.getArbitraryInteger();
-    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
-    final FakeBuilder<ScheduledExecutorService> fakeBuilder = fakeFactory.builder(ScheduledExecutorService.class);
-    final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
-    final ValidatingMethodInvocationHandler validatingHandler = new ValidatingMethodInvocationHandler(
-        invocation -> invocation.getArgument(1).equals((long) period)
-            && invocation.getArgument(3).equals(TimeUnit.MINUTES),
-        countingHandler);
+    final FakeBuilder<ScheduledExecutorService> fakeBuilder = this.testFrameworkRule
+        .fakeBuilder(ScheduledExecutorService.class);
+    final CapturingMethodInvocationHandler capturingHandler = new CapturingMethodInvocationHandler(1);
     fakeBuilder.forMethod("scheduleAtFixedRate", new Class<?>[] { Runnable.class, long.class, long.class,
-        TimeUnit.class }).addHandler(validatingHandler);
+        TimeUnit.class }).addHandler(capturingHandler);
     final ScheduledExecutorService scheduledExecutorService = fakeBuilder.build();
     final ScheduleService subjectToTest = this.givenASubjectToTest(scheduledExecutorService);
 
     subjectToTest.schedule(System::currentTimeMillis, period, TimeUnit.MINUTES,
         DELAY);
+    final Long result = capturingHandler.getValue();
 
-    assertThat(countingHandler.getCallCount()).isEqualTo(1);
+    assertThat(result).isEqualTo(period);
   }
 
   @Test
   public final void stop_called_shutsDownExecutor() {
-    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
-    final FakeBuilder<ScheduledExecutorService> fakeBuilder = fakeFactory.builder(ScheduledExecutorService.class);
+    final FakeBuilder<ScheduledExecutorService> fakeBuilder = this.testFrameworkRule
+        .fakeBuilder(ScheduledExecutorService.class);
     final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
     fakeBuilder.forMethod("shutdown").addHandler(countingHandler);
     final ScheduledExecutorService scheduledExecutorService = fakeBuilder.build();

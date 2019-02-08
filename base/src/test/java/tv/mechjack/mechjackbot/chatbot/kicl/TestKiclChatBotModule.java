@@ -1,7 +1,6 @@
 package tv.mechjack.mechjackbot.chatbot.kicl;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.google.inject.Provides;
 import com.google.inject.Scopes;
@@ -9,7 +8,6 @@ import com.google.inject.Singleton;
 
 import org.kitteh.irc.client.library.Client;
 import org.kitteh.irc.client.library.element.Channel;
-import org.kitteh.irc.client.library.element.ServerMessage;
 import org.kitteh.irc.client.library.element.User;
 import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 
@@ -72,37 +70,6 @@ public class TestKiclChatBotModule extends TestChatBotModule {
       final Client client, final Channel channel, final User user) {
     return new TestChannelMessageEvent(client, new ArrayList<>(), user, channel,
         arbitraryDataGenerator.getString());
-  }
-
-  public static final class TestChannelMessageEvent extends ChannelMessageEvent {
-
-    private boolean sendReplyCalled;
-
-    /**
-     * Creates the event.
-     *
-     * @param client client for which this is occurring
-     * @param originalMessages original messages
-     * @param sender who sent it
-     * @param channel channel receiving
-     * @param message message sent
-     */
-    public TestChannelMessageEvent(final Client client, final List<ServerMessage> originalMessages, final User sender,
-        final Channel channel, final String message) {
-      super(client, originalMessages, sender, channel, message);
-      this.sendReplyCalled = false;
-    }
-
-    @Override
-    public void sendReply(final String message) {
-      this.sendReplyCalled = true;
-      super.sendReply(message);
-    }
-
-    public final boolean wasSendReplyCalled() {
-      return this.sendReplyCalled;
-    }
-
   }
 
 }
