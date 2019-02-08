@@ -234,8 +234,6 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
           return actualLastShoutOut == lastShoutOut;
         }
         return false;
-        // return actual.get(casterKey).isPresent() &&
-        // actual.get(casterKey).get().getLastShoutOut() == lastShoutOut;
       }
 
     });

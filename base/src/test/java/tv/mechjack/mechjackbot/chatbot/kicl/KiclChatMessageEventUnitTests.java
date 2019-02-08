@@ -2,6 +2,7 @@ package tv.mechjack.mechjackbot.chatbot.kicl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static tv.mechjack.mechjackbot.chatbot.kicl.KiclChatMessageEvent.DEFAULT_RESPONSE_MESSAGE_FORMAT;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,7 +13,6 @@ import tv.mechjack.mechjackbot.api.ChatMessage;
 import tv.mechjack.mechjackbot.api.ChatUser;
 import tv.mechjack.mechjackbot.api.TestCommandModule;
 import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
-import tv.mechjack.mechjackbot.chatbot.kicl.TestKiclChatBotModule.TestChannelMessageEvent;
 import tv.mechjack.platform.configuration.Configuration;
 import tv.mechjack.platform.configuration.TestConfigurationModule;
 import tv.mechjack.platform.utils.ExecutionUtils;
@@ -115,14 +115,16 @@ public class KiclChatMessageEventUnitTests {
   @Test
   public final void sendResponse_forMessage_resultIsFormattedMessageSent() {
     this.installModules();
-    final ChatMessage chatMessage = ChatMessage.of(this.testFrameworkRule.getArbitraryString());
     final TestChannelMessageEvent channelMessageEvent = this.testFrameworkRule
         .getInstance(TestChannelMessageEvent.class);
     final KiclChatMessageEvent subjectUnderTest = this.givenASubjectToTest(channelMessageEvent);
 
+    final ChatMessage chatMessage = ChatMessage.of(this.testFrameworkRule.getArbitraryString());
+    final String[] result = new String[1];
+    channelMessageEvent.setSendReplyHandler(replyMessage -> result[0] = replyMessage);
     subjectUnderTest.sendResponse(chatMessage);
 
-    assertThat(channelMessageEvent.wasSendReplyCalled()).isTrue();
+    assertThat(result[0]).isEqualTo(String.format(DEFAULT_RESPONSE_MESSAGE_FORMAT, chatMessage.value));
   }
 
 }

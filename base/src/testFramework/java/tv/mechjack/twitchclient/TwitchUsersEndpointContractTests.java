@@ -18,7 +18,7 @@ import org.junit.Test;
 import tv.mechjack.platform.utils.function.ConsumerWithException;
 import tv.mechjack.testframework.TestFrameworkRule;
 import tv.mechjack.testframework.fake.FakeBuilder;
-import tv.mechjack.testframework.fake.FakeFactory;
+import tv.mechjack.testframework.fake.methodhandler.CapturingMethodInvocationHandler;
 import tv.mechjack.testframework.fake.methodhandler.CountingMethodInvocationHandler;
 import tv.mechjack.twitchclient.ProtoMessage.User;
 import tv.mechjack.twitchclient.ProtoMessage.Users;
@@ -153,8 +153,7 @@ public abstract class TwitchUsersEndpointContractTests {
 
   @Test
   public final void getUsers_forTwitchLogin_returnsAListWithOneUser() {
-    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
-    final FakeBuilder<TwitchClientUtils> fakeBuilder = fakeFactory.builder(TwitchClientUtils.class);
+    final FakeBuilder<TwitchClientUtils> fakeBuilder = this.testFrameworkRule.fakeBuilder(TwitchClientUtils.class);
     fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
         .addHandler(invocation -> {
           final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
@@ -185,50 +184,47 @@ public abstract class TwitchUsersEndpointContractTests {
 
   @Test
   public final void getUsers_forUserLogin_requestsUserForLogin() {
-    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
-    final FakeBuilder<TwitchClientUtils> fakeBuilder = fakeFactory.builder(TwitchClientUtils.class);
-    final TwitchUrl[] twitchUrls = new TwitchUrl[1];
-    fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
-        .addHandler(invocation -> {
-          twitchUrls[0] = invocation.getArgument(0);
-          final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
+    final FakeBuilder<TwitchClientUtils> fakeBuilder = this.testFrameworkRule.fakeBuilder(TwitchClientUtils.class);
+    final CapturingMethodInvocationHandler capturingHandler = new CapturingMethodInvocationHandler(0, invocation -> {
+      final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
 
-          consumer.accept(new StringReader(RESPONSE_BODY));
-          return null;
-        });
+      consumer.accept(new StringReader(RESPONSE_BODY));
+      return null;
+    });
+    fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
+        .addHandler(capturingHandler);
     final TwitchClientUtils twitchClientUtils = fakeBuilder.build();
     final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(), twitchClientUtils);
 
     subjectUnderTest.getUsers(Sets.newHashSet(TwitchLogin.of(USER_LOGIN)), this.givenASetOfTwitchIds(0));
+    final TwitchUrl result = capturingHandler.getValue();
 
-    assertThat(twitchUrls[0].value).contains("login=" + USER_LOGIN);
+    assertThat(result.value).contains("login=" + USER_LOGIN);
   }
 
   @Test
   public final void getUsers_forUserId_requestsUserForId() {
-    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
-    final FakeBuilder<TwitchClientUtils> fakeBuilder = fakeFactory.builder(TwitchClientUtils.class);
-    final TwitchUrl[] twitchUrls = new TwitchUrl[1];
-    fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
-        .addHandler(invocation -> {
-          twitchUrls[0] = invocation.getArgument(0);
-          final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
+    final FakeBuilder<TwitchClientUtils> fakeBuilder = this.testFrameworkRule.fakeBuilder(TwitchClientUtils.class);
+    final CapturingMethodInvocationHandler capturingHandler = new CapturingMethodInvocationHandler(0, invocation -> {
+      final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
 
-          consumer.accept(new StringReader(RESPONSE_BODY));
-          return null;
-        });
+      consumer.accept(new StringReader(RESPONSE_BODY));
+      return null;
+    });
+    fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
+        .addHandler(capturingHandler);
     final TwitchClientUtils twitchClientUtils = fakeBuilder.build();
     final TwitchUsersEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(), twitchClientUtils);
 
     subjectUnderTest.getUsers(this.givenASetOfTwitchLogins(0), Sets.newHashSet(TwitchUserId.of(USER_ID)));
+    final TwitchUrl result = capturingHandler.getValue();
 
-    assertThat(twitchUrls[0].value).contains("id=" + USER_ID);
+    assertThat(result.value).contains("id=" + USER_ID);
   }
 
   @Test
   public final void getUsers_invalidObjectName_handlesInvalidObjectName() {
-    final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
-    final FakeBuilder<TwitchClientUtils> fakeBuilder = fakeFactory.builder(TwitchClientUtils.class);
+    final FakeBuilder<TwitchClientUtils> fakeBuilder = this.testFrameworkRule.fakeBuilder(TwitchClientUtils.class);
     final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
     fakeBuilder.forMethod("handleUnknownObjectName", new Class[] { String.class })
         .addHandler(countingHandler);
