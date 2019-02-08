@@ -19,8 +19,8 @@ import tv.mechjack.platform.utils.ExecutionUtils;
 import tv.mechjack.platform.utils.TestUtilsModule;
 import tv.mechjack.testframework.TestFrameworkRule;
 import tv.mechjack.testframework.fake.FakeBuilder;
+import tv.mechjack.testframework.fake.methodhandler.CapturingMethodInvocationHandler;
 import tv.mechjack.testframework.fake.methodhandler.CountingMethodInvocationHandler;
-import tv.mechjack.testframework.fake.methodhandler.ValidatingMethodInvocationHandler;
 
 public class KiclChatBotUnitTests {
 
@@ -79,24 +79,41 @@ public class KiclChatBotUnitTests {
   }
 
   @Test
-  public final void sendMessage_isCalled_sendsTheFormattedMessage() {
+  public final void sendMessage_isCalled_resultIsTheExpectChannel() {
     this.installModules();
     final String messageFormat = this.testFrameworkRule.getArbitraryString() + "%s";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(KEY_CHAT_BOT_MESSAGE_FORMAT, messageFormat);
-    final ChatChannel chatChannel = ChatChannel.of(this.testFrameworkRule.getArbitraryString());
-    final ChatMessage chatMessage = ChatMessage.of(this.testFrameworkRule.getArbitraryString());
     final FakeBuilder<Client> fakeBuilder = this.testFrameworkRule.fakeBuilder(Client.class);
-    final ValidatingMethodInvocationHandler validatingHandler = new ValidatingMethodInvocationHandler(
-        invocation -> invocation.getArgument(0).equals(chatChannel.value)
-            && invocation.getArgument(1).equals(String.format(messageFormat, chatMessage)));
+    final CapturingMethodInvocationHandler capturingHandler = new CapturingMethodInvocationHandler(0);
     fakeBuilder.forMethod("sendMessage", new Class[] { String.class, String.class })
-        .addHandler(validatingHandler);
+        .addHandler(capturingHandler);
     final KiclChatBot subjectUnderTest = this.givenASubjectToTest(fakeBuilder.build());
 
-    subjectUnderTest.sendMessage(chatChannel, chatMessage);
+    final ChatChannel chatChannel = ChatChannel.of(this.testFrameworkRule.getArbitraryString());
+    subjectUnderTest.sendMessage(chatChannel, ChatMessage.of(this.testFrameworkRule.getArbitraryString()));
 
-    assertThat(validatingHandler.isValid()).isTrue();
+    final String actual = capturingHandler.getValue();
+    assertThat(actual).isEqualTo(chatChannel.value);
+  }
+
+  @Test
+  public final void sendMessage_isCalled_resultIsTheExpectMessage() {
+    this.installModules();
+    final String messageFormat = this.testFrameworkRule.getArbitraryString() + "%s";
+    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    configuration.set(KEY_CHAT_BOT_MESSAGE_FORMAT, messageFormat);
+    final FakeBuilder<Client> fakeBuilder = this.testFrameworkRule.fakeBuilder(Client.class);
+    final CapturingMethodInvocationHandler capturingHandler = new CapturingMethodInvocationHandler(1);
+    fakeBuilder.forMethod("sendMessage", new Class[] { String.class, String.class })
+        .addHandler(capturingHandler);
+    final KiclChatBot subjectUnderTest = this.givenASubjectToTest(fakeBuilder.build());
+
+    final ChatMessage chatMessage = ChatMessage.of(this.testFrameworkRule.getArbitraryString());
+    subjectUnderTest.sendMessage(ChatChannel.of(this.testFrameworkRule.getArbitraryString()), chatMessage);
+
+    final String actual = capturingHandler.getValue();
+    assertThat(actual).isEqualTo(String.format(messageFormat, chatMessage));
   }
 
   @Test
@@ -106,15 +123,14 @@ public class KiclChatBotUnitTests {
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(KEY_SHUTDOWN_MESSAGE, shutdownMessage);
     final FakeBuilder<Client> fakeBuilder = this.testFrameworkRule.fakeBuilder(Client.class);
-    final ValidatingMethodInvocationHandler validatingHandler = new ValidatingMethodInvocationHandler(
-        invocation -> invocation.getArgument(0).equals(shutdownMessage));
-    fakeBuilder.forMethod("shutdown", new Class[] { String.class })
-        .addHandler(validatingHandler);
+    final CapturingMethodInvocationHandler capturingHandler = new CapturingMethodInvocationHandler(0);
+    fakeBuilder.forMethod("shutdown", new Class[] { String.class }).addHandler(capturingHandler);
     final KiclChatBot subjectUnderTest = this.givenASubjectToTest(fakeBuilder.build());
 
     subjectUnderTest.stop();
 
-    assertThat(validatingHandler.isValid()).isTrue();
+    final String actual = capturingHandler.getValue();
+    assertThat(actual).isEqualTo(shutdownMessage);
   }
 
 }
