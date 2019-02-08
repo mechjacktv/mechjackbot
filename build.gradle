@@ -61,7 +61,6 @@ subprojects {
     testFrameworkImplementation project(':testframework')
     testFrameworkImplementation group: 'junit', name: 'junit', version: '4.+'
     testFrameworkImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
-//    testFrameworkImplementation group: 'org.mockito', name: 'mockito-core', version: '2.+'
     testFrameworkImplementation group: 'pl.pragmatists', name: 'JUnitParams', version: '1.+'
     testRuntimeOnly group: 'org.slf4j', name: 'slf4j-nop', version: '1.+'
   }
@@ -156,7 +155,6 @@ project(':all') {
   mainClassName = 'tv.mechjack.mechjackbot.main.Main'
 
   dependencies {
-    runtimeOnly project(':base')
     runtimeOnly project(':feature:core')
     runtimeOnly project(':feature:customcommands')
     runtimeOnly project(':feature:shoutouts')
@@ -168,7 +166,7 @@ project(':all') {
     main {
       baseName = "mechjackbot-${project.getProperty('name')}"
     }
-  }
+  } 
   startScripts {
     applicationName = 'mechjackbot'
   }
