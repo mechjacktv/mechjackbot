@@ -52,6 +52,7 @@ subprojects {
 
   repositories {
     jcenter()
+    maven { url 'https://jitpack.io' }
   }
   dependencies {
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.+'
@@ -59,7 +60,7 @@ subprojects {
     implementation group: 'com.google.inject', name: 'guice', version: '4.+'
     implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.+'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
-    testFrameworkImplementation project(':testframework')
+    testFrameworkImplementation group: 'com.github.mechjacktv', name: 'java-test-framework', version: '0.1.0'
     testFrameworkImplementation group: 'junit', name: 'junit', version: '4.+'
     testFrameworkImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
     testFrameworkImplementation group: 'pl.pragmatists', name: 'JUnitParams', version: '1.+'
@@ -70,15 +71,6 @@ subprojects {
 /*******************************
  * BASE PROJECTS
  */
-
-project(':testframework') {
-  archivesBaseName = "mechjack-${project.name}"
-
-  dependencies {
-    implementation group: 'junit', name: 'junit', version: '4.+'
-    implementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
-  }
-}
 
 project(':platform') {
   archivesBaseName = "mechjack-${project.name}"

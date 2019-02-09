@@ -1,8 +1,5 @@
-// APPLICATION BASE PROJECTS
-include ':testframework', ':platform',':base'
-// APPLICATION PLUGIN PROJECTS
+include ':platform',':base'
 include ':feature:core', ':feature:customcommands', ':feature:shoutouts', ':feature:wouldyourather'
-// APPLICATION WITH ALL PLUGINS
 include ':all'
 
 rootProject.name = 'mechjackbot'
