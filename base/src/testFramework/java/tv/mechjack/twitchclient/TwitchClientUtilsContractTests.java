@@ -10,15 +10,15 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.Rule;
 import org.junit.Test;
 
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
 
 public abstract class TwitchClientUtilsContractTests {
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   protected void installModules() {
-    this.testFrameworkRule.installModule(new TestTwitchClientModule());
+    this.testFrameworkRule.registerModule(new TestTwitchClientModule());
   }
 
   protected abstract TwitchClientUtils givenASubjectToTest();
@@ -35,7 +35,7 @@ public abstract class TwitchClientUtilsContractTests {
     final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest
-        .handleResponse(TwitchUrl.of(this.testFrameworkRule.getArbitraryString()),
+        .handleResponse(TwitchUrl.of(this.testFrameworkRule.arbitraryData().getString()),
             reader -> fail("Response handler **MUST** not be called on connection error")));
 
     assertThat(thrown).isInstanceOf(TwitchConnectionException.class);
@@ -44,7 +44,7 @@ public abstract class TwitchClientUtilsContractTests {
   @Test
   public final void handleResponse_connectionOpened_callsCorrectServiceApi() {
     this.installModules();
-    final String serviceUri = this.testFrameworkRule.getArbitraryString();
+    final String serviceUri = this.testFrameworkRule.arbitraryData().getString();
     final TestUrlConnectionFactory urlConnectionFactory = this.testFrameworkRule
         .getInstance(TestUrlConnectionFactory.class);
     final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest();
@@ -79,7 +79,7 @@ public abstract class TwitchClientUtilsContractTests {
         result[0] = value;
       }
     });
-    subjectUnderTest.handleResponse(TwitchUrl.of(this.testFrameworkRule.getArbitraryString()), reader -> {
+    subjectUnderTest.handleResponse(TwitchUrl.of(this.testFrameworkRule.arbitraryData().getString()), reader -> {
       /* no-op (2018-12-10 mechjack) */
     });
 
@@ -91,7 +91,7 @@ public abstract class TwitchClientUtilsContractTests {
   @Test
   public final void handleResponse_getInputStreamThrowsIOException_throwsTwitchConnectException() {
     this.installModules();
-    final String exceptionMessage = this.testFrameworkRule.getArbitraryString();
+    final String exceptionMessage = this.testFrameworkRule.arbitraryData().getString();
     final TestUrlConnectionFactory urlConnectionFactory = this.testFrameworkRule
         .getInstance(TestUrlConnectionFactory.class);
     final TestUrlConnection urlConnection = new TestUrlConnection();
@@ -102,7 +102,7 @@ public abstract class TwitchClientUtilsContractTests {
     final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.handleResponse(
-        TwitchUrl.of(this.testFrameworkRule.getArbitraryString()), (reader) -> {
+        TwitchUrl.of(this.testFrameworkRule.arbitraryData().getString()), (reader) -> {
           /* no-op (2018-12-18 mechjack) */
         }));
 
@@ -112,11 +112,11 @@ public abstract class TwitchClientUtilsContractTests {
   @Test
   public final void handleResponse_consumerThrowsException_throwsTwitchDataException() {
     this.installModules();
-    final String exceptionMessage = this.testFrameworkRule.getArbitraryString();
+    final String exceptionMessage = this.testFrameworkRule.arbitraryData().getString();
     final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.handleResponse(
-        TwitchUrl.of(this.testFrameworkRule.getArbitraryString()), (reader) -> {
+        TwitchUrl.of(this.testFrameworkRule.arbitraryData().getString()), (reader) -> {
           throw new Exception(exceptionMessage);
         }));
 
@@ -129,7 +129,7 @@ public abstract class TwitchClientUtilsContractTests {
     final TwitchClientUtils subjectUnderTest = this.givenASubjectToTest();
 
     final boolean[] result = new boolean[] { false };
-    subjectUnderTest.handleResponse(TwitchUrl.of(this.testFrameworkRule.getArbitraryString()),
+    subjectUnderTest.handleResponse(TwitchUrl.of(this.testFrameworkRule.arbitraryData().getString()),
         (inputStream) -> result[0] = true);
 
     assertThat(result[0]).isTrue();

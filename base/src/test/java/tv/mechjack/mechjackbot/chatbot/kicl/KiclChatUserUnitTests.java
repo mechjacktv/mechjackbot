@@ -23,7 +23,7 @@ import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
 import tv.mechjack.platform.configuration.TestConfigurationModule;
 import tv.mechjack.platform.utils.TestUtilsModule;
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
 import tv.mechjack.testframework.fake.FakeBuilder;
 import tv.mechjack.twitchclient.TwitchLogin;
 
@@ -39,14 +39,14 @@ public class KiclChatUserUnitTests {
   private static final String VIP_SUBSCRIBER_BADGE = "vip/1,subscriber/0,bits-charity/1";
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   private void installModules() {
-    this.testFrameworkRule.installModule(new TestChatBotModule());
-    this.testFrameworkRule.installModule(new TestCommandModule());
-    this.testFrameworkRule.installModule(new TestConfigurationModule());
-    this.testFrameworkRule.installModule(new TestKiclChatBotModule());
-    this.testFrameworkRule.installModule(new TestUtilsModule());
+    this.testFrameworkRule.registerModule(new TestChatBotModule());
+    this.testFrameworkRule.registerModule(new TestCommandModule());
+    this.testFrameworkRule.registerModule(new TestConfigurationModule());
+    this.testFrameworkRule.registerModule(new TestKiclChatBotModule());
+    this.testFrameworkRule.registerModule(new TestUtilsModule());
   }
 
   private KiclChatUser givenIHaveASubjectToTest(final ChannelMessageEvent event) {
@@ -64,19 +64,19 @@ public class KiclChatUserUnitTests {
   private ChannelMessageEvent givenAFakeChannelMessageEvent(final User user, final ServerMessage serverMessage) {
     return new ChannelMessageEvent(this.testFrameworkRule.getInstance(Client.class),
         Lists.newArrayList(serverMessage), user, this.testFrameworkRule.getInstance(Channel.class),
-        this.testFrameworkRule.getArbitraryString());
+        this.testFrameworkRule.arbitraryData().getString());
   }
 
   private ServerMessage givenAFakeServerMessage(final String badgesTagValue) {
     final FakeBuilder<MessageTag> messageTagFakeBuilder = this.testFrameworkRule.fakeBuilder(MessageTag.class);
 
-    messageTagFakeBuilder.forMethod("getName").addHandler(invocation -> "badges");
-    messageTagFakeBuilder.forMethod("getValue").addHandler(invocation -> Optional.ofNullable(badgesTagValue));
+    messageTagFakeBuilder.forMethod("getName").setHandler(invocation -> "badges");
+    messageTagFakeBuilder.forMethod("getValue").setHandler(invocation -> Optional.ofNullable(badgesTagValue));
 
     final MessageTag messageTag = messageTagFakeBuilder.build();
     final FakeBuilder<ServerMessage> serverMessageFakeBuilder = this.testFrameworkRule.fakeBuilder(ServerMessage.class);
 
-    serverMessageFakeBuilder.forMethod("getTag", new Class[] { String.class }).addHandler(invocation -> {
+    serverMessageFakeBuilder.forMethod("getTag", new Class[] { String.class }).setHandler(invocation -> {
       if ("badges".equals(invocation.getArgument(0))) {
         return Optional.of(messageTag);
       }

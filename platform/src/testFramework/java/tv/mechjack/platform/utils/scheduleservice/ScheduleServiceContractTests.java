@@ -9,67 +9,85 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Rule;
 import org.junit.Test;
 
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.platform.utils.ExecutionUtils;
+import tv.mechjack.platform.utils.TestUtilsModule;
+import tv.mechjack.testframework.TestFramework;
+import tv.mechjack.testframework.fake.ArgumentCaptor;
 import tv.mechjack.testframework.fake.FakeBuilder;
-import tv.mechjack.testframework.fake.methodhandler.CapturingMethodInvocationHandler;
-import tv.mechjack.testframework.fake.methodhandler.CountingMethodInvocationHandler;
+import tv.mechjack.testframework.fake.InvocationCounter;
 
 public abstract class ScheduleServiceContractTests {
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
+
+  private void registerModules() {
+    this.testFrameworkRule.registerModule(new TestUtilsModule());
+  }
 
   private static final Boolean DELAY = true;
   private static final Boolean NO_DELAY = false;
 
   private ScheduleService givenASubjectToTest() {
 
-    return this.givenASubjectToTest(this.testFrameworkRule.fake(ScheduledExecutorService.class));
+    return this.givenASubjectToTest(this.testFrameworkRule.fakeFactory().fake(ScheduledExecutorService.class));
   }
 
   abstract ScheduleService givenASubjectToTest(ScheduledExecutorService scheduledExecutorService);
 
   @Test
   public final void schedule_nullRunnable_throwsNullPointerExceptionWithMessage() {
+    this.registerModules();
     final ScheduleService subjectToTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectToTest.schedule(null,
-        this.testFrameworkRule.getArbitraryInteger(), TimeUnit.MINUTES));
+        this.testFrameworkRule.arbitraryData().getInteger(), TimeUnit.MINUTES));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "runnable");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("runnable"));
   }
 
   @Test
   public final void schedule_nullPeriod_throwsNullPointerExceptionWithMessage() {
+    this.registerModules();
     final ScheduleService subjectToTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
         () -> subjectToTest.schedule(System::currentTimeMillis, null, TimeUnit.MINUTES));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "period");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("period"));
   }
 
   @Test
   public final void schedule_nullTimeUnit_throwsNullPointerExceptionWithMessage() {
+    this.registerModules();
     final ScheduleService subjectToTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectToTest.schedule(System::currentTimeMillis, this.testFrameworkRule.getArbitraryInteger(), null));
+        () -> subjectToTest.schedule(System::currentTimeMillis, this.testFrameworkRule.arbitraryData().getInteger(),
+            null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "unit");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("unit"));
   }
 
   @Test
   public final void schedule_noDelaySpecified_schedulesWithNoDelay() {
+    this.registerModules();
     final FakeBuilder<ScheduledExecutorService> fakeBuilder = this.testFrameworkRule
         .fakeBuilder(ScheduledExecutorService.class);
-    final CapturingMethodInvocationHandler capturingHandler = new CapturingMethodInvocationHandler(1);
+    final ArgumentCaptor capturingHandler = new ArgumentCaptor(1);
     fakeBuilder.forMethod("scheduleAtFixedRate", new Class<?>[] { Runnable.class, long.class, long.class,
-        TimeUnit.class }).addHandler(capturingHandler);
+        TimeUnit.class }).setHandler(capturingHandler);
     final ScheduledExecutorService scheduledExecutorService = fakeBuilder.build();
     final ScheduleService subjectToTest = this.givenASubjectToTest(scheduledExecutorService);
 
-    subjectToTest.schedule(System::currentTimeMillis, this.testFrameworkRule.getArbitraryInteger(), TimeUnit.MINUTES);
+    subjectToTest.schedule(System::currentTimeMillis, this.testFrameworkRule.arbitraryData().getInteger(),
+        TimeUnit.MINUTES);
     final Long result = capturingHandler.getValue();
 
     assertThat(result).isEqualTo(0L);
@@ -77,25 +95,30 @@ public abstract class ScheduleServiceContractTests {
 
   @Test
   public final void schedule_nullDelay_throwsNullPointerExceptionWithMessage() {
+    this.registerModules();
     final ScheduleService subjectToTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectToTest
-        .schedule(System::currentTimeMillis, this.testFrameworkRule.getArbitraryInteger(), TimeUnit.MINUTES, null));
+        .schedule(System::currentTimeMillis, this.testFrameworkRule.arbitraryData().getInteger(), TimeUnit.MINUTES,
+            null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "delay");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("delay"));
   }
 
   @Test
   public final void schedule_noDelay_schedulesWithNoDelay() {
     final FakeBuilder<ScheduledExecutorService> fakeBuilder = this.testFrameworkRule
         .fakeBuilder(ScheduledExecutorService.class);
-    final CapturingMethodInvocationHandler capturingHandler = new CapturingMethodInvocationHandler(1);
+    final ArgumentCaptor capturingHandler = new ArgumentCaptor(1);
     fakeBuilder.forMethod("scheduleAtFixedRate", new Class<?>[] { Runnable.class, long.class, long.class,
-        TimeUnit.class }).addHandler(capturingHandler);
+        TimeUnit.class }).setHandler(capturingHandler);
     final ScheduledExecutorService scheduledExecutorService = fakeBuilder.build();
     final ScheduleService subjectToTest = this.givenASubjectToTest(scheduledExecutorService);
 
-    subjectToTest.schedule(System::currentTimeMillis, this.testFrameworkRule.getArbitraryInteger(), TimeUnit.MINUTES,
+    subjectToTest.schedule(System::currentTimeMillis, this.testFrameworkRule.arbitraryData().getInteger(),
+        TimeUnit.MINUTES,
         NO_DELAY);
     final Long result = capturingHandler.getValue();
 
@@ -104,12 +127,12 @@ public abstract class ScheduleServiceContractTests {
 
   @Test
   public final void schedule_withDelay_schedulesWithDelay() {
-    final int period = this.testFrameworkRule.getArbitraryInteger();
+    final int period = this.testFrameworkRule.arbitraryData().getInteger();
     final FakeBuilder<ScheduledExecutorService> fakeBuilder = this.testFrameworkRule
         .fakeBuilder(ScheduledExecutorService.class);
-    final CapturingMethodInvocationHandler capturingHandler = new CapturingMethodInvocationHandler(1);
+    final ArgumentCaptor capturingHandler = new ArgumentCaptor(1);
     fakeBuilder.forMethod("scheduleAtFixedRate", new Class<?>[] { Runnable.class, long.class, long.class,
-        TimeUnit.class }).addHandler(capturingHandler);
+        TimeUnit.class }).setHandler(capturingHandler);
     final ScheduledExecutorService scheduledExecutorService = fakeBuilder.build();
     final ScheduleService subjectToTest = this.givenASubjectToTest(scheduledExecutorService);
 
@@ -124,8 +147,8 @@ public abstract class ScheduleServiceContractTests {
   public final void stop_called_shutsDownExecutor() {
     final FakeBuilder<ScheduledExecutorService> fakeBuilder = this.testFrameworkRule
         .fakeBuilder(ScheduledExecutorService.class);
-    final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
-    fakeBuilder.forMethod("shutdown").addHandler(countingHandler);
+    final InvocationCounter countingHandler = new InvocationCounter();
+    fakeBuilder.forMethod("shutdown").setHandler(countingHandler);
     final ScheduledExecutorService scheduledExecutorService = fakeBuilder.build();
     final ScheduleService subjectToTest = this.givenASubjectToTest(scheduledExecutorService);
 

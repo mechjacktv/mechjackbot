@@ -11,20 +11,20 @@ import tv.mechjack.mechjackbot.api.ChatMessageEventHandler;
 import tv.mechjack.mechjackbot.api.TestCommandModule;
 import tv.mechjack.platform.configuration.TestConfigurationModule;
 import tv.mechjack.platform.utils.TestUtilsModule;
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
 import tv.mechjack.testframework.fake.FakeBuilder;
-import tv.mechjack.testframework.fake.methodhandler.CountingMethodInvocationHandler;
+import tv.mechjack.testframework.fake.InvocationCounter;
 
 public class KiclChatBotListenerUnitTests {
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   private void installModules() {
-    this.testFrameworkRule.installModule(new TestCommandModule());
-    this.testFrameworkRule.installModule(new TestConfigurationModule());
-    this.testFrameworkRule.installModule(new TestKiclChatBotModule());
-    this.testFrameworkRule.installModule(new TestUtilsModule());
+    this.testFrameworkRule.registerModule(new TestCommandModule());
+    this.testFrameworkRule.registerModule(new TestConfigurationModule());
+    this.testFrameworkRule.registerModule(new TestKiclChatBotModule());
+    this.testFrameworkRule.registerModule(new TestUtilsModule());
   }
 
   private KiclChatBotListener givenASubjectToTest(final ChatMessageEventHandler chatMessageEventHandler) {
@@ -37,9 +37,9 @@ public class KiclChatBotListenerUnitTests {
     this.installModules();
     final FakeBuilder<ChatMessageEventHandler> fakeBuilder = this.testFrameworkRule
         .fakeBuilder(ChatMessageEventHandler.class);
-    final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
+    final InvocationCounter countingHandler = new InvocationCounter();
     fakeBuilder.forMethod("handleMessageEvent", new Class[] { ChatMessageEvent.class })
-        .addHandler(countingHandler);
+        .setHandler(countingHandler);
     final ChatMessageEventHandler chatMessageEventHandler = fakeBuilder.build();
     final KiclChatBotListener subjectUnderTest = this.givenASubjectToTest(chatMessageEventHandler);
 

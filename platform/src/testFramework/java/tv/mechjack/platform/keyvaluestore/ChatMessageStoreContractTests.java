@@ -2,7 +2,7 @@ package tv.mechjack.platform.keyvaluestore;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static tv.mechjack.testframework.TestFrameworkRule.ARBITRARY_COLLECTION_SIZE;
+import static tv.mechjack.testframework.ArbitraryData.ARBITRARY_COLLECTION_SIZE;
 
 import java.util.Collection;
 import java.util.Map;
@@ -16,16 +16,17 @@ import com.google.protobuf.Message;
 import org.junit.Rule;
 import org.junit.Test;
 
+import tv.mechjack.platform.utils.ExecutionUtils;
 import tv.mechjack.platform.utils.TestUtilsModule;
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
 
 public abstract class ChatMessageStoreContractTests<K extends Message, V extends Message> {
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   protected void installModules() {
-    this.testFrameworkRule.installModule(new TestUtilsModule());
+    this.testFrameworkRule.registerModule(new TestUtilsModule());
   }
 
   protected abstract BaseMessageStore<K, V> givenASubjectToTest();
@@ -50,9 +51,12 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
     this.installModules();
     final BaseMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.containsKey(null));
+    final Throwable thrown = catchThrowable(
+        () -> subjectUnderTest.containsKey(null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "key");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("key"));
   }
 
   @Test
@@ -71,7 +75,8 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
     final Map<K, V> data = Maps.newHashMap();
     final K key = this.givenAKey();
     data.put(key, this.givenAValue());
-    final BaseMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
+    final BaseMessageStore<K, V> subjectUnderTest = this
+        .givenASubjectToTest(data);
 
     final boolean result = subjectUnderTest.containsKey(key);
 
@@ -84,7 +89,8 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
     final Map<K, V> data = Maps.newHashMap();
     final K key = this.givenAKey();
     data.put(key, this.givenAValue());
-    final BaseMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
+    final BaseMessageStore<K, V> subjectUnderTest = this
+        .givenASubjectToTest(data);
 
     final boolean result = subjectUnderTest.containsKey(this.givenAKey());
 
@@ -123,7 +129,9 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.get(null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "key");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("key"));
   }
 
   @Test
@@ -144,7 +152,8 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
     final K key = this.givenAKey();
     final V value = this.givenAValue();
     data.put(key, value);
-    final BaseMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
+    final BaseMessageStore<K, V> subjectUnderTest = this
+        .givenASubjectToTest(data);
 
     final Optional<V> result = subjectUnderTest.get(key);
 
@@ -158,7 +167,8 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
     final K key = this.givenAKey();
     final V value = this.givenAValue();
     data.put(key, value);
-    final BaseMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
+    final BaseMessageStore<K, V> subjectUnderTest = this
+        .givenASubjectToTest(data);
 
     final Optional<V> result = subjectUnderTest.get(this.givenAKey());
 
@@ -170,9 +180,12 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
     this.installModules();
     final BaseMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.put(null, this.givenAValue()));
+    final Throwable thrown = catchThrowable(
+        () -> subjectUnderTest.put(null, this.givenAValue()));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "key");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("key"));
   }
 
   @Test
@@ -180,9 +193,12 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
     this.installModules();
     final BaseMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.put(this.givenAKey(), null));
+    final Throwable thrown = catchThrowable(
+        () -> subjectUnderTest.put(this.givenAKey(), null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "value");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("value"));
   }
 
   @Test
@@ -205,7 +221,8 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
     final K key = this.givenAKey();
     final V value = this.givenAValue();
     data.put(key, this.givenAValue());
-    final BaseMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
+    final BaseMessageStore<K, V> subjectUnderTest = this
+        .givenASubjectToTest(data);
 
     subjectUnderTest.put(key, value);
     final Optional<V> result = subjectUnderTest.get(key);
@@ -218,9 +235,12 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
     this.installModules();
     final BaseMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.remove(null));
+    final Throwable thrown = catchThrowable(
+        () -> subjectUnderTest.remove(null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "key");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("key"));
   }
 
   @Test
@@ -228,7 +248,8 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
     this.installModules();
     final BaseMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.remove(this.givenAKey()));
+    final Throwable thrown = catchThrowable(
+        () -> subjectUnderTest.remove(this.givenAKey()));
 
     assertThat(thrown).isNull();
   }
@@ -240,7 +261,8 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
     final K key = this.givenAKey();
     final V value = this.givenAValue();
     data.put(key, value);
-    final BaseMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
+    final BaseMessageStore<K, V> subjectUnderTest = this
+        .givenASubjectToTest(data);
 
     subjectUnderTest.remove(key);
     final Optional<V> result = subjectUnderTest.get(key);
@@ -256,7 +278,8 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
     for (final K key : keys) {
       data.put(key, this.givenAValue());
     }
-    final BaseMessageStore<K, V> subjectUnderTest = this.givenASubjectToTest(data);
+    final BaseMessageStore<K, V> subjectUnderTest = this
+        .givenASubjectToTest(data);
 
     subjectUnderTest.remove(this.givenAKey());
     final Collection<K> result = subjectUnderTest.getKeys();

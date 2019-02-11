@@ -7,12 +7,12 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import tv.mechjack.platform.utils.function.SupplierWithException;
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
 
 public abstract class ExecutionUtilsContractTests {
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   abstract ExecutionUtils givenASubjectToTest();
 
@@ -29,7 +29,7 @@ public abstract class ExecutionUtilsContractTests {
 
   @Test
   public final void softenException_withRunnableThrowsException_throwsWrappingException() {
-    final String exceptionMessage = this.testFrameworkRule.getArbitraryString();
+    final String exceptionMessage = this.testFrameworkRule.arbitraryData().getString();
     final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.softenException(
@@ -42,7 +42,7 @@ public abstract class ExecutionUtilsContractTests {
 
   @Test
   public final void softenException_withRunnableThrowsExceptionNonWrappingException_throwsSoftenedException() {
-    final String exceptionMessage = this.testFrameworkRule.getArbitraryString();
+    final String exceptionMessage = this.testFrameworkRule.arbitraryData().getString();
     final ExecutionUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.softenException(
@@ -84,7 +84,7 @@ public abstract class ExecutionUtilsContractTests {
   }
 
   private SupplierWithException<Object> supplierThrowsException() throws Exception {
-    throw new Exception(this.testFrameworkRule.getArbitraryString());
+    throw new Exception(this.testFrameworkRule.arbitraryData().getString());
   }
 
   private static final class WrappingException extends RuntimeException {

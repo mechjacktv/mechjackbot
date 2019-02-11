@@ -6,7 +6,7 @@ import tv.mechjack.mechjackbot.api.ChatBotConfiguration;
 import tv.mechjack.mechjackbot.api.ChatChannel;
 import tv.mechjack.mechjackbot.api.UserPassword;
 import tv.mechjack.platform.application.ApplicationDataLocation;
-import tv.mechjack.testframework.ArbitraryDataGenerator;
+import tv.mechjack.testframework.ArbitraryData;
 import tv.mechjack.twitchclient.TwitchLogin;
 
 public class TestChatBotConfiguration implements ChatBotConfiguration {
@@ -17,7 +17,7 @@ public class TestChatBotConfiguration implements ChatBotConfiguration {
   private final TwitchLogin twitchLogin;
 
   @Inject
-  public TestChatBotConfiguration(final ArbitraryDataGenerator arbitraryDataGenerator) {
+  public TestChatBotConfiguration(final ArbitraryData arbitraryDataGenerator) {
     this.applicationDataLocation = ApplicationDataLocation.of(arbitraryDataGenerator.getString());
     this.chatChannel = ChatChannel.of(arbitraryDataGenerator.getString());
     this.userPassword = UserPassword.of(arbitraryDataGenerator.getString());

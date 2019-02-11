@@ -14,11 +14,11 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import tv.mechjack.platform.utils.function.ConsumerWithException;
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
+import tv.mechjack.testframework.fake.ArgumentCaptor;
 import tv.mechjack.testframework.fake.FakeBuilder;
 import tv.mechjack.testframework.fake.FakeFactory;
-import tv.mechjack.testframework.fake.methodhandler.CapturingMethodInvocationHandler;
-import tv.mechjack.testframework.fake.methodhandler.CountingMethodInvocationHandler;
+import tv.mechjack.testframework.fake.InvocationCounter;
 import tv.mechjack.twitchclient.ProtoMessage.UserFollow;
 import tv.mechjack.twitchclient.ProtoMessage.UserFollows;
 import tv.mechjack.twitchclient.messageadapter.UserFollowMessageTypeAdapter;
@@ -26,7 +26,7 @@ import tv.mechjack.twitchclient.messageadapter.UserFollowMessageTypeAdapter;
 public abstract class TwitchUsersFollowsEndpointContractTests {
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   private static final String CURSOR = "CURSOR_CURSOR_CURSOR_CURSOR";
   private static final String FOLLOWED_AT = "2018-10-30T21:47:09Z";
@@ -77,7 +77,7 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
   public final void getUserFollowsFromId_forFromId_returnsListOfUsersFollowed() {
     final FakeBuilder<TwitchClientUtils> fakeBuilder = this.testFrameworkRule.fakeBuilder(TwitchClientUtils.class);
     fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
-        .addHandler(invocation -> {
+        .setHandler(invocation -> {
           final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
 
           consumer.accept(new StringReader(RESPONSE_BODY));
@@ -104,14 +104,14 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
   @Test
   public final void getUserFollowsFromId_forFromId_requestsFollowsForId() {
     final FakeBuilder<TwitchClientUtils> fakeBuilder = this.testFrameworkRule.fakeBuilder(TwitchClientUtils.class);
-    final CapturingMethodInvocationHandler capturingHandler = new CapturingMethodInvocationHandler(0, invocation -> {
+    final ArgumentCaptor capturingHandler = new ArgumentCaptor(0, invocation -> {
       final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
 
       consumer.accept(new StringReader(RESPONSE_BODY));
       return null;
     });
     fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
-        .addHandler(capturingHandler);
+        .setHandler(capturingHandler);
     final TwitchClientUtils twitchClientUtils = fakeBuilder.build();
     final TwitchUsersFollowsEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(), twitchClientUtils);
 
@@ -124,14 +124,14 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
   @Test
   public final void getUserFollowsFromId_forFromIdAndCursor_requestsFollowsForIdAndCursor() {
     final FakeBuilder<TwitchClientUtils> fakeBuilder = this.testFrameworkRule.fakeBuilder(TwitchClientUtils.class);
-    final CapturingMethodInvocationHandler capturingHandler = new CapturingMethodInvocationHandler(0, invocation -> {
+    final ArgumentCaptor capturingHandler = new ArgumentCaptor(0, invocation -> {
       final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
 
       consumer.accept(new StringReader(RESPONSE_BODY));
       return null;
     });
     fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
-        .addHandler(capturingHandler);
+        .setHandler(capturingHandler);
     final TwitchClientUtils twitchClientUtils = fakeBuilder.build();
     final TwitchUsersFollowsEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(), twitchClientUtils);
 
@@ -148,10 +148,10 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
   public final void getUsers_invalidObjectNames_handlesInvalidObjectName() {
     final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
     final FakeBuilder<TwitchClientUtils> fakeBuilder = fakeFactory.builder(TwitchClientUtils.class);
-    final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
-    fakeBuilder.forMethod("handleUnknownObjectName", new Class[] { String.class }).addHandler(countingHandler);
+    final InvocationCounter countingHandler = new InvocationCounter();
+    fakeBuilder.forMethod("handleUnknownObjectName", new Class[] { String.class }).setHandler(countingHandler);
     fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
-        .addHandler(invocation -> {
+        .setHandler(invocation -> {
           final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
 
           consumer.accept(new StringReader(RESPONSE_BODY));

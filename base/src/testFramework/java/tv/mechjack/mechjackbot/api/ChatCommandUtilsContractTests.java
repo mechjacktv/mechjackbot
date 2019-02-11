@@ -18,19 +18,20 @@ import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
 import tv.mechjack.platform.configuration.ConfigurationKey;
 import tv.mechjack.platform.configuration.MapConfiguration;
 import tv.mechjack.platform.configuration.TestConfigurationModule;
+import tv.mechjack.platform.utils.ExecutionUtils;
 import tv.mechjack.platform.utils.TestUtilsModule;
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
 
 public abstract class ChatCommandUtilsContractTests {
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   protected void installModules() {
-    this.testFrameworkRule.installModule(new TestChatBotModule());
-    this.testFrameworkRule.installModule(new TestCommandModule());
-    this.testFrameworkRule.installModule(new TestConfigurationModule());
-    this.testFrameworkRule.installModule(new TestUtilsModule());
+    this.testFrameworkRule.registerModule(new TestChatBotModule());
+    this.testFrameworkRule.registerModule(new TestCommandModule());
+    this.testFrameworkRule.registerModule(new TestConfigurationModule());
+    this.testFrameworkRule.registerModule(new TestUtilsModule());
   }
 
   protected abstract ChatCommandUtils givenASubjectToTest();
@@ -67,7 +68,9 @@ public abstract class ChatCommandUtilsContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.hasAccessLevel(null, chatMessageEvent));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "chatCommand");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("chatCommand"));
   }
 
   @Test
@@ -78,7 +81,9 @@ public abstract class ChatCommandUtilsContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.hasAccessLevel(chatCommand, null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "chatMessageEvent");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("chatMessageEvent"));
   }
 
   @Test
@@ -149,7 +154,9 @@ public abstract class ChatCommandUtilsContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.isCooledDown(null, chatMessageEvent));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "chatCommand");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("chatCommand"));
   }
 
   @Test
@@ -160,7 +167,9 @@ public abstract class ChatCommandUtilsContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.isCooledDown(chatCommand, null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "chatMessageEvent");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("chatMessageEvent"));
   }
 
   @Test
@@ -184,7 +193,7 @@ public abstract class ChatCommandUtilsContractTests {
     // set lastTrigger for chatCommand
     subjectUnderTest.isCooledDown(chatCommand, this.testFrameworkRule.getInstance(ChatMessageEvent.class));
     // advance time to the chatCommand cool down duration
-    this.testFrameworkRule.currentTimeDelta(this.getCommandCoolDownDefault(), TimeUnit.SECONDS);
+    this.testFrameworkRule.testClock().updateTime(this.getCommandCoolDownDefault(), TimeUnit.SECONDS);
 
     final boolean result = subjectUnderTest.isCooledDown(chatCommand, chatMessageEvent);
 
@@ -201,7 +210,7 @@ public abstract class ChatCommandUtilsContractTests {
     subjectUnderTest.isCooledDown(chatCommand, this.testFrameworkRule.getInstance(ChatMessageEvent.class));
     // advance time to one millisecond longer than the chatCommand cool down
     // duration
-    this.testFrameworkRule.currentTimeDelta(this.getCommandCoolDownDefault(), TimeUnit.SECONDS, 1);
+    this.testFrameworkRule.testClock().updateTime(this.getCommandCoolDownDefault(), TimeUnit.SECONDS, 1);
 
     final boolean result = subjectUnderTest.isCooledDown(chatCommand, chatMessageEvent);
 
@@ -217,7 +226,7 @@ public abstract class ChatCommandUtilsContractTests {
     // set lastTrigger for user
     subjectUnderTest.isCooledDown(this.testFrameworkRule.getInstance(TestChatCommand.class), chatMessageEvent);
     // advance time to the user cool down duration
-    this.testFrameworkRule.currentTimeDelta(this.getUserCoolDownDefault(), TimeUnit.SECONDS);
+    this.testFrameworkRule.testClock().updateTime(this.getUserCoolDownDefault(), TimeUnit.SECONDS);
 
     final boolean result = subjectUnderTest.isCooledDown(chatCommand, chatMessageEvent);
 
@@ -233,7 +242,7 @@ public abstract class ChatCommandUtilsContractTests {
     // set lastTrigger for user
     subjectUnderTest.isCooledDown(this.testFrameworkRule.getInstance(TestChatCommand.class), chatMessageEvent);
     // advance time to one millisecond longer than the user cool down duration
-    this.testFrameworkRule.currentTimeDelta(this.getUserCoolDownDefault(), TimeUnit.SECONDS, 1);
+    this.testFrameworkRule.testClock().updateTime(this.getUserCoolDownDefault(), TimeUnit.SECONDS, 1);
 
     final boolean result = subjectUnderTest.isCooledDown(chatCommand, chatMessageEvent);
 
@@ -249,7 +258,7 @@ public abstract class ChatCommandUtilsContractTests {
     // set lastTrigger for chatCommand and user
     subjectUnderTest.isCooledDown(chatCommand, chatMessageEvent);
     // advance time to the shorter cool down duration
-    this.testFrameworkRule.currentTimeDelta(Math.min(this.getCommandCoolDownDefault(),
+    this.testFrameworkRule.testClock().updateTime(Math.min(this.getCommandCoolDownDefault(),
         this.getUserCoolDownDefault()), TimeUnit.SECONDS);
 
     final boolean result = subjectUnderTest.isCooledDown(chatCommand, chatMessageEvent);
@@ -266,7 +275,7 @@ public abstract class ChatCommandUtilsContractTests {
     // set lastTrigger for chatCommand and user
     subjectUnderTest.isCooledDown(chatCommand, chatMessageEvent);
     // advance time to one millisecond longer than the longer cool down duration
-    this.testFrameworkRule.currentTimeDelta(Math.max(this.getCommandCoolDownDefault(),
+    this.testFrameworkRule.testClock().updateTime(Math.max(this.getCommandCoolDownDefault(),
         this.getUserCoolDownDefault()), TimeUnit.SECONDS, 1);
 
     final boolean result = subjectUnderTest.isCooledDown(chatCommand, chatMessageEvent);
@@ -284,7 +293,7 @@ public abstract class ChatCommandUtilsContractTests {
     // set lastTrigger for chatCommand and user
     subjectUnderTest.isCooledDown(chatCommand, chatMessageEvent);
     // advance time to the shorter cool down duration
-    this.testFrameworkRule.currentTimeDelta(Math.min(this.getCommandCoolDownDefault(),
+    this.testFrameworkRule.testClock().updateTime(Math.min(this.getCommandCoolDownDefault(),
         this.getUserCoolDownDefault()), TimeUnit.SECONDS);
 
     final boolean result = subjectUnderTest.isCooledDown(chatCommand, chatMessageEvent);
@@ -304,7 +313,7 @@ public abstract class ChatCommandUtilsContractTests {
     // set lastTrigger for chatCommand and user
     subjectUnderTest.isCooledDown(chatCommand, chatMessageEvent);
     // advance time to the shorter cool down duration
-    this.testFrameworkRule.currentTimeDelta(Math.min(this.getCommandCoolDownDefault(),
+    this.testFrameworkRule.testClock().updateTime(Math.min(this.getCommandCoolDownDefault(),
         this.getUserCoolDownDefault()), TimeUnit.SECONDS);
 
     final boolean result = subjectUnderTest.isCooledDown(chatCommand, chatMessageEvent);
@@ -324,7 +333,7 @@ public abstract class ChatCommandUtilsContractTests {
     // set lastTrigger for chatCommand
     subjectUnderTest.isCooledDown(chatCommand, this.testFrameworkRule.getInstance(ChatMessageEvent.class));
     // advance time to the custom chatCommand cool down duration
-    this.testFrameworkRule.currentTimeDelta(customCommandCoolDown, TimeUnit.SECONDS);
+    this.testFrameworkRule.testClock().updateTime(customCommandCoolDown, TimeUnit.SECONDS);
 
     final boolean result = subjectUnderTest.isCooledDown(chatCommand, chatMessageEvent);
 
@@ -343,7 +352,7 @@ public abstract class ChatCommandUtilsContractTests {
     // set lastTrigger for chatCommand
     subjectUnderTest.isCooledDown(chatCommand, this.testFrameworkRule.getInstance(ChatMessageEvent.class));
     // advance time to one millisecond past custom chatCommand cool down duration
-    this.testFrameworkRule.currentTimeDelta(customCommandCoolDown, TimeUnit.SECONDS, 1);
+    this.testFrameworkRule.testClock().updateTime(customCommandCoolDown, TimeUnit.SECONDS, 1);
 
     final boolean result = subjectUnderTest.isCooledDown(chatCommand, chatMessageEvent);
 
@@ -362,7 +371,7 @@ public abstract class ChatCommandUtilsContractTests {
     // set lastTrigger for user
     subjectUnderTest.isCooledDown(this.testFrameworkRule.getInstance(TestChatCommand.class), chatMessageEvent);
     // advance time to the custom user cool down duration
-    this.testFrameworkRule.currentTimeDelta(customUserCoolDown, TimeUnit.SECONDS);
+    this.testFrameworkRule.testClock().updateTime(customUserCoolDown, TimeUnit.SECONDS);
 
     final boolean result = subjectUnderTest.isCooledDown(chatCommand, chatMessageEvent);
 
@@ -382,7 +391,7 @@ public abstract class ChatCommandUtilsContractTests {
     subjectUnderTest.isCooledDown(this.testFrameworkRule.getInstance(TestChatCommand.class), chatMessageEvent);
     // advance time to one millisecond longer than the custom user cool down
     // duration
-    this.testFrameworkRule.currentTimeDelta(customUserCoolDown, TimeUnit.SECONDS, 1);
+    this.testFrameworkRule.testClock().updateTime(customUserCoolDown, TimeUnit.SECONDS, 1);
 
     final boolean result = subjectUnderTest.isCooledDown(chatCommand, chatMessageEvent);
 
@@ -395,9 +404,11 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.isTriggered(null, this.testFrameworkRule.fake(ChatMessageEvent.class)));
+        () -> subjectUnderTest.isTriggered(null, this.testFrameworkRule.fakeFactory().fake(ChatMessageEvent.class)));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "chatCommand");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("chatCommand"));
   }
 
   @Test
@@ -406,9 +417,11 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.isTriggered(this.testFrameworkRule.fake(ChatCommand.class), null));
+        () -> subjectUnderTest.isTriggered(this.testFrameworkRule.fakeFactory().fake(ChatCommand.class), null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "chatMessageEvent");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("chatMessageEvent"));
   }
 
   @Test
@@ -455,9 +468,12 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.createUsageMessage(null, this.testFrameworkRule.fake(ChatMessageEvent.class)));
+        () -> subjectUnderTest.createUsageMessage(null,
+            this.testFrameworkRule.fakeFactory().fake(ChatMessageEvent.class)));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "chatCommand");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("chatCommand"));
   }
 
   @Test
@@ -466,9 +482,11 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.createUsageMessage(this.testFrameworkRule.fake(ChatCommand.class), null));
+        () -> subjectUnderTest.createUsageMessage(this.testFrameworkRule.fakeFactory().fake(ChatCommand.class), null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "chatMessageEvent");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("chatMessageEvent"));
   }
 
   @Test
@@ -487,7 +505,7 @@ public abstract class ChatCommandUtilsContractTests {
   @Test
   public final void createUsageMessage_customUsageMessageFormatConfigured_resultIsCustomUsageMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + "$(user) $(trigger) %s";
+    final String customMessageFormat = this.testFrameworkRule.arbitraryData().getString() + "$(user) $(trigger) %s";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(this.getUsageMessageFormatKey(), customMessageFormat);
     final ChatCommand chatCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
@@ -505,10 +523,13 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.replaceChatMessageVariables(null, this.testFrameworkRule.fake(ChatMessageEvent.class),
-            ChatMessage.of(this.testFrameworkRule.getArbitraryString())));
+        () -> subjectUnderTest.replaceChatMessageVariables(null,
+            this.testFrameworkRule.fakeFactory().fake(ChatMessageEvent.class),
+            ChatMessage.of(this.testFrameworkRule.arbitraryData().getString())));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "chatCommand");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("chatCommand"));
   }
 
   @Test
@@ -517,10 +538,13 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.replaceChatMessageVariables(this.testFrameworkRule.fake(ChatCommand.class), null,
-            ChatMessage.of(this.testFrameworkRule.getArbitraryString())));
+        () -> subjectUnderTest.replaceChatMessageVariables(this.testFrameworkRule.fakeFactory().fake(ChatCommand.class),
+            null,
+            ChatMessage.of(this.testFrameworkRule.arbitraryData().getString())));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "chatMessageEvent");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("chatMessageEvent"));
   }
 
   @Test
@@ -529,11 +553,13 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.replaceChatMessageVariables(this.testFrameworkRule.fake(ChatCommand.class),
-            this.testFrameworkRule.fake(ChatMessageEvent.class),
+        () -> subjectUnderTest.replaceChatMessageVariables(this.testFrameworkRule.fakeFactory().fake(ChatCommand.class),
+            this.testFrameworkRule.fakeFactory().fake(ChatMessageEvent.class),
             null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "chatMessage");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("chatMessage"));
   }
 
   @Test
@@ -541,7 +567,7 @@ public abstract class ChatCommandUtilsContractTests {
     this.installModules();
     final ChatCommand chatCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
     final ChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
-    final ChatMessage chatMessage = ChatMessage.of(this.testFrameworkRule.getArbitraryString());
+    final ChatMessage chatMessage = ChatMessage.of(this.testFrameworkRule.arbitraryData().getString());
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final ChatMessage result = subjectUnderTest.replaceChatMessageVariables(chatCommand, messageEvent, chatMessage);
@@ -552,7 +578,7 @@ public abstract class ChatCommandUtilsContractTests {
   @Test
   public final void replaceChatMessageVariables_triggerVariablePresent_resultIsTriggerVariableReplaced() {
     this.installModules();
-    final String messageFormat = this.testFrameworkRule.getArbitraryString() + " %s";
+    final String messageFormat = this.testFrameworkRule.arbitraryData().getString() + " %s";
     final ChatCommand chatCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
     final ChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
@@ -566,7 +592,7 @@ public abstract class ChatCommandUtilsContractTests {
   @Test
   public final void replaceChatMessageVariables_userVariablePresent_resultIsUserVariableReplaced() {
     this.installModules();
-    final String messageFormat = this.testFrameworkRule.getArbitraryString() + " %s";
+    final String messageFormat = this.testFrameworkRule.arbitraryData().getString() + " %s";
     final ChatCommand chatCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
     final ChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
@@ -581,7 +607,7 @@ public abstract class ChatCommandUtilsContractTests {
   @Test
   public final void replaceChatMessageVariables_multipleVariablesPresent_resultIsAllVariablesReplaced() {
     this.installModules();
-    final String messageFormat = this.testFrameworkRule.getArbitraryString() + " %s %s";
+    final String messageFormat = this.testFrameworkRule.arbitraryData().getString() + " %s %s";
     final ChatCommand chatCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
     final ChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
@@ -599,9 +625,12 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.stripTriggerFromMessage(null, this.testFrameworkRule.fake(ChatMessageEvent.class)));
+        () -> subjectUnderTest.stripTriggerFromMessage(null,
+            this.testFrameworkRule.fakeFactory().fake(ChatMessageEvent.class)));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "chatCommand");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("chatCommand"));
   }
 
   @Test
@@ -610,15 +639,18 @@ public abstract class ChatCommandUtilsContractTests {
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.stripTriggerFromMessage(this.testFrameworkRule.fake(ChatCommand.class), null));
+        () -> subjectUnderTest.stripTriggerFromMessage(this.testFrameworkRule.fakeFactory().fake(ChatCommand.class),
+            null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "chatMessageEvent");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("chatMessageEvent"));
   }
 
   @Test
   public final void stripTriggerFromMessage_forCommandAndMessageEvent_stripsTriggerFromMessage() {
     this.installModules();
-    final String messageArgument = this.testFrameworkRule.getArbitraryString();
+    final String messageArgument = this.testFrameworkRule.arbitraryData().getString();
     final ChatCommand chatCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     final ChatCommandUtils subjectUnderTest = this.givenASubjectToTest();

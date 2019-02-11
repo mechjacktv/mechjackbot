@@ -9,7 +9,7 @@ import java.util.Map;
 import org.junit.Rule;
 import org.junit.Test;
 
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
 import tv.mechjack.twitchclient.TwitchLogin;
 
 public abstract class ChatBotConfigurationContractTests {
@@ -19,7 +19,7 @@ public abstract class ChatBotConfigurationContractTests {
   public static final String TWITCH_LOGIN_KEY = "TWITCH_LOGIN_KEY";
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   protected void installModules() {
     /* no-op (2019-01-06 mechjack) */
@@ -30,9 +30,9 @@ public abstract class ChatBotConfigurationContractTests {
   private Map<String, String> givenIHaveAPropertiesMap() {
     final Map<String, String> properties = new HashMap<>();
 
-    properties.put(TWITCH_CHANNEL_KEY, this.testFrameworkRule.getArbitraryString());
-    properties.put(TWITCH_PASSWORD_KEY, this.testFrameworkRule.getArbitraryString());
-    properties.put(TWITCH_LOGIN_KEY, this.testFrameworkRule.getArbitraryString());
+    properties.put(TWITCH_CHANNEL_KEY, this.testFrameworkRule.arbitraryData().getString());
+    properties.put(TWITCH_PASSWORD_KEY, this.testFrameworkRule.arbitraryData().getString());
+    properties.put(TWITCH_LOGIN_KEY, this.testFrameworkRule.arbitraryData().getString());
     return properties;
   }
 

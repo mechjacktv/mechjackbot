@@ -17,19 +17,19 @@ import tv.mechjack.platform.configuration.Configuration;
 import tv.mechjack.platform.configuration.TestConfigurationModule;
 import tv.mechjack.platform.utils.ExecutionUtils;
 import tv.mechjack.platform.utils.TestUtilsModule;
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
 
 public class KiclChatMessageEventUnitTests {
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   private void installModules() {
-    this.testFrameworkRule.installModule(new TestChatBotModule());
-    this.testFrameworkRule.installModule(new TestCommandModule());
-    this.testFrameworkRule.installModule(new TestConfigurationModule());
-    this.testFrameworkRule.installModule(new TestKiclChatBotModule());
-    this.testFrameworkRule.installModule(new TestUtilsModule());
+    this.testFrameworkRule.registerModule(new TestChatBotModule());
+    this.testFrameworkRule.registerModule(new TestCommandModule());
+    this.testFrameworkRule.registerModule(new TestConfigurationModule());
+    this.testFrameworkRule.registerModule(new TestKiclChatBotModule());
+    this.testFrameworkRule.registerModule(new TestUtilsModule());
   }
 
   private KiclChatMessageEvent givenASubjectToTest() {
@@ -109,7 +109,9 @@ public class KiclChatMessageEventUnitTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.sendResponse(null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "chatMessage");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("chatMessage"));
   }
 
   @Test
@@ -119,7 +121,7 @@ public class KiclChatMessageEventUnitTests {
         .getInstance(TestChannelMessageEvent.class);
     final KiclChatMessageEvent subjectUnderTest = this.givenASubjectToTest(channelMessageEvent);
 
-    final ChatMessage chatMessage = ChatMessage.of(this.testFrameworkRule.getArbitraryString());
+    final ChatMessage chatMessage = ChatMessage.of(this.testFrameworkRule.arbitraryData().getString());
     final String[] result = new String[1];
     channelMessageEvent.setSendReplyHandler(replyMessage -> result[0] = replyMessage);
     subjectUnderTest.sendResponse(chatMessage);

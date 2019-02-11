@@ -13,7 +13,7 @@ import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 
 import tv.mechjack.mechjackbot.api.ChatBot;
 import tv.mechjack.mechjackbot.chatbot.TestChatBotModule;
-import tv.mechjack.testframework.ArbitraryDataGenerator;
+import tv.mechjack.testframework.ArbitraryData;
 import tv.mechjack.testframework.fake.FakeBuilder;
 import tv.mechjack.testframework.fake.FakeFactory;
 
@@ -37,36 +37,36 @@ public class TestKiclChatBotModule extends TestChatBotModule {
 
   @Provides
   @Singleton
-  public final Channel createFakeChannel(final ArbitraryDataGenerator arbitraryDataGenerator,
+  public final Channel createFakeChannel(final ArbitraryData arbitraryDataGenerator,
       final FakeFactory fakeFactory, final Client client) {
     final FakeBuilder<Channel> fakeBuilder = fakeFactory.builder(Channel.class);
     final String channelName = arbitraryDataGenerator.getString();
-    fakeBuilder.forMethod("getClient").addHandler(invocation -> client);
-    fakeBuilder.forMethod("getName").addHandler(invocation -> channelName);
+    fakeBuilder.forMethod("getClient").setHandler(invocation -> client);
+    fakeBuilder.forMethod("getName").setHandler(invocation -> channelName);
 
     return fakeBuilder.build();
   }
 
   @Provides
-  public final User createFakeUser(final ArbitraryDataGenerator arbitraryDataGenerator,
+  public final User createFakeUser(final ArbitraryData arbitraryDataGenerator,
       final FakeFactory fakeFactory, final Client client) {
     final FakeBuilder<User> fakeBuilder = fakeFactory.builder(User.class);
     final String userNick = arbitraryDataGenerator.getString();
 
-    fakeBuilder.forMethod("getClient").addHandler(invocation -> client);
-    fakeBuilder.forMethod("getNick").addHandler(invocation -> userNick);
+    fakeBuilder.forMethod("getClient").setHandler(invocation -> client);
+    fakeBuilder.forMethod("getNick").setHandler(invocation -> userNick);
     return fakeBuilder.build();
   }
 
   @Provides
-  public final ChannelMessageEvent createChannelMessageEvent(final ArbitraryDataGenerator arbitraryDataGenerator,
+  public final ChannelMessageEvent createChannelMessageEvent(final ArbitraryData arbitraryDataGenerator,
       final Client client, final Channel channel, final User user) {
     return this.createTestChannelMessageEvent(arbitraryDataGenerator, client, channel, user);
   }
 
   @Provides
   public final TestChannelMessageEvent createTestChannelMessageEvent(
-      final ArbitraryDataGenerator arbitraryDataGenerator,
+      final ArbitraryData arbitraryDataGenerator,
       final Client client, final Channel channel, final User user) {
     return new TestChannelMessageEvent(client, new ArrayList<>(), user, channel,
         arbitraryDataGenerator.getString());

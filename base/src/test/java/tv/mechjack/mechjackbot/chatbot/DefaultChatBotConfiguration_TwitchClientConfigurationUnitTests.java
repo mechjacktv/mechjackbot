@@ -17,8 +17,8 @@ public class DefaultChatBotConfiguration_TwitchClientConfigurationUnitTests exte
 
   @Override
   protected void installModules() {
-    this.testFrameworkRule.installModule(new TestApplicationModule());
-    this.testFrameworkRule.installModule(new TestScheduleServiceModule());
+    this.testFrameworkRule.registerModule(new TestApplicationModule());
+    this.testFrameworkRule.registerModule(new TestScheduleServiceModule());
   }
 
   @Override
@@ -26,9 +26,9 @@ public class DefaultChatBotConfiguration_TwitchClientConfigurationUnitTests exte
     final Map<String, String> properties = new HashMap<>();
 
     clientId.ifPresent((value) -> properties.put(DefaultChatBotConfiguration.TWITCH_CLIENT_ID_KEY, value));
-    properties.put(DefaultChatBotConfiguration.TWITCH_CHANNEL_KEY, this.testFrameworkRule.getArbitraryString());
-    properties.put(DefaultChatBotConfiguration.TWITCH_PASSWORD_KEY, this.testFrameworkRule.getArbitraryString());
-    properties.put(DefaultChatBotConfiguration.TWITCH_LOGIN_KEY, this.testFrameworkRule.getArbitraryString());
+    properties.put(DefaultChatBotConfiguration.TWITCH_CHANNEL_KEY, this.testFrameworkRule.arbitraryData().getString());
+    properties.put(DefaultChatBotConfiguration.TWITCH_PASSWORD_KEY, this.testFrameworkRule.arbitraryData().getString());
+    properties.put(DefaultChatBotConfiguration.TWITCH_LOGIN_KEY, this.testFrameworkRule.arbitraryData().getString());
     return new DefaultChatBotConfiguration(this.testFrameworkRule.getInstance(Application.class),
         new MapHotUpdatePropertiesSource(properties), this.testFrameworkRule.getInstance(ScheduleService.class));
   }

@@ -8,12 +8,12 @@ import java.util.Optional;
 import org.junit.Rule;
 import org.junit.Test;
 
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
 
 public abstract class TwitchClientConfigurationContractTests {
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   protected void installModules() {
     /* no-op (2019-01-06 mechjack) */
@@ -33,7 +33,7 @@ public abstract class TwitchClientConfigurationContractTests {
   @Test
   public final void getTwitchClientId_isPresent_returnsTwitchClientId() {
     this.installModules();
-    final String clientId = this.testFrameworkRule.getArbitraryString();
+    final String clientId = this.testFrameworkRule.arbitraryData().getString();
     final TwitchClientConfiguration subjectUnderTest = this.givenASubjectToTest(Optional.of(clientId));
 
     final TwitchClientId result = subjectUnderTest.getTwitchClientId();

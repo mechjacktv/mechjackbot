@@ -15,8 +15,8 @@ public class DefaultChatBotConfiguration_ChatBotConfigurationUnitTests extends C
 
   @Override
   protected void installModules() {
-    this.testFrameworkRule.installModule(new TestApplicationModule());
-    this.testFrameworkRule.installModule(new TestScheduleServiceModule());
+    this.testFrameworkRule.registerModule(new TestApplicationModule());
+    this.testFrameworkRule.registerModule(new TestScheduleServiceModule());
   }
 
   @Override
@@ -31,7 +31,7 @@ public class DefaultChatBotConfiguration_ChatBotConfigurationUnitTests extends C
     final Map<String, String> realProperties = new HashMap<>();
 
     realProperties.put(DefaultChatBotConfiguration.TWITCH_CLIENT_ID_KEY,
-        this.testFrameworkRule.getArbitraryString());
+        this.testFrameworkRule.arbitraryData().getString());
     if (properties.containsKey(ChatBotConfigurationContractTests.TWITCH_CHANNEL_KEY)) {
       realProperties.put(DefaultChatBotConfiguration.TWITCH_CHANNEL_KEY,
           properties.get(ChatBotConfigurationContractTests.TWITCH_CHANNEL_KEY));

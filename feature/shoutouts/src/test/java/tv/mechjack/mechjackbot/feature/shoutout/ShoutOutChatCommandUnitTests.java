@@ -68,7 +68,7 @@ public class ShoutOutChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_noMessageFormatConfiguredWithTriggerableCommand_resultIsDefaultMessage() {
     this.installModules();
-    final TwitchLogin twitchLogin = TwitchLogin.of(this.testFrameworkRule.getArbitraryString());
+    final TwitchLogin twitchLogin = TwitchLogin.of(this.testFrameworkRule.arbitraryData().getString());
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     final ShoutOutChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), twitchLogin)));
@@ -88,10 +88,10 @@ public class ShoutOutChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_customMessageFormatConfiguredWithTriggerableCommand_resultIsCustomMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + " $(user) %s";
+    final String customMessageFormat = this.testFrameworkRule.arbitraryData().getString() + " $(user) %s";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
-    final TwitchLogin twitchLogin = TwitchLogin.of(this.testFrameworkRule.getArbitraryString());
+    final TwitchLogin twitchLogin = TwitchLogin.of(this.testFrameworkRule.arbitraryData().getString());
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     final ShoutOutChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), twitchLogin)));

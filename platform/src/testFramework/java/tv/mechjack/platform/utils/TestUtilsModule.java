@@ -4,8 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Scopes;
 
-import tv.mechjack.testframework.ArbitraryDataGenerator;
-import tv.mechjack.testframework.NullMessageForNameFactory;
+import tv.mechjack.testframework.ArbitraryData;
 import tv.mechjack.util.ProtoMessage.TestKeyMessage;
 import tv.mechjack.util.ProtoMessage.TestValueMessage;
 
@@ -14,7 +13,6 @@ public class TestUtilsModule extends AbstractModule {
   @Override
   protected void configure() {
     this.bind(ExecutionUtils.class).to(DefaultExecutionUtils.class).in(Scopes.SINGLETON);
-    this.bind(NullMessageForNameFactory.class).to(ExecutionUtilsNullMessageForNameFactory.class).in(Scopes.SINGLETON);
     this.bind(ProtobufUtils.class).to(DefaultProtobufUtils.class).in(Scopes.SINGLETON);
     this.bind(TestRandomUtils.class).in(Scopes.SINGLETON);
     this.bind(RandomUtils.class).to(TestRandomUtils.class);
@@ -23,12 +21,12 @@ public class TestUtilsModule extends AbstractModule {
   }
 
   @Provides
-  public final TestKeyMessage getTestKeyMessage(final ArbitraryDataGenerator arbitraryDataGenerator) {
+  public final TestKeyMessage getTestKeyMessage(final ArbitraryData arbitraryDataGenerator) {
     return TestKeyMessage.newBuilder().setValue(arbitraryDataGenerator.getString()).build();
   }
 
   @Provides
-  public final TestValueMessage getTestValueMessage(final ArbitraryDataGenerator arbitraryDataGenerator) {
+  public final TestValueMessage getTestValueMessage(final ArbitraryData arbitraryDataGenerator) {
     return TestValueMessage.newBuilder().setValue(arbitraryDataGenerator.getString()).build();
   }
 

@@ -91,7 +91,7 @@ public class CommandsChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + ": %s";
+    final String customMessageFormat = this.testFrameworkRule.arbitraryData().getString() + ": %s";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
     final Set<ChatCommand> chatCommands = this.givenASetOfCommands();

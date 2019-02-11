@@ -1,5 +1,6 @@
 package tv.mechjack.platform.configuration;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 import java.util.HashMap;
@@ -34,9 +35,11 @@ public class MapConfigurationUnitTests extends ConfigurationContractTests {
     final MapConfiguration subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.set((String) null,
-        this.testFrameworkRule.getArbitraryString()));
+        this.testFrameworkRule.arbitraryData().getString()));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "key");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("key"));
   }
 
   @Test
@@ -45,16 +48,18 @@ public class MapConfigurationUnitTests extends ConfigurationContractTests {
     final MapConfiguration subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.set(this.testFrameworkRule.getArbitraryString(), null));
+        () -> subjectUnderTest.set(this.testFrameworkRule.arbitraryData().getString(), null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "value");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("value"));
   }
 
   @Test
   public final void set_withKeyValuePair_storesValue() {
     this.installModules();
-    final String key = this.testFrameworkRule.getArbitraryString();
-    final String value = this.testFrameworkRule.getArbitraryString();
+    final String key = this.testFrameworkRule.arbitraryData().getString();
+    final String value = this.testFrameworkRule.arbitraryData().getString();
     final MapConfiguration subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.set(key, value);

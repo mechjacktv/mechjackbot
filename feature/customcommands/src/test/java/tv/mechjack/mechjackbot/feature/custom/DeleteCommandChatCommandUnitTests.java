@@ -62,9 +62,9 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
   @Override
   protected void installModules() {
     super.installModules();
-    this.testFrameworkRule.installModule(new TestConfigurationModule());
-    this.testFrameworkRule.installModule(new TestCustomCommandModule());
-    this.testFrameworkRule.installModule(new TestKeyValueStoreModule());
+    this.testFrameworkRule.registerModule(new TestConfigurationModule());
+    this.testFrameworkRule.registerModule(new TestCustomCommandModule());
+    this.testFrameworkRule.registerModule(new TestKeyValueStoreModule());
   }
 
   @Override
@@ -78,7 +78,7 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
   @Test
   public final void handleMessageEvent_notExistingCustomCommandWithDefaultMessage_resultIsSendsDefaultNotCustomCommandMessage() {
     this.installModules();
-    final String trigger = this.testFrameworkRule.getArbitraryString();
+    final String trigger = this.testFrameworkRule.arbitraryData().getString();
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     final DeleteCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), trigger)));
@@ -94,10 +94,10 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
   @Test
   public final void handleMessageEvent_notExistingCustomCommandWithCustomMessage_resultIsSendsCustomNotCustomCommandMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + "%s";
+    final String customMessageFormat = this.testFrameworkRule.arbitraryData().getString() + "%s";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(DeleteCommandChatCommand.KEY_NOT_CUSTOM_COMMAND_MESSAGE_FORMAT, customMessageFormat);
-    final String trigger = this.testFrameworkRule.getArbitraryString();
+    final String trigger = this.testFrameworkRule.arbitraryData().getString();
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     final DeleteCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), trigger)));
@@ -113,11 +113,11 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
   @Test
   public final void handleMessageEvent_existingCustomCommandWithDefaultMessage_resultIsDefaultMessage() {
     this.installModules();
-    final String trigger = this.testFrameworkRule.getArbitraryString();
+    final String trigger = this.testFrameworkRule.arbitraryData().getString();
     final CustomChatCommandService service = this.testFrameworkRule.getInstance(CustomChatCommandService.class);
     service.createCustomChatCommand(ChatCommandTrigger.of(trigger),
-        CommandBody.of(this.testFrameworkRule.getArbitraryString()),
-        ChatCommandDescription.of(this.testFrameworkRule.getArbitraryString()), UserRole.VIEWER);
+        CommandBody.of(this.testFrameworkRule.arbitraryData().getString()),
+        ChatCommandDescription.of(this.testFrameworkRule.arbitraryData().getString()), UserRole.VIEWER);
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     final DeleteCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), trigger)));
@@ -137,14 +137,14 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
   @Test
   public final void handleMessageEvent_existingCustomCommandWithCustomMessage_resultIsCustomMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + " %s";
+    final String customMessageFormat = this.testFrameworkRule.arbitraryData().getString() + " %s";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
-    final String trigger = this.testFrameworkRule.getArbitraryString();
+    final String trigger = this.testFrameworkRule.arbitraryData().getString();
     final CustomChatCommandService service = this.testFrameworkRule.getInstance(CustomChatCommandService.class);
     service.createCustomChatCommand(ChatCommandTrigger.of(trigger),
-        CommandBody.of(this.testFrameworkRule.getArbitraryString()),
-        ChatCommandDescription.of(this.testFrameworkRule.getArbitraryString()), UserRole.VIEWER);
+        CommandBody.of(this.testFrameworkRule.arbitraryData().getString()),
+        ChatCommandDescription.of(this.testFrameworkRule.arbitraryData().getString()), UserRole.VIEWER);
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     final DeleteCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), trigger)));

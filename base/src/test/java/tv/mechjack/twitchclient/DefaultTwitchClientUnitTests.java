@@ -7,7 +7,7 @@ public class DefaultTwitchClientUnitTests extends TwitchClientContractTests {
   @Override
   protected void installModules() {
     super.installModules();
-    this.testFrameworkRule.installModule(new TestUtilsModule());
+    this.testFrameworkRule.registerModule(new TestUtilsModule());
   }
 
   @Override

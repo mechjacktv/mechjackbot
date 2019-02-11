@@ -8,17 +8,17 @@ import org.junit.Test;
 
 import tv.mechjack.platform.configuration.TestConfigurationModule;
 import tv.mechjack.platform.utils.TestUtilsModule;
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
 
 public abstract class ChatCommandContractTests {
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   protected void installModules() {
-    this.testFrameworkRule.installModule(new TestConfigurationModule());
-    this.testFrameworkRule.installModule(new TestCommandModule());
-    this.testFrameworkRule.installModule(new TestUtilsModule());
+    this.testFrameworkRule.registerModule(new TestConfigurationModule());
+    this.testFrameworkRule.registerModule(new TestCommandModule());
+    this.testFrameworkRule.registerModule(new TestUtilsModule());
   }
 
   protected abstract ChatCommand givenASubjectToTest();
@@ -70,7 +70,7 @@ public abstract class ChatCommandContractTests {
     assumeTrue(subjectUnderTest.isTriggerable());
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(),
-        this.testFrameworkRule.getArbitraryString())));
+        this.testFrameworkRule.arbitraryData().getString())));
 
     final boolean result = subjectUnderTest.isTriggered(messageEvent);
 

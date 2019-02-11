@@ -4,7 +4,7 @@ import java.util.function.Function;
 
 import javax.inject.Inject;
 
-import tv.mechjack.testframework.ArbitraryDataGenerator;
+import tv.mechjack.testframework.ArbitraryData;
 import tv.mechjack.twitchclient.TwitchLogin;
 
 public class TestChatUser implements ChatUser {
@@ -13,7 +13,7 @@ public class TestChatUser implements ChatUser {
   private Function<UserRole, Boolean> hasAccessLevelHandler;
 
   @Inject
-  public TestChatUser(final ArbitraryDataGenerator arbitraryDataGenerator) {
+  public TestChatUser(final ArbitraryData arbitraryDataGenerator) {
     this.twitchLogin = TwitchLogin.of(arbitraryDataGenerator.getString());
     this.hasAccessLevelHandler = UserRole.VIEWER::equals;
   }
