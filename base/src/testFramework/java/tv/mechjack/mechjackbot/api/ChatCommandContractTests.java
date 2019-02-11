@@ -13,12 +13,12 @@ import tv.mechjack.testframework.TestFramework;
 public abstract class ChatCommandContractTests {
 
   @Rule
-  public final TestFramework testFrameworkRule = new TestFramework();
+  public final TestFramework testFramework = new TestFramework();
 
   protected void installModules() {
-    this.testFrameworkRule.registerModule(new TestConfigurationModule());
-    this.testFrameworkRule.registerModule(new TestCommandModule());
-    this.testFrameworkRule.registerModule(new TestUtilsModule());
+    this.testFramework.registerModule(new TestConfigurationModule());
+    this.testFramework.registerModule(new TestCommandModule());
+    this.testFramework.registerModule(new TestUtilsModule());
   }
 
   protected abstract ChatCommand givenASubjectToTest();
@@ -68,9 +68,9 @@ public abstract class ChatCommandContractTests {
     this.installModules();
     final ChatCommand subjectUnderTest = this.givenASubjectToTest();
     assumeTrue(subjectUnderTest.isTriggerable());
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(),
-        this.testFrameworkRule.arbitraryData().getString())));
+        this.testFramework.arbitraryData().getString())));
 
     final boolean result = subjectUnderTest.isTriggered(messageEvent);
 
@@ -82,7 +82,7 @@ public abstract class ChatCommandContractTests {
     this.installModules();
     final ChatCommand subjectUnderTest = this.givenASubjectToTest();
     assumeTrue(subjectUnderTest.isTriggerable());
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
 
     final boolean result = subjectUnderTest.isTriggered(messageEvent);
 

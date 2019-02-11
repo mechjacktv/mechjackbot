@@ -28,10 +28,10 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
   @Override
   protected void installModules() {
     super.installModules();
-    this.testFrameworkRule.registerModule(new TestConfigurationModule());
-    this.testFrameworkRule.registerModule(new TestCustomCommandModule());
-    this.testFrameworkRule.registerModule(new TestKeyValueStoreModule());
-    this.testFrameworkRule.registerModule(new TestProtobufModule());
+    this.testFramework.registerModule(new TestConfigurationModule());
+    this.testFramework.registerModule(new TestCustomCommandModule());
+    this.testFramework.registerModule(new TestKeyValueStoreModule());
+    this.testFramework.registerModule(new TestProtobufModule());
   }
 
   @Override
@@ -57,38 +57,38 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
   @Test
   public final void handleMessageEvent_emptyMessageBody_resultIsSendsUsage() {
     this.installModules();
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final DeleteCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(subjectUnderTest.getTrigger().value));
 
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    final ChatCommandUtils commandUtils = this.testFramework.getInstance(ChatCommandUtils.class);
     assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
         commandUtils.createUsageMessage(subjectUnderTest, messageEvent)));
   }
 
   @Override
   protected DeleteCommandChatCommand givenASubjectToTest() {
-    return new DeleteCommandChatCommand(this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class),
-        this.testFrameworkRule.getInstance(Configuration.class),
-        this.testFrameworkRule.getInstance(ChatCommandUtils.class),
-        this.testFrameworkRule.getInstance(CustomChatCommandService.class));
+    return new DeleteCommandChatCommand(this.testFramework.getInstance(CommandConfigurationBuilder.class),
+        this.testFramework.getInstance(Configuration.class),
+        this.testFramework.getInstance(ChatCommandUtils.class),
+        this.testFramework.getInstance(CustomChatCommandService.class));
   }
 
   @Test
   public final void handleMessageEvent_notExistingCustomCommandWithDefaultMessage_resultIsSendsDefaultNotCustomCommandMessage() {
     this.installModules();
-    final String trigger = this.testFrameworkRule.arbitraryData().getString();
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final String trigger = this.testFramework.arbitraryData().getString();
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final DeleteCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), trigger)));
 
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    final ChatCommandUtils commandUtils = this.testFramework.getInstance(ChatCommandUtils.class);
     assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
         ChatMessage.of(String.format(DeleteCommandChatCommand.DEFAULT_NOT_CUSTOM_COMMAND_MESSAGE_FORMAT, trigger))));
   }
@@ -96,18 +96,18 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
   @Test
   public final void handleMessageEvent_notExistingCustomCommandWithCustomMessage_resultIsSendsCustomNotCustomCommandMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.arbitraryData().getString() + "%s";
-    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    final String customMessageFormat = this.testFramework.arbitraryData().getString() + "%s";
+    final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(DeleteCommandChatCommand.KEY_NOT_CUSTOM_COMMAND_MESSAGE_FORMAT, customMessageFormat);
-    final String trigger = this.testFrameworkRule.arbitraryData().getString();
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final String trigger = this.testFramework.arbitraryData().getString();
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final DeleteCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), trigger)));
 
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    final ChatCommandUtils commandUtils = this.testFramework.getInstance(ChatCommandUtils.class);
     assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
         ChatMessage.of(String.format(customMessageFormat, trigger))));
   }
@@ -115,19 +115,19 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
   @Test
   public final void handleMessageEvent_existingCustomCommandWithDefaultMessage_resultIsDefaultMessage() {
     this.installModules();
-    final String trigger = this.testFrameworkRule.arbitraryData().getString();
-    final CustomChatCommandService service = this.testFrameworkRule.getInstance(CustomChatCommandService.class);
+    final String trigger = this.testFramework.arbitraryData().getString();
+    final CustomChatCommandService service = this.testFramework.getInstance(CustomChatCommandService.class);
     service.createCustomChatCommand(ChatCommandTrigger.of(trigger),
-        CommandBody.of(this.testFrameworkRule.arbitraryData().getString()),
-        ChatCommandDescription.of(this.testFrameworkRule.arbitraryData().getString()), UserRole.VIEWER);
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+        CommandBody.of(this.testFramework.arbitraryData().getString()),
+        ChatCommandDescription.of(this.testFramework.arbitraryData().getString()), UserRole.VIEWER);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final DeleteCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), trigger)));
 
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    final ChatCommandUtils commandUtils = this.testFramework.getInstance(ChatCommandUtils.class);
     assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
         ChatMessage.of(String.format(this.getMessageFormatDefault().value, trigger))));
   }
@@ -139,22 +139,22 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
   @Test
   public final void handleMessageEvent_existingCustomCommandWithCustomMessage_resultIsCustomMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.arbitraryData().getString() + " %s";
-    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    final String customMessageFormat = this.testFramework.arbitraryData().getString() + " %s";
+    final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
-    final String trigger = this.testFrameworkRule.arbitraryData().getString();
-    final CustomChatCommandService service = this.testFrameworkRule.getInstance(CustomChatCommandService.class);
+    final String trigger = this.testFramework.arbitraryData().getString();
+    final CustomChatCommandService service = this.testFramework.getInstance(CustomChatCommandService.class);
     service.createCustomChatCommand(ChatCommandTrigger.of(trigger),
-        CommandBody.of(this.testFrameworkRule.arbitraryData().getString()),
-        ChatCommandDescription.of(this.testFrameworkRule.arbitraryData().getString()), UserRole.VIEWER);
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+        CommandBody.of(this.testFramework.arbitraryData().getString()),
+        ChatCommandDescription.of(this.testFramework.arbitraryData().getString()), UserRole.VIEWER);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final DeleteCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), trigger)));
 
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    final ChatCommandUtils commandUtils = this.testFramework.getInstance(ChatCommandUtils.class);
     assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
         ChatMessage.of(String.format(customMessageFormat, trigger))));
   }

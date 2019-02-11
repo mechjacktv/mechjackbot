@@ -60,7 +60,7 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
   @Test
   public final void isTriggered_notACaster_resultIsFalse() {
     this.installModules();
-    final ChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
+    final ChatMessageEvent chatMessageEvent = this.testFramework.getInstance(ChatMessageEvent.class);
     final ShoutOutListenerChatCommand subjectUnderTest = this.givenASubjectToTest();
 
     final boolean result = subjectUnderTest.isTriggered(chatMessageEvent);
@@ -70,32 +70,33 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
 
   protected final void installModules() {
     super.installModules();
-    this.testFrameworkRule.registerModule(new TestChatBotModule());
-    this.testFrameworkRule.registerModule(new TestKeyValueStoreModule());
-    this.testFrameworkRule.registerModule(new TestScheduleServiceModule());
-    this.testFrameworkRule.registerModule(new TestShoutOutCommandModule());
-    this.testFrameworkRule.registerModule(new TestTwitchClientModule());
-    this.testFrameworkRule.registerModule(new TestProtobufModule());
+    this.testFramework.registerModule(new TestChatBotModule());
+    this.testFramework.registerModule(new TestKeyValueStoreModule());
+    this.testFramework.registerModule(new TestScheduleServiceModule());
+    this.testFramework.registerModule(new TestShoutOutCommandModule());
+    this.testFramework.registerModule(new TestTwitchClientModule());
+    this.testFramework.registerModule(new TestProtobufModule());
   }
 
   @Override
   protected final ShoutOutListenerChatCommand givenASubjectToTest() {
-    return this.givenASubjectToTest(this.testFrameworkRule.getInstance(ChatCommandRegistry.class));
+    return this.givenASubjectToTest(this.testFramework.getInstance(ChatCommandRegistry.class));
   }
 
   private ShoutOutListenerChatCommand givenASubjectToTest(final ChatCommandRegistry chatCommandRegistry) {
-    return new ShoutOutListenerChatCommand(this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class),
-        chatCommandRegistry, this.testFrameworkRule.getInstance(Configuration.class),
-        this.testFrameworkRule.getInstance(ShoutOutDataStore.class),
-        this.testFrameworkRule.getInstance(TimeUtils.class));
+    return new ShoutOutListenerChatCommand(this.testFramework.getInstance(CommandConfigurationBuilder.class),
+        chatCommandRegistry, this.testFramework.getInstance(Configuration.class),
+        this.testFramework.getInstance(ShoutOutDataStore.class),
+        this.testFramework.getInstance(TimeUtils.class));
   }
 
   @Test
   public final void isTriggered_casterIsNotDue_resultIsFalse() {
     this.installModules();
-    this.testFrameworkRule.testClock().updateTime(this.getFrequencyDefault(), TimeUnit.HOURS);
-    final ChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
-    final ShoutOutDataStore shoutOutDataStore = this.testFrameworkRule.getInstance(ShoutOutDataStore.class);
+    this.testFramework
+        .testClock().updateTime(this.getFrequencyDefault(), TimeUnit.HOURS);
+    final ChatMessageEvent chatMessageEvent = this.testFramework.getInstance(ChatMessageEvent.class);
+    final ShoutOutDataStore shoutOutDataStore = this.testFramework.getInstance(ShoutOutDataStore.class);
     final CasterKey casterKey = shoutOutDataStore
         .createCasterKey(chatMessageEvent.getChatUser().getTwitchLogin().value);
     final Caster caster = shoutOutDataStore.createCaster(casterKey.getName(), 0L);
@@ -114,9 +115,10 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
   @Test
   public final void isTriggered_casterIsDue_resultIsTrue() {
     this.installModules();
-    this.testFrameworkRule.testClock().updateTime(this.getFrequencyDefault(), TimeUnit.HOURS, 1);
-    final ChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
-    final ShoutOutDataStore shoutOutDataStore = this.testFrameworkRule.getInstance(ShoutOutDataStore.class);
+    this.testFramework
+        .testClock().updateTime(this.getFrequencyDefault(), TimeUnit.HOURS, 1);
+    final ChatMessageEvent chatMessageEvent = this.testFramework.getInstance(ChatMessageEvent.class);
+    final ShoutOutDataStore shoutOutDataStore = this.testFramework.getInstance(ShoutOutDataStore.class);
     final CasterKey casterKey = shoutOutDataStore
         .createCasterKey(chatMessageEvent.getChatUser().getTwitchLogin().value);
     final Caster caster = shoutOutDataStore.createCaster(casterKey.getName(), 0L);
@@ -132,12 +134,13 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
   public final void isTriggered_casterIsNotDueWithCustomFrequency_resultIsFalse() {
     this.installModules();
     final int customFrequency = this.getFrequencyDefault() + 1;
-    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(ConfigurationKey.of(ShoutOutListenerChatCommand.KEY_FREQUENCY, ShoutOutListenerChatCommand.class),
         Integer.toString(customFrequency));
-    this.testFrameworkRule.testClock().updateTime(this.getFrequencyDefault(), TimeUnit.HOURS);
-    final ChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
-    final ShoutOutDataStore shoutOutDataStore = this.testFrameworkRule.getInstance(ShoutOutDataStore.class);
+    this.testFramework
+        .testClock().updateTime(this.getFrequencyDefault(), TimeUnit.HOURS);
+    final ChatMessageEvent chatMessageEvent = this.testFramework.getInstance(ChatMessageEvent.class);
+    final ShoutOutDataStore shoutOutDataStore = this.testFramework.getInstance(ShoutOutDataStore.class);
     final CasterKey casterKey = shoutOutDataStore
         .createCasterKey(chatMessageEvent.getChatUser().getTwitchLogin().value);
     final Caster caster = shoutOutDataStore.createCaster(casterKey.getName(), 0L);
@@ -153,12 +156,12 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
   public final void isTriggered_casterIsDueWithCustomFrequency_resultIsTrue() {
     this.installModules();
     final int customFrequency = this.getFrequencyDefault() + 1;
-    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(ConfigurationKey.of(ShoutOutListenerChatCommand.KEY_FREQUENCY, ShoutOutListenerChatCommand.class),
         Integer.toString(customFrequency));
-    this.testFrameworkRule.testClock().updateTime(customFrequency, TimeUnit.HOURS, 1);
-    final ChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(ChatMessageEvent.class);
-    final ShoutOutDataStore shoutOutDataStore = this.testFrameworkRule.getInstance(ShoutOutDataStore.class);
+    this.testFramework.testClock().updateTime(customFrequency, TimeUnit.HOURS, 1);
+    final ChatMessageEvent chatMessageEvent = this.testFramework.getInstance(ChatMessageEvent.class);
+    final ShoutOutDataStore shoutOutDataStore = this.testFramework.getInstance(ShoutOutDataStore.class);
     final CasterKey casterKey = shoutOutDataStore
         .createCasterKey(chatMessageEvent.getChatUser().getTwitchLogin().value);
     final Caster caster = shoutOutDataStore.createCaster(casterKey.getName(), 0L);
@@ -173,8 +176,8 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
   @Test
   public final void handleMessageEvent_noMessageFormatConfigured_resultIsDefaultMessage() {
     this.installModules();
-    final FakeBuilder<ChatCommandRegistry> fakeBuilder = this.testFrameworkRule.fakeBuilder(ChatCommandRegistry.class);
-    final TestChatCommand chatCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
+    final FakeBuilder<ChatCommandRegistry> fakeBuilder = this.testFramework.fakeBuilder(ChatCommandRegistry.class);
+    final TestChatCommand chatCommand = this.testFramework.getInstance(TestChatCommand.class);
     fakeBuilder.forMethod("getCommand", new Class[] { Class.class }).setHandler(invocation -> {
       if (ShoutOutChatCommand.class.equals(invocation.getArgument(0))) {
         return Optional.of(chatCommand);
@@ -182,7 +185,7 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
       return Optional.empty();
     });
     final ChatCommandRegistry fakeChatCommandRegistry = fakeBuilder.build();
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final ShoutOutListenerChatCommand subjectUnderTest = this.givenASubjectToTest(fakeChatCommandRegistry);
 
     final ChatMessageEvent[] result = new ChatMessageEvent[1];
@@ -204,16 +207,16 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
   public final void handleMessageEvent_isCalled_resultIsUpdatedDataStore() {
 
     this.installModules();
-    final TestTimeUtils timeUtils = this.testFrameworkRule.getInstance(TestTimeUtils.class);
+    final TestTimeUtils timeUtils = this.testFramework.getInstance(TestTimeUtils.class);
     final Long lastShoutOut = timeUtils.hoursAsMs(this.getFrequencyDefault());
-    this.testFrameworkRule.testClock().updateTime(lastShoutOut, TimeUnit.MILLISECONDS);
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
-    final ShoutOutDataStore shoutOutDataStore = this.testFrameworkRule.getInstance(ShoutOutDataStore.class);
+    this.testFramework.testClock().updateTime(lastShoutOut, TimeUnit.MILLISECONDS);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
+    final ShoutOutDataStore shoutOutDataStore = this.testFramework.getInstance(ShoutOutDataStore.class);
     final CasterKey casterKey = shoutOutDataStore.createCasterKey(messageEvent.getChatUser().getTwitchLogin().value);
     final Caster caster = shoutOutDataStore.createCaster(casterKey.getName(), 0L);
     shoutOutDataStore.put(casterKey, caster);
-    final FakeBuilder<ChatCommandRegistry> fakeBuilder = this.testFrameworkRule.fakeBuilder(ChatCommandRegistry.class);
-    final TestChatCommand chatCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
+    final FakeBuilder<ChatCommandRegistry> fakeBuilder = this.testFramework.fakeBuilder(ChatCommandRegistry.class);
+    final TestChatCommand chatCommand = this.testFramework.getInstance(TestChatCommand.class);
     fakeBuilder.forMethod("getCommand", new Class[] { Class.class }).setHandler(invocation -> {
       if (ShoutOutChatCommand.class.equals(invocation.getArgument(0))) {
         Optional.of(chatCommand);

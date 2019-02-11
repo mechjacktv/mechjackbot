@@ -25,13 +25,13 @@ public class QuitChatCommandUnitTests extends BaseChatCommandContractTests {
 
   protected final void installModules() {
     super.installModules();
-    this.testFrameworkRule.registerModule(new TestScheduleServiceModule());
+    this.testFramework.registerModule(new TestScheduleServiceModule());
   }
 
   @Override
   protected final QuitChatCommand givenASubjectToTest() {
-    return new QuitChatCommand(this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class),
-        this.testFrameworkRule.getInstance(ScheduleService.class));
+    return new QuitChatCommand(this.testFramework.getInstance(CommandConfigurationBuilder.class),
+        this.testFramework.getInstance(ScheduleService.class));
   }
 
   @Override
@@ -65,7 +65,7 @@ public class QuitChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_noMessageFormatConfigured_resultIsDefaultMessage() {
     this.installModules();
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final QuitChatCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);
@@ -77,10 +77,10 @@ public class QuitChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.arbitraryData().getString();
-    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    final String customMessageFormat = this.testFramework.arbitraryData().getString();
+    final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final QuitChatCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);
@@ -92,7 +92,7 @@ public class QuitChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_whenCalled_resultIsStoppedChatBot() {
     this.installModules();
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final QuitChatCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);
@@ -103,8 +103,8 @@ public class QuitChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_whenCalled_stopsScheduleService() {
     this.installModules();
-    final TestScheduleService scheduleService = this.testFrameworkRule.getInstance(TestScheduleService.class);
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestScheduleService scheduleService = this.testFramework.getInstance(TestScheduleService.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final QuitChatCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);

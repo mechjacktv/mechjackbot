@@ -46,10 +46,10 @@ public class ShoutOutChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_messageNotProperlyFormatted_resultIsUsageMessage() {
     this.installModules();
-    final TestChatCommand command = this.testFrameworkRule.getInstance(TestChatCommand.class);
-    final ChatCommandRegistry chatCommandRegistry = this.testFrameworkRule.getInstance(ChatCommandRegistry.class);
+    final TestChatCommand command = this.testFramework.getInstance(TestChatCommand.class);
+    final ChatCommandRegistry chatCommandRegistry = this.testFramework.getInstance(ChatCommandRegistry.class);
     chatCommandRegistry.addCommand(command);
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final ShoutOutChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(subjectUnderTest.getTrigger().value));
 
@@ -61,22 +61,22 @@ public class ShoutOutChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Override
   protected ShoutOutChatCommand givenASubjectToTest() {
-    return new ShoutOutChatCommand(this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class),
-        this.testFrameworkRule.getInstance(ChatCommandUtils.class));
+    return new ShoutOutChatCommand(this.testFramework.getInstance(CommandConfigurationBuilder.class),
+        this.testFramework.getInstance(ChatCommandUtils.class));
   }
 
   @Test
   public final void handleMessageEvent_noMessageFormatConfiguredWithTriggerableCommand_resultIsDefaultMessage() {
     this.installModules();
-    final TwitchLogin twitchLogin = TwitchLogin.of(this.testFrameworkRule.arbitraryData().getString());
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TwitchLogin twitchLogin = TwitchLogin.of(this.testFramework.arbitraryData().getString());
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final ShoutOutChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), twitchLogin)));
 
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    final ChatCommandUtils commandUtils = this.testFramework.getInstance(ChatCommandUtils.class);
     assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
         ChatMessage.of(String.format(this.getMessageFormatDefault().value, twitchLogin))));
   }
@@ -88,18 +88,18 @@ public class ShoutOutChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_customMessageFormatConfiguredWithTriggerableCommand_resultIsCustomMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.arbitraryData().getString() + " $(user) %s";
-    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    final String customMessageFormat = this.testFramework.arbitraryData().getString() + " $(user) %s";
+    final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
-    final TwitchLogin twitchLogin = TwitchLogin.of(this.testFrameworkRule.arbitraryData().getString());
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TwitchLogin twitchLogin = TwitchLogin.of(this.testFramework.arbitraryData().getString());
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final ShoutOutChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), twitchLogin)));
 
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    final ChatCommandUtils commandUtils = this.testFramework.getInstance(ChatCommandUtils.class);
     assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
         ChatMessage.of(String.format(customMessageFormat, twitchLogin))));
   }

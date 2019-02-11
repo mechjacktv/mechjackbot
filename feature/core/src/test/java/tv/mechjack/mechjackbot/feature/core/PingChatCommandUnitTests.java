@@ -22,7 +22,7 @@ public class PingChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Override
   protected PingChatCommand givenASubjectToTest() {
-    return new PingChatCommand(this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class));
+    return new PingChatCommand(this.testFramework.getInstance(CommandConfigurationBuilder.class));
   }
 
   @Override
@@ -56,13 +56,13 @@ public class PingChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_noMessageFormatConfigured_resultIsDefaultMessage() {
     this.installModules();
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final PingChatCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    final ChatCommandUtils chatCommandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    final ChatCommandUtils chatCommandUtils = this.testFramework.getInstance(ChatCommandUtils.class);
     assertThat(result).isEqualTo(chatCommandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
         ChatMessage.of(this.getMessageFormatDefault().value)));
   }
@@ -70,16 +70,16 @@ public class PingChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.arbitraryData().getString() + "$(user)";
-    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    final String customMessageFormat = this.testFramework.arbitraryData().getString() + "$(user)";
+    final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final PingChatCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    final ChatCommandUtils chatCommandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    final ChatCommandUtils chatCommandUtils = this.testFramework.getInstance(ChatCommandUtils.class);
     assertThat(result).isEqualTo(chatCommandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
         ChatMessage.of(customMessageFormat)));
   }

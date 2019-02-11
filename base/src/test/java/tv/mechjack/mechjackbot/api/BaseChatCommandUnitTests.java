@@ -28,7 +28,7 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
 
   protected final TestChatCommand givenASubjectToTest(final CommandMessageFormat defaultMessageFormat) {
     final TestCommandConfigurationBuilder builder = new TestCommandConfigurationBuilder(
-        this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class));
+        this.testFramework.getInstance(CommandConfigurationBuilder.class));
     builder.setDefaultMessageFormat(defaultMessageFormat.value);
 
     return new TestChatCommand(builder);
@@ -65,7 +65,7 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_sendUsage_resultIsUsageMessage() {
     this.installModules();
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final TestChatCommand subjectUnderTest = this.givenASubjectToTest();
     subjectUnderTest.setMessageEventHandler(subjectUnderTest::sendUsage);
 
@@ -78,23 +78,23 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_sendResponseWithNullMessageFormat_throwsNullPointerException() {
     this.installModules();
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final TestChatCommand subjectUnderTest = this.givenASubjectToTest();
     subjectUnderTest.setMessageEventHandler(event -> subjectUnderTest.sendResponse(event, (CommandMessageFormat) null));
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.handleMessageEvent(messageEvent));
 
     assertThat(thrown).isInstanceOf(NullPointerException.class)
-        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+        .hasMessage(this.testFramework.getInstance(ExecutionUtils.class)
             .nullMessageForName("messageFormat"));
   }
 
   @Test
   public final void handleMessageEvent_noMessageFormatConfigured_resultIsDefaultMessage() {
     this.installModules();
-    final Object[] responseArgs = new Object[] { this.testFrameworkRule.arbitraryData().getString(),
-        this.testFrameworkRule.arbitraryData().getString(), this.testFrameworkRule.arbitraryData().getString() };
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final Object[] responseArgs = new Object[] { this.testFramework.arbitraryData().getString(),
+        this.testFramework.arbitraryData().getString(), this.testFramework.arbitraryData().getString() };
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final TestChatCommand subjectUnderTest = this.givenASubjectToTest();
     subjectUnderTest.setMessageEventHandler(event -> subjectUnderTest.sendResponse(event, responseArgs));
 
@@ -109,11 +109,11 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
   public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
     this.installModules();
     final String customMessageFormat = "%s";
-    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
-    final Object[] responseArgs = new Object[] { this.testFrameworkRule.arbitraryData().getString(),
-        this.testFrameworkRule.arbitraryData().getString(), this.testFrameworkRule.arbitraryData().getString() };
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final Object[] responseArgs = new Object[] { this.testFramework.arbitraryData().getString(),
+        this.testFramework.arbitraryData().getString(), this.testFramework.arbitraryData().getString() };
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final TestChatCommand subjectUnderTest = this.givenASubjectToTest();
     subjectUnderTest.setMessageEventHandler(event -> subjectUnderTest.sendResponse(event, responseArgs));
 
@@ -127,11 +127,11 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void parseArguments_noMessageBody_resultIsFalse() {
     this.installModules();
-    final PicoCliUtils picoCliUtils = this.testFrameworkRule.getInstance(PicoCliUtils.class);
+    final PicoCliUtils picoCliUtils = this.testFramework.getInstance(PicoCliUtils.class);
     final PositionalParamSpec stringListParam = picoCliUtils.createStringListParam(false, "0..*");
 
     final TestChatCommand subjectUnderTest = this.givenASubjectToTest();
-    final TestChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent chatMessageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     chatMessageEvent.setChatMessage(ChatMessage.of(subjectUnderTest.getTrigger().value));
 
     final boolean result = subjectUnderTest.parseArguments(Sets.newHashSet(stringListParam),
@@ -144,16 +144,16 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void parseArguments_properlyFormattedCommand_resultIsTrue() {
     this.installModules();
-    final PicoCliUtils picoCliUtils = this.testFrameworkRule.getInstance(PicoCliUtils.class);
+    final PicoCliUtils picoCliUtils = this.testFramework.getInstance(PicoCliUtils.class);
     final OptionSpec stringOption = picoCliUtils.createStringOption(true, "-r");
     final PositionalParamSpec stringParam = picoCliUtils.createStringParam(true, "0");
     final PositionalParamSpec stringListParam = picoCliUtils.createStringListParam(true, "1..*");
 
     final TestChatCommand subjectUnderTest = this.givenASubjectToTest();
-    final TestChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent chatMessageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     chatMessageEvent.setChatMessage(ChatMessage.of(String.format("%s %s -r %s %s", subjectUnderTest.getTrigger(),
-        this.testFrameworkRule.arbitraryData().getString(), this.testFrameworkRule.arbitraryData().getString(),
-        this.testFrameworkRule.arbitraryData().getString())));
+        this.testFramework.arbitraryData().getString(), this.testFramework.arbitraryData().getString(),
+        this.testFramework.arbitraryData().getString())));
 
     final boolean result = subjectUnderTest.parseArguments(Sets.newHashSet(stringOption, stringParam, stringListParam),
         chatMessageEvent,
@@ -165,15 +165,15 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void parseArguments_improperlyFormattedCommand_resultIsFalse() {
     this.installModules();
-    final PicoCliUtils picoCliUtils = this.testFrameworkRule.getInstance(PicoCliUtils.class);
+    final PicoCliUtils picoCliUtils = this.testFramework.getInstance(PicoCliUtils.class);
     final OptionSpec stringOption = picoCliUtils.createStringOption(true, "-r");
     final PositionalParamSpec stringParam = picoCliUtils.createStringParam(true, "0");
     final PositionalParamSpec stringListParam = picoCliUtils.createStringListParam(true, "1..*");
 
     final TestChatCommand subjectUnderTest = this.givenASubjectToTest();
-    final TestChatMessageEvent chatMessageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent chatMessageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     chatMessageEvent.setChatMessage(ChatMessage.of(String.format("%s %s %s", subjectUnderTest.getTrigger(),
-        this.testFrameworkRule.arbitraryData().getString(), this.testFrameworkRule.arbitraryData().getString())));
+        this.testFramework.arbitraryData().getString(), this.testFramework.arbitraryData().getString())));
 
     final boolean result = subjectUnderTest.parseArguments(Sets.newHashSet(stringOption, stringParam, stringListParam),
         chatMessageEvent,

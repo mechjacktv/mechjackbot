@@ -10,8 +10,9 @@ public class DefaultChatCommandUtilsUnitTests extends ChatCommandUtilsContractTe
 
   @Override
   protected ChatCommandUtils givenASubjectToTest() {
-    return new DefaultChatCommandUtils(this.testFrameworkRule.getInstance(Configuration.class),
-        this.testFrameworkRule.getInstance(ExecutionUtils.class), this.testFrameworkRule.getInstance(TimeUtils.class));
+    return new DefaultChatCommandUtils(this.testFramework.getInstance(Configuration.class),
+        this.testFramework.getInstance(ExecutionUtils.class), this.testFramework
+            .getInstance(TimeUtils.class));
   }
 
 }
