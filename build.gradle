@@ -76,8 +76,17 @@ project(':platform') {
   archivesBaseName = "mechjack-${project.name}"
 
   dependencies {
-    implementation group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.+'
     implementation group: 'org.mapdb', name: 'mapdb', version: '3.+'
+  }
+}
+
+project(':protobuf') {
+  archivesBaseName = "mechjack-${project.name}"
+
+  dependencies {
+    implementation project(':platform')
+    implementation group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.+'
+    testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
   }
 }
 
@@ -88,6 +97,7 @@ project(':platform') {
 project(':base') {
   dependencies {
     implementation project(':platform')
+    implementation project(':protobuf')
     implementation group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.+'
     implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
     implementation group: 'org.kitteh.irc', name: 'client-lib', version: '5.+'
@@ -113,9 +123,11 @@ project(':feature:customcommands') {
   dependencies {
     implementation project(':base')
     implementation project(':platform')
+    implementation project(':protobuf')
     implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
     testFrameworkImplementation project(path: ':base', configuration: 'testFramework')
     testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
+    testFrameworkImplementation project(path: ':protobuf', configuration: 'testFramework')
   }
 }
 
@@ -123,9 +135,11 @@ project(':feature:shoutouts') {
   dependencies {
     implementation project(':base')
     implementation project(':platform')
+    implementation project(':protobuf')
     implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
     testFrameworkImplementation project(path: ':base', configuration: 'testFramework')
     testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
+    testFrameworkImplementation project(path: ':protobuf', configuration: 'testFramework')
   }
 }
 

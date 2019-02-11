@@ -1,4 +1,4 @@
-include ':platform',':base'
+include ':platform', ':protobuf', ':base'
 include ':feature:core', ':feature:customcommands', ':feature:shoutouts', ':feature:wouldyourather'
 include ':all'
 
