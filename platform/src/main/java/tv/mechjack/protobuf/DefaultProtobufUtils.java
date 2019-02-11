@@ -1,4 +1,4 @@
-package tv.mechjack.platform.utils;
+package tv.mechjack.protobuf;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -8,6 +8,9 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import com.google.protobuf.Message;
+
+import tv.mechjack.platform.utils.ExecutionUtils;
+import tv.mechjack.platform.utils.MessageParsingException;
 
 public final class DefaultProtobufUtils implements ProtobufUtils {
 

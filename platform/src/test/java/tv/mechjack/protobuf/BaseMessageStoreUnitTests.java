@@ -1,14 +1,15 @@
-package tv.mechjack.platform.keyvaluestore;
+package tv.mechjack.protobuf;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import tv.mechjack.platform.keyvaluestore.MapKeyValueStore;
 import tv.mechjack.platform.utils.ExecutionUtils;
-import tv.mechjack.platform.utils.ProtobufUtils;
-import tv.mechjack.util.ProtoMessage.TestKeyMessage;
-import tv.mechjack.util.ProtoMessage.TestValueMessage;
+import tv.mechjack.protobuf.ProtoMessage.TestKeyMessage;
+import tv.mechjack.protobuf.ProtoMessage.TestValueMessage;
 
-public class ChatMessageStoreUnitTests extends ChatMessageStoreContractTests<TestKeyMessage, TestValueMessage> {
+public class BaseMessageStoreUnitTests extends
+    BaseMessageStoreContractTests<TestKeyMessage, TestValueMessage> {
 
   @Override
   protected TestMessageStore givenASubjectToTest() {

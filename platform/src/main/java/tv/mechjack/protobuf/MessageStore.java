@@ -1,4 +1,4 @@
-package tv.mechjack.platform.keyvaluestore;
+package tv.mechjack.protobuf;
 
 import java.util.Collection;
 import java.util.Optional;

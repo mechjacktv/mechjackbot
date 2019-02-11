@@ -25,20 +25,21 @@ import tv.mechjack.platform.configuration.Configuration;
 import tv.mechjack.platform.configuration.ConfigurationKey;
 import tv.mechjack.platform.configuration.MapConfiguration;
 import tv.mechjack.platform.configuration.TestConfigurationModule;
-import tv.mechjack.platform.keyvaluestore.ChatMessageStoreContractTests;
 import tv.mechjack.platform.keyvaluestore.MapKeyValueStore;
 import tv.mechjack.platform.utils.ExecutionUtils;
-import tv.mechjack.platform.utils.ProtobufUtils;
 import tv.mechjack.platform.utils.scheduleservice.ScheduleService;
 import tv.mechjack.platform.utils.scheduleservice.TestScheduleService;
 import tv.mechjack.platform.utils.scheduleservice.TestScheduleServiceModule;
+import tv.mechjack.protobuf.BaseMessageStoreContractTests;
+import tv.mechjack.protobuf.ProtobufUtils;
 import tv.mechjack.twitchclient.ProtoMessage.UserFollow;
 import tv.mechjack.twitchclient.TestTwitchClient;
 import tv.mechjack.twitchclient.TestTwitchClientModule;
 import tv.mechjack.twitchclient.TwitchClient;
 import tv.mechjack.twitchclient.TwitchUserId;
 
-public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractTests<CasterKey, Caster> {
+public class DefaultShoutOutDataStoreUnitTests extends
+    BaseMessageStoreContractTests<CasterKey, Caster> {
 
   @Test
   public final void createCasterKey_nullName_throwsNullPointerException() {

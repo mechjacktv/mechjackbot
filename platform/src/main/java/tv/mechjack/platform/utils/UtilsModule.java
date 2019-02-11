@@ -3,6 +3,9 @@ package tv.mechjack.platform.utils;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 
+import tv.mechjack.protobuf.DefaultProtobufUtils;
+import tv.mechjack.protobuf.ProtobufUtils;
+
 public final class UtilsModule extends AbstractModule {
 
   @Override

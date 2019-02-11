@@ -1,4 +1,4 @@
-package tv.mechjack.platform.keyvaluestore;
+package tv.mechjack.protobuf;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -20,7 +20,7 @@ import tv.mechjack.platform.utils.ExecutionUtils;
 import tv.mechjack.platform.utils.TestUtilsModule;
 import tv.mechjack.testframework.TestFramework;
 
-public abstract class ChatMessageStoreContractTests<K extends Message, V extends Message> {
+public abstract class BaseMessageStoreContractTests<K extends Message, V extends Message> {
 
   @Rule
   public final TestFramework testFrameworkRule = new TestFramework();

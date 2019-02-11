@@ -4,9 +4,11 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Scopes;
 
+import tv.mechjack.protobuf.DefaultProtobufUtils;
+import tv.mechjack.protobuf.ProtoMessage.TestKeyMessage;
+import tv.mechjack.protobuf.ProtoMessage.TestValueMessage;
+import tv.mechjack.protobuf.ProtobufUtils;
 import tv.mechjack.testframework.ArbitraryData;
-import tv.mechjack.util.ProtoMessage.TestKeyMessage;
-import tv.mechjack.util.ProtoMessage.TestValueMessage;
 
 public class TestUtilsModule extends AbstractModule {
 

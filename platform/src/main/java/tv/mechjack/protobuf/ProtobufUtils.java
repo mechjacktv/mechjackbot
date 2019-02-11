@@ -1,4 +1,4 @@
-package tv.mechjack.platform.utils;
+package tv.mechjack.protobuf;
 
 import java.util.Collection;
 

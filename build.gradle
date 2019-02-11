@@ -76,6 +76,7 @@ project(':platform') {
   archivesBaseName = "mechjack-${project.name}"
 
   dependencies {
+    implementation group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.+'
     implementation group: 'org.mapdb', name: 'mapdb', version: '3.+'
   }
 }

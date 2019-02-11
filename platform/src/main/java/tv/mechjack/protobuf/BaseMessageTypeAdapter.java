@@ -1,4 +1,4 @@
-package tv.mechjack.twitchclient.messageadapter;
+package tv.mechjack.protobuf;
 
 import java.io.IOException;
 
@@ -9,7 +9,7 @@ import com.google.gson.stream.JsonWriter;
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
 
-abstract class BaseMessageTypeAdapter<M extends Message> extends TypeAdapter<M> {
+public abstract class BaseMessageTypeAdapter<M extends Message> extends TypeAdapter<M> {
 
   @Override
   public final void write(final JsonWriter jsonWriter, final Message message) throws IOException {
@@ -26,6 +26,6 @@ abstract class BaseMessageTypeAdapter<M extends Message> extends TypeAdapter<M> 
     return (M) builder.build();
   }
 
-  abstract Message.Builder getBuilder();
+  public abstract Message.Builder getBuilder();
 
 }
