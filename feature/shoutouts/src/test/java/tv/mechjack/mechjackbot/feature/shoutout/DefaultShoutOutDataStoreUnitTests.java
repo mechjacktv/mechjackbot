@@ -47,7 +47,9 @@ public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractT
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.createCasterKey(null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "casterName");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("casterName"));
   }
 
   @Override
@@ -111,7 +113,9 @@ public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractT
     final Throwable thrown = catchThrowable(
         () -> subjectUnderTest.createCaster(null, this.testFrameworkRule.arbitraryData().getLong()));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "casterName");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("casterName"));
   }
 
   @Test
@@ -122,7 +126,9 @@ public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractT
     final Throwable thrown = catchThrowable(
         () -> subjectUnderTest.createCaster(this.testFrameworkRule.arbitraryData().getString(), null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "lastShoutOut");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("lastShoutOut"));
   }
 
   @Test

@@ -1,12 +1,12 @@
 package tv.mechjack.platform.utils;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
 import org.junit.Rule;
 import org.junit.Test;
 
 import tv.mechjack.testframework.TestFramework;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
 
 public abstract class TimeUtilsContractTests {
 
@@ -58,7 +58,9 @@ public abstract class TimeUtilsContractTests {
     final Throwable thrown = catchThrowable(
         () -> subjectUnderTest.hoursAsMs(null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "hours");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("hours"));
   }
 
 }

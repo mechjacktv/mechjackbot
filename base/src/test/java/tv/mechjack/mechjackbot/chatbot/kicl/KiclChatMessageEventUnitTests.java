@@ -109,7 +109,9 @@ public class KiclChatMessageEventUnitTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.sendResponse(null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "chatMessage");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("chatMessage"));
   }
 
   @Test

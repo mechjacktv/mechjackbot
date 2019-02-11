@@ -70,13 +70,13 @@ public class KiclChatUserUnitTests {
   private ServerMessage givenAFakeServerMessage(final String badgesTagValue) {
     final FakeBuilder<MessageTag> messageTagFakeBuilder = this.testFrameworkRule.fakeBuilder(MessageTag.class);
 
-    messageTagFakeBuilder.forMethod("getName").addHandler(invocation -> "badges");
-    messageTagFakeBuilder.forMethod("getValue").addHandler(invocation -> Optional.ofNullable(badgesTagValue));
+    messageTagFakeBuilder.forMethod("getName").setHandler(invocation -> "badges");
+    messageTagFakeBuilder.forMethod("getValue").setHandler(invocation -> Optional.ofNullable(badgesTagValue));
 
     final MessageTag messageTag = messageTagFakeBuilder.build();
     final FakeBuilder<ServerMessage> serverMessageFakeBuilder = this.testFrameworkRule.fakeBuilder(ServerMessage.class);
 
-    serverMessageFakeBuilder.forMethod("getTag", new Class[] { String.class }).addHandler(invocation -> {
+    serverMessageFakeBuilder.forMethod("getTag", new Class[] { String.class }).setHandler(invocation -> {
       if ("badges".equals(invocation.getArgument(0))) {
         return Optional.of(messageTag);
       }

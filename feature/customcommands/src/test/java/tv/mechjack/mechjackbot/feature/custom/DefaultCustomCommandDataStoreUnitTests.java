@@ -29,7 +29,9 @@ public class DefaultCustomCommandDataStoreUnitTests extends
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.createCustomCommandKey(null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "trigger");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("trigger"));
   }
 
   @Override
@@ -87,7 +89,9 @@ public class DefaultCustomCommandDataStoreUnitTests extends
         CommandBody.of(this.testFrameworkRule.arbitraryData().getString()),
         ChatCommandDescription.of(this.testFrameworkRule.arbitraryData().getString()), UserRole.SUBSCRIBER));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "trigger");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("trigger"));
   }
 
   @Test
@@ -99,7 +103,9 @@ public class DefaultCustomCommandDataStoreUnitTests extends
         ChatCommandTrigger.of(this.testFrameworkRule.arbitraryData().getString()), null,
         ChatCommandDescription.of(this.testFrameworkRule.arbitraryData().getString()), UserRole.SUBSCRIBER));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "commandBody");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("commandBody"));
   }
 
   @Test
@@ -112,7 +118,9 @@ public class DefaultCustomCommandDataStoreUnitTests extends
         CommandBody.of(this.testFrameworkRule.arbitraryData().getString()),
         null, UserRole.SUBSCRIBER));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "description");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("description"));
   }
 
   @Test
@@ -125,7 +133,9 @@ public class DefaultCustomCommandDataStoreUnitTests extends
         CommandBody.of(this.testFrameworkRule.arbitraryData().getString()),
         ChatCommandDescription.of(this.testFrameworkRule.arbitraryData().getString()), null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "userRole");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("userRole"));
   }
 
   @Test

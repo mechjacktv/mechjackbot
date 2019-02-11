@@ -11,6 +11,7 @@ import java.util.Optional;
 import org.junit.Rule;
 import org.junit.Test;
 
+import tv.mechjack.platform.utils.ExecutionUtils;
 import tv.mechjack.platform.utils.OptionalByteArrayEqualsExpected;
 import tv.mechjack.platform.utils.TestUtilsModule;
 import tv.mechjack.testframework.TestFramework;
@@ -50,7 +51,9 @@ public abstract class KeyValueStoreContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.containsKey(null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "key");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("key"));
   }
 
   @Test
@@ -104,7 +107,9 @@ public abstract class KeyValueStoreContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.get(null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "key");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("key"));
   }
 
   @Test
@@ -138,7 +143,9 @@ public abstract class KeyValueStoreContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.put(null, this.givenAByteArray()));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "key");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("key"));
   }
 
   @Test
@@ -148,7 +155,9 @@ public abstract class KeyValueStoreContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.put(this.givenAByteArray(), null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "value");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("value"));
   }
 
   @Test
@@ -186,7 +195,9 @@ public abstract class KeyValueStoreContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.remove(null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "key");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("key"));
   }
 
   @Test

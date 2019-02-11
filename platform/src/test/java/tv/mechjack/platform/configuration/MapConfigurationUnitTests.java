@@ -1,5 +1,6 @@
 package tv.mechjack.platform.configuration;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 import java.util.HashMap;
@@ -36,7 +37,9 @@ public class MapConfigurationUnitTests extends ConfigurationContractTests {
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.set((String) null,
         this.testFrameworkRule.arbitraryData().getString()));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "key");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("key"));
   }
 
   @Test
@@ -47,7 +50,9 @@ public class MapConfigurationUnitTests extends ConfigurationContractTests {
     final Throwable thrown = catchThrowable(
         () -> subjectUnderTest.set(this.testFrameworkRule.arbitraryData().getString(), null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "value");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("value"));
   }
 
   @Test

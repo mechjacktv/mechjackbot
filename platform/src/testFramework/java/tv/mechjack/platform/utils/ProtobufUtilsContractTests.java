@@ -1,5 +1,9 @@
 package tv.mechjack.platform.utils;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static tv.mechjack.testframework.ArbitraryData.ARBITRARY_COLLECTION_SIZE;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,10 +13,6 @@ import org.junit.Test;
 
 import tv.mechjack.testframework.TestFramework;
 import tv.mechjack.util.ProtoMessage.TestKeyMessage;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static tv.mechjack.testframework.ArbitraryData.ARBITRARY_COLLECTION_SIZE;
 
 public abstract class ProtobufUtilsContractTests {
 

@@ -64,7 +64,8 @@ public abstract class BaseChatCommandContractTests extends ChatCommandContractTe
   @Test
   public final void getTrigger_customTriggerConfigured_resultIsEqualToCustomTrigger() {
     this.installModules();
-    final ChatCommandTrigger chatCommandTrigger = ChatCommandTrigger.of(this.testFrameworkRule.arbitraryData().getString());
+    final ChatCommandTrigger chatCommandTrigger = ChatCommandTrigger
+        .of(this.testFrameworkRule.arbitraryData().getString());
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(this.getTriggerKey(), chatCommandTrigger.value);
     final ChatCommand subjectUnderTest = this.givenASubjectToTest();

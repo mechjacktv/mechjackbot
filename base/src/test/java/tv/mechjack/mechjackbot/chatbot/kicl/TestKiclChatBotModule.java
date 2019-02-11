@@ -41,8 +41,8 @@ public class TestKiclChatBotModule extends TestChatBotModule {
       final FakeFactory fakeFactory, final Client client) {
     final FakeBuilder<Channel> fakeBuilder = fakeFactory.builder(Channel.class);
     final String channelName = arbitraryDataGenerator.getString();
-    fakeBuilder.forMethod("getClient").addHandler(invocation -> client);
-    fakeBuilder.forMethod("getName").addHandler(invocation -> channelName);
+    fakeBuilder.forMethod("getClient").setHandler(invocation -> client);
+    fakeBuilder.forMethod("getName").setHandler(invocation -> channelName);
 
     return fakeBuilder.build();
   }
@@ -53,8 +53,8 @@ public class TestKiclChatBotModule extends TestChatBotModule {
     final FakeBuilder<User> fakeBuilder = fakeFactory.builder(User.class);
     final String userNick = arbitraryDataGenerator.getString();
 
-    fakeBuilder.forMethod("getClient").addHandler(invocation -> client);
-    fakeBuilder.forMethod("getNick").addHandler(invocation -> userNick);
+    fakeBuilder.forMethod("getClient").setHandler(invocation -> client);
+    fakeBuilder.forMethod("getNick").setHandler(invocation -> userNick);
     return fakeBuilder.build();
   }
 

@@ -13,6 +13,7 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.Rule;
 import org.junit.Test;
 
+import tv.mechjack.platform.utils.ExecutionUtils;
 import tv.mechjack.platform.utils.TestUtilsModule;
 import tv.mechjack.testframework.TestFramework;
 
@@ -35,7 +36,8 @@ public abstract class ConfigurationContractTests {
     final Map<String, String> properties = new HashMap<>();
 
     for (int i = 0; i < ARBITRARY_COLLECTION_SIZE; i++) {
-      properties.put(this.testFrameworkRule.arbitraryData().getString(), this.testFrameworkRule.arbitraryData().getString());
+      properties.put(this.testFrameworkRule.arbitraryData().getString(),
+          this.testFrameworkRule.arbitraryData().getString());
     }
     return properties;
   }
@@ -47,7 +49,9 @@ public abstract class ConfigurationContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.get((String) null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "key");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("key"));
   }
 
   @Test
@@ -85,7 +89,9 @@ public abstract class ConfigurationContractTests {
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.get((String) null,
         this.testFrameworkRule.arbitraryData().getString()));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "key");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("key"));
   }
 
   @Test

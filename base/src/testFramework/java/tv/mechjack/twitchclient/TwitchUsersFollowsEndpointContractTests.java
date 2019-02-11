@@ -15,9 +15,9 @@ import org.junit.Test;
 
 import tv.mechjack.platform.utils.function.ConsumerWithException;
 import tv.mechjack.testframework.TestFramework;
+import tv.mechjack.testframework.fake.ArgumentCaptor;
 import tv.mechjack.testframework.fake.FakeBuilder;
 import tv.mechjack.testframework.fake.FakeFactory;
-import tv.mechjack.testframework.fake.ArgumentCaptor;
 import tv.mechjack.testframework.fake.InvocationCounter;
 import tv.mechjack.twitchclient.ProtoMessage.UserFollow;
 import tv.mechjack.twitchclient.ProtoMessage.UserFollows;
@@ -77,7 +77,7 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
   public final void getUserFollowsFromId_forFromId_returnsListOfUsersFollowed() {
     final FakeBuilder<TwitchClientUtils> fakeBuilder = this.testFrameworkRule.fakeBuilder(TwitchClientUtils.class);
     fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
-        .addHandler(invocation -> {
+        .setHandler(invocation -> {
           final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
 
           consumer.accept(new StringReader(RESPONSE_BODY));
@@ -111,7 +111,7 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
       return null;
     });
     fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
-        .addHandler(capturingHandler);
+        .setHandler(capturingHandler);
     final TwitchClientUtils twitchClientUtils = fakeBuilder.build();
     final TwitchUsersFollowsEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(), twitchClientUtils);
 
@@ -131,7 +131,7 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
       return null;
     });
     fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
-        .addHandler(capturingHandler);
+        .setHandler(capturingHandler);
     final TwitchClientUtils twitchClientUtils = fakeBuilder.build();
     final TwitchUsersFollowsEndpoint subjectUnderTest = this.givenASubjectToTest(this.givenAGson(), twitchClientUtils);
 
@@ -149,9 +149,9 @@ public abstract class TwitchUsersFollowsEndpointContractTests {
     final FakeFactory fakeFactory = this.testFrameworkRule.getInstance(FakeFactory.class);
     final FakeBuilder<TwitchClientUtils> fakeBuilder = fakeFactory.builder(TwitchClientUtils.class);
     final InvocationCounter countingHandler = new InvocationCounter();
-    fakeBuilder.forMethod("handleUnknownObjectName", new Class[] { String.class }).addHandler(countingHandler);
+    fakeBuilder.forMethod("handleUnknownObjectName", new Class[] { String.class }).setHandler(countingHandler);
     fakeBuilder.forMethod("handleResponse", new Class[] { TwitchUrl.class, ConsumerWithException.class })
-        .addHandler(invocation -> {
+        .setHandler(invocation -> {
           final ConsumerWithException<Reader> consumer = invocation.getArgument(1);
 
           consumer.accept(new StringReader(RESPONSE_BODY));

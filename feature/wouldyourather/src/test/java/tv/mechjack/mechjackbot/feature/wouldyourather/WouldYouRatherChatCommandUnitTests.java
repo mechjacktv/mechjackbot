@@ -31,7 +31,7 @@ public class WouldYouRatherChatCommandUnitTests extends BaseChatCommandContractT
   @Override
   protected WouldYouRatherChatCommand givenASubjectToTest() {
     final FakeBuilder<QuestionsDataSource> fakeBuilder = this.testFrameworkRule.fakeBuilder(QuestionsDataSource.class);
-    fakeBuilder.forMethod("getQuestions").addHandler(invocation -> new StringReader(""));
+    fakeBuilder.forMethod("getQuestions").setHandler(invocation -> new StringReader(""));
     return this.givenASubjectToTest(fakeBuilder.build());
   }
 
@@ -81,7 +81,7 @@ public class WouldYouRatherChatCommandUnitTests extends BaseChatCommandContractT
     questionsDataSource.addQuestion(desiredQuestion);
     questionsDataSource.addQuestion(this.testFrameworkRule.arbitraryData().getString());
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
-    this.testFrameworkRule.nextRandomValue(1L);
+    this.testFrameworkRule.testRandom().setNextValues(1);
     final WouldYouRatherChatCommand subjectUnderTest = this.givenASubjectToTest(questionsDataSource);
 
     subjectUnderTest.handleMessageEvent(messageEvent);
@@ -99,7 +99,7 @@ public class WouldYouRatherChatCommandUnitTests extends BaseChatCommandContractT
     questionsDataSource.addQuestion("#" + this.testFrameworkRule.arbitraryData().getString());
     questionsDataSource.addQuestion(desiredQuestion);
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
-    this.testFrameworkRule.nextRandomValue(0L);
+    this.testFrameworkRule.testRandom().setNextValues(0);
     final WouldYouRatherChatCommand subjectUnderTest = this.givenASubjectToTest(questionsDataSource);
 
     subjectUnderTest.handleMessageEvent(messageEvent);
@@ -116,7 +116,7 @@ public class WouldYouRatherChatCommandUnitTests extends BaseChatCommandContractT
     final TestQuestionsDataSource questionsDataSource = new TestQuestionsDataSource();
     questionsDataSource.addQuestion(desiredQuestion + "?");
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
-    this.testFrameworkRule.nextRandomValue(0L);
+    this.testFrameworkRule.testRandom().setNextValues(0);
     final WouldYouRatherChatCommand subjectUnderTest = this.givenASubjectToTest(questionsDataSource);
 
     subjectUnderTest.handleMessageEvent(messageEvent);
@@ -133,7 +133,7 @@ public class WouldYouRatherChatCommandUnitTests extends BaseChatCommandContractT
     final TestQuestionsDataSource questionsDataSource = new TestQuestionsDataSource();
     questionsDataSource.addQuestion("Would you rather " + desiredQuestion);
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
-    this.testFrameworkRule.nextRandomValue(0L);
+    this.testFrameworkRule.testRandom().setNextValues(0);
     final WouldYouRatherChatCommand subjectUnderTest = this.givenASubjectToTest(questionsDataSource);
 
     subjectUnderTest.handleMessageEvent(messageEvent);

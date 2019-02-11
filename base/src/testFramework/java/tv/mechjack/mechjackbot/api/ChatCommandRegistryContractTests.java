@@ -11,6 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import tv.mechjack.platform.configuration.TestConfigurationModule;
+import tv.mechjack.platform.utils.ExecutionUtils;
 import tv.mechjack.platform.utils.TestUtilsModule;
 import tv.mechjack.testframework.TestFramework;
 
@@ -34,7 +35,9 @@ public abstract class ChatCommandRegistryContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.addCommand(null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "chatCommand");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("chatCommand"));
   }
 
   @Test
@@ -75,7 +78,9 @@ public abstract class ChatCommandRegistryContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.hasCommand(null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "trigger");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("trigger"));
   }
 
   @Test
@@ -108,7 +113,9 @@ public abstract class ChatCommandRegistryContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.removeCommand(null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "trigger");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("trigger"));
   }
 
   @Test

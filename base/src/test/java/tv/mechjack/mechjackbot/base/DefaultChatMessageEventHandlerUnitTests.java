@@ -43,7 +43,7 @@ public class DefaultChatMessageEventHandlerUnitTests extends ChatMessageEventHan
     this.installModules();
     final FakeBuilder<Logger> fakeBuilder = this.testFrameworkRule.fakeBuilder(Logger.class);
     final InvocationCounter countingHandler = new InvocationCounter();
-    fakeBuilder.forMethod("info", new Class[] { String.class }).addHandler(countingHandler);
+    fakeBuilder.forMethod("info", new Class[] { String.class }).setHandler(countingHandler);
     final TestChatCommand command = this.testFrameworkRule.getInstance(TestChatCommand.class);
     command.setTriggered(true);
     final DefaultChatMessageEventHandler subjectUnderTest = this.givenASubjectToTest(Sets.newHashSet(command),
@@ -60,9 +60,9 @@ public class DefaultChatMessageEventHandlerUnitTests extends ChatMessageEventHan
     final FakeBuilder<Logger> fakeBuilder = this.testFrameworkRule.fakeBuilder(Logger.class);
     final InvocationCounter infoCountingHandler = new InvocationCounter();
     final InvocationCounter errorCountingHandler = new InvocationCounter();
-    fakeBuilder.forMethod("info", new Class[] { String.class }).addHandler(infoCountingHandler);
+    fakeBuilder.forMethod("info", new Class[] { String.class }).setHandler(infoCountingHandler);
     fakeBuilder.forMethod("error", new Class[] { String.class, Throwable.class })
-        .addHandler(errorCountingHandler);
+        .setHandler(errorCountingHandler);
     final TestChatCommand command = this.testFrameworkRule.getInstance(TestChatCommand.class);
     command.setTriggered(true);
     command.setMessageEventHandler(messageEvent -> {

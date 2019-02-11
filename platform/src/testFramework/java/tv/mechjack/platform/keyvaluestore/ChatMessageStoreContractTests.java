@@ -1,5 +1,9 @@
 package tv.mechjack.platform.keyvaluestore;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static tv.mechjack.testframework.ArbitraryData.ARBITRARY_COLLECTION_SIZE;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -12,12 +16,9 @@ import com.google.protobuf.Message;
 import org.junit.Rule;
 import org.junit.Test;
 
+import tv.mechjack.platform.utils.ExecutionUtils;
 import tv.mechjack.platform.utils.TestUtilsModule;
 import tv.mechjack.testframework.TestFramework;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static tv.mechjack.testframework.ArbitraryData.ARBITRARY_COLLECTION_SIZE;
 
 public abstract class ChatMessageStoreContractTests<K extends Message, V extends Message> {
 
@@ -53,7 +54,9 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
     final Throwable thrown = catchThrowable(
         () -> subjectUnderTest.containsKey(null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "key");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("key"));
   }
 
   @Test
@@ -126,7 +129,9 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.get(null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "key");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("key"));
   }
 
   @Test
@@ -178,7 +183,9 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
     final Throwable thrown = catchThrowable(
         () -> subjectUnderTest.put(null, this.givenAValue()));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "key");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("key"));
   }
 
   @Test
@@ -189,7 +196,9 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
     final Throwable thrown = catchThrowable(
         () -> subjectUnderTest.put(this.givenAKey(), null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "value");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("value"));
   }
 
   @Test
@@ -229,7 +238,9 @@ public abstract class ChatMessageStoreContractTests<K extends Message, V extends
     final Throwable thrown = catchThrowable(
         () -> subjectUnderTest.remove(null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "key");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("key"));
   }
 
   @Test

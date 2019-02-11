@@ -17,6 +17,7 @@ import picocli.CommandLine.Model.PositionalParamSpec;
 
 import tv.mechjack.platform.configuration.ConfigurationKey;
 import tv.mechjack.platform.configuration.MapConfiguration;
+import tv.mechjack.platform.utils.ExecutionUtils;
 
 public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
 
@@ -83,7 +84,9 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.handleMessageEvent(messageEvent));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "messageFormat");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("messageFormat"));
   }
 
   @Test

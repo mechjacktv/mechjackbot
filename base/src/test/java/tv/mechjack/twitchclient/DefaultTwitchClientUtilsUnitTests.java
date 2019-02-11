@@ -34,7 +34,7 @@ public class DefaultTwitchClientUtilsUnitTests extends TwitchClientUtilsContract
     this.installModules();
     final FakeBuilder<Logger> fakeBuilder = this.testFrameworkRule.fakeBuilder(Logger.class);
     final InvocationCounter countingHandler = new InvocationCounter();
-    fakeBuilder.forMethod("warn", new Class[] { String.class }).addHandler(countingHandler);
+    fakeBuilder.forMethod("warn", new Class[] { String.class }).setHandler(countingHandler);
     final DefaultTwitchClientUtils subjectUnderTest = this.givenASubjectToTest(fakeBuilder.build());
 
     subjectUnderTest.handleUnknownObjectName(this.testFrameworkRule.arbitraryData().getString());

@@ -191,7 +191,8 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
     final SetCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
     final String description = this.testFrameworkRule.arbitraryData().getString();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s --description \"%s\" %s",
-        subjectUnderTest.getTrigger(), customTrigger, description, this.testFrameworkRule.arbitraryData().getString())));
+        subjectUnderTest.getTrigger(), customTrigger, description,
+        this.testFrameworkRule.arbitraryData().getString())));
 
     subjectUnderTest.handleMessageEvent(messageEvent);
 

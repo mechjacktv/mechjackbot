@@ -39,7 +39,7 @@ public class KiclChatBotListenerUnitTests {
         .fakeBuilder(ChatMessageEventHandler.class);
     final InvocationCounter countingHandler = new InvocationCounter();
     fakeBuilder.forMethod("handleMessageEvent", new Class[] { ChatMessageEvent.class })
-        .addHandler(countingHandler);
+        .setHandler(countingHandler);
     final ChatMessageEventHandler chatMessageEventHandler = fakeBuilder.build();
     final KiclChatBotListener subjectUnderTest = this.givenASubjectToTest(chatMessageEventHandler);
 
