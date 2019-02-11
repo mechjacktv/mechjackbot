@@ -20,7 +20,8 @@ import tv.mechjack.mechjackbot.api.UserRole;
 
 public class CustomChatCommand implements ChatCommand {
 
-  public static final Pattern PATTERN_ARGUMENT = Pattern.compile("\\$\\{([\\w\\d-_]+)}");
+  public static final Pattern PATTERN_ARGUMENT = Pattern
+      .compile("\\$\\{([\\w\\d-_]+)}");
 
   private final ChatCommandUtils chatCommandUtils;
   private final ChatCommandTrigger trigger;
@@ -30,8 +31,10 @@ public class CustomChatCommand implements ChatCommand {
   private final List<String> argumentNames;
   private final UserRole userRole;
 
-  protected CustomChatCommand(final ChatCommandUtils chatCommandUtils, final ChatCommandTrigger trigger,
-      final CommandBody commandBody, final ChatCommandDescription description, final UserRole userRole) {
+  protected CustomChatCommand(final ChatCommandUtils chatCommandUtils,
+      final ChatCommandTrigger trigger,
+      final CommandBody commandBody, final ChatCommandDescription description,
+      final UserRole userRole) {
     this.chatCommandUtils = chatCommandUtils;
     this.trigger = trigger;
     this.description = description;
@@ -66,7 +69,9 @@ public class CustomChatCommand implements ChatCommand {
 
   @Override
   public ChatCommandName getName() {
-    return ChatCommandName.of(String.format("%s#%s", CustomChatCommand.class.getCanonicalName(), this.getTrigger()));
+    return ChatCommandName.of(String
+        .format("%s#%s", CustomChatCommand.class.getCanonicalName(),
+            this.getTrigger()));
   }
 
   @Override
@@ -100,26 +105,70 @@ public class CustomChatCommand implements ChatCommand {
   @Override
   @RequiresAccessLevel(UserRole.VIEWER)
   public void handleMessageEvent(final ChatMessageEvent chatMessageEvent) {
-    final ChatMessage cleanChatMessage = this.chatCommandUtils.stripTriggerFromMessage(this, chatMessageEvent);
-    final String[] arguments = cleanChatMessage.value.split("\\s+");
-    final Map<String, String> argReplacements = new HashMap<>();
+    final List<String> arguments = this.parseMessage(chatMessageEvent);
 
-    if (this.argumentNames.size() > 0 && ("".equals(cleanChatMessage.value.trim())
-        || this.argumentNames.size() > arguments.length)) {
-      final ChatMessage usageMessage = this.chatCommandUtils.createUsageMessage(this, chatMessageEvent);
+    if (argumentsProvided(arguments)) {
+      final Map<String, String> argumentReplacements = new HashMap<>();
 
-      chatMessageEvent.sendResponse(this.chatCommandUtils.replaceChatMessageVariables(this, chatMessageEvent,
-          usageMessage));
-      return;
+      for (int i = 0; i < this.argumentNames.size(); i++) {
+        final String argKey = String.format("${%s}", this.argumentNames.get(i));
+
+        argumentReplacements.put(argKey, arguments.get(i));
+      }
+      chatMessageEvent.sendResponse(
+          getCommandMessage(chatMessageEvent, argumentReplacements));
+    } else {
+      chatMessageEvent.sendResponse(getUsageMessage(chatMessageEvent));
     }
-    for (int i = 0; i < this.argumentNames.size(); i++) {
-      argReplacements.put(String.format("${%s}", this.argumentNames.get(i)), arguments[i]);
-    }
-    chatMessageEvent.sendResponse(this.chatCommandUtils.replaceChatMessageVariables(this, chatMessageEvent,
-        ChatMessage.of(this.replaceArguments(this.commandBody, argReplacements))));
   }
 
-  private String replaceArguments(final CommandBody commandBody, final Map<String, String> replacements) {
+  private List<String> parseMessage(final ChatMessageEvent chatMessageEvent) {
+    final ChatMessage cleanChatMessage = this.chatCommandUtils
+        .stripTriggerFromMessage(this, chatMessageEvent);
+
+    return this.chatCommandUtils.parseMessageIntoArguments(
+        this, chatMessageEvent, cleanChatMessage);
+  }
+
+  private boolean argumentsProvided(final List<String> arguments) {
+    if (!argumentsExpected()) {
+      return true;
+    }
+
+    switch (arguments.size()) {
+    case 0:
+      return false;
+    case 1:
+      return !"".equals(arguments.get(0).trim())
+          && this.argumentNames.size() == 1;
+    default:
+      return arguments.size() >= this.argumentNames.size();
+    }
+  }
+
+  private boolean argumentsExpected() {
+    return this.argumentNames.size() > 0;
+  }
+
+  private ChatMessage getUsageMessage(final ChatMessageEvent chatMessageEvent) {
+    final ChatMessage usageMessage = this.chatCommandUtils
+        .createUsageMessage(this, chatMessageEvent);
+
+    return this.chatCommandUtils.replaceChatMessageVariables(
+        this, chatMessageEvent, usageMessage);
+  }
+
+  private ChatMessage getCommandMessage(final ChatMessageEvent chatMessageEvent,
+      final Map<String, String> argReplacements) {
+    final ChatMessage commandMessage = ChatMessage.of(
+        this.replaceArguments(this.commandBody, argReplacements));
+
+    return this.chatCommandUtils.replaceChatMessageVariables(
+        this, chatMessageEvent, commandMessage);
+  }
+
+  private String replaceArguments(final CommandBody commandBody,
+      final Map<String, String> replacements) {
     String messageBody = commandBody.value;
 
     for (final String key : replacements.keySet()) {

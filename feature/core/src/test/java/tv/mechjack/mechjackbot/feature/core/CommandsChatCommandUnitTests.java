@@ -29,8 +29,8 @@ import tv.mechjack.platform.configuration.MapConfiguration;
 public class CommandsChatCommandUnitTests extends BaseChatCommandContractTests {
 
   protected final CommandsChatCommand givenASubjectToTest() {
-    return new CommandsChatCommand(this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class),
-        this.testFrameworkRule.getInstance(ChatCommandRegistry.class));
+    return new CommandsChatCommand(this.testFramework.getInstance(CommandConfigurationBuilder.class),
+        this.testFramework.getInstance(ChatCommandRegistry.class));
   }
 
   @Override
@@ -66,7 +66,7 @@ public class CommandsChatCommandUnitTests extends BaseChatCommandContractTests {
 
     for (int i = 0; i < 3; i++) {
       chatCommands.add(new TestChatCommand(
-          new TestCommandConfigurationBuilder(this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class))
+          new TestCommandConfigurationBuilder(this.testFramework.getInstance(CommandConfigurationBuilder.class))
               .setDefaultTrigger(UUID.randomUUID().toString())));
     }
     return chatCommands;
@@ -76,9 +76,9 @@ public class CommandsChatCommandUnitTests extends BaseChatCommandContractTests {
   public final void handleMessageEvent_noMessageFormatConfigured_resultIsDefaultMessage() {
     this.installModules();
     final Set<ChatCommand> chatCommands = this.givenASetOfCommands();
-    final ChatCommandRegistry chatCommandRegistry = this.testFrameworkRule.getInstance(ChatCommandRegistry.class);
+    final ChatCommandRegistry chatCommandRegistry = this.testFramework.getInstance(ChatCommandRegistry.class);
     chatCommands.forEach(chatCommandRegistry::addCommand);
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final CommandsChatCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);
@@ -91,13 +91,13 @@ public class CommandsChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.arbitraryData().getString() + ": %s";
-    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    final String customMessageFormat = this.testFramework.arbitraryData().getString() + ": %s";
+    final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
     final Set<ChatCommand> chatCommands = this.givenASetOfCommands();
-    final ChatCommandRegistry chatCommandRegistry = this.testFrameworkRule.getInstance(ChatCommandRegistry.class);
+    final ChatCommandRegistry chatCommandRegistry = this.testFramework.getInstance(ChatCommandRegistry.class);
     chatCommands.forEach(chatCommandRegistry::addCommand);
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final CommandsChatCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);
@@ -113,13 +113,13 @@ public class CommandsChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_noMessageFormatConfiguredWithNonTriggerableCommand_resultIsDefaultMessageWithoutNonTriggerableCommand() {
     this.installModules();
-    final TestChatCommand nonTriggerableCommand = this.testFrameworkRule.getInstance(TestChatCommand.class);
+    final TestChatCommand nonTriggerableCommand = this.testFramework.getInstance(TestChatCommand.class);
     nonTriggerableCommand.setTriggerable(false);
     final Set<ChatCommand> chatCommands = this.givenASetOfCommands();
-    final ChatCommandRegistry chatCommandRegistry = this.testFrameworkRule.getInstance(ChatCommandRegistry.class);
+    final ChatCommandRegistry chatCommandRegistry = this.testFramework.getInstance(ChatCommandRegistry.class);
     chatCommandRegistry.addCommand(nonTriggerableCommand);
     chatCommands.forEach(chatCommandRegistry::addCommand);
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final CommandsChatCommand subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.handleMessageEvent(messageEvent);

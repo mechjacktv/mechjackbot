@@ -1,7 +1,9 @@
 package tv.mechjack.mechjackbot.base;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -26,6 +28,9 @@ import tv.mechjack.twitchclient.TwitchLogin;
 
 public final class DefaultChatCommandUtils implements ChatCommandUtils {
 
+  public static final Pattern ARGUMENT_PATTERN = Pattern
+      .compile("(\"[^\"]*\"|\\S+)");
+
   private final Configuration configuration;
   private final ExecutionUtils executionUtils;
   private final TimeUtils timeUtils;
@@ -34,7 +39,8 @@ public final class DefaultChatCommandUtils implements ChatCommandUtils {
   private final Map<TwitchLogin, LastTrigger> viewerLastTrigger;
 
   @Inject
-  DefaultChatCommandUtils(final Configuration configuration, final ExecutionUtils executionUtils,
+  DefaultChatCommandUtils(final Configuration configuration,
+      final ExecutionUtils executionUtils,
       final TimeUtils timeUtils) {
     this.configuration = configuration;
     this.executionUtils = executionUtils;
@@ -45,12 +51,17 @@ public final class DefaultChatCommandUtils implements ChatCommandUtils {
   }
 
   @Override
-  public boolean hasAccessLevel(final ChatCommand chatCommand, final ChatMessageEvent chatMessageEvent) {
-    Objects.requireNonNull(chatCommand, this.executionUtils.nullMessageForName("chatCommand"));
-    Objects.requireNonNull(chatMessageEvent, this.executionUtils.nullMessageForName("chatMessageEvent"));
+  public boolean hasAccessLevel(final ChatCommand chatCommand,
+      final ChatMessageEvent chatMessageEvent) {
+    Objects.requireNonNull(chatCommand,
+        this.executionUtils.nullMessageForName("chatCommand"));
+    Objects.requireNonNull(chatMessageEvent,
+        this.executionUtils.nullMessageForName("chatMessageEvent"));
     return this.executionUtils.softenException(() -> {
-      final Method method = chatCommand.getClass().getMethod("handleMessageEvent", ChatMessageEvent.class);
-      final RequiresAccessLevel roles = method.getAnnotation(RequiresAccessLevel.class);
+      final Method method = chatCommand.getClass()
+          .getMethod("handleMessageEvent", ChatMessageEvent.class);
+      final RequiresAccessLevel roles = method
+          .getAnnotation(RequiresAccessLevel.class);
 
       if (Objects.isNull(roles)) {
         return this.hasAccessLevel(chatMessageEvent, UserRole.MODERATOR);
@@ -59,47 +70,61 @@ public final class DefaultChatCommandUtils implements ChatCommandUtils {
     }, ChatCommandException.class);
   }
 
-  private boolean hasAccessLevel(final ChatMessageEvent chatMessageEvent, final UserRole userRole) {
+  private boolean hasAccessLevel(final ChatMessageEvent chatMessageEvent,
+      final UserRole userRole) {
     return chatMessageEvent.getChatUser().hasAccessLevel(userRole);
   }
 
   @Override
-  public final boolean isCooledDown(final ChatCommand chatCommand, final ChatMessageEvent chatMessageEvent) {
-    Objects.requireNonNull(chatCommand, this.executionUtils.nullMessageForName("chatCommand"));
-    Objects.requireNonNull(chatMessageEvent, this.executionUtils.nullMessageForName("chatMessageEvent"));
+  public final boolean isCooledDown(final ChatCommand chatCommand,
+      final ChatMessageEvent chatMessageEvent) {
+    Objects.requireNonNull(chatCommand,
+        this.executionUtils.nullMessageForName("chatCommand"));
+    Objects.requireNonNull(chatMessageEvent,
+        this.executionUtils.nullMessageForName("chatMessageEvent"));
     return this.executionUtils.softenException(() -> {
       final long now = this.timeUtils.currentTime();
-      final Method method = chatCommand.getClass().getMethod("handleMessageEvent", ChatMessageEvent.class);
+      final Method method = chatCommand.getClass()
+          .getMethod("handleMessageEvent", ChatMessageEvent.class);
       final NoCoolDown noCoolDown = method.getAnnotation(NoCoolDown.class);
 
       if (Objects.nonNull(noCoolDown)
           || this.hasAccessLevel(chatMessageEvent, UserRole.MODERATOR)) {
         return true;
-      } else if (this.isCooledDown(chatCommand.getTrigger(), chatMessageEvent.getChatUser().getTwitchLogin(), now)) {
-        this.commandLastTrigger.put(chatCommand.getTrigger(), LastTrigger.of(now));
-        this.viewerLastTrigger.put(chatMessageEvent.getChatUser().getTwitchLogin(), LastTrigger.of(now));
+      } else if (this.isCooledDown(chatCommand.getTrigger(),
+          chatMessageEvent.getChatUser().getTwitchLogin(), now)) {
+        this.commandLastTrigger
+            .put(chatCommand.getTrigger(), LastTrigger.of(now));
+        this.viewerLastTrigger
+            .put(chatMessageEvent.getChatUser().getTwitchLogin(),
+                LastTrigger.of(now));
         return true;
       }
       return false;
     }, ChatCommandException.class);
   }
 
-  private boolean isCooledDown(final ChatCommandTrigger chatCommandTrigger, final TwitchLogin twitchLog,
+  private boolean isCooledDown(final ChatCommandTrigger chatCommandTrigger,
+      final TwitchLogin twitchLog,
       final long now) {
-    return this.isCooledDown(() -> this.commandLastTrigger.get(chatCommandTrigger), this::getCommandCoolDown, now)
-        && this.isCooledDown(() -> this.viewerLastTrigger.get(twitchLog), this::getUserCoolDown, now);
+    return this.isCooledDown(() -> this.commandLastTrigger.get(chatCommandTrigger),
+        this::getCommandCoolDown, now)
+        && this.isCooledDown(() -> this.viewerLastTrigger.get(twitchLog),
+            this::getUserCoolDown, now);
   }
 
   private boolean isCooledDown(final Supplier<LastTrigger> lastTriggerSupplier,
       final Supplier<CoolDownPeriodMs> coolDownSupplier, final long now) {
     final LastTrigger lastTrigger = lastTriggerSupplier.get();
 
-    return lastTrigger == null || (now - lastTrigger.value > coolDownSupplier.get().value);
+    return lastTrigger == null || (now - lastTrigger.value > coolDownSupplier
+        .get().value);
   }
 
   private CoolDownPeriodMs getCommandCoolDown() {
     return CoolDownPeriodMs.of(this.timeUtils.secondsAsMs(Integer.parseInt(
-        this.configuration.get(KEY_COMMAND_COOL_DOWN, DEFAULT_COMMAND_COOL_DOWN))));
+        this.configuration
+            .get(KEY_COMMAND_COOL_DOWN, DEFAULT_COMMAND_COOL_DOWN))));
   }
 
   private CoolDownPeriodMs getUserCoolDown() {
@@ -108,68 +133,117 @@ public final class DefaultChatCommandUtils implements ChatCommandUtils {
   }
 
   @Override
-  public final boolean isTriggered(final ChatCommand chatCommand, final ChatMessageEvent chatMessageEvent) {
-    Objects.requireNonNull(chatCommand, this.executionUtils.nullMessageForName("chatCommand"));
-    Objects.requireNonNull(chatMessageEvent, this.executionUtils.nullMessageForName("chatMessageEvent"));
+  public final boolean isTriggered(final ChatCommand chatCommand,
+      final ChatMessageEvent chatMessageEvent) {
+    Objects.requireNonNull(chatCommand,
+        this.executionUtils.nullMessageForName("chatCommand"));
+    Objects.requireNonNull(chatMessageEvent,
+        this.executionUtils.nullMessageForName("chatMessageEvent"));
 
     final ChatMessage chatMessage = chatMessageEvent.getChatMessage();
-    final Pattern commandTriggerPattern = this.getCommandTriggerPattern(chatCommand.getTrigger());
-    final Matcher commandTriggerMatcher = commandTriggerPattern.matcher(chatMessage.value);
+    final Pattern commandTriggerPattern = this
+        .getCommandTriggerPattern(chatCommand.getTrigger());
+    final Matcher commandTriggerMatcher = commandTriggerPattern
+        .matcher(chatMessage.value);
 
     return commandTriggerMatcher.matches();
   }
 
-  private Pattern getCommandTriggerPattern(final ChatCommandTrigger chatCommandTrigger) {
+  private Pattern getCommandTriggerPattern(
+      final ChatCommandTrigger chatCommandTrigger) {
     if (this.commandTriggerPatterns.containsKey(chatCommandTrigger)) {
       // can't test because fully encapsulated
       return this.commandTriggerPatterns.get(chatCommandTrigger);
     }
 
     final String commandTriggerRegex = chatCommandTrigger + "(\\s+.+)?";
-    final Pattern commandTriggerPattern = Pattern.compile(commandTriggerRegex, Pattern.CASE_INSENSITIVE);
+    final Pattern commandTriggerPattern = Pattern
+        .compile(commandTriggerRegex, Pattern.CASE_INSENSITIVE);
 
     this.commandTriggerPatterns.put(chatCommandTrigger, commandTriggerPattern);
     return commandTriggerPattern;
   }
 
   @Override
-  public final ChatMessage createUsageMessage(final ChatCommand chatCommand, final ChatMessageEvent chatMessageEvent) {
-    Objects.requireNonNull(chatCommand, this.executionUtils.nullMessageForName("chatCommand"));
-    Objects.requireNonNull(chatMessageEvent, this.executionUtils.nullMessageForName("chatMessageEvent"));
+  public final ChatMessage createUsageMessage(final ChatCommand chatCommand,
+      final ChatMessageEvent chatMessageEvent) {
+    Objects.requireNonNull(chatCommand,
+        this.executionUtils.nullMessageForName("chatCommand"));
+    Objects.requireNonNull(chatMessageEvent,
+        this.executionUtils.nullMessageForName("chatMessageEvent"));
 
-    final String messageFormat = this.configuration.get(KEY_USAGE_MESSAGE_FORMAT,
-        DEFAULT_USAGE_MESSAGE_FORMAT);
+    final String messageFormat = this.configuration
+        .get(KEY_USAGE_MESSAGE_FORMAT,
+            DEFAULT_USAGE_MESSAGE_FORMAT);
 
     return ChatMessage.of(String.format(messageFormat, chatCommand.getUsage()));
   }
 
   @Override
+  public List<String> parseMessageIntoArguments(final ChatCommand chatCommand,
+      final ChatMessageEvent chatMessageEvent, final ChatMessage chatMessage) {
+    Objects.requireNonNull(chatCommand,
+        this.executionUtils.nullMessageForName("chatCommand"));
+    Objects.requireNonNull(chatMessageEvent,
+        this.executionUtils.nullMessageForName("chatMessageEvent"));
+    Objects.requireNonNull(chatMessage,
+        this.executionUtils.nullMessageForName("chatMessage"));
+
+    final List<String> arguments = new ArrayList<>();
+    final Matcher matcher = ARGUMENT_PATTERN.matcher(chatMessage.value);
+
+    while (matcher.find()) {
+      final String argument = matcher.group(0);
+
+      if (argument.startsWith("\"")) {
+        arguments.add(argument.substring(1, argument.lastIndexOf('"')));
+      } else {
+        arguments.add(argument);
+      }
+    }
+    if (arguments.size() == 0) {
+      arguments.add(chatMessage.value);
+    }
+    return arguments;
+  }
+
+  @Override
   public ChatMessage replaceChatMessageVariables(final ChatCommand chatCommand,
       final ChatMessageEvent chatMessageEvent, final ChatMessage chatMessage) {
-    Objects.requireNonNull(chatCommand, this.executionUtils.nullMessageForName("chatCommand"));
-    Objects.requireNonNull(chatMessageEvent, this.executionUtils.nullMessageForName("chatMessageEvent"));
-    Objects.requireNonNull(chatMessage, this.executionUtils.nullMessageForName("chatMessage"));
+    Objects.requireNonNull(chatCommand,
+        this.executionUtils.nullMessageForName("chatCommand"));
+    Objects.requireNonNull(chatMessageEvent,
+        this.executionUtils.nullMessageForName("chatMessageEvent"));
+    Objects.requireNonNull(chatMessage,
+        this.executionUtils.nullMessageForName("chatMessage"));
 
     final Map<String, Object> replacements = new HashMap<>();
     String chatMessageValue = chatMessage.value;
 
     replacements.put("$(trigger)", chatCommand.getTrigger());
-    replacements.put("$(user)", chatMessageEvent.getChatUser().getTwitchLogin());
+    replacements
+        .put("$(user)", chatMessageEvent.getChatUser().getTwitchLogin());
     for (final String key : replacements.keySet()) {
-      chatMessageValue = chatMessageValue.replace(key, replacements.get(key).toString());
+      chatMessageValue = chatMessageValue
+          .replace(key, replacements.get(key).toString());
     }
     return ChatMessage.of(chatMessageValue);
   }
 
   @Override
-  public ChatMessage stripTriggerFromMessage(final ChatCommand chatCommand, final ChatMessageEvent chatMessageEvent) {
-    Objects.requireNonNull(chatCommand, this.executionUtils.nullMessageForName("chatCommand"));
-    Objects.requireNonNull(chatMessageEvent, this.executionUtils.nullMessageForName("chatMessageEvent"));
+  public ChatMessage stripTriggerFromMessage(final ChatCommand chatCommand,
+      final ChatMessageEvent chatMessageEvent) {
+    Objects.requireNonNull(chatCommand,
+        this.executionUtils.nullMessageForName("chatCommand"));
+    Objects.requireNonNull(chatMessageEvent,
+        this.executionUtils.nullMessageForName("chatMessageEvent"));
 
     final ChatCommandTrigger chatCommandTrigger = chatCommand.getTrigger();
     final ChatMessage chatMessage = chatMessageEvent.getChatMessage();
 
-    return ChatMessage.of(chatMessage.value.substring(chatCommandTrigger.value.length()).trim());
+    return ChatMessage
+        .of(chatMessage.value.substring(chatCommandTrigger.value.length())
+            .trim());
   }
 
 }

@@ -20,7 +20,7 @@ public abstract class BaseChatCommandContractTests extends ChatCommandContractTe
 
   protected final void assertUsageMessageForCommand(final ChatMessage result, final ChatCommand subjectUnderTest,
       final ChatMessageEvent chatMessageEvent) {
-    final CommandAssertionsUtils commandAssertionsUtils = this.testFrameworkRule
+    final CommandAssertionsUtils commandAssertionsUtils = this.testFramework
         .getInstance(CommandAssertionsUtils.class);
 
     commandAssertionsUtils.assertUsageMessageForCommand(result, subjectUnderTest, chatMessageEvent);
@@ -40,8 +40,8 @@ public abstract class BaseChatCommandContractTests extends ChatCommandContractTe
   public final void getDescription_customDescriptionConfigured_resultIsEqualToCustomDescription() {
     this.installModules();
     final ChatCommandDescription chatCommandDescription = ChatCommandDescription
-        .of(this.testFrameworkRule.arbitraryData().getString());
-    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+        .of(this.testFramework.arbitraryData().getString());
+    final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(this.getDescriptionKey(), chatCommandDescription.value);
     final ChatCommand subjectUnderTest = this.givenASubjectToTest();
 
@@ -65,8 +65,8 @@ public abstract class BaseChatCommandContractTests extends ChatCommandContractTe
   public final void getTrigger_customTriggerConfigured_resultIsEqualToCustomTrigger() {
     this.installModules();
     final ChatCommandTrigger chatCommandTrigger = ChatCommandTrigger
-        .of(this.testFrameworkRule.arbitraryData().getString());
-    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+        .of(this.testFramework.arbitraryData().getString());
+    final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(this.getTriggerKey(), chatCommandTrigger.value);
     final ChatCommand subjectUnderTest = this.givenASubjectToTest();
     assumeTrue(subjectUnderTest.isTriggerable());

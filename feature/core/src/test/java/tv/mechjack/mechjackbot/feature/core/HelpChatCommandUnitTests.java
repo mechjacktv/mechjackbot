@@ -24,10 +24,10 @@ import tv.mechjack.platform.configuration.MapConfiguration;
 public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
 
   protected final HelpChatCommand givenASubjectToTest() {
-    return new HelpChatCommand(this.testFrameworkRule.getInstance(CommandConfigurationBuilder.class),
-        this.testFrameworkRule.getInstance(ChatCommandRegistry.class),
-        this.testFrameworkRule.getInstance(ChatCommandUtils.class),
-        this.testFrameworkRule.getInstance(Configuration.class));
+    return new HelpChatCommand(this.testFramework.getInstance(CommandConfigurationBuilder.class),
+        this.testFramework.getInstance(ChatCommandRegistry.class),
+        this.testFramework.getInstance(ChatCommandUtils.class),
+        this.testFramework.getInstance(Configuration.class));
   }
 
   @Override
@@ -69,10 +69,10 @@ public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_messageNotProperlyFormatted_resultIsUsageMessage() {
     this.installModules();
-    final TestChatCommand command = this.testFrameworkRule.getInstance(TestChatCommand.class);
-    final ChatCommandRegistry chatCommandRegistry = this.testFrameworkRule.getInstance(ChatCommandRegistry.class);
+    final TestChatCommand command = this.testFramework.getInstance(TestChatCommand.class);
+    final ChatCommandRegistry chatCommandRegistry = this.testFramework.getInstance(ChatCommandRegistry.class);
     chatCommandRegistry.addCommand(command);
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final HelpChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(subjectUnderTest.getTrigger().value));
 
@@ -85,10 +85,10 @@ public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_noMessageFormatConfiguredWithTriggerableCommand_resultIsDefaultMessage() {
     this.installModules();
-    final TestChatCommand command = this.testFrameworkRule.getInstance(TestChatCommand.class);
-    final ChatCommandRegistry chatCommandRegistry = this.testFrameworkRule.getInstance(ChatCommandRegistry.class);
+    final TestChatCommand command = this.testFramework.getInstance(TestChatCommand.class);
+    final ChatCommandRegistry chatCommandRegistry = this.testFramework.getInstance(ChatCommandRegistry.class);
     chatCommandRegistry.addCommand(command);
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final HelpChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent
         .setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), command.getTrigger())));
@@ -96,7 +96,7 @@ public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    final ChatCommandUtils commandUtils = this.testFramework.getInstance(ChatCommandUtils.class);
     assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(command, messageEvent,
         ChatMessage.of(String.format(this.getMessageFormatDefault().value, command.getTrigger(),
             command.getDescription()))));
@@ -105,13 +105,13 @@ public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_customMessageFormatConfiguredWithTriggerableCommand_resultIsCustomMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.arbitraryData().getString() + " $(user) %s %s";
-    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    final String customMessageFormat = this.testFramework.arbitraryData().getString() + " $(user) %s %s";
+    final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
-    final TestChatCommand command = this.testFrameworkRule.getInstance(TestChatCommand.class);
-    final ChatCommandRegistry chatCommandRegistry = this.testFrameworkRule.getInstance(ChatCommandRegistry.class);
+    final TestChatCommand command = this.testFramework.getInstance(TestChatCommand.class);
+    final ChatCommandRegistry chatCommandRegistry = this.testFramework.getInstance(ChatCommandRegistry.class);
     chatCommandRegistry.addCommand(command);
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final HelpChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent
         .setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), command.getTrigger())));
@@ -119,7 +119,7 @@ public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    final ChatCommandUtils commandUtils = this.testFramework.getInstance(ChatCommandUtils.class);
     assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(command, messageEvent,
         ChatMessage.of(String.format(customMessageFormat, command.getTrigger(), command.getDescription()))));
   }
@@ -127,8 +127,8 @@ public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_noMissingMessageFormatConfigured_resultIsDefaultMissingMessage() {
     this.installModules();
-    final TestChatCommand command = this.testFrameworkRule.getInstance(TestChatCommand.class);
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatCommand command = this.testFramework.getInstance(TestChatCommand.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final HelpChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent
         .setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), command.getTrigger())));
@@ -136,7 +136,7 @@ public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    final ChatCommandUtils commandUtils = this.testFramework.getInstance(ChatCommandUtils.class);
     assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(command, messageEvent,
         ChatMessage.of(String.format(this.getMissingMessageFormatDefault().value, command.getTrigger()))));
   }
@@ -144,11 +144,11 @@ public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_customMissingMessageFormatConfigured_resultIsCustomMissingMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.arbitraryData().getString() + " $(user) %s";
-    final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
+    final String customMessageFormat = this.testFramework.arbitraryData().getString() + " $(user) %s";
+    final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(this.getMissingMessageFormatKey(), customMessageFormat);
-    final TestChatCommand command = this.testFrameworkRule.getInstance(TestChatCommand.class);
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatCommand command = this.testFramework.getInstance(TestChatCommand.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final HelpChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent
         .setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), command.getTrigger())));
@@ -156,7 +156,7 @@ public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    final ChatCommandUtils commandUtils = this.testFramework.getInstance(ChatCommandUtils.class);
     assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(command, messageEvent,
         ChatMessage.of(String.format(customMessageFormat, command.getTrigger()))));
   }
@@ -164,11 +164,11 @@ public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_noMissingMessageFormatConfiguredWithNonTriggerableCommand_resultIsDefaultMissingMessage() {
     this.installModules();
-    final TestChatCommand command = this.testFrameworkRule.getInstance(TestChatCommand.class);
+    final TestChatCommand command = this.testFramework.getInstance(TestChatCommand.class);
     command.setTriggerable(false);
-    final ChatCommandRegistry chatCommandRegistry = this.testFrameworkRule.getInstance(ChatCommandRegistry.class);
+    final ChatCommandRegistry chatCommandRegistry = this.testFramework.getInstance(ChatCommandRegistry.class);
     chatCommandRegistry.addCommand(command);
-    final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
+    final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final HelpChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent
         .setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), command.getTrigger())));
@@ -176,7 +176,7 @@ public class HelpChatCommandUnitTests extends BaseChatCommandContractTests {
     subjectUnderTest.handleMessageEvent(messageEvent);
     final ChatMessage result = messageEvent.getResponseChatMessage();
 
-    final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
+    final ChatCommandUtils commandUtils = this.testFramework.getInstance(ChatCommandUtils.class);
     assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(command, messageEvent,
         ChatMessage.of(String.format(this.getMissingMessageFormatDefault().value, command.getTrigger()))));
   }
