@@ -13,6 +13,7 @@ import com.google.inject.AbstractModule;
 import tv.mechjack.mechjackbot.MechJackBotModule;
 import tv.mechjack.mechjackbot.api.FeatureModule;
 import tv.mechjack.platform.PlatformModule;
+import tv.mechjack.protobuf.ProtobufModule;
 
 final class MainModule extends AbstractModule {
 
@@ -26,6 +27,7 @@ final class MainModule extends AbstractModule {
     final Iterator<FeatureModule> featureModules = featureServiceLoader.iterator();
 
     this.install(new PlatformModule());
+    this.install(new ProtobufModule());
     this.install(new MechJackBotModule());
     while (featureModules.hasNext()) {
       final FeatureModule featureModule = featureModules.next();
