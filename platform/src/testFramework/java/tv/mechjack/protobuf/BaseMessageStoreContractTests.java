@@ -26,6 +26,7 @@ public abstract class BaseMessageStoreContractTests<K extends Message, V extends
   public final TestFramework testFrameworkRule = new TestFramework();
 
   protected void installModules() {
+    this.testFrameworkRule.registerModule(new TestProtobufModule());
     this.testFrameworkRule.registerModule(new TestUtilsModule());
   }
 

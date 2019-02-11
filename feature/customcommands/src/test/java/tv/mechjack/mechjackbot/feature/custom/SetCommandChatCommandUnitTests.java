@@ -25,8 +25,18 @@ import tv.mechjack.platform.configuration.ConfigurationKey;
 import tv.mechjack.platform.configuration.MapConfiguration;
 import tv.mechjack.platform.configuration.TestConfigurationModule;
 import tv.mechjack.platform.keyvaluestore.TestKeyValueStoreModule;
+import tv.mechjack.protobuf.TestProtobufModule;
 
 public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests {
+
+  @Override
+  protected void installModules() {
+    super.installModules();
+    this.testFrameworkRule.registerModule(new TestConfigurationModule());
+    this.testFrameworkRule.registerModule(new TestCustomCommandModule());
+    this.testFrameworkRule.registerModule(new TestKeyValueStoreModule());
+    this.testFrameworkRule.registerModule(new TestProtobufModule());
+  }
 
   @Override
   protected ChatCommandDescription getDescriptionDefault() {
@@ -62,14 +72,6 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
     final ChatCommandUtils commandUtils = this.testFrameworkRule.getInstance(ChatCommandUtils.class);
     assertThat(result).isEqualTo(commandUtils.replaceChatMessageVariables(subjectUnderTest, messageEvent,
         commandUtils.createUsageMessage(subjectUnderTest, messageEvent)));
-  }
-
-  @Override
-  protected void installModules() {
-    super.installModules();
-    this.testFrameworkRule.registerModule(new TestConfigurationModule());
-    this.testFrameworkRule.registerModule(new TestCustomCommandModule());
-    this.testFrameworkRule.registerModule(new TestKeyValueStoreModule());
   }
 
   @Override

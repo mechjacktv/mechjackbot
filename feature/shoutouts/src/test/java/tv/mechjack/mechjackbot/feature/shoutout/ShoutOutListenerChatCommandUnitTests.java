@@ -31,6 +31,7 @@ import tv.mechjack.platform.keyvaluestore.TestKeyValueStoreModule;
 import tv.mechjack.platform.utils.TestTimeUtils;
 import tv.mechjack.platform.utils.TimeUtils;
 import tv.mechjack.platform.utils.scheduleservice.TestScheduleServiceModule;
+import tv.mechjack.protobuf.TestProtobufModule;
 import tv.mechjack.testframework.fake.FakeBuilder;
 import tv.mechjack.twitchclient.TestTwitchClientModule;
 
@@ -74,6 +75,7 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
     this.testFrameworkRule.registerModule(new TestScheduleServiceModule());
     this.testFrameworkRule.registerModule(new TestShoutOutCommandModule());
     this.testFrameworkRule.registerModule(new TestTwitchClientModule());
+    this.testFrameworkRule.registerModule(new TestProtobufModule());
   }
 
   @Override
