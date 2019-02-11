@@ -22,13 +22,13 @@ import tv.mechjack.mechjackbot.api.TestChatUser;
 import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.platform.utils.typedobject.StronglyTypedInstantiationException;
 import tv.mechjack.testframework.fake.FakeBuilder;
-import tv.mechjack.testframework.fake.methodhandler.CountingMethodInvocationHandler;
+import tv.mechjack.testframework.fake.InvocationCounter;
 
 public class DefaultChatMessageEventHandlerUnitTests extends ChatMessageEventHandlerContractTests {
 
   @Override
   protected DefaultChatMessageEventHandler givenASubjectToTest(final Set<ChatCommand> chatCommands) {
-    return this.givenASubjectToTest(chatCommands, this.testFrameworkRule.fake(Logger.class));
+    return this.givenASubjectToTest(chatCommands, this.testFrameworkRule.fakeFactory().fake(Logger.class));
   }
 
   private DefaultChatMessageEventHandler givenASubjectToTest(final Set<ChatCommand> chatCommands,
@@ -42,7 +42,7 @@ public class DefaultChatMessageEventHandlerUnitTests extends ChatMessageEventHan
   public final void handleMessageEvent_isCalled_logsAnInfoLevelMessage() {
     this.installModules();
     final FakeBuilder<Logger> fakeBuilder = this.testFrameworkRule.fakeBuilder(Logger.class);
-    final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
+    final InvocationCounter countingHandler = new InvocationCounter();
     fakeBuilder.forMethod("info", new Class[] { String.class }).addHandler(countingHandler);
     final TestChatCommand command = this.testFrameworkRule.getInstance(TestChatCommand.class);
     command.setTriggered(true);
@@ -58,8 +58,8 @@ public class DefaultChatMessageEventHandlerUnitTests extends ChatMessageEventHan
   public final void handleMessageEvent_commandThrowsException_logsAnInfoAndErrorLevelMessageWithSameLogger() {
     this.installModules();
     final FakeBuilder<Logger> fakeBuilder = this.testFrameworkRule.fakeBuilder(Logger.class);
-    final CountingMethodInvocationHandler infoCountingHandler = new CountingMethodInvocationHandler();
-    final CountingMethodInvocationHandler errorCountingHandler = new CountingMethodInvocationHandler();
+    final InvocationCounter infoCountingHandler = new InvocationCounter();
+    final InvocationCounter errorCountingHandler = new InvocationCounter();
     fakeBuilder.forMethod("info", new Class[] { String.class }).addHandler(infoCountingHandler);
     fakeBuilder.forMethod("error", new Class[] { String.class, Throwable.class })
         .addHandler(errorCountingHandler);

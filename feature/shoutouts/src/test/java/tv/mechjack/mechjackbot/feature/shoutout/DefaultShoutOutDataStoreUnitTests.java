@@ -53,11 +53,11 @@ public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractT
   @Override
   protected void installModules() {
     super.installModules();
-    this.testFrameworkRule.installModule(new TestCommandModule());
-    this.testFrameworkRule.installModule(new TestConfigurationModule());
-    this.testFrameworkRule.installModule(new TestChatBotModule());
-    this.testFrameworkRule.installModule(new TestScheduleServiceModule());
-    this.testFrameworkRule.installModule(new TestTwitchClientModule());
+    this.testFrameworkRule.registerModule(new TestCommandModule());
+    this.testFrameworkRule.registerModule(new TestConfigurationModule());
+    this.testFrameworkRule.registerModule(new TestChatBotModule());
+    this.testFrameworkRule.registerModule(new TestScheduleServiceModule());
+    this.testFrameworkRule.registerModule(new TestTwitchClientModule());
   }
 
   @Override
@@ -83,19 +83,19 @@ public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractT
 
   @Override
   protected final CasterKey givenAKey() {
-    return CasterKey.newBuilder().setName(this.testFrameworkRule.getArbitraryString()).build();
+    return CasterKey.newBuilder().setName(this.testFrameworkRule.arbitraryData().getString()).build();
   }
 
   @Override
   protected final Caster givenAValue() {
-    return Caster.newBuilder().setName(this.testFrameworkRule.getArbitraryString())
-        .setLastShoutOut(this.testFrameworkRule.getArbitraryLong()).build();
+    return Caster.newBuilder().setName(this.testFrameworkRule.arbitraryData().getString())
+        .setLastShoutOut(this.testFrameworkRule.arbitraryData().getLong()).build();
   }
 
   @Test
   public final void createCasterKey_forName_returnsCasterKeyWithName() {
     this.installModules();
-    final String casterName = this.testFrameworkRule.getArbitraryString();
+    final String casterName = this.testFrameworkRule.arbitraryData().getString();
     final DefaultShoutOutDataStore subjectUnderTest = this.givenASubjectToTest(new HashMap<>());
 
     final CasterKey result = subjectUnderTest.createCasterKey(casterName);
@@ -109,7 +109,7 @@ public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractT
     final DefaultShoutOutDataStore subjectUnderTest = this.givenASubjectToTest(new HashMap<>());
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.createCaster(null, this.testFrameworkRule.getArbitraryLong()));
+        () -> subjectUnderTest.createCaster(null, this.testFrameworkRule.arbitraryData().getLong()));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "casterName");
   }
@@ -120,7 +120,7 @@ public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractT
     final DefaultShoutOutDataStore subjectUnderTest = this.givenASubjectToTest(new HashMap<>());
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.createCaster(this.testFrameworkRule.getArbitraryString(), null));
+        () -> subjectUnderTest.createCaster(this.testFrameworkRule.arbitraryData().getString(), null));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "lastShoutOut");
   }
@@ -128,8 +128,8 @@ public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractT
   @Test
   public final void createCasterKey_forNameAndLastShoutOut_returnsCasterWithNameAndLastShoutOut() {
     this.installModules();
-    final String casterName = this.testFrameworkRule.getArbitraryString();
-    final Long lastShoutOut = this.testFrameworkRule.getArbitraryLong();
+    final String casterName = this.testFrameworkRule.arbitraryData().getString();
+    final Long lastShoutOut = this.testFrameworkRule.arbitraryData().getLong();
     final DefaultShoutOutDataStore subjectUnderTest = this.givenASubjectToTest(new HashMap<>());
 
     final Caster result = subjectUnderTest.createCaster(casterName, lastShoutOut);
@@ -197,7 +197,7 @@ public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractT
     final TestScheduleService scheduleService = this.testFrameworkRule.getInstance(TestScheduleService.class);
     scheduleService.setRunnableHandler(Runnable::run);
     final TestTwitchClient twitchClient = this.testFrameworkRule.getInstance(TestTwitchClient.class);
-    twitchClient.setGetUserIdImpl(login -> TwitchUserId.of(this.testFrameworkRule.getArbitraryString()));
+    twitchClient.setGetUserIdImpl(login -> TwitchUserId.of(this.testFrameworkRule.arbitraryData().getString()));
     final AtomicBoolean methodWasCalled = new AtomicBoolean(false);
     twitchClient.setGetUserFollowsFromIdImpl(fromId -> {
       methodWasCalled.set(true);
@@ -216,7 +216,7 @@ public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractT
     scheduleService.setRunnableHandler(Runnable::run);
     final TestTwitchClient twitchClient = this.testFrameworkRule.getInstance(TestTwitchClient.class);
     twitchClient.setGetUserIdImpl(login -> {
-      throw new IllegalArgumentException(this.testFrameworkRule.getArbitraryString());
+      throw new IllegalArgumentException(this.testFrameworkRule.arbitraryData().getString());
     });
 
     final Throwable thrown = catchThrowable(this::givenASubjectToTest);
@@ -230,7 +230,7 @@ public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractT
     final TestScheduleService scheduleService = this.testFrameworkRule.getInstance(TestScheduleService.class);
     scheduleService.setRunnableHandler(Runnable::run);
     final TestTwitchClient twitchClient = this.testFrameworkRule.getInstance(TestTwitchClient.class);
-    final TwitchUserId twitchUserId = TwitchUserId.of(this.testFrameworkRule.getArbitraryString());
+    final TwitchUserId twitchUserId = TwitchUserId.of(this.testFrameworkRule.arbitraryData().getString());
     twitchClient.setGetUserIdImpl(login -> twitchUserId);
     final UserFollows userFollows = this.givenAUserFollows(twitchUserId);
     twitchClient.setGetUserFollowsFromIdImpl(fromId -> userFollows);
@@ -250,7 +250,7 @@ public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractT
     final UserFollows.Builder builder = UserFollows.newBuilder();
 
     builder.setTotalFollows(totalFollows);
-    builder.setCursor(this.testFrameworkRule.getArbitraryString());
+    builder.setCursor(this.testFrameworkRule.arbitraryData().getString());
     for (int i = 0; i < followsBatchSize; i++) {
       builder.addUserFollow(this.givenAUserFollow(twitchUserId));
     }
@@ -262,9 +262,9 @@ public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractT
 
     builder.setFromId(twitchUserId.value);
     builder.setFromName(twitchUserId.value);
-    builder.setToId(this.testFrameworkRule.getArbitraryString());
-    builder.setToName(this.testFrameworkRule.getArbitraryString());
-    builder.setFollowedAt(this.testFrameworkRule.getArbitraryString());
+    builder.setToId(this.testFrameworkRule.arbitraryData().getString());
+    builder.setToName(this.testFrameworkRule.arbitraryData().getString());
+    builder.setFollowedAt(this.testFrameworkRule.arbitraryData().getString());
     return builder.build();
   }
 
@@ -274,7 +274,7 @@ public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractT
     final TestScheduleService scheduleService = this.testFrameworkRule.getInstance(TestScheduleService.class);
     scheduleService.setRunnableHandler(Runnable::run);
     final TestTwitchClient twitchClient = this.testFrameworkRule.getInstance(TestTwitchClient.class);
-    final TwitchUserId twitchUserId = TwitchUserId.of(this.testFrameworkRule.getArbitraryString());
+    final TwitchUserId twitchUserId = TwitchUserId.of(this.testFrameworkRule.arbitraryData().getString());
     twitchClient.setGetUserIdImpl(login -> twitchUserId);
     final UserFollows userFollows = this.givenAUserFollows(twitchUserId);
     twitchClient.setGetUserFollowsFromIdImpl(fromId -> userFollows);
@@ -303,7 +303,7 @@ public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractT
     final TestScheduleService scheduleService = this.testFrameworkRule.getInstance(TestScheduleService.class);
     scheduleService.setRunnableHandler(Runnable::run);
     final TestTwitchClient twitchClient = this.testFrameworkRule.getInstance(TestTwitchClient.class);
-    final TwitchUserId twitchUserId = TwitchUserId.of(this.testFrameworkRule.getArbitraryString());
+    final TwitchUserId twitchUserId = TwitchUserId.of(this.testFrameworkRule.arbitraryData().getString());
     twitchClient.setGetUserIdImpl(login -> twitchUserId);
     final UserFollows userFollows = this.givenAUserFollows(twitchUserId);
     twitchClient.setGetUserFollowsFromIdImpl(fromId -> userFollows);
@@ -321,7 +321,7 @@ public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractT
     final TestScheduleService scheduleService = this.testFrameworkRule.getInstance(TestScheduleService.class);
     scheduleService.setRunnableHandler(Runnable::run);
     final TestTwitchClient twitchClient = this.testFrameworkRule.getInstance(TestTwitchClient.class);
-    final TwitchUserId twitchUserId = TwitchUserId.of(this.testFrameworkRule.getArbitraryString());
+    final TwitchUserId twitchUserId = TwitchUserId.of(this.testFrameworkRule.arbitraryData().getString());
     twitchClient.setGetUserIdImpl(login -> twitchUserId);
     final UserFollows userFollows1 = this.givenAUserFollows(twitchUserId, 3, 6);
     twitchClient.setGetUserFollowsFromIdImpl(fromId -> userFollows1);
@@ -342,7 +342,7 @@ public class DefaultShoutOutDataStoreUnitTests extends ChatMessageStoreContractT
     final TestScheduleService scheduleService = this.testFrameworkRule.getInstance(TestScheduleService.class);
     scheduleService.setRunnableHandler(Runnable::run);
     final TestTwitchClient twitchClient = this.testFrameworkRule.getInstance(TestTwitchClient.class);
-    final TwitchUserId twitchUserId = TwitchUserId.of(this.testFrameworkRule.getArbitraryString());
+    final TwitchUserId twitchUserId = TwitchUserId.of(this.testFrameworkRule.arbitraryData().getString());
     twitchClient.setGetUserIdImpl(login -> twitchUserId);
     final UserFollows userFollows1 = this.givenAUserFollows(twitchUserId, 3, 6);
     twitchClient.setGetUserFollowsFromIdImpl(fromId -> userFollows1);

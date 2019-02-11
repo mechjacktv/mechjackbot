@@ -16,19 +16,19 @@ public class CustomChatCommandUnitTests extends ChatCommandContractTests {
 
   @Override
   protected CustomChatCommand givenASubjectToTest() {
-    return this.givenASubjectToTest(CommandBody.of(this.testFrameworkRule.getArbitraryString()));
+    return this.givenASubjectToTest(CommandBody.of(this.testFrameworkRule.arbitraryData().getString()));
   }
 
   private CustomChatCommand givenASubjectToTest(final CommandBody commandBody) {
     return new CustomChatCommand(this.testFrameworkRule.getInstance(ChatCommandUtils.class),
-        ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString()), commandBody,
-        ChatCommandDescription.of(this.testFrameworkRule.getArbitraryString()), UserRole.VIEWER);
+        ChatCommandTrigger.of(this.testFrameworkRule.arbitraryData().getString()), commandBody,
+        ChatCommandDescription.of(this.testFrameworkRule.arbitraryData().getString()), UserRole.VIEWER);
   }
 
   @Test
   public final void handleMessageEvent_noArgumentsRequired_resultIsChatMessage() {
     this.installModules();
-    final String bodyPart = this.testFrameworkRule.getArbitraryString();
+    final String bodyPart = this.testFrameworkRule.arbitraryData().getString();
     final CommandBody commandBody = CommandBody.of(bodyPart);
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
     final CustomChatCommand subjectUnderTest = this.givenASubjectToTest(commandBody);
@@ -43,11 +43,11 @@ public class CustomChatCommandUnitTests extends ChatCommandContractTests {
   @Test
   public final void handleMessageEvent_calledWithArguments_resultIsChatMessageWithReplacedArguments() {
     this.installModules();
-    final String bodyPart = this.testFrameworkRule.getArbitraryString();
-    final String argumentName = this.testFrameworkRule.getArbitraryString();
+    final String bodyPart = this.testFrameworkRule.arbitraryData().getString();
+    final String argumentName = this.testFrameworkRule.arbitraryData().getString();
     final CommandBody commandBody = CommandBody.of(String.format("%s ${%s}", bodyPart, argumentName));
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
-    final String argumentValue = this.testFrameworkRule.getArbitraryString();
+    final String argumentValue = this.testFrameworkRule.arbitraryData().getString();
     final CustomChatCommand subjectUnderTest = this.givenASubjectToTest(commandBody);
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), argumentValue)));
 
@@ -60,11 +60,11 @@ public class CustomChatCommandUnitTests extends ChatCommandContractTests {
   @Test
   public final void handleMessageEvent_duplicateArgument_resultIsChatMessageWithReplacedArguments() {
     this.installModules();
-    final String bodyPart = this.testFrameworkRule.getArbitraryString();
-    final String argumentName = this.testFrameworkRule.getArbitraryString();
+    final String bodyPart = this.testFrameworkRule.arbitraryData().getString();
+    final String argumentName = this.testFrameworkRule.arbitraryData().getString();
     final CommandBody commandBody = CommandBody.of(String.format("%s ${%2$s} ${%2$s}", bodyPart, argumentName));
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
-    final String argumentValue = this.testFrameworkRule.getArbitraryString();
+    final String argumentValue = this.testFrameworkRule.arbitraryData().getString();
     final CustomChatCommand subjectUnderTest = this.givenASubjectToTest(commandBody);
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), argumentValue)));
 
@@ -77,14 +77,14 @@ public class CustomChatCommandUnitTests extends ChatCommandContractTests {
   @Test
   public final void handleMessageEvent_multipleArguments_resultIsChatMessageWithReplacedArguments() {
     this.installModules();
-    final String bodyPart = this.testFrameworkRule.getArbitraryString();
-    final String argumentName1 = this.testFrameworkRule.getArbitraryString();
-    final String argumentName2 = this.testFrameworkRule.getArbitraryString();
+    final String bodyPart = this.testFrameworkRule.arbitraryData().getString();
+    final String argumentName1 = this.testFrameworkRule.arbitraryData().getString();
+    final String argumentName2 = this.testFrameworkRule.arbitraryData().getString();
     final CommandBody commandBody = CommandBody.of(String.format("%s ${%s} ${%s}", bodyPart, argumentName1,
         argumentName2));
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
-    final String argumentValue1 = this.testFrameworkRule.getArbitraryString();
-    final String argumentValue2 = this.testFrameworkRule.getArbitraryString();
+    final String argumentValue1 = this.testFrameworkRule.arbitraryData().getString();
+    final String argumentValue2 = this.testFrameworkRule.arbitraryData().getString();
     final CustomChatCommand subjectUnderTest = this.givenASubjectToTest(commandBody);
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s %s", subjectUnderTest.getTrigger(),
         argumentValue1, argumentValue2)));
@@ -98,9 +98,9 @@ public class CustomChatCommandUnitTests extends ChatCommandContractTests {
   @Test
   public final void handleMessageEvent_emptyArgumentsArgumentsRequired_resultIsUsageMessage() {
     this.installModules();
-    final String bodyPart = this.testFrameworkRule.getArbitraryString();
-    final String argumentName1 = this.testFrameworkRule.getArbitraryString();
-    final String argumentName2 = this.testFrameworkRule.getArbitraryString();
+    final String bodyPart = this.testFrameworkRule.arbitraryData().getString();
+    final String argumentName1 = this.testFrameworkRule.arbitraryData().getString();
+    final String argumentName2 = this.testFrameworkRule.arbitraryData().getString();
     final CommandBody commandBody = CommandBody.of(String.format("%s ${%s} ${%s}", bodyPart, argumentName1,
         argumentName2));
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
@@ -119,13 +119,13 @@ public class CustomChatCommandUnitTests extends ChatCommandContractTests {
   @Test
   public final void handleMessageEvent_missingArgument_resultIsUsageMessage() {
     this.installModules();
-    final String bodyPart = this.testFrameworkRule.getArbitraryString();
-    final String argumentName1 = this.testFrameworkRule.getArbitraryString();
-    final String argumentName2 = this.testFrameworkRule.getArbitraryString();
+    final String bodyPart = this.testFrameworkRule.arbitraryData().getString();
+    final String argumentName1 = this.testFrameworkRule.arbitraryData().getString();
+    final String argumentName2 = this.testFrameworkRule.arbitraryData().getString();
     final CommandBody commandBody = CommandBody.of(String.format("%s ${%s} ${%s}", bodyPart, argumentName1,
         argumentName2));
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);
-    final String argumentValue = this.testFrameworkRule.getArbitraryString();
+    final String argumentValue = this.testFrameworkRule.arbitraryData().getString();
     final CustomChatCommand subjectUnderTest = this.givenASubjectToTest(commandBody);
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(), argumentValue)));
 

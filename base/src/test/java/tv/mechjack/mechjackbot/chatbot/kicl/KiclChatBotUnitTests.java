@@ -17,21 +17,21 @@ import tv.mechjack.platform.configuration.MapConfiguration;
 import tv.mechjack.platform.configuration.TestConfigurationModule;
 import tv.mechjack.platform.utils.ExecutionUtils;
 import tv.mechjack.platform.utils.TestUtilsModule;
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
 import tv.mechjack.testframework.fake.FakeBuilder;
-import tv.mechjack.testframework.fake.methodhandler.CapturingMethodInvocationHandler;
-import tv.mechjack.testframework.fake.methodhandler.CountingMethodInvocationHandler;
+import tv.mechjack.testframework.fake.ArgumentCaptor;
+import tv.mechjack.testframework.fake.InvocationCounter;
 
 public class KiclChatBotUnitTests {
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   private void installModules() {
-    this.testFrameworkRule.installModule(new TestCommandModule());
-    this.testFrameworkRule.installModule(new TestConfigurationModule());
-    this.testFrameworkRule.installModule(new TestKiclChatBotModule());
-    this.testFrameworkRule.installModule(new TestUtilsModule());
+    this.testFrameworkRule.registerModule(new TestCommandModule());
+    this.testFrameworkRule.registerModule(new TestConfigurationModule());
+    this.testFrameworkRule.registerModule(new TestKiclChatBotModule());
+    this.testFrameworkRule.registerModule(new TestUtilsModule());
   }
 
   private KiclChatBot givenASubjectToTest() {
@@ -47,7 +47,7 @@ public class KiclChatBotUnitTests {
   public final void start_whenCalled_callsConnectOnClient() {
     this.installModules();
     final FakeBuilder<Client> fakeBuilder = this.testFrameworkRule.fakeBuilder(Client.class);
-    final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
+    final InvocationCounter countingHandler = new InvocationCounter();
     fakeBuilder.forMethod("connect").addHandler(countingHandler);
     final KiclChatBot subjectUnderTest = this.givenASubjectToTest(fakeBuilder.build());
 
@@ -62,7 +62,7 @@ public class KiclChatBotUnitTests {
     final KiclChatBot subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.sendMessage(null,
-        ChatMessage.of(this.testFrameworkRule.getArbitraryString())));
+        ChatMessage.of(this.testFrameworkRule.arbitraryData().getString())));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "chatChannel");
   }
@@ -73,7 +73,7 @@ public class KiclChatBotUnitTests {
     final KiclChatBot subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.sendMessage(
-        ChatChannel.of(this.testFrameworkRule.getArbitraryString()), null));
+        ChatChannel.of(this.testFrameworkRule.arbitraryData().getString()), null));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "chatMessage");
   }
@@ -81,17 +81,17 @@ public class KiclChatBotUnitTests {
   @Test
   public final void sendMessage_isCalled_resultIsTheExpectChannel() {
     this.installModules();
-    final String messageFormat = this.testFrameworkRule.getArbitraryString() + "%s";
+    final String messageFormat = this.testFrameworkRule.arbitraryData().getString() + "%s";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(KEY_CHAT_BOT_MESSAGE_FORMAT, messageFormat);
     final FakeBuilder<Client> fakeBuilder = this.testFrameworkRule.fakeBuilder(Client.class);
-    final CapturingMethodInvocationHandler capturingHandler = new CapturingMethodInvocationHandler(0);
+    final ArgumentCaptor capturingHandler = new ArgumentCaptor(0);
     fakeBuilder.forMethod("sendMessage", new Class[] { String.class, String.class })
         .addHandler(capturingHandler);
     final KiclChatBot subjectUnderTest = this.givenASubjectToTest(fakeBuilder.build());
 
-    final ChatChannel chatChannel = ChatChannel.of(this.testFrameworkRule.getArbitraryString());
-    subjectUnderTest.sendMessage(chatChannel, ChatMessage.of(this.testFrameworkRule.getArbitraryString()));
+    final ChatChannel chatChannel = ChatChannel.of(this.testFrameworkRule.arbitraryData().getString());
+    subjectUnderTest.sendMessage(chatChannel, ChatMessage.of(this.testFrameworkRule.arbitraryData().getString()));
 
     final String actual = capturingHandler.getValue();
     assertThat(actual).isEqualTo(chatChannel.value);
@@ -100,17 +100,17 @@ public class KiclChatBotUnitTests {
   @Test
   public final void sendMessage_isCalled_resultIsTheExpectMessage() {
     this.installModules();
-    final String messageFormat = this.testFrameworkRule.getArbitraryString() + "%s";
+    final String messageFormat = this.testFrameworkRule.arbitraryData().getString() + "%s";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(KEY_CHAT_BOT_MESSAGE_FORMAT, messageFormat);
     final FakeBuilder<Client> fakeBuilder = this.testFrameworkRule.fakeBuilder(Client.class);
-    final CapturingMethodInvocationHandler capturingHandler = new CapturingMethodInvocationHandler(1);
+    final ArgumentCaptor capturingHandler = new ArgumentCaptor(1);
     fakeBuilder.forMethod("sendMessage", new Class[] { String.class, String.class })
         .addHandler(capturingHandler);
     final KiclChatBot subjectUnderTest = this.givenASubjectToTest(fakeBuilder.build());
 
-    final ChatMessage chatMessage = ChatMessage.of(this.testFrameworkRule.getArbitraryString());
-    subjectUnderTest.sendMessage(ChatChannel.of(this.testFrameworkRule.getArbitraryString()), chatMessage);
+    final ChatMessage chatMessage = ChatMessage.of(this.testFrameworkRule.arbitraryData().getString());
+    subjectUnderTest.sendMessage(ChatChannel.of(this.testFrameworkRule.arbitraryData().getString()), chatMessage);
 
     final String actual = capturingHandler.getValue();
     assertThat(actual).isEqualTo(String.format(messageFormat, chatMessage));
@@ -119,11 +119,11 @@ public class KiclChatBotUnitTests {
   @Test
   public final void stop_whenCalled_callsStopOnKicl() {
     this.installModules();
-    final String shutdownMessage = this.testFrameworkRule.getArbitraryString();
+    final String shutdownMessage = this.testFrameworkRule.arbitraryData().getString();
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(KEY_SHUTDOWN_MESSAGE, shutdownMessage);
     final FakeBuilder<Client> fakeBuilder = this.testFrameworkRule.fakeBuilder(Client.class);
-    final CapturingMethodInvocationHandler capturingHandler = new CapturingMethodInvocationHandler(0);
+    final ArgumentCaptor capturingHandler = new ArgumentCaptor(0);
     fakeBuilder.forMethod("shutdown", new Class[] { String.class }).addHandler(capturingHandler);
     final KiclChatBot subjectUnderTest = this.givenASubjectToTest(fakeBuilder.build());
 

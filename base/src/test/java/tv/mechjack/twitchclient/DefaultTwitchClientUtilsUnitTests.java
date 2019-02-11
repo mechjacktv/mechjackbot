@@ -8,19 +8,19 @@ import org.slf4j.Logger;
 import tv.mechjack.platform.utils.ExecutionUtils;
 import tv.mechjack.platform.utils.TestUtilsModule;
 import tv.mechjack.testframework.fake.FakeBuilder;
-import tv.mechjack.testframework.fake.methodhandler.CountingMethodInvocationHandler;
+import tv.mechjack.testframework.fake.InvocationCounter;
 
 public class DefaultTwitchClientUtilsUnitTests extends TwitchClientUtilsContractTests {
 
   @Override
   protected void installModules() {
     super.installModules();
-    this.testFrameworkRule.installModule(new TestUtilsModule());
+    this.testFrameworkRule.registerModule(new TestUtilsModule());
   }
 
   @Override
   protected TwitchClientUtils givenASubjectToTest() {
-    return this.givenASubjectToTest(this.testFrameworkRule.fake(Logger.class));
+    return this.givenASubjectToTest(this.testFrameworkRule.fakeFactory().fake(Logger.class));
   }
 
   private DefaultTwitchClientUtils givenASubjectToTest(final Logger logger) {
@@ -33,11 +33,11 @@ public class DefaultTwitchClientUtilsUnitTests extends TwitchClientUtilsContract
   public final void handleUnknownObjectName_whenCalled_resultIsWarningLogged() {
     this.installModules();
     final FakeBuilder<Logger> fakeBuilder = this.testFrameworkRule.fakeBuilder(Logger.class);
-    final CountingMethodInvocationHandler countingHandler = new CountingMethodInvocationHandler();
+    final InvocationCounter countingHandler = new InvocationCounter();
     fakeBuilder.forMethod("warn", new Class[] { String.class }).addHandler(countingHandler);
     final DefaultTwitchClientUtils subjectUnderTest = this.givenASubjectToTest(fakeBuilder.build());
 
-    subjectUnderTest.handleUnknownObjectName(this.testFrameworkRule.getArbitraryString());
+    subjectUnderTest.handleUnknownObjectName(this.testFrameworkRule.arbitraryData().getString());
 
     assertThat(countingHandler.getCallCount()).isOne();
   }

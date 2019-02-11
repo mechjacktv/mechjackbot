@@ -34,7 +34,7 @@ public class MapConfigurationUnitTests extends ConfigurationContractTests {
     final MapConfiguration subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.set((String) null,
-        this.testFrameworkRule.getArbitraryString()));
+        this.testFrameworkRule.arbitraryData().getString()));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "key");
   }
@@ -45,7 +45,7 @@ public class MapConfigurationUnitTests extends ConfigurationContractTests {
     final MapConfiguration subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(
-        () -> subjectUnderTest.set(this.testFrameworkRule.getArbitraryString(), null));
+        () -> subjectUnderTest.set(this.testFrameworkRule.arbitraryData().getString(), null));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "value");
   }
@@ -53,8 +53,8 @@ public class MapConfigurationUnitTests extends ConfigurationContractTests {
   @Test
   public final void set_withKeyValuePair_storesValue() {
     this.installModules();
-    final String key = this.testFrameworkRule.getArbitraryString();
-    final String value = this.testFrameworkRule.getArbitraryString();
+    final String key = this.testFrameworkRule.arbitraryData().getString();
+    final String value = this.testFrameworkRule.arbitraryData().getString();
     final MapConfiguration subjectUnderTest = this.givenASubjectToTest();
 
     subjectUnderTest.set(key, value);

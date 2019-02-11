@@ -13,15 +13,15 @@ import org.junit.Test;
 
 import tv.mechjack.platform.utils.OptionalByteArrayEqualsExpected;
 import tv.mechjack.platform.utils.TestUtilsModule;
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
 
 public abstract class KeyValueStoreContractTests {
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   protected void installModules() {
-    this.testFrameworkRule.installModule(new TestUtilsModule());
+    this.testFrameworkRule.registerModule(new TestUtilsModule());
   }
 
   private KeyValueStore givenASubjectToTest() {
@@ -40,7 +40,7 @@ public abstract class KeyValueStoreContractTests {
   }
 
   private byte[] givenAByteArray() {
-    return this.testFrameworkRule.getArbitraryByteArray();
+    return this.testFrameworkRule.arbitraryData().getByteArray();
   }
 
   @Test

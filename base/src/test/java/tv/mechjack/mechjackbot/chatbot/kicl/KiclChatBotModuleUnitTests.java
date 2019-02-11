@@ -10,18 +10,18 @@ import tv.mechjack.mechjackbot.api.ChatBotConfiguration;
 import tv.mechjack.mechjackbot.api.TestCommandModule;
 import tv.mechjack.platform.configuration.TestConfigurationModule;
 import tv.mechjack.platform.utils.TestUtilsModule;
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
 
 public class KiclChatBotModuleUnitTests {
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   private void installModules() {
-    this.testFrameworkRule.installModule(new TestCommandModule());
-    this.testFrameworkRule.installModule(new TestConfigurationModule());
-    this.testFrameworkRule.installModule(new TestKiclChatBotModule());
-    this.testFrameworkRule.installModule(new TestUtilsModule());
+    this.testFrameworkRule.registerModule(new TestCommandModule());
+    this.testFrameworkRule.registerModule(new TestConfigurationModule());
+    this.testFrameworkRule.registerModule(new TestKiclChatBotModule());
+    this.testFrameworkRule.registerModule(new TestUtilsModule());
   }
 
   private KiclChatBotModule givenASubjectToTest() {

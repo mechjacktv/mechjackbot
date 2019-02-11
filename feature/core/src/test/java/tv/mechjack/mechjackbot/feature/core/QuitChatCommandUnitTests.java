@@ -25,7 +25,7 @@ public class QuitChatCommandUnitTests extends BaseChatCommandContractTests {
 
   protected final void installModules() {
     super.installModules();
-    this.testFrameworkRule.installModule(new TestScheduleServiceModule());
+    this.testFrameworkRule.registerModule(new TestScheduleServiceModule());
   }
 
   @Override
@@ -77,7 +77,7 @@ public class QuitChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.getArbitraryString();
+    final String customMessageFormat = this.testFrameworkRule.arbitraryData().getString();
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);

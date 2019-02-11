@@ -1,7 +1,7 @@
 package tv.mechjack.mechjackbot.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static tv.mechjack.testframework.TestFrameworkRule.ARBITRARY_COLLECTION_SIZE;
+import static tv.mechjack.testframework.TestFramework.ARBITRARY_COLLECTION_SIZE;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,17 +16,17 @@ import org.junit.Test;
 
 import tv.mechjack.platform.configuration.TestConfigurationModule;
 import tv.mechjack.platform.utils.TestUtilsModule;
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
 
 public abstract class ChatMessageEventHandlerContractTests {
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   protected void installModules() {
-    this.testFrameworkRule.installModule(new TestCommandModule());
-    this.testFrameworkRule.installModule(new TestConfigurationModule());
-    this.testFrameworkRule.installModule(new TestUtilsModule());
+    this.testFrameworkRule.registerModule(new TestCommandModule());
+    this.testFrameworkRule.registerModule(new TestConfigurationModule());
+    this.testFrameworkRule.registerModule(new TestUtilsModule());
   }
 
   protected abstract ChatMessageEventHandler givenASubjectToTest(final Set<ChatCommand> chatCommands);

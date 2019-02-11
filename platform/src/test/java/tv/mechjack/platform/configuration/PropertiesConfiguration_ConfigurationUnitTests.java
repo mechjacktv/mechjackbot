@@ -13,7 +13,7 @@ public class PropertiesConfiguration_ConfigurationUnitTests extends Configuratio
   @Override
   protected void installModules() {
     super.installModules();
-    this.testFrameworkRule.installModule(new TestScheduleServiceModule());
+    this.testFrameworkRule.registerModule(new TestScheduleServiceModule());
   }
 
   @Override

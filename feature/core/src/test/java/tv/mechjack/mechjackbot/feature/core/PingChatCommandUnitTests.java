@@ -70,7 +70,7 @@ public class PingChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + "$(user)";
+    final String customMessageFormat = this.testFrameworkRule.arbitraryData().getString() + "$(user)";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
     final TestChatMessageEvent messageEvent = this.testFrameworkRule.getInstance(TestChatMessageEvent.class);

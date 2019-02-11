@@ -7,8 +7,8 @@ public class TestApplicationModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    this.bind(TestApplicataion.class).in(Scopes.SINGLETON);
-    this.bind(Application.class).to(TestApplicataion.class);
+    this.bind(TestApplication.class).in(Scopes.SINGLETON);
+    this.bind(Application.class).to(TestApplication.class);
   }
 
 }

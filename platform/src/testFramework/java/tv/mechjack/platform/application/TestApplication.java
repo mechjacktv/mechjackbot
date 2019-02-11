@@ -2,14 +2,14 @@ package tv.mechjack.platform.application;
 
 import javax.inject.Inject;
 
-import tv.mechjack.testframework.ArbitraryDataGenerator;
+import tv.mechjack.testframework.ArbitraryData;
 
-public final class TestApplicataion implements Application {
+public final class TestApplication implements Application {
 
   private ApplicationDataLocation applicationDataLocation;
 
   @Inject
-  TestApplicataion(final ArbitraryDataGenerator arbitraryDataGenerator) {
+  TestApplication(final ArbitraryData arbitraryDataGenerator) {
     this.applicationDataLocation = ApplicationDataLocation.of(arbitraryDataGenerator.getString());
   }
 

@@ -1,9 +1,5 @@
 package tv.mechjack.platform.utils;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static tv.mechjack.testframework.TestFrameworkRule.ARBITRARY_COLLECTION_SIZE;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,13 +7,17 @@ import java.util.Set;
 import org.junit.Rule;
 import org.junit.Test;
 
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
 import tv.mechjack.util.ProtoMessage.TestKeyMessage;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static tv.mechjack.testframework.ArbitraryData.ARBITRARY_COLLECTION_SIZE;
 
 public abstract class ProtobufUtilsContractTests {
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   protected abstract void installModules();
 
@@ -27,7 +27,8 @@ public abstract class ProtobufUtilsContractTests {
     final Set<TestKeyMessage> testKeyMessages = new HashSet<>();
 
     for (int i = 0; i < ARBITRARY_COLLECTION_SIZE; i++) {
-      testKeyMessages.add(this.testFrameworkRule.getInstance(TestKeyMessage.class));
+      testKeyMessages
+          .add(this.testFrameworkRule.getInstance(TestKeyMessage.class));
     }
     return testKeyMessages;
   }
@@ -36,12 +37,13 @@ public abstract class ProtobufUtilsContractTests {
     final Set<byte[]> byteArraySet = new HashSet<>();
 
     for (int i = 0; i < ARBITRARY_COLLECTION_SIZE; i++) {
-      byteArraySet.add(this.testFrameworkRule.getArbitraryByteArray());
+      byteArraySet.add(this.testFrameworkRule.arbitraryData().getByteArray());
     }
     return byteArraySet;
   }
 
-  private Set<byte[]> givenASetOfTestKeyMessageByteArrays(final Set<TestKeyMessage> testKeyMessages) {
+  private Set<byte[]> givenASetOfTestKeyMessageByteArrays(
+      final Set<TestKeyMessage> testKeyMessages) {
     final Set<byte[]> testKeyMessageBytesSet = new HashSet<>();
 
     for (final TestKeyMessage testKeyMessage : testKeyMessages) {
@@ -53,10 +55,12 @@ public abstract class ProtobufUtilsContractTests {
   @Test
   public final void parseMessage_forMessageBytes_resultIsMessage() {
     this.installModules();
-    final TestKeyMessage testKeyMessage = this.testFrameworkRule.getInstance(TestKeyMessage.class);
+    final TestKeyMessage testKeyMessage = this.testFrameworkRule
+        .getInstance(TestKeyMessage.class);
     final ProtobufUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final TestKeyMessage result = subjectUnderTest.parseMessage(TestKeyMessage.class, testKeyMessage.toByteArray());
+    final TestKeyMessage result = subjectUnderTest
+        .parseMessage(TestKeyMessage.class, testKeyMessage.toByteArray());
 
     assertThat(result).isEqualTo(testKeyMessage);
   }
@@ -66,8 +70,9 @@ public abstract class ProtobufUtilsContractTests {
     this.installModules();
     final ProtobufUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.parseMessage(TestKeyMessage.class,
-        this.testFrameworkRule.getArbitraryByteArray()));
+    final Throwable thrown = catchThrowable(
+        () -> subjectUnderTest.parseMessage(TestKeyMessage.class,
+            this.testFrameworkRule.arbitraryData().getByteArray()));
 
     assertThat(thrown).isInstanceOf(MessageParsingException.class);
   }
@@ -75,12 +80,15 @@ public abstract class ProtobufUtilsContractTests {
   @Test
   public final void parseAllMessages_forMessageBytes_resultIsAllMessages() {
     this.installModules();
-    final Set<TestKeyMessage> testKeyMessages = this.givenASetOfTestKeyMessages();
-    final Set<byte[]> testKeyMessageBytesSet = this.givenASetOfTestKeyMessageByteArrays(testKeyMessages);
+    final Set<TestKeyMessage> testKeyMessages = this
+        .givenASetOfTestKeyMessages();
+    final Set<byte[]> testKeyMessageBytesSet = this
+        .givenASetOfTestKeyMessageByteArrays(testKeyMessages);
     final ProtobufUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Collection<TestKeyMessage> result = subjectUnderTest.parseAllMessages(TestKeyMessage.class,
-        testKeyMessageBytesSet);
+    final Collection<TestKeyMessage> result = subjectUnderTest
+        .parseAllMessages(TestKeyMessage.class,
+            testKeyMessageBytesSet);
 
     assertThat(result).containsExactlyInAnyOrderElementsOf(testKeyMessages);
   }
@@ -90,8 +98,9 @@ public abstract class ProtobufUtilsContractTests {
     this.installModules();
     final ProtobufUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.parseAllMessages(TestKeyMessage.class,
-        this.givenASetOfRandomByteArrays()));
+    final Throwable thrown = catchThrowable(
+        () -> subjectUnderTest.parseAllMessages(TestKeyMessage.class,
+            this.givenASetOfRandomByteArrays()));
 
     assertThat(thrown).isInstanceOf(MessageParsingException.class);
   }

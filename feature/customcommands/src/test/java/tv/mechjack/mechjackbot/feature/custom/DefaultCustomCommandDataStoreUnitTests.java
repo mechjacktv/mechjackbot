@@ -54,15 +54,15 @@ public class DefaultCustomCommandDataStoreUnitTests extends
   @Override
   protected CustomCommandKey givenAKey() {
     return CustomCommandKey.newBuilder()
-        .setTrigger(this.testFrameworkRule.getArbitraryString())
+        .setTrigger(this.testFrameworkRule.arbitraryData().getString())
         .build();
   }
 
   @Override
   protected CustomCommand givenAValue() {
     return CustomCommand.newBuilder()
-        .setTrigger(this.testFrameworkRule.getArbitraryString())
-        .setCommandBody(this.testFrameworkRule.getArbitraryString())
+        .setTrigger(this.testFrameworkRule.arbitraryData().getString())
+        .setCommandBody(this.testFrameworkRule.arbitraryData().getString())
         .setAccessLevel(UserRole.SUBSCRIBER.toString())
         .build();
   }
@@ -70,7 +70,7 @@ public class DefaultCustomCommandDataStoreUnitTests extends
   @Test
   public final void createCustomCommandKey_forTrigger_resultIsCustomCommandKeyWithTrigger() {
     this.installModules();
-    final String trigger = this.testFrameworkRule.getArbitraryString();
+    final String trigger = this.testFrameworkRule.arbitraryData().getString();
     final DefaultCustomCommandDataStore subjectUnderTest = this.givenASubjectToTest();
 
     final CustomCommandKey result = subjectUnderTest.createCustomCommandKey(ChatCommandTrigger.of(trigger));
@@ -84,8 +84,8 @@ public class DefaultCustomCommandDataStoreUnitTests extends
     final DefaultCustomCommandDataStore subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.createCustomCommand(null,
-        CommandBody.of(this.testFrameworkRule.getArbitraryString()),
-        ChatCommandDescription.of(this.testFrameworkRule.getArbitraryString()), UserRole.SUBSCRIBER));
+        CommandBody.of(this.testFrameworkRule.arbitraryData().getString()),
+        ChatCommandDescription.of(this.testFrameworkRule.arbitraryData().getString()), UserRole.SUBSCRIBER));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "trigger");
   }
@@ -96,8 +96,8 @@ public class DefaultCustomCommandDataStoreUnitTests extends
     final DefaultCustomCommandDataStore subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.createCustomCommand(
-        ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString()), null,
-        ChatCommandDescription.of(this.testFrameworkRule.getArbitraryString()), UserRole.SUBSCRIBER));
+        ChatCommandTrigger.of(this.testFrameworkRule.arbitraryData().getString()), null,
+        ChatCommandDescription.of(this.testFrameworkRule.arbitraryData().getString()), UserRole.SUBSCRIBER));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "commandBody");
   }
@@ -108,8 +108,8 @@ public class DefaultCustomCommandDataStoreUnitTests extends
     final DefaultCustomCommandDataStore subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.createCustomCommand(
-        ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString()),
-        CommandBody.of(this.testFrameworkRule.getArbitraryString()),
+        ChatCommandTrigger.of(this.testFrameworkRule.arbitraryData().getString()),
+        CommandBody.of(this.testFrameworkRule.arbitraryData().getString()),
         null, UserRole.SUBSCRIBER));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "description");
@@ -121,9 +121,9 @@ public class DefaultCustomCommandDataStoreUnitTests extends
     final DefaultCustomCommandDataStore subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.createCustomCommand(
-        ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString()),
-        CommandBody.of(this.testFrameworkRule.getArbitraryString()),
-        ChatCommandDescription.of(this.testFrameworkRule.getArbitraryString()), null));
+        ChatCommandTrigger.of(this.testFrameworkRule.arbitraryData().getString()),
+        CommandBody.of(this.testFrameworkRule.arbitraryData().getString()),
+        ChatCommandDescription.of(this.testFrameworkRule.arbitraryData().getString()), null));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "userRole");
   }
@@ -131,9 +131,9 @@ public class DefaultCustomCommandDataStoreUnitTests extends
   @Test
   public final void createCustomCommand_forTriggerBodyAndAccessLevel_resultIsCustomCommandKeyWithTriggerBodyAndAccessLevel() {
     this.installModules();
-    final String trigger = this.testFrameworkRule.getArbitraryString();
-    final String commandBody = this.testFrameworkRule.getArbitraryString();
-    final String description = this.testFrameworkRule.getArbitraryString();
+    final String trigger = this.testFrameworkRule.arbitraryData().getString();
+    final String commandBody = this.testFrameworkRule.arbitraryData().getString();
+    final String description = this.testFrameworkRule.arbitraryData().getString();
     final DefaultCustomCommandDataStore subjectUnderTest = this.givenASubjectToTest();
 
     final CustomCommand result = subjectUnderTest.createCustomCommand(ChatCommandTrigger.of(trigger),

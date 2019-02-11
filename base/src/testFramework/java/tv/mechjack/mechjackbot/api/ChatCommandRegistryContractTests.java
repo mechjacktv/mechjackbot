@@ -12,17 +12,17 @@ import org.junit.Test;
 
 import tv.mechjack.platform.configuration.TestConfigurationModule;
 import tv.mechjack.platform.utils.TestUtilsModule;
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
 
 public abstract class ChatCommandRegistryContractTests {
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   protected void installModules() {
-    this.testFrameworkRule.installModule(new TestCommandModule());
-    this.testFrameworkRule.installModule(new TestConfigurationModule());
-    this.testFrameworkRule.installModule(new TestUtilsModule());
+    this.testFrameworkRule.registerModule(new TestCommandModule());
+    this.testFrameworkRule.registerModule(new TestConfigurationModule());
+    this.testFrameworkRule.registerModule(new TestUtilsModule());
   }
 
   protected abstract ChatCommandRegistry givenASubjectToTest();
@@ -84,7 +84,7 @@ public abstract class ChatCommandRegistryContractTests {
     final ChatCommandRegistry subjectUnderTest = this.givenASubjectToTest();
 
     final boolean result = subjectUnderTest
-        .hasCommand(ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString()));
+        .hasCommand(ChatCommandTrigger.of(this.testFrameworkRule.arbitraryData().getString()));
 
     assertThat(result).isFalse();
   }
@@ -117,7 +117,7 @@ public abstract class ChatCommandRegistryContractTests {
     final ChatCommandRegistry subjectUnderTest = this.givenASubjectToTest();
 
     final boolean result = subjectUnderTest
-        .removeCommand(ChatCommandTrigger.of(this.testFrameworkRule.getArbitraryString()));
+        .removeCommand(ChatCommandTrigger.of(this.testFrameworkRule.arbitraryData().getString()));
 
     assertThat(result).isFalse();
   }

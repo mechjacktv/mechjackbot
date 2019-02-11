@@ -1,20 +1,20 @@
 package tv.mechjack.platform.utils;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-
 import org.junit.Rule;
 import org.junit.Test;
 
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 public abstract class TimeUtilsContractTests {
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   protected void installModules() {
-    this.testFrameworkRule.installModule(new TestUtilsModule());
+    this.testFrameworkRule.registerModule(new TestUtilsModule());
   }
 
   abstract TimeUtils givenASubjectToTest();
@@ -33,9 +33,12 @@ public abstract class TimeUtilsContractTests {
     this.installModules();
     final TimeUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.secondsAsMs(null));
+    final Throwable thrown = catchThrowable(
+        () -> subjectUnderTest.secondsAsMs(null));
 
-    this.testFrameworkRule.assertNullPointerException(thrown, "seconds");
+    assertThat(thrown).isInstanceOf(NullPointerException.class)
+        .hasMessage(this.testFrameworkRule.getInstance(ExecutionUtils.class)
+            .nullMessageForName("seconds"));
   }
 
   @Test
@@ -52,7 +55,8 @@ public abstract class TimeUtilsContractTests {
     this.installModules();
     final TimeUtils subjectUnderTest = this.givenASubjectToTest();
 
-    final Throwable thrown = catchThrowable(() -> subjectUnderTest.hoursAsMs(null));
+    final Throwable thrown = catchThrowable(
+        () -> subjectUnderTest.hoursAsMs(null));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "hours");
   }

@@ -9,7 +9,7 @@ public class DefaultProtobufUtilsUnitTests extends ProtobufUtilsContractTests {
 
   @Override
   protected void installModules() {
-    this.testFrameworkRule.installModule(new TestUtilsModule());
+    this.testFrameworkRule.registerModule(new TestUtilsModule());
   }
 
 }

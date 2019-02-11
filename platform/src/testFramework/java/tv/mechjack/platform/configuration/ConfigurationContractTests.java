@@ -2,6 +2,7 @@ package tv.mechjack.platform.configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static tv.mechjack.testframework.ArbitraryData.ARBITRARY_COLLECTION_SIZE;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,15 +14,15 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import tv.mechjack.platform.utils.TestUtilsModule;
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
 
 public abstract class ConfigurationContractTests {
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   protected void installModules() {
-    this.testFrameworkRule.installModule(new TestUtilsModule());
+    this.testFrameworkRule.registerModule(new TestUtilsModule());
   }
 
   private Configuration givenASubjectToTest() throws Exception {
@@ -33,8 +34,8 @@ public abstract class ConfigurationContractTests {
   private Map<String, String> givenAPropertiesMap() {
     final Map<String, String> properties = new HashMap<>();
 
-    for (int i = 0; i < TestFrameworkRule.ARBITRARY_COLLECTION_SIZE; i++) {
-      properties.put(this.testFrameworkRule.getArbitraryString(), this.testFrameworkRule.getArbitraryString());
+    for (int i = 0; i < ARBITRARY_COLLECTION_SIZE; i++) {
+      properties.put(this.testFrameworkRule.arbitraryData().getString(), this.testFrameworkRule.arbitraryData().getString());
     }
     return properties;
   }
@@ -54,7 +55,7 @@ public abstract class ConfigurationContractTests {
     this.installModules();
     final Configuration subjectUnderTest = this.givenASubjectToTest();
 
-    final Optional<String> result = subjectUnderTest.get(this.testFrameworkRule.getArbitraryString());
+    final Optional<String> result = subjectUnderTest.get(this.testFrameworkRule.arbitraryData().getString());
 
     assertThat(result).isEmpty();
   }
@@ -62,8 +63,8 @@ public abstract class ConfigurationContractTests {
   @Test
   public final void get_withData_returnsOptionalWithValue() throws Exception {
     this.installModules();
-    final String key = this.testFrameworkRule.getArbitraryString();
-    final String value = this.testFrameworkRule.getArbitraryString();
+    final String key = this.testFrameworkRule.arbitraryData().getString();
+    final String value = this.testFrameworkRule.arbitraryData().getString();
     final Map<String, String> properties = new HashMap<>();
     properties.put(key, value);
     final Configuration subjectUnderTest = this.givenASubjectToTest(properties);
@@ -82,7 +83,7 @@ public abstract class ConfigurationContractTests {
     final Configuration subjectUnderTest = this.givenASubjectToTest();
 
     final Throwable thrown = catchThrowable(() -> subjectUnderTest.get((String) null,
-        this.testFrameworkRule.getArbitraryString()));
+        this.testFrameworkRule.arbitraryData().getString()));
 
     this.testFrameworkRule.assertNullPointerException(thrown, "key");
   }
@@ -90,10 +91,10 @@ public abstract class ConfigurationContractTests {
   @Test
   public final void get_forKeyWithNoValueAndDefaultValue_returnsDefaultValue() throws Exception {
     this.installModules();
-    final String defaultValue = this.testFrameworkRule.getArbitraryString();
+    final String defaultValue = this.testFrameworkRule.arbitraryData().getString();
     final Configuration subjectUnderTest = this.givenASubjectToTest();
 
-    final String result = subjectUnderTest.get(this.testFrameworkRule.getArbitraryString(), defaultValue);
+    final String result = subjectUnderTest.get(this.testFrameworkRule.arbitraryData().getString(), defaultValue);
 
     assertThat(result).isEqualTo(defaultValue);
   }
@@ -103,7 +104,7 @@ public abstract class ConfigurationContractTests {
     this.installModules();
     final Configuration subjectUnderTest = this.givenASubjectToTest();
 
-    final String result = subjectUnderTest.get(this.testFrameworkRule.getArbitraryString(), null);
+    final String result = subjectUnderTest.get(this.testFrameworkRule.arbitraryData().getString(), null);
 
     assertThat(result).isNull();
   }
@@ -111,13 +112,13 @@ public abstract class ConfigurationContractTests {
   @Test
   public final void get_forKeyWithValueAndDefaultValue_returnsKeyValue() throws Exception {
     this.installModules();
-    final String key = this.testFrameworkRule.getArbitraryString();
-    final String value = this.testFrameworkRule.getArbitraryString();
+    final String key = this.testFrameworkRule.arbitraryData().getString();
+    final String value = this.testFrameworkRule.arbitraryData().getString();
     final Map<String, String> properties = new HashMap<>();
     properties.put(key, value);
     final Configuration subjectUnderTest = this.givenASubjectToTest(properties);
 
-    final String result = subjectUnderTest.get(key, this.testFrameworkRule.getArbitraryString());
+    final String result = subjectUnderTest.get(key, this.testFrameworkRule.arbitraryData().getString());
 
     assertThat(result).isEqualTo(value);
   }
@@ -125,8 +126,8 @@ public abstract class ConfigurationContractTests {
   @Test
   public final void get_forKeyWithValueAndNullDefaultValue_returnsKeyValue() throws Exception {
     this.installModules();
-    final String key = this.testFrameworkRule.getArbitraryString();
-    final String value = this.testFrameworkRule.getArbitraryString();
+    final String key = this.testFrameworkRule.arbitraryData().getString();
+    final String value = this.testFrameworkRule.arbitraryData().getString();
     final Map<String, String> properties = new HashMap<>();
     properties.put(key, value);
     final Configuration subjectUnderTest = this.givenASubjectToTest(properties);

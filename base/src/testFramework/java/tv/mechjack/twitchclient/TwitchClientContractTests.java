@@ -12,7 +12,7 @@ import org.assertj.core.api.Condition;
 import org.junit.Rule;
 import org.junit.Test;
 
-import tv.mechjack.testframework.TestFrameworkRule;
+import tv.mechjack.testframework.TestFramework;
 import tv.mechjack.twitchclient.ProtoMessage.User;
 import tv.mechjack.twitchclient.ProtoMessage.UserFollows;
 import tv.mechjack.twitchclient.ProtoMessage.Users;
@@ -20,10 +20,10 @@ import tv.mechjack.twitchclient.ProtoMessage.Users;
 public abstract class TwitchClientContractTests {
 
   @Rule
-  public final TestFrameworkRule testFrameworkRule = new TestFrameworkRule();
+  public final TestFramework testFrameworkRule = new TestFramework();
 
   protected void installModules() {
-    this.testFrameworkRule.installModule(new TestTwitchClientModule());
+    this.testFrameworkRule.registerModule(new TestTwitchClientModule());
   }
 
   protected abstract TwitchClient givenASubjectToTest();
@@ -44,7 +44,7 @@ public abstract class TwitchClientContractTests {
     final TwitchClient subjectUnderTest = this.givenASubjectToTest();
 
     final Optional<TwitchUserId> result = subjectUnderTest
-        .getUserId(TwitchLogin.of(this.testFrameworkRule.getArbitraryString()));
+        .getUserId(TwitchLogin.of(this.testFrameworkRule.arbitraryData().getString()));
 
     assertThat(result).isEmpty();
   }
@@ -52,8 +52,8 @@ public abstract class TwitchClientContractTests {
   @Test
   public final void getUserId_userFound_returnsOptionalWithTwitchUserId() {
     this.installModules();
-    final TwitchLogin twitchLogin = TwitchLogin.of(this.testFrameworkRule.getArbitraryString());
-    final TwitchUserId twitchUserId = TwitchUserId.of(this.testFrameworkRule.getArbitraryString());
+    final TwitchLogin twitchLogin = TwitchLogin.of(this.testFrameworkRule.arbitraryData().getString());
+    final TwitchUserId twitchUserId = TwitchUserId.of(this.testFrameworkRule.arbitraryData().getString());
     final TestTwitchUsersEndpoint twitchUsersEndpoint = this.testFrameworkRule
         .getInstance(TestTwitchUsersEndpoint.class);
     twitchUsersEndpoint.setGetUsersHandler((twitchLogins, twitchUserIds) -> Users.newBuilder()
@@ -95,7 +95,7 @@ public abstract class TwitchClientContractTests {
     });
     final TwitchClient subjectUnderTest = this.givenASubjectToTest();
 
-    subjectUnderTest.getUserFollowsFromId(TwitchUserId.of(this.testFrameworkRule.getArbitraryString()));
+    subjectUnderTest.getUserFollowsFromId(TwitchUserId.of(this.testFrameworkRule.arbitraryData().getString()));
 
     assertThat(wasCalled).isTrue();
   }
@@ -112,8 +112,8 @@ public abstract class TwitchClientContractTests {
     });
     final TwitchClient subjectUnderTest = this.givenASubjectToTest();
 
-    subjectUnderTest.getUserFollowsFromId(TwitchUserId.of(this.testFrameworkRule.getArbitraryString()),
-        TwitchUserFollowsCursor.of(this.testFrameworkRule.getArbitraryString()));
+    subjectUnderTest.getUserFollowsFromId(TwitchUserId.of(this.testFrameworkRule.arbitraryData().getString()),
+        TwitchUserFollowsCursor.of(this.testFrameworkRule.arbitraryData().getString()));
 
     assertThat(wasCalled).isTrue();
   }

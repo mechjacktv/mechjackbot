@@ -105,7 +105,7 @@ public class UsageChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_customMessageFormatConfiguredWithTriggerableCommand_resultIsCustomMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + " $(user) %s %s";
+    final String customMessageFormat = this.testFrameworkRule.arbitraryData().getString() + " $(user) %s %s";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
     final TestChatCommand command = this.testFrameworkRule.getInstance(TestChatCommand.class);
@@ -144,7 +144,7 @@ public class UsageChatCommandUnitTests extends BaseChatCommandContractTests {
   @Test
   public final void handleMessageEvent_customMissingMessageFormatConfigured_resultIsCustomMissingMessage() {
     this.installModules();
-    final String customMessageFormat = this.testFrameworkRule.getArbitraryString() + " $(user) %s";
+    final String customMessageFormat = this.testFrameworkRule.arbitraryData().getString() + " $(user) %s";
     final MapConfiguration configuration = this.testFrameworkRule.getInstance(MapConfiguration.class);
     configuration.set(this.getMissingMessageFormatKey(), customMessageFormat);
     final TestChatCommand command = this.testFrameworkRule.getInstance(TestChatCommand.class);

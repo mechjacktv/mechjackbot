@@ -2,7 +2,7 @@ package tv.mechjack.mechjackbot.api;
 
 import javax.inject.Inject;
 
-import tv.mechjack.testframework.ArbitraryDataGenerator;
+import tv.mechjack.testframework.ArbitraryData;
 
 public class TestChatMessageEvent implements ChatMessageEvent {
 
@@ -12,7 +12,7 @@ public class TestChatMessageEvent implements ChatMessageEvent {
   private ChatMessage responseChatMessage;
 
   @Inject
-  public TestChatMessageEvent(final ArbitraryDataGenerator arbitraryDataGenerator) {
+  public TestChatMessageEvent(final ArbitraryData arbitraryDataGenerator) {
     this.chatBot = new TestChatBot();
     this.chatUser = new TestChatUser(arbitraryDataGenerator);
     this.chatMessage = ChatMessage.of(arbitraryDataGenerator.getString());
