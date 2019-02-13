@@ -19,6 +19,7 @@ subprojects {
   apply plugin: 'jacoco'
   apply plugin: 'java'
   apply plugin: 'tv.mechjack.gradle.testframework'
+  apply plugin: tv.mechjack.gradle.react.ReactWebappPlugin
 
   archivesBaseName = "${rootProject.name}-${project.name}"
   group = 'tv.mechjack'
@@ -76,6 +77,8 @@ project(':platform') {
   archivesBaseName = "mechjack-${project.name}"
 
   dependencies {
+    implementation 'org.eclipse.jetty:jetty-server:9.+'
+    implementation 'org.eclipse.jetty:jetty-servlet:9.+'
     implementation 'org.mapdb:mapdb:3.+'
   }
 }
@@ -101,6 +104,7 @@ project(':base') {
     implementation 'info.picocli:picocli:3.8.2'
     implementation 'org.kitteh.irc:client-lib:5.+'
     testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
+    runtimeOnly 'org.slf4j:slf4j-simple:1.+'
   }
 }
 

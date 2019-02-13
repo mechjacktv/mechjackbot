@@ -2,8 +2,8 @@ package tv.mechjack.mechjackbot.main;
 
 import com.google.inject.Injector;
 
-import tv.mechjack.mechjackbot.api.ChatBot;
 import tv.mechjack.platform.application.GuiceApplication;
+import tv.mechjack.platform.webserver.WebServer;
 
 final class Main extends GuiceApplication {
 
@@ -19,7 +19,8 @@ final class Main extends GuiceApplication {
 
   @Override
   protected void start(final Injector injector) {
-    injector.getInstance(ChatBot.class).start();
+    injector.getInstance(WebServer.class).start();
+    // injector.getInstance(ChatBot.class).start();
   }
 
 }

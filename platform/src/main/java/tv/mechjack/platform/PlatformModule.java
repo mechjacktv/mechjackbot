@@ -7,6 +7,7 @@ import tv.mechjack.platform.gson.GsonModule;
 import tv.mechjack.platform.keyvaluestore.KeyValueStoreModule;
 import tv.mechjack.platform.utils.UtilsModule;
 import tv.mechjack.platform.utils.scheduleservice.ScheduleServiceModule;
+import tv.mechjack.platform.webserver.jetty.JettyModule;
 
 public class PlatformModule extends AbstractModule {
 
@@ -14,6 +15,7 @@ public class PlatformModule extends AbstractModule {
   protected void configure() {
     this.install(new ApplicationModule());
     this.install(new GsonModule());
+    this.install(new JettyModule());
     this.install(new KeyValueStoreModule());
     this.install(new ScheduleServiceModule());
     this.install(new UtilsModule());

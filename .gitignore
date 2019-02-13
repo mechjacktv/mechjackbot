@@ -269,3 +269,5 @@ gradle-app.setting
 
 
 # End of https://www.gitignore.io/api/osx,java,linux,gradle,windows,eclipse,intellij
+
+node_modules

@@ -32,7 +32,8 @@ final class MainModule extends AbstractModule {
     while (featureModules.hasNext()) {
       final FeatureModule featureModule = featureModules.next();
 
-      if (!excludedFeatures.contains(featureModule.getClass().getCanonicalName())) {
+      if (!excludedFeatures
+          .contains(featureModule.getClass().getCanonicalName())) {
         this.install(featureModule);
       }
     }
@@ -41,8 +42,10 @@ final class MainModule extends AbstractModule {
   private Set<String> getExcludedFeatures() {
     final Set<String> excludedFeatures = new HashSet<>();
 
-    Optional.ofNullable(System.getProperty(KEY_EXCLUDE_FEATURE)).ifPresent(configuredModulesString -> excludedFeatures
-        .addAll(Arrays.asList(configuredModulesString.split(File.pathSeparator))));
+    Optional.ofNullable(System.getProperty(KEY_EXCLUDE_FEATURE))
+        .ifPresent(configuredModulesString -> excludedFeatures
+            .addAll(Arrays
+                .asList(configuredModulesString.split(File.pathSeparator))));
     return excludedFeatures;
   }
 
