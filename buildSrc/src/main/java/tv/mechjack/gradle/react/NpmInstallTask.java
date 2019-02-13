@@ -69,7 +69,8 @@ public class NpmInstallTask extends DefaultTask {
       builder.append("    \"webpack-cli\": \"^3.2.1\",\n");
       builder.append("    \"css-loader\": \"^2.1.0\",\n");
       builder.append("    \"html-webpack-plugin\": \"^3.2.0\",\n");
-      builder.append("    \"style-loader\": \"^0.23.1\"\n");
+      builder.append("    \"style-loader\": \"^0.23.1\",\n");
+      builder.append("    \"acorn\": \"^6.0.0\"\n");
       builder.append("  },\n");
       builder.append("  \"browserslist\": [\n");
       builder.append("    \">0.2%\",\n");
