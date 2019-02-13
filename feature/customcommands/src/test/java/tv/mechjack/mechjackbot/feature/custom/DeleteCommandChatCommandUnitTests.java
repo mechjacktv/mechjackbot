@@ -21,7 +21,7 @@ import tv.mechjack.platform.configuration.ConfigurationKey;
 import tv.mechjack.platform.configuration.MapConfiguration;
 import tv.mechjack.platform.configuration.TestConfigurationModule;
 import tv.mechjack.platform.keyvaluestore.TestKeyValueStoreModule;
-import tv.mechjack.protobuf.TestProtobufModule;
+import tv.mechjack.platform.protobuf.TestProtobufModule;
 
 public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTests {
 

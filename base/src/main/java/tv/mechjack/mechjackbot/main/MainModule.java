@@ -13,7 +13,7 @@ import com.google.inject.AbstractModule;
 import tv.mechjack.mechjackbot.MechJackBotModule;
 import tv.mechjack.mechjackbot.api.FeatureModule;
 import tv.mechjack.platform.PlatformModule;
-import tv.mechjack.protobuf.ProtobufModule;
+import tv.mechjack.platform.protobuf.ProtobufModule;
 
 final class MainModule extends AbstractModule {
 

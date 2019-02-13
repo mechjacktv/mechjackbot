@@ -1,4 +1,4 @@
-package tv.mechjack.protobuf;
+package tv.mechjack.platform.protobuf;
 
 import tv.mechjack.platform.utils.ExecutionUtils;
 import tv.mechjack.platform.utils.TestUtilsModule;

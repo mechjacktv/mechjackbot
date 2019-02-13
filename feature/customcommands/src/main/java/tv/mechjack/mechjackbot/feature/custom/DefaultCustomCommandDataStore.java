@@ -10,9 +10,9 @@ import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.mechjackbot.feature.custom.ProtoMessage.CustomCommand;
 import tv.mechjack.mechjackbot.feature.custom.ProtoMessage.CustomCommandKey;
 import tv.mechjack.platform.keyvaluestore.KeyValueStoreFactory;
+import tv.mechjack.platform.protobuf.BaseMessageStore;
+import tv.mechjack.platform.protobuf.ProtobufUtils;
 import tv.mechjack.platform.utils.ExecutionUtils;
-import tv.mechjack.protobuf.BaseMessageStore;
-import tv.mechjack.protobuf.ProtobufUtils;
 
 public class DefaultCustomCommandDataStore extends BaseMessageStore<CustomCommandKey, CustomCommand>
     implements CustomCommandDataStore {

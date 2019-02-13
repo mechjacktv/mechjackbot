@@ -2,7 +2,7 @@ package tv.mechjack.mechjackbot.feature.shoutout;
 
 import tv.mechjack.mechjackbot.feature.shoutout.ProtoMessage.Caster;
 import tv.mechjack.mechjackbot.feature.shoutout.ProtoMessage.CasterKey;
-import tv.mechjack.protobuf.MessageStore;
+import tv.mechjack.platform.protobuf.MessageStore;
 
 public interface ShoutOutDataStore extends MessageStore<CasterKey, Caster> {
 

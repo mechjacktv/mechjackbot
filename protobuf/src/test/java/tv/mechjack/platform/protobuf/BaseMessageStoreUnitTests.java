@@ -1,12 +1,12 @@
-package tv.mechjack.protobuf;
+package tv.mechjack.platform.protobuf;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import tv.mechjack.platform.keyvaluestore.MapKeyValueStore;
+import tv.mechjack.platform.protobuf.ProtoMessage.TestKeyMessage;
+import tv.mechjack.platform.protobuf.ProtoMessage.TestValueMessage;
 import tv.mechjack.platform.utils.ExecutionUtils;
-import tv.mechjack.protobuf.ProtoMessage.TestKeyMessage;
-import tv.mechjack.protobuf.ProtoMessage.TestValueMessage;
 
 public class BaseMessageStoreUnitTests extends
     BaseMessageStoreContractTests<TestKeyMessage, TestValueMessage> {

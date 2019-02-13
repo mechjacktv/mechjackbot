@@ -1,4 +1,4 @@
-package tv.mechjack.protobuf;
+package tv.mechjack.platform.protobuf;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -11,8 +11,8 @@ import java.util.Set;
 import org.junit.Rule;
 import org.junit.Test;
 
+import tv.mechjack.platform.protobuf.ProtoMessage.TestKeyMessage;
 import tv.mechjack.platform.utils.MessageParsingException;
-import tv.mechjack.protobuf.ProtoMessage.TestKeyMessage;
 import tv.mechjack.testframework.TestFramework;
 
 public abstract class ProtobufUtilsContractTests {

@@ -55,28 +55,28 @@ subprojects {
     maven { url 'https://jitpack.io' }
   }
   dependencies {
-    implementation group: 'com.google.code.gson', name: 'gson', version: '2.+'
-    implementation group: 'com.google.guava', name: 'guava', version: '23.+'
-    implementation group: 'com.google.inject', name: 'guice', version: '4.+'
-    implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.+'
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.+'
-    testFrameworkImplementation group: 'com.github.mechjacktv', name: 'java-test-framework', version: '0.2.0'
-    testFrameworkImplementation group: 'junit', name: 'junit', version: '4.+'
-    testFrameworkImplementation group: 'org.assertj', name: 'assertj-core', version: '3.+'
-    testFrameworkImplementation group: 'pl.pragmatists', name: 'JUnitParams', version: '1.+'
-    testRuntimeOnly group: 'org.slf4j', name: 'slf4j-nop', version: '1.+'
+    implementation 'com.google.code.gson:gson:2.+'
+    implementation 'com.google.guava:guava:23.+'
+    implementation 'com.google.inject:guice:4.+'
+    implementation 'com.google.protobuf:protobuf-java:3.+'
+    implementation 'org.slf4j:slf4j-api:1.+'
+    testFrameworkImplementation 'com.github.mechjacktv:java-test-framework:0.2.0'
+    testFrameworkImplementation 'junit:junit:4.+'
+    testFrameworkImplementation 'org.assertj:assertj-core:3.+'
+    testFrameworkImplementation 'pl.pragmatists:JUnitParams:1.+'
+    testRuntimeOnly 'org.slf4j:slf4j-nop:1.+'
   }
 }
 
 /*******************************
- * BASE PROJECTS
+ * PLATFORM PROJECTS
  */
 
 project(':platform') {
   archivesBaseName = "mechjack-${project.name}"
 
   dependencies {
-    implementation group: 'org.mapdb', name: 'mapdb', version: '3.+'
+    implementation 'org.mapdb:mapdb:3.+'
   }
 }
 
@@ -85,22 +85,21 @@ project(':protobuf') {
 
   dependencies {
     implementation project(':platform')
-    implementation group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.+'
+    implementation 'com.google.protobuf:protobuf-java-util:3.+'
     testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
   }
 }
 
 /*******************************
- * CORE PROJECT
+ * BASE PROJECT
  */
 
 project(':base') {
   dependencies {
     implementation project(':platform')
     implementation project(':protobuf')
-    implementation group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.+'
-    implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
-    implementation group: 'org.kitteh.irc', name: 'client-lib', version: '5.+'
+    implementation 'info.picocli:picocli:3.8.2'
+    implementation 'org.kitteh.irc:client-lib:5.+'
     testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
   }
 }
@@ -113,7 +112,7 @@ project(':feature:core') {
   dependencies {
     implementation project(':base')
     implementation project(':platform')
-    implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
+    implementation 'info.picocli:picocli:3.8.2'
     testFrameworkImplementation project(path: ':base', configuration: 'testFramework')
     testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
   }
@@ -124,7 +123,7 @@ project(':feature:customcommands') {
     implementation project(':base')
     implementation project(':platform')
     implementation project(':protobuf')
-    implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
+    implementation 'info.picocli:picocli:3.8.2'
     testFrameworkImplementation project(path: ':base', configuration: 'testFramework')
     testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
     testFrameworkImplementation project(path: ':protobuf', configuration: 'testFramework')
@@ -136,7 +135,7 @@ project(':feature:shoutouts') {
     implementation project(':base')
     implementation project(':platform')
     implementation project(':protobuf')
-    implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
+    implementation 'info.picocli:picocli:3.8.2'
     testFrameworkImplementation project(path: ':base', configuration: 'testFramework')
     testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
     testFrameworkImplementation project(path: ':protobuf', configuration: 'testFramework')
@@ -147,7 +146,7 @@ project(':feature:wouldyourather') {
   dependencies {
     implementation project(':base')
     implementation project(':platform')
-    implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
+    implementation 'info.picocli:picocli:3.8.2'
     testFrameworkImplementation project(path: ':base', configuration: 'testFramework')
     testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
   }
@@ -167,7 +166,7 @@ project(':all') {
     runtimeOnly project(':feature:customcommands')
     runtimeOnly project(':feature:shoutouts')
     runtimeOnly project(':feature:wouldyourather')
-    runtimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'
+    runtimeOnly 'org.slf4j:slf4j-simple:1.+'
   }
 
   distributions {

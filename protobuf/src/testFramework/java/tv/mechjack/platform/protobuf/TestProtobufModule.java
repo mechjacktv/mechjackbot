@@ -1,11 +1,11 @@
-package tv.mechjack.protobuf;
+package tv.mechjack.platform.protobuf;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Scopes;
 
-import tv.mechjack.protobuf.ProtoMessage.TestKeyMessage;
-import tv.mechjack.protobuf.ProtoMessage.TestValueMessage;
+import tv.mechjack.platform.protobuf.ProtoMessage.TestKeyMessage;
+import tv.mechjack.platform.protobuf.ProtoMessage.TestValueMessage;
 import tv.mechjack.testframework.ArbitraryData;
 
 public class TestProtobufModule extends AbstractModule {

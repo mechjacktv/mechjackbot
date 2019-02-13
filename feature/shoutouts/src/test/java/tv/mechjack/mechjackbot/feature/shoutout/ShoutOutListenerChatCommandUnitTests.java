@@ -28,10 +28,10 @@ import tv.mechjack.platform.configuration.Configuration;
 import tv.mechjack.platform.configuration.ConfigurationKey;
 import tv.mechjack.platform.configuration.MapConfiguration;
 import tv.mechjack.platform.keyvaluestore.TestKeyValueStoreModule;
+import tv.mechjack.platform.protobuf.TestProtobufModule;
 import tv.mechjack.platform.utils.TestTimeUtils;
 import tv.mechjack.platform.utils.TimeUtils;
 import tv.mechjack.platform.utils.scheduleservice.TestScheduleServiceModule;
-import tv.mechjack.protobuf.TestProtobufModule;
 import tv.mechjack.testframework.fake.FakeBuilder;
 import tv.mechjack.twitchclient.TestTwitchClientModule;
 

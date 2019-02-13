@@ -15,9 +15,9 @@ import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.mechjackbot.feature.custom.ProtoMessage.CustomCommand;
 import tv.mechjack.mechjackbot.feature.custom.ProtoMessage.CustomCommandKey;
 import tv.mechjack.platform.keyvaluestore.MapKeyValueStore;
+import tv.mechjack.platform.protobuf.BaseMessageStoreContractTests;
+import tv.mechjack.platform.protobuf.ProtobufUtils;
 import tv.mechjack.platform.utils.ExecutionUtils;
-import tv.mechjack.protobuf.BaseMessageStoreContractTests;
-import tv.mechjack.protobuf.ProtobufUtils;
 
 public class DefaultCustomCommandDataStoreUnitTests extends
     BaseMessageStoreContractTests<CustomCommandKey, CustomCommand> {

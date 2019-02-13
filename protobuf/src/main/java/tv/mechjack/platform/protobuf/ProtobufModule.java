@@ -1,4 +1,4 @@
-package tv.mechjack.protobuf;
+package tv.mechjack.platform.protobuf;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;

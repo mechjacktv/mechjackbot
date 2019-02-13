@@ -1,9 +1,9 @@
-package tv.mechjack.protobuf;
+package tv.mechjack.platform.protobuf;
 
 import tv.mechjack.platform.keyvaluestore.KeyValueStore;
+import tv.mechjack.platform.protobuf.ProtoMessage.TestKeyMessage;
+import tv.mechjack.platform.protobuf.ProtoMessage.TestValueMessage;
 import tv.mechjack.platform.utils.ExecutionUtils;
-import tv.mechjack.protobuf.ProtoMessage.TestKeyMessage;
-import tv.mechjack.protobuf.ProtoMessage.TestValueMessage;
 
 final class TestMessageStore extends
     BaseMessageStore<TestKeyMessage, TestValueMessage> {

@@ -1,4 +1,4 @@
-package tv.mechjack.protobuf;
+package tv.mechjack.platform.protobuf;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
