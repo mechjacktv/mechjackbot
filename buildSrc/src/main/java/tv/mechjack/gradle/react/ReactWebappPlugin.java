@@ -6,7 +6,7 @@ import org.gradle.api.tasks.TaskContainer;
 
 public class ReactWebappPlugin implements Plugin<Project> {
 
-  public static final String TASK_GROUP = "React";
+  public static final String TASK_GROUP = "ReactJS";
 
   @Override
   public void apply(final Project project) {
