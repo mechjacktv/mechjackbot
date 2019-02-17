@@ -1,6 +1,11 @@
 package tv.mechjack.gradle.react;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -14,16 +19,30 @@ final class TaskUtils {
     this.project = project;
   }
 
-
-  final String getAbsolutePath(final String relativePath) {
-    return new File(this.project.getProjectDir(), relativePath).getAbsolutePath();
+  final Path absolutePath(final String path) {
+    return new File(this.project.getProjectDir(), path).toPath();
   }
 
-  final  void monitorProcess(final String name, final Process process)
+  final void createFile(final String path) throws IOException {
+    if (this.doesNotExist(path)) {
+      Files.copy(this.resourceStream(path), this.absolutePath(path));
+    }
+  }
+
+  private boolean doesNotExist(final String path) {
+    return !this.absolutePath(path).toFile().exists();
+  }
+
+  private InputStream resourceStream(final String path) {
+    return this.getClass().getResourceAsStream("/" + path);
+  }
+
+  final void monitorProcess(final String name, final Process process)
       throws InterruptedException, ProcessExecutionException {
     final Scanner sout = new Scanner(process.getInputStream());
     final Scanner serr = new Scanner(process.getErrorStream());
 
+    // TODO (2019-02-17 mechjack): use threads for reading pipes
     while (sout.hasNextLine() || serr.hasNextLine()) {
       try {
         System.out.println(sout.nextLine());
@@ -42,7 +61,8 @@ final class TaskUtils {
     final int result = process.waitFor();
 
     if (result != 0) {
-      throw new ProcessExecutionException(name + " failed with result: " + result);
+      throw new ProcessExecutionException(
+          name + " failed with result: " + result);
     }
   }
 
