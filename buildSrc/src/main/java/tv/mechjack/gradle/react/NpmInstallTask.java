@@ -1,5 +1,5 @@
 package tv.mechjack.gradle.react;
 
-public class InitReactTask {
+public class NpmInstallTask {
 
 }
