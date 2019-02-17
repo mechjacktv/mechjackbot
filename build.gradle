@@ -60,6 +60,7 @@ subprojects {
     implementation 'com.google.guava:guava:23.+'
     implementation 'com.google.inject:guice:4.+'
     implementation 'com.google.protobuf:protobuf-java:3.+'
+    implementation 'org.eclipse.jetty:jetty-servlet:9.+'
     implementation 'org.slf4j:slf4j-api:1.+'
     testFrameworkImplementation 'com.github.mechjacktv:java-test-framework:0.2.0'
     testFrameworkImplementation 'junit:junit:4.+'
@@ -77,6 +78,7 @@ project(':platform') {
   archivesBaseName = "mechjack-${project.name}"
 
   dependencies {
+    implementation 'com.google.inject.extensions:guice-servlet:4.+'
     implementation 'org.eclipse.jetty:jetty-server:9.+'
     implementation 'org.eclipse.jetty:jetty-servlet:9.+'
     implementation 'org.mapdb:mapdb:3.+'

@@ -33,15 +33,6 @@ public class NpmInstallTask extends DefaultTask {
 
       createPackageJson(this.taskUtils.getAbsolutePath("package.json"));
       this.taskUtils.monitorProcess("NpmInstall", builder.start());
-
-      final Process npmInstallProcess = builder.start();
-      final Scanner scanner = new Scanner(npmInstallProcess.getInputStream());
-
-      while (scanner.hasNextLine()) {
-        System.out.println(scanner.nextLine());
-      }
-      scanner.close();
-      npmInstallProcess.waitFor();
     } catch (final IOException | InterruptedException | ProcessExecutionException e) {
       throw new RuntimeException(e.getMessage(), e);
     }

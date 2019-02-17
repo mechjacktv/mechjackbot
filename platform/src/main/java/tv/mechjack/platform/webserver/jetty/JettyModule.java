@@ -1,14 +1,20 @@
 package tv.mechjack.platform.webserver.jetty;
 
+import java.util.EnumSet;
 import java.util.Set;
 
+import javax.servlet.DispatcherType;
+
+import com.google.inject.Injector;
 import com.google.inject.Provides;
+import com.google.inject.servlet.GuiceFilter;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.servlet.DefaultServlet;
+import org.eclipse.jetty.servlet.ListenerHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +44,7 @@ public class JettyModule extends WebServerModule {
 
   @Provides
   public final WebServer createJettyServer(final Configuration configuration,
-      final Set<WebApplication> webApplications) {
+      final Set<WebApplication> webApplications, final Injector rootInjector) {
     final Server server = new Server();
     final ServerConnector connector = new ServerConnector(server);
     final ContextHandlerCollection handlers = new ContextHandlerCollection();
@@ -57,22 +63,33 @@ public class JettyModule extends WebServerModule {
       LOGGER.info(String.format("Request: %s %s", req, res));
     });
     server.setHandler(handlers);
-
     for (final WebApplication webApplication : webApplications) {
-      handlers.addHandler(createHandler(webApplication));
+      handlers.addHandler(createHandler(webApplication, rootInjector));
     }
-
     return new JettyWebServer(server);
   }
 
-  private Handler createHandler(final WebApplication webApplication) {
+  private Handler createHandler(final WebApplication webApplication,
+      final Injector rootInjector) {
     final ServletContextHandler handler = new ServletContextHandler(
         ServletContextHandler.SESSIONS);
-
+    handler.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(
+        DispatcherType.class));
     handler.setContextPath(webApplication.getContextPath());
     handler.setResourceBase(webApplication.getResourceBase());
     handler.addServlet(DefaultServlet.class, "/");
+    handler.getServletHandler()
+        .addListener(createListenerHolder(webApplication, rootInjector));
     return handler;
+  }
+
+  private ListenerHolder createListenerHolder(
+      final WebApplication webApplication, final Injector rootInjector) {
+    final ListenerHolder listenerHolder = new ListenerHolder();
+
+    listenerHolder.setListener(
+        new ControllerContextListener(webApplication, rootInjector));
+    return listenerHolder;
   }
 
 }

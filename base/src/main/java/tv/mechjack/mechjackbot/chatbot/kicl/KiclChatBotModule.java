@@ -32,6 +32,10 @@ public class KiclChatBotModule extends ChatBotModule {
   @Singleton
   public final Client createIrcClient(final ChatBotConfiguration chatBotConfiguration,
       final KiclChatBotListener listener) {
+    if (!chatBotConfiguration.isReady()) {
+      throw new IllegalStateException("Chat bot not configured.");
+    }
+
     final Logger clientLogger = LoggerFactory.getLogger(Client.class);
     final Builder builder = Client.builder();
 

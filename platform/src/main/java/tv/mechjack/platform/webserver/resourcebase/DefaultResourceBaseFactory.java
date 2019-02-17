@@ -38,7 +38,7 @@ public class DefaultResourceBaseFactory implements ResourceBaseFactory {
   private String getCanonicalNameAsPath(final Class<?> moduleClass) {
     final String className = moduleClass.getCanonicalName();
 
-    return className.replace('.', File.separatorChar) + ".class";
+    return "/" + className.replace('.', '/') + ".class";
   }
 
 }

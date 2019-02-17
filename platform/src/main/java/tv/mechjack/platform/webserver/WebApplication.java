@@ -6,4 +6,6 @@ public interface WebApplication {
 
   String getResourceBase();
 
+  void registerControllers(ControllerHandler controllerHandler);
+
 }
