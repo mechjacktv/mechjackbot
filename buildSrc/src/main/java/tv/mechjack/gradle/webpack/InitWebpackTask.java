@@ -53,8 +53,8 @@ public class InitWebpackTask extends DefaultTask {
   public final void executeNpmInstall() {
     try {
       final ProcessBuilder builder = new ProcessBuilder("npm", "install",
-          "@babel/core", "@babel/preset-env", "babel-loader", "css-loader",
-          "style-loader", "webpack", "webpack-cli", "--save-dev")
+          "@babel/core", "@babel/preset-env", "acorn", "babel-loader",
+          "css-loader", "style-loader", "webpack", "webpack-cli", "--save-dev")
           .directory(this.project.getProjectDir());
 
       this.taskUtils.createFile("package.json");
