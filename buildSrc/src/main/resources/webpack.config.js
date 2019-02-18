@@ -1,18 +1,11 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-
-const outputDirectory = './build/react/main';
 
 module.exports = {
-  entry: {
-    main: './src/main/react/index.js'
-  },
-  output: {
-    path: path.join(__dirname, outputDirectory),
-    filename: 'bundle.js'
-  },
   mode: 'production',
+  output: {
+    filename: 'index.js'
+  },
   module: {
     rules: [
       {
@@ -32,8 +25,5 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new CleanWebpackPlugin([outputDirectory]),
-    new HtmlWebpackPlugin()
-  ]
+  plugins: [new HtmlWebpackPlugin({ title: process.env.HTML_TITLE })]
 };
