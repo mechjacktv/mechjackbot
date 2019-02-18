@@ -45,6 +45,7 @@ public class InitWebpackTask extends DefaultTask {
 
     if (!reactSource.exists()) {
       reactSource.mkdirs();
+      this.taskUtils.createFile(SOURCE_DIR + "/index.html");
       this.taskUtils.createFile(SOURCE_DIR + "/index.js");
       this.taskUtils.createFile(SOURCE_DIR + "/reset.css");
     }
