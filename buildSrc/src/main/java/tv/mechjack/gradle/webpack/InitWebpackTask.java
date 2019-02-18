@@ -30,9 +30,10 @@ public class InitWebpackTask extends DefaultTask {
   @TaskAction
   public final void initializeReact() {
     try {
-      this.createWebpackSourceSet();
       this.taskUtils.createFile(".babelrc");
       this.taskUtils.createFile("webpack.config.js");
+      this.createWebpackSourceSet();
+      this.executeNpmInstall();
     } catch (final IOException e) {
       throw new RuntimeException(e.getMessage(), e);
     }
