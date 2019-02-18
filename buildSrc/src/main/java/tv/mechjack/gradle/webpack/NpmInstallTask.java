@@ -1,4 +1,4 @@
-package tv.mechjack.gradle.react;
+package tv.mechjack.gradle.webpack;
 
 import java.io.IOException;
 
@@ -19,7 +19,7 @@ public class NpmInstallTask extends DefaultTask {
   public NpmInstallTask(final Project project) {
     this.project = project;
     this.taskUtils = new TaskUtils(project);
-    this.setGroup(ReactWebappPlugin.TASK_GROUP);
+    this.setGroup(WebpackPlugin.TASK_GROUP);
     this.setDescription(
         "Generates `package.json` if missing and executes `npm install`");
   }

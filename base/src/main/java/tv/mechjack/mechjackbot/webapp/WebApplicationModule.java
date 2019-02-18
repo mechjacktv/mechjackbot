@@ -52,13 +52,15 @@ public class WebApplicationModule extends AbstractModule {
 
     @Override
     public String getResourceBase() {
-      return this.resourceBase.getPath();
+      return System.getProperty(
+          WebApplicationModule.class.getCanonicalName() + ".resource_base",
+          this.resourceBase.getPath());
     }
 
     @Override
     public void registerControllers(final ControllerHandler controllerHandler) {
-      controllerHandler.registerController("/api/v1/chat-bot/ready",
-          new ChatBotReadyController(this.chatBotConfiguration));
+      controllerHandler.registerController("/api/v1/application",
+          ApplicationServlet.class);
     }
 
   }

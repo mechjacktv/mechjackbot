@@ -24,8 +24,8 @@ public class ControllerContextListener extends GuiceServletContextListener {
       @Override
       protected void configureServlets() {
         ControllerContextListener.this.webApplication.registerControllers(
-            (urlPattern, controller) -> {
-              serve(urlPattern).with(controller);
+            (urlPattern, controllerClass) -> {
+              serve(urlPattern).with(controllerClass);
             });
       }
 

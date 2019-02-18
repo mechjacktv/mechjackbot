@@ -1,4 +1,4 @@
-package tv.mechjack.gradle.react;
+package tv.mechjack.gradle.webpack;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -13,28 +13,31 @@ import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskAction;
 
-public class WebpackReactTask extends DefaultTask {
+import static tv.mechjack.gradle.webpack.WebpackPlugin.BUILD_DIR;
+import static tv.mechjack.gradle.webpack.WebpackPlugin.SOURCE_DIR;
 
-  public static final String TASK_NAME = "webpackReact";
+public class WebpackTask extends DefaultTask {
+
+  public static final String TASK_NAME = "webpack";
 
   private final Project project;
   private final TaskUtils taskUtils;
 
   @Inject
-  public WebpackReactTask(final Project project) {
+  public WebpackTask(final Project project) {
     this.project = project;
     this.taskUtils = new TaskUtils(project);
-    this.setGroup(ReactWebappPlugin.TASK_GROUP);
+    this.setGroup(WebpackPlugin.TASK_GROUP);
     this.setDescription(
-        "Executes webpack over all 'index.js' files in react source set");
+        "Executes webpack on the webpack source set (each index.js is an entry point");
   }
 
   @TaskAction
   public final void webpackReactSource() {
-    if (this.taskUtils.doesExist("src/main/react")) {
+    if (this.taskUtils.doesExist(SOURCE_DIR)) {
       try {
-        this.taskUtils.absolutePath("build/react/main/").toFile().mkdirs();
-        Files.walkFileTree(this.taskUtils.absolutePath("src/main/react"),
+        this.taskUtils.absolutePath(BUILD_DIR).toFile().mkdirs();
+        Files.walkFileTree(this.taskUtils.absolutePath(SOURCE_DIR),
             new IndexJsFileVisitor(this.project));
       } catch (final IOException e) {
         throw new RuntimeException(e.getMessage(), e);
@@ -58,11 +61,10 @@ public class WebpackReactTask extends DefaultTask {
         final BasicFileAttributes attrs) {
       try {
         if ("index.js".equals(file.getFileName().toString())) {
-          final String relativePath = relativePath(
-              file.toAbsolutePath().toString());
+          final String sourcePart =
+              sourcePart(file.toAbsolutePath().toString());
           final Path buildPath = this.taskUtils
-              .absolutePath("build/react/main/" + relativePath);
-
+              .absolutePath(BUILD_DIR + sourcePart);
           final ProcessBuilder builder = new ProcessBuilder("npx", "webpack",
               "--entry", file.toAbsolutePath().toString(), "--output",
               buildPath.toString()).directory(this.project.getProjectDir());
@@ -76,10 +78,9 @@ public class WebpackReactTask extends DefaultTask {
       }
     }
 
-    private String relativePath(final String path) {
-      final Path rootPath = this.taskUtils.absolutePath("src/main/react");
-
-      return path.substring(rootPath.toString().length() + 1);
+    private String sourcePart(final String path) {
+      return path.substring(this.taskUtils.absolutePath(SOURCE_DIR)
+          .toString().length());
     }
 
   }

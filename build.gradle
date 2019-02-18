@@ -1,3 +1,5 @@
+import tv.mechjack.gradle.webpack.WebpackPlugin
+
 buildscript {
   repositories {
     jcenter()
@@ -19,7 +21,7 @@ subprojects {
   apply plugin: 'jacoco'
   apply plugin: 'java'
   apply plugin: 'tv.mechjack.gradle.testframework'
-  apply plugin: tv.mechjack.gradle.react.ReactWebappPlugin
+  apply plugin: WebpackPlugin
 
   archivesBaseName = "${rootProject.name}-${project.name}"
   group = 'tv.mechjack'
@@ -166,6 +168,10 @@ project(':all') {
   apply plugin: 'application'
 
   mainClassName = 'tv.mechjack.mechjackbot.main.Main'
+
+  application {
+    applicationDefaultJvmArgs = ['-Dtv.mechjack.mechjackbot.webapp.WebApplicationModule.resource_base=/Users/mechjack/Documents/mechjackbot/base/build/webpack/main']
+  }
 
   dependencies {
     runtimeOnly project(':feature:core')

@@ -9,7 +9,7 @@ public class GradleReactBuildResourceBase implements ResourceBase {
   public final File resourceBase;
 
   public GradleReactBuildResourceBase(final String projectRoot) {
-    this.resourceBase = new File(projectRoot, "build/react/main/");
+    this.resourceBase = new File(projectRoot, "build/webpack/main/");
   }
 
   @Override
