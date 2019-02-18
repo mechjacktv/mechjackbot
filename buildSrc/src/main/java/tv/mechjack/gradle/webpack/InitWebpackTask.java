@@ -45,8 +45,6 @@ public class InitWebpackTask extends DefaultTask {
 
     if (!reactSource.exists()) {
       reactSource.mkdirs();
-      this.taskUtils.createFile(SOURCE_DIR + "/index.css");
-      this.taskUtils.createFile(SOURCE_DIR + "/index.html");
       this.taskUtils.createFile(SOURCE_DIR + "/index.js");
       this.taskUtils.createFile(SOURCE_DIR + "/reset.css");
     }
@@ -55,10 +53,9 @@ public class InitWebpackTask extends DefaultTask {
   public final void executeNpmInstall() {
     try {
       final ProcessBuilder builder = new ProcessBuilder("npm", "install",
-          "@babel/core", "@babel/plugin-proposal-class-properties",
-          "@babel/preset-env", "babel-loader", "css-loader", "file-loader",
-          "html-webpack-plugin", "style-loader", "url-loader", "webpack",
-          "webpack-cli", "--save-dev").directory(this.project.getProjectDir());
+          "@babel/core", "@babel/preset-env", "babel-loader", "css-loader",
+          "style-loader", "webpack", "webpack-cli", "--save-dev")
+          .directory(this.project.getProjectDir());
 
       this.taskUtils.createFile("package.json");
       this.taskUtils.monitorProcess("NpmInstall", builder.start());
