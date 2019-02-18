@@ -2,14 +2,17 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-const outputDirectory = './build/main/react';
+const outputDirectory = './build/react/main';
 
 module.exports = {
-  entry: ['babel-polyfill', './src/main/react/index.js'],
+  entry: {
+    main: './src/main/react/index.js'
+  },
   output: {
     path: path.join(__dirname, outputDirectory),
     filename: 'bundle.js'
   },
+  mode: 'production',
   module: {
     rules: [
       {
