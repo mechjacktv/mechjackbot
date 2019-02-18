@@ -50,6 +50,10 @@ public final class DefaultChatBotConfiguration
       final ScheduleService scheduleService) {
     this.hotUpdateProperties = new HotUpdateProperties(
         hotUpdatePropertiesSource, scheduleService, LOGGER);
+
+    if (!this.isReady()) {
+      throw new IllegalStateException("check yo' self");
+    }
   }
 
   public final boolean isReady() {

@@ -7,6 +7,9 @@ import com.google.inject.Inject;
 import com.google.inject.Scopes;
 import com.google.inject.multibindings.Multibinder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tv.mechjack.mechjackbot.api.ChatBotConfiguration;
 import tv.mechjack.platform.webserver.ControllerHandler;
 import tv.mechjack.platform.webserver.ResourceBase;
@@ -15,6 +18,9 @@ import tv.mechjack.platform.webserver.WebApplication;
 import tv.mechjack.platform.webserver.WebServerException;
 
 public class WebApplicationModule extends AbstractModule {
+
+  private static final Logger LOGGER = LoggerFactory
+      .getLogger(WebApplicationModule.class);
 
   @Override
   protected void configure() {

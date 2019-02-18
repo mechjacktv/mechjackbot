@@ -24,8 +24,7 @@ public final class ChatBotReadyController extends HttpServlet {
   protected void doGet(final HttpServletRequest req,
       final HttpServletResponse resp) throws IOException {
     resp.setContentType("application/json");
-    resp.getWriter().println("{ \"ready\" : " + this.configuration.isReady() +
-        " }");
+    resp.getWriter().println("{ \"message\" : \"Hello, service!\" }");
   }
 
 }

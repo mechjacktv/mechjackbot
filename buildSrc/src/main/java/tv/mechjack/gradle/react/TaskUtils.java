@@ -29,8 +29,12 @@ final class TaskUtils {
     }
   }
 
-  private boolean doesNotExist(final String path) {
-    return !this.absolutePath(path).toFile().exists();
+  boolean doesExist(final String path) {
+    return this.absolutePath(path).toFile().exists();
+  }
+
+  boolean doesNotExist(final String path) {
+    return !this.doesExist(path);
   }
 
   private InputStream resourceStream(final String path) {
