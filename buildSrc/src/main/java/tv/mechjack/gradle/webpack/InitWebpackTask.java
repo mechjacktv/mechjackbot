@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskAction;
+import org.gradle.api.tasks.TaskExecutionException;
 
 import static tv.mechjack.gradle.webpack.WebpackPlugin.SOURCE_DIR;
 
@@ -34,8 +35,8 @@ public class InitWebpackTask extends DefaultTask {
       this.taskUtils.createFile("webpack.config.js");
       this.createWebpackSourceSet();
       this.executeNpmInstall();
-    } catch (final IOException e) {
-      throw new RuntimeException(e.getMessage(), e);
+    } catch (final Exception e) {
+      throw new TaskExecutionException(this, e);
     }
   }
 

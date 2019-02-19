@@ -12,6 +12,8 @@ import javax.inject.Inject;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskAction;
+import org.gradle.api.tasks.TaskExecutionException;
+import org.gradle.internal.impldep.aQute.bnd.build.Run;
 
 import static tv.mechjack.gradle.webpack.WebpackPlugin.BUILD_DIR;
 import static tv.mechjack.gradle.webpack.WebpackPlugin.SOURCE_DIR;
@@ -39,8 +41,8 @@ public class WebpackTask extends DefaultTask {
         this.taskUtils.absolutePath(BUILD_DIR).toFile().mkdirs();
         Files.walkFileTree(this.taskUtils.absolutePath(SOURCE_DIR),
             new IndexJsFileVisitor(this.project));
-      } catch (final IOException e) {
-        throw new RuntimeException(e.getMessage(), e);
+      } catch (final Exception e) {
+        throw new TaskExecutionException(this, e);
       }
     }
   }
@@ -73,8 +75,7 @@ public class WebpackTask extends DefaultTask {
         }
         return FileVisitResult.CONTINUE;
       } catch (final IOException | InterruptedException | ProcessExecutionException e) {
-        e.printStackTrace();
-        return FileVisitResult.TERMINATE;
+        throw new RuntimeException(e.getMessage(), e);
       }
     }
 
