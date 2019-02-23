@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Register MechJackBot with Twitch - MechJackBot</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+  ${require('../../_global_header.htmli')}
+  <main class="container">
+    <header>
+      <h1 class="display-1">Register MechJackBot with Twitch</h1>
+    </header>
+    <p class="lead">
+      MechJackBot makes use of Twtich Authentication and the Twitch API. Twitch
+      requires that applications that make use of these services are registed
+      and have a unique <code>Client ID</code>. MechJackBot will also require
+      the <code>Client Secret</code> Twitch provides.
+    </p>
+    <div id="app"></div>
+  </main>
+
+  <article class="container mt-5">
+    <header>
+      <h2>How to Register MechJackBot with Twitch</h2>
+    </header>
+    <ol>
+      <li>
+        <p>
+          Go to <a href="https://dev.twitch.tv/" target="_blank"
+            rel="noopener noreferrer">https://dev.twitch.tv/</a>.
+        </p>
+      </li>
+      <li>
+        <p>
+          If you aren't already logged in to a Twitch developer account, click
+          on <code>Sign up with Twitch</code> in the upper right hand corner
+          of the page and then click on <code>Authorize</code> to sign in to
+          or create your developer account.
+        </p>
+      </li>
+      <li>
+        <p>
+          Once you are logged in to your Twitch developer account, go to your
+          <a href="https://dev.twitch.tv/dashboard" target="_blank"
+            rel="noopener noreferrer">Dashboard</a>, select the
+          <a href="https://glass.twitch.tv/console/apps" target="_blank"
+            rel="noopener noreferrer">Apps</a> tab and click </code><a
+            href="https://glass.twitch.tv/console/apps/create" target="_blank"
+            rel="noopener noreferrer">Register Your Application</a> to
+          register a new application with Twitch.
+        </p>
+      </li>
+      <li>
+        <p>
+          Choose a name for your application. It doesn't matter what you
+          choose as long as it's unique. I suggest something like
+          <code>&lt;TwitchLogin&gt;Bot</code>, where you replace
+          &lt;TwitchLogin&gt; with your Twitch login.
+        </p>
+        <p class="alert alert-info" role="alert">
+          App names must not include “Twitch” (as an exact or fuzzy match), or
+          registration will fail.
+        </p>
+      </li>
+      <li>
+        <p>
+          Tell Twitch where to send authentication requests by setting an
+          OAuth Redirect URL. Since you're running MechJackBot on your local
+          machine use <code>http://localhost:8080/</code>.
+        </p>
+        <p class="alert alert-warning" role="alert">
+          MechJackBot is not ready to be hosted on the public Internet.
+          <strong>DON'T DO IT.</strong>
+        </p>
+      </li>
+      <li>
+        <p>
+          Select <code>Chat Bot</code> as your category and click
+          <code>Create</code>.
+        </p>
+      </li>
+      <li>
+        <p>
+          You'll be brought to your <a
+            href="https://glass.twitch.tv/console/apps" target="_blank"
+            rel="noopener noreferrer">Developer Applications</a>
+          page with
+          your new app listed. Click on <code>Manage</code> for your new app.
+        </p>
+      </li>
+      <li>
+        <p>
+          Toward the bottom of the page you'll see your app's
+          <code>Client ID</code>. Client IDs are public and can be shared.
+          Copy and paste it here.
+        </p>
+      </li>
+      <li>
+        <p>
+          Click on <code>New Secret</code> and then <code>OK</code> to
+          generate a new <code>Client Secret</code>. Client secrets are
+          equivalent to a password for your application and must be kept
+          confidential. Copy and paste it here.
+        </p>
+      </li>
+    </ol>
+    <div id="root"></div>
+  </article>
+  ${require('../../_global_footer.htmli')}
+  <script src="index.js"></script>
+</body>
+
+</html>

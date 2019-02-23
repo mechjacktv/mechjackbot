@@ -13,7 +13,9 @@
 <body>
   ${require('./_global_header.htmli')}
   <main class="container">
-    <h1 class="display-1">Thank You!</h1>
+    <header>
+      <h1 class="display-1">Thank You!</h1>
+    </header>
     <p class="lead">
       Thank you for choosing MechJackBot. Before you can start MechJackBot we
       need to make sure that we have some basic configuration completed.
@@ -25,8 +27,7 @@
       each fix process you'll be brought back here to either fix the next
       problem or start using MechJackBot.
     </p>
-
-    <div id="root"></div>
+    <div id="app"></div>
   </main>
   ${require('./_global_footer.htmli')}
   <script src="index.js"></script>

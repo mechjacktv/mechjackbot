@@ -1,9 +1,9 @@
 <footer class="container mt-5">
-  <p class="m-0"><small>Copyright 2018-2019 MechJack TV.</small></p>
-  <p class="m-0">
+  <p class="mb-2"><small>Copyright 2018-2019 MechJack TV.</small></p>
+  <p class="mb-2">
     <small>MechJackBot is open-source software. You can find the source code for
     MechJackBot and my other projects on
     <a href="https://github.com/mechjacktv">GitHub</a>.</small>
   </p>
-  <p class="m-0"><small>Link for third-party LICENSE information goes here.</small></p>
+  <p class="mb-2"><small>Link for third-party LICENSE information goes here.</small></p>
 </footer>

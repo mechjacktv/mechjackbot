@@ -11,7 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import tv.mechjack.mechjackbot.api.ChatBotConfiguration;
+import tv.mechjack.mechjackbot.webapp.tempdata.Application;
+import tv.mechjack.mechjackbot.webapp.tempdata.WebappTypeAdapterRegistrar;
+import tv.mechjack.platform.gson.TypeAdapterRegistrar;
 import tv.mechjack.platform.webserver.ControllerHandler;
+import tv.mechjack.platform.webserver.ErrorPageHandler;
 import tv.mechjack.platform.webserver.ResourceBase;
 import tv.mechjack.platform.webserver.ResourceBaseFactory;
 import tv.mechjack.platform.webserver.WebApplication;
@@ -24,6 +28,11 @@ public class WebApplicationModule extends AbstractModule {
 
   @Override
   protected void configure() {
+    this.bind(Application.class).in(Scopes.SINGLETON);
+
+    Multibinder.newSetBinder(this.binder(), TypeAdapterRegistrar.class)
+        .addBinding().to(WebappTypeAdapterRegistrar.class).in(Scopes.SINGLETON);
+
     Multibinder.newSetBinder(this.binder(), WebApplication.class).addBinding()
         .to(BaseWebApplication.class).in(Scopes.SINGLETON);
   }
@@ -59,8 +68,18 @@ public class WebApplicationModule extends AbstractModule {
 
     @Override
     public void registerControllers(final ControllerHandler controllerHandler) {
+      controllerHandler.registerController("/api/v1/error",
+          DefaultJsonErrorServlet.class);
+      controllerHandler.registerController("/api/v1/wait",
+          WaitServlet.class);
+
       controllerHandler.registerController("/api/v1/application",
-          ApplicationServlet.class);
+          ApplicationControllerServlet.class);
+    }
+
+    @Override
+    public void registerErrorPages(final ErrorPageHandler errorPageHandler) {
+      errorPageHandler.registerErrorPage(400, 599, "/api/v1/error");
     }
 
   }

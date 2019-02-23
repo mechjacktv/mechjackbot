@@ -51,7 +51,7 @@ subprojects {
       endWithNewline()
     }
   }
-  compileJava.dependsOn 'spotlessApply'
+//  compileJava.dependsOn 'spotlessApply'
 
   repositories {
     jcenter()

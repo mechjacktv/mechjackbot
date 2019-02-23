@@ -18,7 +18,7 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: '[path][name].[ext]',
+              name: '[name].[ext]',
               context: 'src/main/webpack',
             },
           },
@@ -32,7 +32,7 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: '[path][name].css',
+              name: '[name].css',
               context: 'src/main/webpack',
             },
           },
@@ -57,7 +57,7 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: '[path][name].[ext]',
+              name: '[name].[ext]',
               context: 'src/main/webpack',
             },
           },
@@ -69,7 +69,7 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: '[path][name].[ext]',
+              name: '[name].[ext]',
               context: 'src/main/webpack',
             },
           },

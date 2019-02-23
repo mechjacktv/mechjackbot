@@ -13,7 +13,9 @@ import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.server.handler.ErrorHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
+import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
 import org.eclipse.jetty.servlet.ListenerHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.slf4j.Logger;
@@ -64,7 +66,7 @@ public class JettyModule extends WebServerModule {
     });
     server.setHandler(handlers);
     for (final WebApplication webApplication : webApplications) {
-      handlers.addHandler(createHandler(webApplication, rootInjector));
+      handlers.addHandler(this.createHandler(webApplication, rootInjector));
     }
     return new JettyWebServer(server);
   }
@@ -79,7 +81,8 @@ public class JettyModule extends WebServerModule {
     handler.setResourceBase(webApplication.getResourceBase());
     handler.addServlet(DefaultServlet.class, "/");
     handler.getServletHandler()
-        .addListener(createListenerHolder(webApplication, rootInjector));
+        .addListener(this.createListenerHolder(webApplication, rootInjector));
+    handler.setErrorHandler(this.createErrorHandler(webApplication));
     return handler;
   }
 
@@ -90,6 +93,14 @@ public class JettyModule extends WebServerModule {
     listenerHolder.setListener(
         new ControllerContextListener(webApplication, rootInjector));
     return listenerHolder;
+  }
+
+  private ErrorHandler createErrorHandler(final WebApplication webApplication) {
+    final ErrorPageErrorHandler errorHandler = new ErrorPageErrorHandler();
+
+    webApplication.registerErrorPages(
+        new DefaultErrorPageHandler(errorHandler));
+    return errorHandler;
   }
 
 }

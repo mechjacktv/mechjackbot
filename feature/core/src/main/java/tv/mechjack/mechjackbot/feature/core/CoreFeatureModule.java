@@ -2,6 +2,7 @@ package tv.mechjack.mechjackbot.feature.core;
 
 import tv.mechjack.mechjackbot.api.FeatureModule;
 import tv.mechjack.platform.webserver.ControllerHandler;
+import tv.mechjack.platform.webserver.ErrorPageHandler;
 import tv.mechjack.platform.webserver.WebApplication;
 
 public class CoreFeatureModule extends FeatureModule {
@@ -34,6 +35,11 @@ public class CoreFeatureModule extends FeatureModule {
     @Override
     public void registerControllers(final ControllerHandler controllerHandler) {
       /* no-op (2019-02-14 mechjack) */
+    }
+
+    @Override
+    public void registerErrorPages(final ErrorPageHandler errorPageHandler) {
+      /* no-op (2019-02-20 mechjack) */
     }
 
   }

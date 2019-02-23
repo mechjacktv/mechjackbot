@@ -8,4 +8,6 @@ public interface WebApplication {
 
   void registerControllers(ControllerHandler controllerHandler);
 
+  void registerErrorPages(ErrorPageHandler errorPageHandler);
+
 }
