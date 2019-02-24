@@ -17,26 +17,24 @@ import tv.mechjack.mechjackbot.api.FeatureModule;
 import tv.mechjack.mechjackbot.base.BaseModule;
 import tv.mechjack.mechjackbot.chatbot.kicl.KiclChatBotModule;
 import tv.mechjack.platform.PlatformModule;
-<<<<<<< HEAD
 import tv.mechjack.platform.protobuf.ProtobufModule;
-=======
-import tv.mechjack.protobuf.ProtobufModule;
 import tv.mechjack.twitchclient.TwitchClientModule;
->>>>>>> develop
 
 final class MainModule extends AbstractModule {
 
   private static final Logger LOGGER = LoggerFactory
       .getLogger(MainModule.class);
 
-  private static final ServiceLoader<FeatureModule> featureServiceLoader = ServiceLoader.load(FeatureModule.class);
+  private static final ServiceLoader<FeatureModule> featureServiceLoader = ServiceLoader
+      .load(FeatureModule.class);
 
   public static final String KEY_EXCLUDE_FEATURE = "mechjackbot.exclude_feature";
 
   @Override
   protected final void configure() {
     final Set<String> excludedFeatures = this.getExcludedFeatures();
-    final Iterator<FeatureModule> featureModules = featureServiceLoader.iterator();
+    final Iterator<FeatureModule> featureModules = featureServiceLoader
+        .iterator();
 
     this.install(new BaseModule());
     this.install(new KiclChatBotModule());
@@ -48,11 +46,8 @@ final class MainModule extends AbstractModule {
 
       if (!excludedFeatures
           .contains(featureModule.getClass().getCanonicalName())) {
-<<<<<<< HEAD
-=======
         LOGGER.info("Loading Feature: "
             + featureModule.getClass().getCanonicalName());
->>>>>>> develop
         this.install(featureModule);
       }
     }

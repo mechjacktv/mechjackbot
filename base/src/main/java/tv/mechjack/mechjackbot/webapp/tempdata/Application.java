@@ -27,7 +27,7 @@ public final class Application {
     if (this.isRegistered()) {
       final String tokenExpires = this.getTokenExpires();
 
-      if(Objects.nonNull(tokenExpires)) {
+      if (Objects.nonNull(tokenExpires)) {
         final long now = System.currentTimeMillis();
         final long expires = Long.parseLong(tokenExpires);
 
