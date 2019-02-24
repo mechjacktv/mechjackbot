@@ -1,16 +1,14 @@
 package tv.mechjack.mechjackbot.feature.linkmoderation;
 
-import static tv.mechjack.mechjackbot.api.BaseChatCommand.KEY_DESCRIPTION;
-import static tv.mechjack.mechjackbot.api.BaseChatCommand.KEY_MESSAGE_FORMAT;
-import static tv.mechjack.mechjackbot.api.BaseChatCommand.KEY_TRIGGER;
-
 import tv.mechjack.mechjackbot.api.BaseChatCommandContractTests;
 import tv.mechjack.mechjackbot.api.ChatCommandDescription;
 import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
 import tv.mechjack.mechjackbot.api.ChatCommandUtils;
 import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
-import tv.mechjack.mechjackbot.api.CommandMessageFormat;
 import tv.mechjack.platform.configuration.ConfigurationKey;
+
+import static tv.mechjack.mechjackbot.api.BaseChatCommand.KEY_DESCRIPTION;
+import static tv.mechjack.mechjackbot.api.BaseChatCommand.KEY_TRIGGER;
 
 public class PermitChatCommandUnitTests extends BaseChatCommandContractTests {
 
