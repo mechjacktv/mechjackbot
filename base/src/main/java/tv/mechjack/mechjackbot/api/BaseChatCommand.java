@@ -16,13 +16,15 @@ import tv.mechjack.platform.configuration.Configuration;
 import tv.mechjack.platform.configuration.ConfigurationKey;
 import tv.mechjack.platform.utils.ExecutionUtils;
 
-public abstract class BaseChatCommand implements PicoCliCommandParser, RespondingChatCommand {
+public abstract class BaseChatCommand
+    implements PicoCliCommandParser, RespondingChatCommand {
 
   public static final String KEY_DESCRIPTION = "description";
   public static final String KEY_MESSAGE_FORMAT = "message_format";
   public static final String KEY_TRIGGER = "trigger";
 
-  public static final Pattern ARGUMENTS_PATTERN = Pattern.compile("(\"(.+)\"|(\\S+))");
+  public static final Pattern ARGUMENTS_PATTERN = Pattern
+      .compile("(\"(.+)\"|(\\S+))");
 
   private final Configuration configuration;
   private final ChatCommandUtils chatCommandUtils;
@@ -36,7 +38,8 @@ public abstract class BaseChatCommand implements PicoCliCommandParser, Respondin
   private final ChatCommandUsage usage;
   private final boolean triggerable;
 
-  protected BaseChatCommand(CommandConfigurationBuilder commandConfigurationBuilder) {
+  protected BaseChatCommand(
+      CommandConfigurationBuilder commandConfigurationBuilder) {
     this(commandConfigurationBuilder.build());
   }
 
@@ -47,7 +50,8 @@ public abstract class BaseChatCommand implements PicoCliCommandParser, Respondin
     this.descriptionDefault = commandConfiguration.getDescription();
     this.descriptionKey = ConfigurationKey.of(KEY_DESCRIPTION, this.getClass());
     this.messageFormatDefault = commandConfiguration.getMessageFormat();
-    this.messageFormatKey = ConfigurationKey.of(KEY_MESSAGE_FORMAT, this.getClass());
+    this.messageFormatKey = ConfigurationKey
+        .of(KEY_MESSAGE_FORMAT, this.getClass());
     this.triggerDefault = commandConfiguration.getTrigger();
     this.triggerKey = ConfigurationKey.of(KEY_TRIGGER, this.getClass());
     this.triggerable = commandConfiguration.isTriggerable();
@@ -61,7 +65,8 @@ public abstract class BaseChatCommand implements PicoCliCommandParser, Respondin
 
   @Override
   public ChatCommandDescription getDescription() {
-    return ChatCommandDescription.of(this.configuration.get(this.descriptionKey.value, this.descriptionDefault.value));
+    return ChatCommandDescription.of(this.configuration
+        .get(this.descriptionKey.value, this.descriptionDefault.value));
   }
 
   @Override
@@ -76,7 +81,8 @@ public abstract class BaseChatCommand implements PicoCliCommandParser, Respondin
 
   @Override
   public final ChatCommandTrigger getTrigger() {
-    return ChatCommandTrigger.of(this.configuration.get(this.triggerKey.value, this.triggerDefault.value));
+    return ChatCommandTrigger.of(this.configuration
+        .get(this.triggerKey.value, this.triggerDefault.value));
   }
 
   @Override
@@ -85,31 +91,61 @@ public abstract class BaseChatCommand implements PicoCliCommandParser, Respondin
   }
 
   @Override
-  public final void sendResponse(final ChatMessageEvent chatMessageEvent, final Object... args) {
-    final CommandMessageFormat messageFormat = CommandMessageFormat.of(
-        this.configuration.get(this.messageFormatKey.value, this.messageFormatDefault.value));
+  public final void sendResponse(final ChatMessageEvent chatMessageEvent,
+      final Object... args) {
+    final CommandMessageFormat messageFormat = CommandMessageFormat.of(this.configuration
+        .get(this.messageFormatKey.value, this.messageFormatDefault.value));
 
     this.sendResponse(chatMessageEvent, messageFormat, args);
   }
 
   @Override
-  public final void sendResponse(final ChatMessageEvent chatMessageEvent, final CommandMessageFormat messageFormat,
+  public final void sendResponse(final ChatMessageEvent chatMessageEvent,
+      final CommandMessageFormat messageFormat,
       final Object... args) {
-    Objects.requireNonNull(chatMessageEvent, this.executionUtils.nullMessageForName("chatMessageEvent"));
-    Objects.requireNonNull(messageFormat, this.executionUtils.nullMessageForName("messageFormat"));
+    Objects.requireNonNull(chatMessageEvent,
+        this.executionUtils.nullMessageForName("chatMessageEvent"));
+    Objects.requireNonNull(messageFormat,
+        this.executionUtils.nullMessageForName("messageFormat"));
 
-    chatMessageEvent.sendResponse(this.chatCommandUtils.replaceChatMessageVariables(this, chatMessageEvent,
-        ChatMessage.of(String.format(messageFormat.value, args))));
+    chatMessageEvent.sendResponse(this.chatCommandUtils
+        .replaceChatMessageVariables(this, chatMessageEvent,
+            ChatMessage.of(String.format(messageFormat.value, args))));
+  }
+
+  @Override
+  public final void sendRawResponse(final ChatMessageEvent chatMessageEvent,
+      final Object... args) {
+    final CommandMessageFormat messageFormat = CommandMessageFormat.of(this.configuration
+        .get(this.messageFormatKey.value, this.messageFormatDefault.value));
+
+    this.sendRawResponse(chatMessageEvent, messageFormat, args);
+  }
+
+  @Override
+  public final void sendRawResponse(final ChatMessageEvent chatMessageEvent,
+      final CommandMessageFormat messageFormat,
+      final Object... args) {
+    Objects.requireNonNull(chatMessageEvent,
+        this.executionUtils.nullMessageForName("chatMessageEvent"));
+    Objects.requireNonNull(messageFormat,
+        this.executionUtils.nullMessageForName("messageFormat"));
+
+    chatMessageEvent.sendRawResponse(this.chatCommandUtils
+        .replaceChatMessageVariables(this, chatMessageEvent,
+            ChatMessage.of(String.format(messageFormat.value, args))));
   }
 
   @Override
   public final void sendUsage(final ChatMessageEvent chatMessageEvent) {
     this.sendResponse(chatMessageEvent, CommandMessageFormat.of(
-        this.chatCommandUtils.createUsageMessage(this, chatMessageEvent).value));
+        this.chatCommandUtils
+            .createUsageMessage(this, chatMessageEvent).value));
   }
 
   @Override
-  public boolean parseArguments(final Collection<ArgSpec> argSpecs, final ChatMessageEvent messageEvent,
+  public boolean parseArguments(final Collection<ArgSpec> argSpecs,
+      final ChatMessageEvent messageEvent,
       final IParseResultHandler2<Boolean> handler) {
     final CommandSpec commandSpec = CommandSpec.create();
 
@@ -120,19 +156,19 @@ public abstract class BaseChatCommand implements PicoCliCommandParser, Respondin
   }
 
   @Override
-  public boolean parseArguments(final CommandSpec commandSpec, final ChatMessageEvent messageEvent,
+  public boolean parseArguments(final CommandSpec commandSpec,
+      final ChatMessageEvent messageEvent,
       final IParseResultHandler2<Boolean> handler) {
-    final ChatMessage cleanMessage = this.chatCommandUtils.stripTriggerFromMessage(this, messageEvent);
+    final ChatMessage cleanMessage = this.chatCommandUtils
+        .stripTriggerFromMessage(this, messageEvent);
     final CommandLine commandLine = new CommandLine(commandSpec);
 
     if ("".equals(cleanMessage.value)) {
       this.sendUsage(messageEvent);
       return false;
     }
-
-    // !setcommand !trigger -r SUBSCRIBER -d "This is a description" This is a
-    // command body
-    return commandLine.parseWithHandlers(handler, new ShowUsagePicoCliExceptionHandler(this, messageEvent),
+    return commandLine.parseWithHandlers(handler,
+        new ShowUsagePicoCliExceptionHandler(this, messageEvent),
         this.splitArguments(cleanMessage.value));
   }
 

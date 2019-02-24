@@ -9,7 +9,7 @@ import tv.mechjack.mechjackbot.api.ChatMessageEventHandler;
 import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
 import tv.mechjack.mechjackbot.api.PicoCliUtils;
 
-public final class CoreModule extends AbstractModule {
+public final class BaseModule extends AbstractModule {
 
   @Override
   protected final void configure() {

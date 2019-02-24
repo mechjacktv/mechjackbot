@@ -10,12 +10,20 @@ import java.util.Set;
 
 import com.google.inject.AbstractModule;
 
-import tv.mechjack.mechjackbot.MechJackBotModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tv.mechjack.mechjackbot.api.FeatureModule;
+import tv.mechjack.mechjackbot.base.BaseModule;
+import tv.mechjack.mechjackbot.chatbot.kicl.KiclChatBotModule;
 import tv.mechjack.platform.PlatformModule;
 import tv.mechjack.protobuf.ProtobufModule;
+import tv.mechjack.twitchclient.TwitchClientModule;
 
 final class MainModule extends AbstractModule {
+
+  private static final Logger LOGGER = LoggerFactory
+      .getLogger(MainModule.class);
 
   private static final ServiceLoader<FeatureModule> featureServiceLoader = ServiceLoader.load(FeatureModule.class);
 
@@ -26,13 +34,18 @@ final class MainModule extends AbstractModule {
     final Set<String> excludedFeatures = this.getExcludedFeatures();
     final Iterator<FeatureModule> featureModules = featureServiceLoader.iterator();
 
+    this.install(new BaseModule());
+    this.install(new KiclChatBotModule());
     this.install(new PlatformModule());
     this.install(new ProtobufModule());
-    this.install(new MechJackBotModule());
+    this.install(new TwitchClientModule());
     while (featureModules.hasNext()) {
       final FeatureModule featureModule = featureModules.next();
 
-      if (!excludedFeatures.contains(featureModule.getClass().getCanonicalName())) {
+      if (!excludedFeatures
+          .contains(featureModule.getClass().getCanonicalName())) {
+        LOGGER.info("Loading Feature: "
+            + featureModule.getClass().getCanonicalName());
         this.install(featureModule);
       }
     }
@@ -41,8 +54,10 @@ final class MainModule extends AbstractModule {
   private Set<String> getExcludedFeatures() {
     final Set<String> excludedFeatures = new HashSet<>();
 
-    Optional.ofNullable(System.getProperty(KEY_EXCLUDE_FEATURE)).ifPresent(configuredModulesString -> excludedFeatures
-        .addAll(Arrays.asList(configuredModulesString.split(File.pathSeparator))));
+    Optional.ofNullable(System.getProperty(KEY_EXCLUDE_FEATURE))
+        .ifPresent(configuredModulesString -> excludedFeatures
+            .addAll(Arrays
+                .asList(configuredModulesString.split(File.pathSeparator))));
     return excludedFeatures;
   }
 

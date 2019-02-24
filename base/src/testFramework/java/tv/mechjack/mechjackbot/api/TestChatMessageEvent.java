@@ -43,6 +43,11 @@ public class TestChatMessageEvent implements ChatMessageEvent {
     this.responseChatMessage = chatMessage;
   }
 
+  @Override
+  public void sendRawResponse(final ChatMessage chatMessage) {
+    this.responseChatMessage = chatMessage;
+  }
+
   public void setChatBot(final ChatBot chatBot) {
     this.chatBot = chatBot;
   }
