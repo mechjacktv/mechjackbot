@@ -28,4 +28,9 @@ public abstract class ChatMessageEventWrapper implements ChatMessageEvent {
     this.chatMessageEvent.sendResponse(chatMessage);
   }
 
+  @Override
+  public void sendRawResponse(final ChatMessage chatMessage) {
+    this.chatMessageEvent.sendRawResponse(chatMessage);
+  }
+
 }

@@ -9,7 +9,7 @@ buildscript {
     classpath 'ch.raffael.markdown-doclet:markdown-doclet:1.4'
     classpath 'com.diffplug.spotless:spotless-plugin-gradle:3.16.0'
     classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.8'
-    classpath 'com.github.mechjacktv:gradle-test-framework:0.1.0'
+    classpath 'com.github.mechjacktv:gradle-plugin-test-framework:0.1.0'
   }
 }
 
@@ -138,6 +138,16 @@ project(':feature:customcommands') {
   }
 }
 
+project(':feature:linkmoderation') {
+  dependencies {
+    implementation project(':base')
+    implementation project(':platform')
+    implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
+    testFrameworkImplementation project(path: ':base', configuration: 'testFramework')
+    testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
+  }
+}
+
 project(':feature:shoutouts') {
   dependencies {
     implementation project(':base')
@@ -176,6 +186,7 @@ project(':all') {
   dependencies {
     runtimeOnly project(':feature:core')
     runtimeOnly project(':feature:customcommands')
+    runtimeOnly project(':feature:linkmoderation')
     runtimeOnly project(':feature:shoutouts')
     runtimeOnly project(':feature:wouldyourather')
     runtimeOnly 'org.slf4j:slf4j-simple:1.+'

@@ -54,4 +54,10 @@ public class KiclChatMessageEvent implements ChatMessageEvent {
         this.configuration.get(KEY_RESPONSE_MESSAGE_FORMAT, DEFAULT_RESPONSE_MESSAGE_FORMAT), chatMessage));
   }
 
+  @Override
+  public void sendRawResponse(final ChatMessage chatMessage) {
+    Objects.requireNonNull(chatMessage, this.executionUtils.nullMessageForName("chatMessage"));
+    this.channelMessageEvent.sendReply(chatMessage.value);
+  }
+
 }

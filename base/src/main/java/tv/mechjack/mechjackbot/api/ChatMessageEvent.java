@@ -10,4 +10,6 @@ public interface ChatMessageEvent {
 
   void sendResponse(ChatMessage chatMessage);
 
+  void sendRawResponse(ChatMessage chatMessage);
+
 }

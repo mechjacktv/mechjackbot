@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // PLATFORM PROJECTS
 include ':platform'
 include ':protobuf'
@@ -9,6 +10,18 @@ include ':feature:customcommands'
 include ':feature:shoutouts'
 include ':feature:wouldyourather'
 // APPLICATION WITH ALL PROJECTS
+=======
+include ':platform',
+    ':protobuf',
+    ':base'
+
+include ':feature:core',
+    ':feature:customcommands',
+    ':feature:linkmoderation',
+    ':feature:shoutouts',
+    ':feature:wouldyourather'
+
+>>>>>>> develop
 include ':all'
 
 rootProject.name = 'mechjackbot'
