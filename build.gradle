@@ -131,6 +131,16 @@ project(':feature:customcommands') {
   }
 }
 
+project(':feature:linkmoderation') {
+  dependencies {
+    implementation project(':base')
+    implementation project(':platform')
+    implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
+    testFrameworkImplementation project(path: ':base', configuration: 'testFramework')
+    testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
+  }
+}
+
 project(':feature:shoutouts') {
   dependencies {
     implementation project(':base')
@@ -165,6 +175,7 @@ project(':all') {
   dependencies {
     runtimeOnly project(':feature:core')
     runtimeOnly project(':feature:customcommands')
+    runtimeOnly project(':feature:linkmoderation')
     runtimeOnly project(':feature:shoutouts')
     runtimeOnly project(':feature:wouldyourather')
     runtimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '1.+'

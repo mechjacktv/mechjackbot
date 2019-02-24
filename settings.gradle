@@ -1,5 +1,13 @@
-include ':platform', ':protobuf', ':base'
-include ':feature:core', ':feature:customcommands', ':feature:shoutouts', ':feature:wouldyourather'
+include ':platform',
+    ':protobuf',
+    ':base'
+
+include ':feature:core',
+    ':feature:customcommands',
+    ':feature:linkmoderation',
+    ':feature:shoutouts',
+    ':feature:wouldyourather'
+
 include ':all'
 
 rootProject.name = 'mechjackbot'
