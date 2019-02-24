@@ -4,9 +4,6 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import tv.mechjack.mechjackbot.api.BaseChatCommand;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.mechjackbot.api.ChatUser;
@@ -18,12 +15,10 @@ import tv.mechjack.mechjackbot.api.UserRole;
 
 public final class LinkModeratorChatCommand extends BaseChatCommand {
 
-  private static final Logger LOGGER = LoggerFactory
-      .getLogger(LinkModeratorChatCommand.class);
-
-  public static final String URL_REGEX = "(?i)\\b((\\w+://)?(sub\\.)*([\\S]+\\.("
-      + new TopLevelDomainList()
-      + "))|\\w+://localhost)(:\\d+)?(/\\S+)?\\b";
+  public static final String URL_REGEX =
+      "(?i)\\b((\\w+://)?(sub\\.)*([\\S]+\\.("
+          + new TopLevelDomainList()
+          + "))|\\w+://localhost)(:\\d+)?(/\\S+)?\\b";
   public static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX);
 
   public static final String DEFAULT_DESCRIPTION = "Monitors chat for links and takes moderator action for non-subscribers.";

@@ -51,14 +51,4 @@ public class LinkModeratorChatCommandUnitTests
     return ChatCommandTrigger.of(UUID.randomUUID().toString());
   }
 
-  private CommandMessageFormat getMessageFormatDefault() {
-    return CommandMessageFormat
-        .of(LinkModeratorChatCommand.DEFAULT_MESSAGE_FORMAT);
-  }
-
-  private ConfigurationKey getMessageFormatKey() {
-    return ConfigurationKey
-        .of(KEY_MESSAGE_FORMAT, LinkModeratorChatCommand.class);
-  }
-
 }

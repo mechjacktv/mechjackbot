@@ -48,12 +48,4 @@ public class PermitChatCommandUnitTests extends BaseChatCommandContractTests {
     return ChatCommandTrigger.of(PermitChatCommand.DEFAULT_TRIGGER);
   }
 
-  private CommandMessageFormat getMessageFormatDefault() {
-    return CommandMessageFormat.of(PermitChatCommand.DEFAULT_MESSAGE_FORMAT);
-  }
-
-  private ConfigurationKey getMessageFormatKey() {
-    return ConfigurationKey.of(KEY_MESSAGE_FORMAT, PermitChatCommand.class);
-  }
-
 }
