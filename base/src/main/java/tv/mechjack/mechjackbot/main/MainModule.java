@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import tv.mechjack.mechjackbot.api.FeatureModule;
 import tv.mechjack.mechjackbot.base.BaseModule;
 import tv.mechjack.mechjackbot.chatbot.kicl.KiclChatBotModule;
+import tv.mechjack.mechjackbot.webapp.WebApplicationModule;
 import tv.mechjack.platform.PlatformModule;
 import tv.mechjack.platform.protobuf.ProtobufModule;
 import tv.mechjack.twitchclient.TwitchClientModule;
@@ -41,6 +42,7 @@ final class MainModule extends AbstractModule {
     this.install(new PlatformModule());
     this.install(new ProtobufModule());
     this.install(new TwitchClientModule());
+    this.install(new WebApplicationModule());
     while (featureModules.hasNext()) {
       final FeatureModule featureModule = featureModules.next();
 

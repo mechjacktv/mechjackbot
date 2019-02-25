@@ -46,6 +46,7 @@ public class ApplicationController extends BaseController {
     final Map<String, Object> data = new HashMap<>();
 
     data.put("clientId", this.application.getClientId());
+    data.put("registered", this.application.isRegistered());
     data.put("token_expired", this.application.isExpired());
     response.put("data", data);
     return response;
