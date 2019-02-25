@@ -7,7 +7,7 @@ import tv.mechjack.platform.gson.GsonModule;
 import tv.mechjack.platform.keyvaluestore.KeyValueStoreModule;
 import tv.mechjack.platform.utils.UtilsModule;
 import tv.mechjack.platform.utils.scheduleservice.ScheduleServiceModule;
-import tv.mechjack.platform.webserver.jetty.JettyModule;
+import tv.mechjack.platform.web.jetty.JettyModule;
 
 public class PlatformModule extends AbstractModule {
 

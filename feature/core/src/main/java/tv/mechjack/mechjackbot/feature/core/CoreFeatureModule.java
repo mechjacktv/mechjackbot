@@ -1,9 +1,9 @@
 package tv.mechjack.mechjackbot.feature.core;
 
 import tv.mechjack.mechjackbot.api.FeatureModule;
-import tv.mechjack.platform.webserver.ControllerHandler;
-import tv.mechjack.platform.webserver.ErrorPageHandler;
-import tv.mechjack.platform.webserver.WebApplication;
+import tv.mechjack.platform.web.ControllerHandler;
+import tv.mechjack.platform.web.ErrorPageHandler;
+import tv.mechjack.platform.web.WebApplication;
 
 public class CoreFeatureModule extends FeatureModule {
 

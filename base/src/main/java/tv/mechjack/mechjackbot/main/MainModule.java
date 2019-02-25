@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import tv.mechjack.mechjackbot.api.FeatureModule;
 import tv.mechjack.mechjackbot.base.BaseModule;
 import tv.mechjack.mechjackbot.chatbot.kicl.KiclChatBotModule;
-import tv.mechjack.mechjackbot.webapp.WebApplicationModule;
+import tv.mechjack.mechjackbot.web.WebApplicationModule;
 import tv.mechjack.platform.PlatformModule;
 import tv.mechjack.platform.protobuf.ProtobufModule;
 import tv.mechjack.twitchclient.TwitchClientModule;

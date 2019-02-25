@@ -3,7 +3,7 @@ package tv.mechjack.mechjackbot.main;
 import com.google.inject.Injector;
 
 import tv.mechjack.platform.application.GuiceApplication;
-import tv.mechjack.platform.webserver.WebServer;
+import tv.mechjack.platform.web.WebServer;
 
 final class Main extends GuiceApplication {
 
