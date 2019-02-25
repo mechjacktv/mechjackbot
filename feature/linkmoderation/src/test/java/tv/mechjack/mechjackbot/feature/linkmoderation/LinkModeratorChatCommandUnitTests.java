@@ -1,5 +1,8 @@
 package tv.mechjack.mechjackbot.feature.linkmoderation;
 
+import static tv.mechjack.mechjackbot.feature.linkmoderation.LinkModeratorChatCommand.KEY_DESCRIPTION;
+import static tv.mechjack.mechjackbot.feature.linkmoderation.LinkModeratorChatCommand.KEY_TRIGGER;
+
 import java.util.UUID;
 
 import tv.mechjack.mechjackbot.api.BaseChatCommandContractTests;
@@ -7,9 +10,6 @@ import tv.mechjack.mechjackbot.api.ChatCommandDescription;
 import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
 import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
 import tv.mechjack.platform.configuration.ConfigurationKey;
-
-import static tv.mechjack.mechjackbot.feature.linkmoderation.LinkModeratorChatCommand.KEY_DESCRIPTION;
-import static tv.mechjack.mechjackbot.feature.linkmoderation.LinkModeratorChatCommand.KEY_TRIGGER;
 
 public class LinkModeratorChatCommandUnitTests
     extends BaseChatCommandContractTests {
