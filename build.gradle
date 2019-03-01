@@ -43,6 +43,7 @@ subprojects {
       removeUnusedImports()
       trimTrailingWhitespace()
       endWithNewline()
+      paddedCell()
     }
     format 'misc', {
       target '**/*.gradle', '**/*.md', '**/.gitignore', '**/*.proto'
@@ -51,7 +52,7 @@ subprojects {
       endWithNewline()
     }
   }
-//  compileJava.dependsOn 'spotlessApply'
+  compileJava.dependsOn 'spotlessApply'
 
   repositories {
     jcenter()

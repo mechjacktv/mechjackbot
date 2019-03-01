@@ -16,7 +16,7 @@ public final class ApplicationController implements Controller {
     this.application = application;
   }
 
-  @Service(method = HttpMethod.GET, path="/api/v1/application")
+  @Service(method = HttpMethod.GET, path = "/api/v1/application")
   public final ApplicationRepresentation getApplication() {
     return new ApplicationRepresentation(this.application);
   }

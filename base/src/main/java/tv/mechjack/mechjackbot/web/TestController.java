@@ -1,8 +1,5 @@
 package tv.mechjack.mechjackbot.web;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import tv.mechjack.platform.web.services.Controller;
 import tv.mechjack.platform.web.services.HttpMethod;
 import tv.mechjack.platform.web.services.Service;

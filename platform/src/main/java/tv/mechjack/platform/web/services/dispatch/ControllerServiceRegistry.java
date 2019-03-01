@@ -48,8 +48,8 @@ public final class ControllerServiceRegistry {
 
   public boolean handleRequest(final HttpServletRequest req,
       final HttpServletResponse res) throws IOException {
-    for(final ServiceCommand serviceCommand : this.serviceCommands) {
-      if(serviceCommand.isHandler(req)) {
+    for (final ServiceCommand serviceCommand : this.serviceCommands) {
+      if (serviceCommand.isHandler(req)) {
         serviceCommand.handleRequest(req, res);
         return true;
       }

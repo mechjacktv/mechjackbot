@@ -43,8 +43,7 @@ final class ServiceCommand {
   }
 
   public final boolean isHandler(final HttpServletRequest req) {
-    final HttpMethod reqHttpMethod =
-        HttpMethod.valueOf(req.getMethod().toUpperCase());
+    final HttpMethod reqHttpMethod = HttpMethod.valueOf(req.getMethod().toUpperCase());
     // TODO (2019-02-24 mechjack): remove context path
     final String reqRequestURI = req.getRequestURI();
 
@@ -59,7 +58,7 @@ final class ServiceCommand {
       final Object response = this.javaMethod
           .invoke(this.controller, arguments);
 
-      if(Objects.nonNull(response)) {
+      if (Objects.nonNull(response)) {
         res.setContentType("application/json");
         res.getWriter().print(this.gson.toJson(response));
       }
@@ -75,8 +74,8 @@ final class ServiceCommand {
       final HttpServletRequest req, final HttpServletResponse res)
       throws IOException {
     final List<Object> arguments = new ArrayList<>();
-    for(final Class<?> parameter : javaMethod.getParameterTypes()) {
-      if(HttpServletRequest.class.isAssignableFrom(parameter)) {
+    for (final Class<?> parameter : javaMethod.getParameterTypes()) {
+      if (HttpServletRequest.class.isAssignableFrom(parameter)) {
         arguments.add(req);
       } else if (HttpServletResponse.class.isAssignableFrom(parameter)) {
         arguments.add(res);

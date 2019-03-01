@@ -21,8 +21,6 @@ import tv.mechjack.platform.web.ResourceBaseFactory;
 import tv.mechjack.platform.web.WebApplication;
 import tv.mechjack.platform.web.WebServerException;
 import tv.mechjack.platform.web.services.Controller;
-import tv.mechjack.platform.web.services.dispatch.ControllerServiceRegistry;
-import tv.mechjack.platform.web.services.dispatch.ServiceCommandFactory;
 
 public class WebApplicationModule extends AbstractModule {
 
@@ -82,7 +80,7 @@ public class WebApplicationModule extends AbstractModule {
           WaitServlet.class);
 
       // controllerHandler.registerController("/api/v1/application",
-      //     ApplicationNotControllerServlet.class);
+      // ApplicationNotControllerServlet.class);
     }
 
     @Override
