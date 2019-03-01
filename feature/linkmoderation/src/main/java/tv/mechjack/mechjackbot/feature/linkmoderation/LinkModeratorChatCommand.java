@@ -15,7 +15,7 @@ import tv.mechjack.mechjackbot.api.UserRole;
 
 public final class LinkModeratorChatCommand extends BaseChatCommand {
 
-  public static final String URL_REGEX = "(?i)\\b((\\w+://)?(sub\\.)*([\\S]+\\.("
+  public static final String URL_REGEX = "(?i)\\b((\\w+://)?([^\\s.]+\\.)*([^\\s.]+\\.("
       + new TopLevelDomainList()
       + "))|\\w+://localhost)(:\\d+)?(/\\S+)?\\b";
   public static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX);
