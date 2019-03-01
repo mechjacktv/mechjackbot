@@ -11,6 +11,7 @@ import tv.mechjack.mechjackbot.api.ChatMessage;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.mechjackbot.api.ChatMessageEventWrapper;
 import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
+import tv.mechjack.mechjackbot.api.NoCoolDown;
 import tv.mechjack.mechjackbot.api.RequiresAccessLevel;
 import tv.mechjack.mechjackbot.api.UserRole;
 import tv.mechjack.mechjackbot.feature.shoutout.ProtoMessage.CasterKey;
@@ -33,8 +34,10 @@ public final class ShoutOutListenerChatCommand extends BaseChatCommand {
   private ConfigurationKey frequencyKey;
 
   @Inject
-  ShoutOutListenerChatCommand(final CommandConfigurationBuilder commandConfigurationBuilder,
-      final ChatCommandRegistry chatCommandRegistry, final Configuration configuration,
+  ShoutOutListenerChatCommand(
+      final CommandConfigurationBuilder commandConfigurationBuilder,
+      final ChatCommandRegistry chatCommandRegistry,
+      final Configuration configuration,
       final ShoutOutDataStore shoutOutDataStore, final TimeUtils timeUtils) {
     super(commandConfigurationBuilder.setDescription(DEFAULT_DESCRIPTION));
     this.chatCommandRegistry = chatCommandRegistry;
@@ -51,35 +54,50 @@ public final class ShoutOutListenerChatCommand extends BaseChatCommand {
 
   private boolean isCasterDue(final ChatMessageEvent chatMessageEvent) {
     final Long frequency = this.timeUtils.hoursAsMs(
-        Integer.parseInt(this.configuration.get(this.frequencyKey.value, DEFAULT_FREQUENCY)));
-    final TwitchLogin twitchLogin = chatMessageEvent.getChatUser().getTwitchLogin();
-    final CasterKey casterKey = this.shoutOutDataStore.createCasterKey(twitchLogin.value);
+        Integer.parseInt(this.configuration
+            .get(this.frequencyKey.value, DEFAULT_FREQUENCY)));
+    final TwitchLogin twitchLogin = chatMessageEvent.getChatUser()
+        .getTwitchLogin();
+    final CasterKey casterKey = this.shoutOutDataStore
+        .createCasterKey(twitchLogin.value);
 
     return this.shoutOutDataStore.get(casterKey)
-        .filter(caster -> this.timeUtils.currentTime() - caster.getLastShoutOut() > frequency).isPresent();
+        .filter(
+            caster -> this.timeUtils.currentTime() - caster.getLastShoutOut() > frequency)
+        .isPresent();
   }
 
   @Override
+  @NoCoolDown
   @RequiresAccessLevel(UserRole.VIEWER)
   public void handleMessageEvent(final ChatMessageEvent chatMessageEvent) {
-    final TwitchLogin twitchLogin = chatMessageEvent.getChatUser().getTwitchLogin();
-    final Optional<ChatCommand> shoutOutChatCommand = this.chatCommandRegistry.getCommand(ShoutOutChatCommand.class);
+    final TwitchLogin twitchLogin = chatMessageEvent.getChatUser()
+        .getTwitchLogin();
+    final Optional<ChatCommand> shoutOutChatCommand = this.chatCommandRegistry
+        .getCommand(ShoutOutChatCommand.class);
 
     shoutOutChatCommand.ifPresent(chatCommand -> {
       final ChatMessage chatMessage = ChatMessage
-          .of(String.format(FORWARDED_MESSAGE_FORMAT, chatCommand.getTrigger(), twitchLogin));
+          .of(String.format(FORWARDED_MESSAGE_FORMAT, chatCommand.getTrigger(),
+              twitchLogin));
 
-      chatCommand.handleMessageEvent(new ShoutOutChatMessageEventWrapper(chatMessageEvent, chatMessage));
-      this.shoutOutDataStore.put(this.shoutOutDataStore.createCasterKey(twitchLogin.value),
-          this.shoutOutDataStore.createCaster(twitchLogin.value, this.timeUtils.currentTime()));
+      chatCommand.handleMessageEvent(
+          new ShoutOutChatMessageEventWrapper(chatMessageEvent, chatMessage));
+      this.shoutOutDataStore
+          .put(this.shoutOutDataStore.createCasterKey(twitchLogin.value),
+              this.shoutOutDataStore.createCaster(twitchLogin.value,
+                  this.timeUtils.currentTime()));
     });
   }
 
-  private static final class ShoutOutChatMessageEventWrapper extends ChatMessageEventWrapper {
+  private static final class ShoutOutChatMessageEventWrapper
+      extends ChatMessageEventWrapper {
 
     private final ChatMessage chatMessage;
 
-    public ShoutOutChatMessageEventWrapper(final ChatMessageEvent chatMessageEvent, final ChatMessage chatMessage) {
+    public ShoutOutChatMessageEventWrapper(
+        final ChatMessageEvent chatMessageEvent,
+        final ChatMessage chatMessage) {
       super(chatMessageEvent);
       this.chatMessage = chatMessage;
     }
