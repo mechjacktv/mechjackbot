@@ -57,7 +57,8 @@ public final class DefaultChatCommandRegistry implements ChatCommandRegistry {
     }
     this.commandsByTrigger.put(chatCommand.getTrigger(), chatCommand);
     this.commandByClass.put(chatCommand.getClass(), chatCommand);
-    log.info(String.format("Added chatCommand, %s, with trigger, %s", chatCommand.getName(), chatCommand.getTrigger()));
+    log.debug(String.format("Added chatCommand, %s, with trigger, %s",
+        chatCommand.getName(), chatCommand.getTrigger()));
   }
 
   @Override

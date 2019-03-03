@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package tv.mechjack.mechjackbot.feature.autotrigger;
+
+message AutoTriggerListKey {
+  string list_name = 1;
+}
+
+message AutoTriggerList {
+  string list_name = 1;
+  int32 time_required = 2;
+  int32 message_count = 3;
+  int32 chatter_count = 4;
+  string order = 5;
+  repeated CommandTrigger triggers = 6;
+}
+
+message CommandTrigger {
+  string name = 1;
+}

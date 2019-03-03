@@ -28,7 +28,7 @@ public abstract class BaseChatCommandContractTests extends ChatCommandContractTe
 
   @Test
   public final void getDescription_noDescriptionConfigured_resultIsEqualToDefaultDescription() {
-    this.installModules();
+    this.registerModules();
     final ChatCommand subjectUnderTest = this.givenASubjectToTest();
 
     final ChatCommandDescription result = subjectUnderTest.getDescription();
@@ -38,7 +38,7 @@ public abstract class BaseChatCommandContractTests extends ChatCommandContractTe
 
   @Test
   public final void getDescription_customDescriptionConfigured_resultIsEqualToCustomDescription() {
-    this.installModules();
+    this.registerModules();
     final ChatCommandDescription chatCommandDescription = ChatCommandDescription
         .of(this.testFramework.arbitraryData().getString());
     final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
@@ -52,7 +52,7 @@ public abstract class BaseChatCommandContractTests extends ChatCommandContractTe
 
   @Test
   public final void getTrigger_noTriggerConfigured_resultIsEqualToDefaultTrigger() {
-    this.installModules();
+    this.registerModules();
     final ChatCommand subjectUnderTest = this.givenASubjectToTest();
     assumeTrue(subjectUnderTest.isTriggerable());
 
@@ -63,7 +63,7 @@ public abstract class BaseChatCommandContractTests extends ChatCommandContractTe
 
   @Test
   public final void getTrigger_customTriggerConfigured_resultIsEqualToCustomTrigger() {
-    this.installModules();
+    this.registerModules();
     final ChatCommandTrigger chatCommandTrigger = ChatCommandTrigger
         .of(this.testFramework.arbitraryData().getString());
     final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);

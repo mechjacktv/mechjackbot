@@ -2,7 +2,8 @@ include ':platform',
     ':protobuf',
     ':base'
 
-include ':feature:core',
+include ':feature:autotrigger',
+    ':feature:core',
     ':feature:customcommands',
     ':feature:linkmoderation',
     ':feature:shoutouts',

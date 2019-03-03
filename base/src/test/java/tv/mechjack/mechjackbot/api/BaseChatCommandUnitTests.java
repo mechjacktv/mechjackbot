@@ -64,7 +64,7 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_sendUsage_resultIsUsageMessage() {
-    this.installModules();
+    this.registerModules();
     final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final TestChatCommand subjectUnderTest = this.givenASubjectToTest();
     subjectUnderTest.setMessageEventHandler(subjectUnderTest::sendUsage);
@@ -77,7 +77,7 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_sendResponseWithNullMessageFormat_throwsNullPointerException() {
-    this.installModules();
+    this.registerModules();
     final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final TestChatCommand subjectUnderTest = this.givenASubjectToTest();
     subjectUnderTest.setMessageEventHandler(event -> subjectUnderTest.sendResponse(event, (CommandMessageFormat) null));
@@ -91,7 +91,7 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_noMessageFormatConfigured_resultIsDefaultMessage() {
-    this.installModules();
+    this.registerModules();
     final Object[] responseArgs = new Object[] { this.testFramework.arbitraryData().getString(),
         this.testFramework.arbitraryData().getString(), this.testFramework.arbitraryData().getString() };
     final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
@@ -107,7 +107,7 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
-    this.installModules();
+    this.registerModules();
     final String customMessageFormat = "%s";
     final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
@@ -126,7 +126,7 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Test
   public final void parseArguments_noMessageBody_resultIsFalse() {
-    this.installModules();
+    this.registerModules();
     final PicoCliUtils picoCliUtils = this.testFramework.getInstance(PicoCliUtils.class);
     final PositionalParamSpec stringListParam = picoCliUtils.createStringListParam(false, "0..*");
 
@@ -143,7 +143,7 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Test
   public final void parseArguments_properlyFormattedCommand_resultIsTrue() {
-    this.installModules();
+    this.registerModules();
     final PicoCliUtils picoCliUtils = this.testFramework.getInstance(PicoCliUtils.class);
     final OptionSpec stringOption = picoCliUtils.createStringOption(true, "-r");
     final PositionalParamSpec stringParam = picoCliUtils.createStringParam(true, "0");
@@ -164,7 +164,7 @@ public class BaseChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Test
   public final void parseArguments_improperlyFormattedCommand_resultIsFalse() {
-    this.installModules();
+    this.registerModules();
     final PicoCliUtils picoCliUtils = this.testFramework.getInstance(PicoCliUtils.class);
     final OptionSpec stringOption = picoCliUtils.createStringOption(true, "-r");
     final PositionalParamSpec stringParam = picoCliUtils.createStringParam(true, "0");

@@ -39,11 +39,11 @@ public class DefaultChatMessageEventHandlerUnitTests extends ChatMessageEventHan
   }
 
   @Test
-  public final void handleMessageEvent_isCalled_logsAnInfoLevelMessage() {
+  public final void handleMessageEvent_isCalled_logsAnDebugLevelMessage() {
     this.installModules();
     final FakeBuilder<Logger> fakeBuilder = this.testFrameworkRule.fakeBuilder(Logger.class);
     final InvocationCounter countingHandler = new InvocationCounter();
-    fakeBuilder.forMethod("info", new Class[] { String.class }).setHandler(countingHandler);
+    fakeBuilder.forMethod("debug", new Class[] { String.class }).setHandler(countingHandler);
     final TestChatCommand command = this.testFrameworkRule.getInstance(TestChatCommand.class);
     command.setTriggered(true);
     final DefaultChatMessageEventHandler subjectUnderTest = this.givenASubjectToTest(Sets.newHashSet(command),
@@ -55,12 +55,12 @@ public class DefaultChatMessageEventHandlerUnitTests extends ChatMessageEventHan
   }
 
   @Test
-  public final void handleMessageEvent_commandThrowsException_logsAnInfoAndErrorLevelMessageWithSameLogger() {
+  public final void handleMessageEvent_commandThrowsException_logsAnDebugAndErrorLevelMessageWithSameLogger() {
     this.installModules();
     final FakeBuilder<Logger> fakeBuilder = this.testFrameworkRule.fakeBuilder(Logger.class);
     final InvocationCounter infoCountingHandler = new InvocationCounter();
     final InvocationCounter errorCountingHandler = new InvocationCounter();
-    fakeBuilder.forMethod("info", new Class[] { String.class }).setHandler(infoCountingHandler);
+    fakeBuilder.forMethod("debug", new Class[] { String.class }).setHandler(infoCountingHandler);
     fakeBuilder.forMethod("error", new Class[] { String.class, Throwable.class })
         .setHandler(errorCountingHandler);
     final TestChatCommand command = this.testFrameworkRule.getInstance(TestChatCommand.class);

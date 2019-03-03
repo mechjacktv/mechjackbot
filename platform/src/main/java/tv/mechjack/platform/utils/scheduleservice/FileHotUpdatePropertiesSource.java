@@ -26,7 +26,8 @@ public final class FileHotUpdatePropertiesSource implements HotUpdatePropertiesS
       LOGGER.info(String.format("Created %s", this.propertiesFile.getCanonicalPath()));
     }
     try (final InputStream propertiesInputStream = new FileInputStream(this.propertiesFile)) {
-      LOGGER.info(String.format("Accessing %s", this.propertiesFile.getCanonicalPath()));
+      LOGGER.debug(String.format("Accessing %s",
+          this.propertiesFile.getCanonicalPath()));
       propertiesLoader.accept(propertiesInputStream);
     }
   }

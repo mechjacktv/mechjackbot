@@ -30,8 +30,8 @@ import tv.mechjack.protobuf.TestProtobufModule;
 public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Override
-  protected void installModules() {
-    super.installModules();
+  protected void registerModules() {
+    super.registerModules();
     this.testFramework.registerModule(new TestConfigurationModule());
     this.testFramework.registerModule(new TestCustomCommandModule());
     this.testFramework.registerModule(new TestKeyValueStoreModule());
@@ -60,7 +60,7 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
 
   @Test
   public final void handleMessageEvent_invalidCommandOption_resultIsSendsUsage() {
-    this.installModules();
+    this.registerModules();
     final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final SetCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s --bad-flag %s %s", subjectUnderTest.getTrigger(),
@@ -84,7 +84,7 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
 
   @Test
   public final void handleMessageEvent_invalidUserRole_resultIsSendsUsage() {
-    this.installModules();
+    this.registerModules();
     final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final SetCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s --access-level %s %s", subjectUnderTest.getTrigger(),
@@ -100,7 +100,7 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
 
   @Test
   public final void handleMessageEvent_newCommandNoBodyDefaultNoBodyMessage_resultIsDefaultBodyRequiredMessage() {
-    this.installModules();
+    this.registerModules();
     final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final SetCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(String.format("%s %s", subjectUnderTest.getTrigger(),
@@ -116,7 +116,7 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
 
   @Test
   public final void handleMessageEvent_newCommandNoBodyCustomNoBodyMessage_resultIsCustomBodyRequiredMessage() {
-    this.installModules();
+    this.registerModules();
     final String messageFormat = this.testFramework.arbitraryData().getString() + "$(trigger): body required";
     final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(SetCommandChatCommand.KEY_BODY_REQUIRED_MESSAGE_FORMAT, messageFormat);
@@ -135,7 +135,7 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
 
   @Test
   public final void handleMessageEvent_creatingCustomCommandDefaultRole_resultIsNewCommandAddedToRegistry() {
-    this.installModules();
+    this.registerModules();
     final ChatCommandTrigger customTrigger = ChatCommandTrigger.of(this.testFramework
         .arbitraryData().getString());
     final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
@@ -151,7 +151,7 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
 
   @Test
   public final void handleMessageEvent_creatingCustomCommandDefaultRole_resultIsNewCommandAddedToDataStoreWithBody() {
-    this.installModules();
+    this.registerModules();
     final ChatCommandTrigger customTrigger = ChatCommandTrigger.of(this.testFramework
         .arbitraryData().getString());
     final CommandBody customBody = CommandBody.of(this.testFramework.arbitraryData().getString());
@@ -170,7 +170,7 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
 
   @Test
   public final void handleMessageEvent_creatingCustomCommandSpecifiedRole_resultIsNewCommandHasExpectUserRole() {
-    this.installModules();
+    this.registerModules();
     final ChatCommandTrigger customTrigger = ChatCommandTrigger.of(this.testFramework
         .arbitraryData().getString());
     final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
@@ -190,7 +190,7 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
 
   @Test
   public final void handleMessageEvent_creatingCustomCommandSpecifiedDescription_resultIsNewCommandHasExpectDescription() {
-    this.installModules();
+    this.registerModules();
     final ChatCommandTrigger customTrigger = ChatCommandTrigger.of(this.testFramework
         .arbitraryData().getString());
     final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
@@ -211,7 +211,7 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
 
   @Test
   public final void handleMessageEvent_creatingCustomCommand_resultIsSendSuccessMessage() {
-    this.installModules();
+    this.registerModules();
     final ChatCommandTrigger customTrigger = ChatCommandTrigger.of(this.testFramework
         .arbitraryData().getString());
     final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
@@ -229,7 +229,7 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
 
   @Test
   public final void handleMessageEvent_updatingCustomCommandBody_resultIsBodyUpdated() {
-    this.installModules();
+    this.registerModules();
     final ChatCommandTrigger commandTrigger = ChatCommandTrigger.of(this.testFramework
         .arbitraryData().getString());
     final CustomChatCommandService customChatCommandService = this.testFramework
@@ -254,7 +254,7 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
 
   @Test
   public final void handleMessageEvent_updatingCustomCommandRole_resultIsRoleUpdated() {
-    this.installModules();
+    this.registerModules();
     final ChatCommandTrigger commandTrigger = ChatCommandTrigger.of(this.testFramework
         .arbitraryData().getString());
     final CustomChatCommandService customChatCommandService = this.testFramework
@@ -278,7 +278,7 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
 
   @Test
   public final void handleMessageEvent_updatingCustomCommandDescription_resultIsDescriptionUpdated() {
-    this.installModules();
+    this.registerModules();
     final ChatCommandTrigger commandTrigger = ChatCommandTrigger.of(this.testFramework
         .arbitraryData().getString());
     final CustomChatCommandService customChatCommandService = this.testFramework
@@ -303,7 +303,7 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
 
   @Test
   public final void handleMessageEvent_updatingCustomCommand_resultIsSendSuccessMessage() {
-    this.installModules();
+    this.registerModules();
     final ChatCommandTrigger commandTrigger = ChatCommandTrigger.of(this.testFramework
         .arbitraryData().getString());
     final CustomChatCommandService customChatCommandService = this.testFramework
@@ -327,7 +327,7 @@ public class SetCommandChatCommandUnitTests extends BaseChatCommandContractTests
 
   @Test
   public final void handleMessageEvent_updatingCustomCommandNoUpdates_resultIsSendSuccessMessage() {
-    this.installModules();
+    this.registerModules();
     final ChatCommandTrigger commandTrigger = ChatCommandTrigger.of(this.testFramework
         .arbitraryData().getString());
     final CustomChatCommandService customChatCommandService = this.testFramework

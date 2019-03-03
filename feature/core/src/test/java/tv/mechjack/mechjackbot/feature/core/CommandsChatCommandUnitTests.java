@@ -74,7 +74,7 @@ public class CommandsChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_noMessageFormatConfigured_resultIsDefaultMessage() {
-    this.installModules();
+    this.registerModules();
     final Set<ChatCommand> chatCommands = this.givenASetOfCommands();
     final ChatCommandRegistry chatCommandRegistry = this.testFramework.getInstance(ChatCommandRegistry.class);
     chatCommands.forEach(chatCommandRegistry::addCommand);
@@ -90,7 +90,7 @@ public class CommandsChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
-    this.installModules();
+    this.registerModules();
     final String customMessageFormat = this.testFramework.arbitraryData().getString() + ": %s";
     final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
@@ -112,7 +112,7 @@ public class CommandsChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_noMessageFormatConfiguredWithNonTriggerableCommand_resultIsDefaultMessageWithoutNonTriggerableCommand() {
-    this.installModules();
+    this.registerModules();
     final TestChatCommand nonTriggerableCommand = this.testFramework.getInstance(TestChatCommand.class);
     nonTriggerableCommand.setTriggerable(false);
     final Set<ChatCommand> chatCommands = this.givenASetOfCommands();

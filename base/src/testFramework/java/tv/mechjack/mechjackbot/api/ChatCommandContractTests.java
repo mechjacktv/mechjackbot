@@ -15,7 +15,7 @@ public abstract class ChatCommandContractTests {
   @Rule
   public final TestFramework testFramework = new TestFramework();
 
-  protected void installModules() {
+  protected void registerModules() {
     this.testFramework.registerModule(new TestConfigurationModule());
     this.testFramework.registerModule(new TestCommandModule());
     this.testFramework.registerModule(new TestUtilsModule());
@@ -25,7 +25,7 @@ public abstract class ChatCommandContractTests {
 
   @Test
   public final void getDescription_whenCalled_resultIsNotNull() {
-    this.installModules();
+    this.registerModules();
     final ChatCommand subjectUnderTest = this.givenASubjectToTest();
 
     final ChatCommandDescription result = subjectUnderTest.getDescription();
@@ -35,7 +35,7 @@ public abstract class ChatCommandContractTests {
 
   @Test
   public final void getName_whenCalled_resultIsNotNull() {
-    this.installModules();
+    this.registerModules();
     final ChatCommand subjectUnderTest = this.givenASubjectToTest();
 
     final ChatCommandName result = subjectUnderTest.getName();
@@ -45,7 +45,7 @@ public abstract class ChatCommandContractTests {
 
   @Test
   public final void getTrigger_whenCalled_resultIsNotNull() {
-    this.installModules();
+    this.registerModules();
     final ChatCommand subjectUnderTest = this.givenASubjectToTest();
 
     final ChatCommandTrigger result = subjectUnderTest.getTrigger();
@@ -55,7 +55,7 @@ public abstract class ChatCommandContractTests {
 
   @Test
   public final void getUsage_whenCalled_resultIsNotNull() {
-    this.installModules();
+    this.registerModules();
     final ChatCommand subjectUnderTest = this.givenASubjectToTest();
 
     final ChatCommandUsage result = subjectUnderTest.getUsage();
@@ -65,7 +65,7 @@ public abstract class ChatCommandContractTests {
 
   @Test
   public final void isTriggered_messageContainsTrigger_resultIsTrue() {
-    this.installModules();
+    this.registerModules();
     final ChatCommand subjectUnderTest = this.givenASubjectToTest();
     assumeTrue(subjectUnderTest.isTriggerable());
     final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
@@ -79,7 +79,7 @@ public abstract class ChatCommandContractTests {
 
   @Test
   public final void isTriggered_messageDoesNotContainTrigger_resultIsFalse() {
-    this.installModules();
+    this.registerModules();
     final ChatCommand subjectUnderTest = this.givenASubjectToTest();
     assumeTrue(subjectUnderTest.isTriggerable());
     final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);

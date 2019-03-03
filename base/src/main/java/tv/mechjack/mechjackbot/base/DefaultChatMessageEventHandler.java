@@ -45,7 +45,7 @@ public final class DefaultChatMessageEventHandler implements ChatMessageEventHan
   public void handleMessageEvent(final ChatMessageEvent chatMessageEvent) {
     for (final ChatCommand chatCommand : this.chatCommandRegistry.getCommands()) {
       if (this.isTriggered(chatCommand, chatMessageEvent)) {
-        this.getLogger(chatCommand.getName().value).info(
+        this.getLogger(chatCommand.getName().value).debug(
             String.format("Executed: trigger=%s, user=%s, message=%s",
                 chatCommand.getTrigger(),
                 chatMessageEvent.getChatUser().getTwitchLogin(),

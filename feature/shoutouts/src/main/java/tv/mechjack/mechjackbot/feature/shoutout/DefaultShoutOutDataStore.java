@@ -61,7 +61,7 @@ public final class DefaultShoutOutDataStore extends BaseMessageStore<CasterKey, 
         final int addCount = this.addCasters(casterId.get(), existingCasterKeys, twitchClient);
         final int removeCount = this.removeCasters(existingCasterKeys);
 
-        log.info(String.format("ChatChannel, %s, is following %d casters (%d added, %d removed)",
+        log.debug(String.format("ChatChannel, %s, is following %d casters (%d added, %d removed)",
             channel, this.getKeys().size(), addCount, removeCount));
       } else {
         log.warn(String.format("Failed to find Twitch id for Twitch login, %s. Using existing data", channel));
