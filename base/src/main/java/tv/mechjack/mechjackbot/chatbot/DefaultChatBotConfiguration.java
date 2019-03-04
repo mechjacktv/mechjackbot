@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import tv.mechjack.mechjackbot.api.ChatBotConfiguration;
-import tv.mechjack.mechjackbot.api.ChatChannel;
+import tv.mechjack.mechjackbot.api.ChatChannelName;
 import tv.mechjack.mechjackbot.api.UserPassword;
 import tv.mechjack.platform.application.Application;
 import tv.mechjack.platform.utils.scheduleservice.FileHotUpdatePropertiesSource;
@@ -57,8 +57,8 @@ public final class DefaultChatBotConfiguration implements ChatBotConfiguration, 
   }
 
   @Override
-  public ChatChannel getChatChannel() {
-    return ChatChannel.of(this.hotUpdateProperties.getProperty(TWITCH_CHANNEL_KEY));
+  public ChatChannelName getChatChannelName() {
+    return ChatChannelName.of(this.hotUpdateProperties.getProperty(TWITCH_CHANNEL_KEY));
   }
 
   @Override

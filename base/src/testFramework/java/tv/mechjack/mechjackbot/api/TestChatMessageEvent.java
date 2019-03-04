@@ -9,6 +9,7 @@ public class TestChatMessageEvent implements ChatMessageEvent {
   private ChatBot chatBot;
   private ChatUser chatUser;
   private ChatMessage chatMessage;
+  private ChatChannel chatChannel;
   private ChatMessage responseChatMessage;
 
   @Inject
@@ -16,6 +17,7 @@ public class TestChatMessageEvent implements ChatMessageEvent {
     this.chatBot = new TestChatBot();
     this.chatUser = new TestChatUser(arbitraryDataGenerator);
     this.chatMessage = ChatMessage.of(arbitraryDataGenerator.getString());
+    this.chatChannel = null;
     this.responseChatMessage = null;
   }
 
@@ -32,6 +34,11 @@ public class TestChatMessageEvent implements ChatMessageEvent {
   @Override
   public ChatMessage getChatMessage() {
     return this.chatMessage;
+  }
+
+  @Override
+  public ChatChannel getChatChannel() {
+    return this.chatChannel;
   }
 
   public ChatMessage getResponseChatMessage() {

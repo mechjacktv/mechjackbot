@@ -1,15 +1,11 @@
 package tv.mechjack.mechjackbot.api;
 
-import tv.mechjack.platform.utils.typedobject.TypedString;
+import java.util.List;
 
-public final class ChatChannel extends TypedString {
+import tv.mechjack.twitchclient.TwitchLogin;
 
-  public static ChatChannel of(final String value) {
-    return TypedString.of(ChatChannel.class, value.toLowerCase());
-  }
+public interface ChatChannel {
 
-  private ChatChannel(final String value) {
-    super(value);
-  }
+  List<TwitchLogin> getTwitchLogins();
 
 }

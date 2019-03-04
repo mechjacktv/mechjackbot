@@ -13,22 +13,27 @@ import tv.mechjack.platform.utils.ExecutionUtils;
 public class KiclChatMessageEventFactory {
 
   private final Provider<ChatBot> chatBotProvider;
+  private final KiclChatChannelFactory chatMessageEventChannelFactory;
   private final KiclChatUserFactory chatUserFactory;
   private final Configuration configuration;
   private final ExecutionUtils executionUtils;
 
   @Inject
-  KiclChatMessageEventFactory(final Provider<ChatBot> chatBotProvider, final KiclChatUserFactory chatUserFactory,
+  KiclChatMessageEventFactory(final Provider<ChatBot> chatBotProvider,
+      final KiclChatChannelFactory chatMessageEventChannelFactory,
+      final KiclChatUserFactory chatUserFactory,
       final Configuration configuration, final ExecutionUtils executionUtils) {
     this.chatBotProvider = chatBotProvider;
+    this.chatMessageEventChannelFactory = chatMessageEventChannelFactory;
     this.chatUserFactory = chatUserFactory;
     this.configuration = configuration;
     this.executionUtils = executionUtils;
   }
 
   public ChatMessageEvent create(final ChannelMessageEvent event) {
-    return new KiclChatMessageEvent(event, this.chatBotProvider.get(), this.chatUserFactory, this.configuration,
-        this.executionUtils);
+    return new KiclChatMessageEvent(event, this.chatBotProvider.get(),
+        this.chatMessageEventChannelFactory, this.chatUserFactory,
+        this.configuration, this.executionUtils);
   }
 
 }

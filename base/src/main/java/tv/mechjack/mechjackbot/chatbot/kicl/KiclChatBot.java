@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import org.kitteh.irc.client.library.Client;
 
 import tv.mechjack.mechjackbot.api.ChatBot;
-import tv.mechjack.mechjackbot.api.ChatChannel;
+import tv.mechjack.mechjackbot.api.ChatChannelName;
 import tv.mechjack.mechjackbot.api.ChatMessage;
 import tv.mechjack.platform.configuration.Configuration;
 import tv.mechjack.platform.utils.ExecutionUtils;
@@ -31,10 +31,10 @@ public class KiclChatBot implements ChatBot {
   }
 
   @Override
-  public void sendMessage(final ChatChannel chatChannel, final ChatMessage chatMessage) {
-    Objects.requireNonNull(chatChannel, this.executionUtils.nullMessageForName("chatChannel"));
+  public void sendMessage(final ChatChannelName chatChannelName, final ChatMessage chatMessage) {
+    Objects.requireNonNull(chatChannelName, this.executionUtils.nullMessageForName("chatChannelName"));
     Objects.requireNonNull(chatMessage, this.executionUtils.nullMessageForName("chatMessage"));
-    this.ircClient.sendMessage(chatChannel.value, String.format(this.configuration.get(KEY_CHAT_BOT_MESSAGE_FORMAT,
+    this.ircClient.sendMessage(chatChannelName.value, String.format(this.configuration.get(KEY_CHAT_BOT_MESSAGE_FORMAT,
         DEFAULT_CHAT_BOT_MESSAGE_FORMAT), chatMessage));
   }
 

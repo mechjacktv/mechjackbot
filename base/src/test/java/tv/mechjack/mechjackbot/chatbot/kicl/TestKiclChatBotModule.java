@@ -25,6 +25,7 @@ public class TestKiclChatBotModule extends TestChatBotModule {
     this.bind(KiclChatBot.class).in(Scopes.SINGLETON);
     this.bind(ChatBot.class).to(KiclChatBot.class);
     this.bind(KiclChatBotListener.class).in(Scopes.SINGLETON);
+    this.bind(KiclChatChannelFactory.class).in(Scopes.SINGLETON);
     this.bind(KiclChatMessageEventFactory.class).in(Scopes.SINGLETON);
     this.bind(KiclChatUserFactory.class).in(Scopes.SINGLETON);
   }

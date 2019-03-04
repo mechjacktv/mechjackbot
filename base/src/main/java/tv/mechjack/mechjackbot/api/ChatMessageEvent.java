@@ -8,6 +8,8 @@ public interface ChatMessageEvent {
 
   ChatMessage getChatMessage();
 
+  ChatChannel getChatChannel();
+
   void sendResponse(ChatMessage chatMessage);
 
   void sendRawResponse(ChatMessage chatMessage);

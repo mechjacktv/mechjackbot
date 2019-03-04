@@ -6,6 +6,7 @@ include ':feature:autotrigger',
     ':feature:core',
     ':feature:customcommands',
     ':feature:linkmoderation',
+    ':feature:points',
     ':feature:shoutouts',
     ':feature:wouldyourather'
 

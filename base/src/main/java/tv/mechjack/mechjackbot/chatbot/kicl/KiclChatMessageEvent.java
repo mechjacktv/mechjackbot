@@ -5,6 +5,7 @@ import java.util.Objects;
 import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 
 import tv.mechjack.mechjackbot.api.ChatBot;
+import tv.mechjack.mechjackbot.api.ChatChannel;
 import tv.mechjack.mechjackbot.api.ChatMessage;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.mechjackbot.api.ChatUser;
@@ -18,15 +19,20 @@ public class KiclChatMessageEvent implements ChatMessageEvent {
 
   private final ChannelMessageEvent channelMessageEvent;
   private final ChatBot chatBot;
+  private final KiclChatChannelFactory chatMessageEventChannelFactory;
   private final KiclChatUserFactory chatUserFactory;
   private final Configuration configuration;
   private final ExecutionUtils executionUtils;
 
-  KiclChatMessageEvent(final ChannelMessageEvent channelMessageEvent, final ChatBot chatBot,
-      final KiclChatUserFactory chatUserFactory, final Configuration configuration,
+  KiclChatMessageEvent(final ChannelMessageEvent channelMessageEvent,
+      final ChatBot chatBot,
+      final KiclChatChannelFactory chatMessageEventChannelFactory,
+      final KiclChatUserFactory chatUserFactory,
+      final Configuration configuration,
       final ExecutionUtils executionUtils) {
     this.channelMessageEvent = channelMessageEvent;
     this.chatBot = chatBot;
+    this.chatMessageEventChannelFactory = chatMessageEventChannelFactory;
     this.chatUserFactory = chatUserFactory;
     this.configuration = configuration;
     this.executionUtils = executionUtils;
@@ -48,15 +54,24 @@ public class KiclChatMessageEvent implements ChatMessageEvent {
   }
 
   @Override
+  public ChatChannel getChatChannel() {
+    return this.chatMessageEventChannelFactory.createChatChannel(
+        this.channelMessageEvent.getChannel());
+  }
+
+  @Override
   public void sendResponse(final ChatMessage chatMessage) {
-    Objects.requireNonNull(chatMessage, this.executionUtils.nullMessageForName("chatMessage"));
-    this.channelMessageEvent.sendReply(String.format(
-        this.configuration.get(KEY_RESPONSE_MESSAGE_FORMAT, DEFAULT_RESPONSE_MESSAGE_FORMAT), chatMessage));
+    Objects.requireNonNull(chatMessage,
+        this.executionUtils.nullMessageForName("chatMessage"));
+    this.channelMessageEvent.sendReply(String.format(this.configuration
+        .get(KEY_RESPONSE_MESSAGE_FORMAT, DEFAULT_RESPONSE_MESSAGE_FORMAT),
+        chatMessage));
   }
 
   @Override
   public void sendRawResponse(final ChatMessage chatMessage) {
-    Objects.requireNonNull(chatMessage, this.executionUtils.nullMessageForName("chatMessage"));
+    Objects.requireNonNull(chatMessage,
+        this.executionUtils.nullMessageForName("chatMessage"));
     this.channelMessageEvent.sendReply(chatMessage.value);
   }
 

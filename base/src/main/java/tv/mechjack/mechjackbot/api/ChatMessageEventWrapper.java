@@ -24,6 +24,11 @@ public abstract class ChatMessageEventWrapper implements ChatMessageEvent {
   }
 
   @Override
+  public ChatChannel getChatChannel() {
+    return this.chatMessageEvent.getChatChannel();
+  }
+
+  @Override
   public void sendResponse(final ChatMessage chatMessage) {
     this.chatMessageEvent.sendResponse(chatMessage);
   }

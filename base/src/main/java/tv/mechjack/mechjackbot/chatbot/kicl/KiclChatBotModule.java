@@ -24,6 +24,7 @@ public class KiclChatBotModule extends ChatBotModule {
     super.configure();
     this.bind(ChatBot.class).to(KiclChatBot.class).in(Scopes.SINGLETON);
     this.bind(KiclChatBotListener.class).in(Scopes.SINGLETON);
+    this.bind(KiclChatChannelFactory.class).in(Scopes.SINGLETON);
     this.bind(KiclChatMessageEventFactory.class).in(Scopes.SINGLETON);
     this.bind(KiclChatUserFactory.class).in(Scopes.SINGLETON);
   }
@@ -50,7 +51,7 @@ public class KiclChatBotModule extends ChatBotModule {
 
     TwitchSupport.addSupport(client);
     client.getEventManager().registerEventListener(listener);
-    client.addChannel("#" + chatBotConfiguration.getChatChannel().value);
+    client.addChannel("#" + chatBotConfiguration.getChatChannelName().value);
     return client;
   }
 

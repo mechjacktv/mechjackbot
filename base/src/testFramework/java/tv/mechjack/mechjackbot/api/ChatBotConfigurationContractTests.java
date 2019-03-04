@@ -75,9 +75,9 @@ public abstract class ChatBotConfigurationContractTests {
     final Map<String, String> properties = this.givenIHaveAPropertiesMap();
     final ChatBotConfiguration subjectUnderTest = this.givenASubjectToTest(properties);
 
-    final ChatChannel result = subjectUnderTest.getChatChannel();
+    final ChatChannelName result = subjectUnderTest.getChatChannelName();
 
-    assertThat(result).isEqualTo(ChatChannel.of(properties.get(TWITCH_CHANNEL_KEY)));
+    assertThat(result).isEqualTo(ChatChannelName.of(properties.get(TWITCH_CHANNEL_KEY)));
   }
 
   @Test

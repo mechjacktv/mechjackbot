@@ -5,27 +5,27 @@ public class TestChatBot implements ChatBot {
   private ChatMessage chatMessage;
   private boolean started;
   private boolean stopped;
-  private ChatChannel chatChannel;
+  private ChatChannelName chatChannelName;
 
   public TestChatBot() {
     this.chatMessage = null;
     this.started = false;
     this.stopped = false;
-    this.chatChannel = null;
+    this.chatChannelName = null;
   }
 
   public ChatMessage getChatMessage() {
     return this.chatMessage;
   }
 
-  public ChatChannel getChatChannel() {
-    return this.chatChannel;
+  public ChatChannelName getChatChannelName() {
+    return this.chatChannelName;
   }
 
   @Override
-  public void sendMessage(final ChatChannel chatChannel, final ChatMessage chatMessage) {
+  public void sendMessage(final ChatChannelName chatChannelName, final ChatMessage chatMessage) {
     this.chatMessage = chatMessage;
-    this.chatChannel = chatChannel;
+    this.chatChannelName = chatChannelName;
   }
 
   @Override

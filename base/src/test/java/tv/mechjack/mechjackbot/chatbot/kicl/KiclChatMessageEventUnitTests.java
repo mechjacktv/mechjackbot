@@ -38,6 +38,7 @@ public class KiclChatMessageEventUnitTests {
 
   private KiclChatMessageEvent givenASubjectToTest(final ChannelMessageEvent channelMessageEvent) {
     return new KiclChatMessageEvent(channelMessageEvent, this.testFrameworkRule.getInstance(ChatBot.class),
+        this.testFrameworkRule.getInstance(KiclChatChannelFactory.class),
         this.testFrameworkRule.getInstance(KiclChatUserFactory.class),
         this.testFrameworkRule.getInstance(Configuration.class),
         this.testFrameworkRule.getInstance(ExecutionUtils.class));

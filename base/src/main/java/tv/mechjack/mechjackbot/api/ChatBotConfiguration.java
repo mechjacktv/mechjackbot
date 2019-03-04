@@ -4,7 +4,7 @@ import tv.mechjack.twitchclient.TwitchLogin;
 
 public interface ChatBotConfiguration {
 
-  ChatChannel getChatChannel();
+  ChatChannelName getChatChannelName();
 
   UserPassword getUserPassword();
 
