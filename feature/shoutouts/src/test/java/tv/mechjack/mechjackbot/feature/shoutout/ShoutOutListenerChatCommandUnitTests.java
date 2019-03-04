@@ -59,7 +59,7 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
 
   @Test
   public final void isTriggered_notACaster_resultIsFalse() {
-    this.installModules();
+    this.registerModules();
     final ChatMessageEvent chatMessageEvent = this.testFramework.getInstance(ChatMessageEvent.class);
     final ShoutOutListenerChatCommand subjectUnderTest = this.givenASubjectToTest();
 
@@ -68,8 +68,8 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
     assertThat(result).isFalse();
   }
 
-  protected final void installModules() {
-    super.installModules();
+  protected final void registerModules() {
+    super.registerModules();
     this.testFramework.registerModule(new TestChatBotModule());
     this.testFramework.registerModule(new TestKeyValueStoreModule());
     this.testFramework.registerModule(new TestScheduleServiceModule());
@@ -92,7 +92,7 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
 
   @Test
   public final void isTriggered_casterIsNotDue_resultIsFalse() {
-    this.installModules();
+    this.registerModules();
     this.testFramework
         .testClock().updateTime(this.getFrequencyDefault(), TimeUnit.HOURS);
     final ChatMessageEvent chatMessageEvent = this.testFramework.getInstance(ChatMessageEvent.class);
@@ -114,7 +114,7 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
 
   @Test
   public final void isTriggered_casterIsDue_resultIsTrue() {
-    this.installModules();
+    this.registerModules();
     this.testFramework
         .testClock().updateTime(this.getFrequencyDefault(), TimeUnit.HOURS, 1);
     final ChatMessageEvent chatMessageEvent = this.testFramework.getInstance(ChatMessageEvent.class);
@@ -132,7 +132,7 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
 
   @Test
   public final void isTriggered_casterIsNotDueWithCustomFrequency_resultIsFalse() {
-    this.installModules();
+    this.registerModules();
     final int customFrequency = this.getFrequencyDefault() + 1;
     final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(ConfigurationKey.of(ShoutOutListenerChatCommand.KEY_FREQUENCY, ShoutOutListenerChatCommand.class),
@@ -154,7 +154,7 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
 
   @Test
   public final void isTriggered_casterIsDueWithCustomFrequency_resultIsTrue() {
-    this.installModules();
+    this.registerModules();
     final int customFrequency = this.getFrequencyDefault() + 1;
     final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(ConfigurationKey.of(ShoutOutListenerChatCommand.KEY_FREQUENCY, ShoutOutListenerChatCommand.class),
@@ -175,7 +175,7 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
 
   @Test
   public final void handleMessageEvent_noMessageFormatConfigured_resultIsDefaultMessage() {
-    this.installModules();
+    this.registerModules();
     final FakeBuilder<ChatCommandRegistry> fakeBuilder = this.testFramework.fakeBuilder(ChatCommandRegistry.class);
     final TestChatCommand chatCommand = this.testFramework.getInstance(TestChatCommand.class);
     fakeBuilder.forMethod("getCommand", new Class[] { Class.class }).setHandler(invocation -> {
@@ -206,7 +206,7 @@ public final class ShoutOutListenerChatCommandUnitTests extends BaseChatCommandC
   // TODO (2019-02-05 mechjack): make this test pass
   public final void handleMessageEvent_isCalled_resultIsUpdatedDataStore() {
 
-    this.installModules();
+    this.registerModules();
     final TestTimeUtils timeUtils = this.testFramework.getInstance(TestTimeUtils.class);
     final Long lastShoutOut = timeUtils.hoursAsMs(this.getFrequencyDefault());
     this.testFramework.testClock().updateTime(lastShoutOut, TimeUnit.MILLISECONDS);

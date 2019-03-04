@@ -23,8 +23,8 @@ import tv.mechjack.platform.utils.scheduleservice.TestScheduleServiceModule;
 
 public class QuitChatCommandUnitTests extends BaseChatCommandContractTests {
 
-  protected final void installModules() {
-    super.installModules();
+  protected final void registerModules() {
+    super.registerModules();
     this.testFramework.registerModule(new TestScheduleServiceModule());
   }
 
@@ -64,7 +64,7 @@ public class QuitChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_noMessageFormatConfigured_resultIsDefaultMessage() {
-    this.installModules();
+    this.registerModules();
     final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final QuitChatCommand subjectUnderTest = this.givenASubjectToTest();
 
@@ -76,7 +76,7 @@ public class QuitChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_customMessageFormatConfigured_resultIsCustomMessage() {
-    this.installModules();
+    this.registerModules();
     final String customMessageFormat = this.testFramework.arbitraryData().getString();
     final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
@@ -91,7 +91,7 @@ public class QuitChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_whenCalled_resultIsStoppedChatBot() {
-    this.installModules();
+    this.registerModules();
     final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final QuitChatCommand subjectUnderTest = this.givenASubjectToTest();
 
@@ -102,7 +102,7 @@ public class QuitChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_whenCalled_stopsScheduleService() {
-    this.installModules();
+    this.registerModules();
     final TestScheduleService scheduleService = this.testFramework.getInstance(TestScheduleService.class);
     final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final QuitChatCommand subjectUnderTest = this.givenASubjectToTest();

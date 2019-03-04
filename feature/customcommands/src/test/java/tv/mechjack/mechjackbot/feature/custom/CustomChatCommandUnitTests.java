@@ -33,7 +33,7 @@ public class CustomChatCommandUnitTests extends ChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_noArgumentsRequired_resultIsChatMessage() {
-    this.installModules();
+    this.registerModules();
     final String bodyPart = this.testFramework.arbitraryData().getString();
     final CommandBody commandBody = CommandBody.of(bodyPart);
     final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
@@ -49,7 +49,7 @@ public class CustomChatCommandUnitTests extends ChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_calledWithArguments_resultIsChatMessageWithReplacedArguments() {
-    this.installModules();
+    this.registerModules();
     final String bodyPart = this.testFramework.arbitraryData().getString();
     final String argumentName = this.testFramework.arbitraryData()
         .getString();
@@ -73,7 +73,7 @@ public class CustomChatCommandUnitTests extends ChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_duplicateArgument_resultIsChatMessageWithReplacedArguments() {
-    this.installModules();
+    this.registerModules();
     final String bodyPart = this.testFramework.arbitraryData().getString();
     final String argumentName = this.testFramework.arbitraryData()
         .getString();
@@ -97,7 +97,7 @@ public class CustomChatCommandUnitTests extends ChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_multipleArguments_resultIsChatMessageWithReplacedArguments() {
-    this.installModules();
+    this.registerModules();
     final String bodyPart = this.testFramework.arbitraryData().getString();
     final String argName1 = this.testFramework.arbitraryData().getString();
     final String argName2 = this.testFramework.arbitraryData().getString();
@@ -120,7 +120,7 @@ public class CustomChatCommandUnitTests extends ChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_emptyArgumentsArgumentsRequired_resultIsUsageMessage() {
-    this.installModules();
+    this.registerModules();
     final String bodyPart = this.testFramework.arbitraryData().getString();
     final String argumentName1 = this.testFramework.arbitraryData()
         .getString();
@@ -151,7 +151,7 @@ public class CustomChatCommandUnitTests extends ChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_missingArgument_resultIsUsageMessage() {
-    this.installModules();
+    this.registerModules();
     final String bodyPart = this.testFramework.arbitraryData().getString();
     final String argName1 = this.testFramework.arbitraryData().getString();
     final String argName2 = this.testFramework.arbitraryData().getString();

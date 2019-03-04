@@ -117,6 +117,18 @@ project(':base') {
  * FEATURE PROJECTS
  */
 
+project(':feature:autotrigger') {
+  dependencies {
+    implementation project(':base')
+    implementation project(':platform')
+    implementation project(':protobuf')
+    implementation group: 'info.picocli', name: 'picocli', version: '3.8.2'
+    testFrameworkImplementation project(path: ':base', configuration: 'testFramework')
+    testFrameworkImplementation project(path: ':platform', configuration: 'testFramework')
+    testFrameworkImplementation project(path: ':protobuf', configuration: 'testFramework')
+  }
+}
+
 project(':feature:core') {
   dependencies {
     implementation project(':base')
@@ -185,6 +197,7 @@ project(':all') {
   }
 
   dependencies {
+    runtimeOnly project(':feature:autotrigger')
     runtimeOnly project(':feature:core')
     runtimeOnly project(':feature:customcommands')
     runtimeOnly project(':feature:linkmoderation')

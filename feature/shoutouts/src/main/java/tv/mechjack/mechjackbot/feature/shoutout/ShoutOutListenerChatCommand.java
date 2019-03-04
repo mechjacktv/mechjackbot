@@ -53,17 +53,17 @@ public final class ShoutOutListenerChatCommand extends BaseChatCommand {
   }
 
   private boolean isCasterDue(final ChatMessageEvent chatMessageEvent) {
-    final Long frequency = this.timeUtils.hoursAsMs(
-        Integer.parseInt(this.configuration
-            .get(this.frequencyKey.value, DEFAULT_FREQUENCY)));
+    final Long frequency = this.timeUtils.hoursAsMs(Integer
+        .parseInt(this.configuration.get(this.frequencyKey.value,
+            DEFAULT_FREQUENCY)));
     final TwitchLogin twitchLogin = chatMessageEvent.getChatUser()
         .getTwitchLogin();
     final CasterKey casterKey = this.shoutOutDataStore
         .createCasterKey(twitchLogin.value);
 
     return this.shoutOutDataStore.get(casterKey)
-        .filter(
-            caster -> this.timeUtils.currentTime() - caster.getLastShoutOut() > frequency)
+        .filter(caster -> this.timeUtils.currentTime()
+            - caster.getLastShoutOut() > frequency)
         .isPresent();
   }
 

@@ -15,8 +15,8 @@ public class LinkModeratorChatCommandUnitTests
     extends BaseChatCommandContractTests {
 
   @Override
-  protected void installModules() {
-    super.installModules();
+  protected void registerModules() {
+    super.registerModules();
     this.testFramework.registerModule(new TestLinkModerationFeatureModule());
   }
 

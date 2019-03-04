@@ -32,9 +32,11 @@ public class SetCommandChatCommand extends BaseChatCommand {
   public static final String DEFAULT_TRIGGER = "!setcommand";
   public static final ConfigurationKey KEY_BODY_REQUIRED_MESSAGE_FORMAT = ConfigurationKey
       .of("body_required_message_format", SetCommandChatCommand.class);
-  public static final String USAGE = String.format("<trigger> [(-a|--access-level)=\"(%s)\"] [(-d|--description)"
-      + "=\"<description>\"][<body>]",
-      Arrays.stream(UserRole.values()).map(Object::toString).collect(Collectors.joining("|")));
+  public static final String USAGE = String
+      .format("<trigger> [(-a|--access-level)=\"(%s)\"] [(-d|--description)"
+          + "=\"<description>\"][<body>]",
+          Arrays.stream(UserRole.values()).map(Object::toString)
+              .collect(Collectors.joining("|")));
 
   private final Configuration configuration;
   private final CustomChatCommandService customChatCommandService;
@@ -42,8 +44,10 @@ public class SetCommandChatCommand extends BaseChatCommand {
 
   @Inject
   protected SetCommandChatCommand(
-      final CommandConfigurationBuilder commandConfigurationBuilder, final Configuration configuration,
-      final CustomChatCommandService customChatCommandService, final PicoCliUtils picoCliUtils) {
+      final CommandConfigurationBuilder commandConfigurationBuilder,
+      final Configuration configuration,
+      final CustomChatCommandService customChatCommandService,
+      final PicoCliUtils picoCliUtils) {
     super(commandConfigurationBuilder.setTrigger(DEFAULT_TRIGGER)
         .setDescription(DEFAULT_DESCRIPTION)
         .setMessageFormat(DEFAULT_MESSAGE_FORMAT)
@@ -56,27 +60,43 @@ public class SetCommandChatCommand extends BaseChatCommand {
   @Override
   @RequiresAccessLevel(UserRole.MODERATOR)
   public void handleMessageEvent(final ChatMessageEvent messageEvent) {
-    final OptionSpec userRoleOption = this.picoCliUtils.createStringOption(false, "-a", "--access-level");
-    final OptionSpec descriptionOption = this.picoCliUtils.createStringOption(false, "-d", "--description");
-    final PositionalParamSpec triggerParam = this.picoCliUtils.createStringParam(true, "0");
-    final PositionalParamSpec bodyParam = this.picoCliUtils.createStringListParam(false, "1..*");
+    final OptionSpec userRoleOption = this.picoCliUtils.createStringOption(
+        false, "-a", "--access-level");
+    final OptionSpec descriptionOption = this.picoCliUtils.createStringOption(
+        false, "-d", "--description");
+    final PositionalParamSpec triggerParam = this.picoCliUtils
+        .createStringParam(true, "0");
+    final PositionalParamSpec bodyParam = this.picoCliUtils
+        .createStringListParam(false, "1..*");
 
-    this.parseArguments(Sets.newHashSet(userRoleOption, descriptionOption, triggerParam, bodyParam), messageEvent,
-        parseResult -> {
+    this.parseArguments(
+        Sets.newHashSet(userRoleOption, descriptionOption, triggerParam,
+            bodyParam),
+        messageEvent, parseResult -> {
           try {
-            final ChatCommandTrigger trigger = ChatCommandTrigger.of(triggerParam.getValue());
-            final CommandBody commandBody = this.handleBodyParam(bodyParam, parseResult);
-            final ChatCommandDescription description = this.handleDescriptionOption(descriptionOption, parseResult);
-            final UserRole userRole = this.handleUserRoleOption(userRoleOption, parseResult);
+            final ChatCommandTrigger trigger = ChatCommandTrigger
+                .of(triggerParam.getValue());
+            final CommandBody commandBody = this
+                .handleBodyParam(bodyParam, parseResult);
+            final ChatCommandDescription description = this
+                .handleDescriptionOption(descriptionOption, parseResult);
+            final UserRole userRole = this
+                .handleUserRoleOption(userRoleOption, parseResult);
 
-            if (this.customChatCommandService.isExistingCustomChatCommand(trigger)) {
-              this.customChatCommandService.updateCustomChatCommand(trigger, commandBody, description, userRole);
+            if (this.customChatCommandService
+                .isExistingCustomChatCommand(trigger)) {
+              this.customChatCommandService
+                  .updateCustomChatCommand(trigger, commandBody, description,
+                      userRole);
             } else {
               if (commandBody == null) {
-                this.sendResponse(messageEvent, this.getBodyRequiredMessageFormat());
+                this.sendResponse(messageEvent,
+                    this.getBodyRequiredMessageFormat());
                 return false;
               }
-              this.customChatCommandService.createCustomChatCommand(trigger, commandBody, description, userRole);
+              this.customChatCommandService
+                  .createCustomChatCommand(trigger, commandBody, description,
+                      userRole);
             }
             this.sendResponse(messageEvent, trigger);
             return true;
@@ -87,7 +107,8 @@ public class SetCommandChatCommand extends BaseChatCommand {
         });
   }
 
-  private CommandBody handleBodyParam(final PositionalParamSpec param, final ParseResult parseResult) {
+  private CommandBody handleBodyParam(final PositionalParamSpec param,
+      final ParseResult parseResult) {
     if (parseResult.hasMatchedPositional(param)) {
       final List<String> bodyParts = param.getValue();
 
@@ -96,14 +117,16 @@ public class SetCommandChatCommand extends BaseChatCommand {
     return null;
   }
 
-  private ChatCommandDescription handleDescriptionOption(final OptionSpec option, final ParseResult parseResult) {
+  private ChatCommandDescription handleDescriptionOption(
+      final OptionSpec option, final ParseResult parseResult) {
     if (parseResult.hasMatchedOption(option)) {
       return ChatCommandDescription.of(option.getValue());
     }
     return null;
   }
 
-  private UserRole handleUserRoleOption(final OptionSpec option, final ParseResult parseResult) {
+  private UserRole handleUserRoleOption(final OptionSpec option,
+      final ParseResult parseResult) {
     if (parseResult.hasMatchedOption(option)) {
       return UserRole.valueOf(option.getValue());
     }
@@ -111,8 +134,9 @@ public class SetCommandChatCommand extends BaseChatCommand {
   }
 
   private CommandMessageFormat getBodyRequiredMessageFormat() {
-    return CommandMessageFormat.of(this.configuration.get(KEY_BODY_REQUIRED_MESSAGE_FORMAT,
-        DEFAULT_BODY_REQUIRED_MESSAGE_FORMAT));
+    return CommandMessageFormat.of(
+        this.configuration.get(KEY_BODY_REQUIRED_MESSAGE_FORMAT,
+            DEFAULT_BODY_REQUIRED_MESSAGE_FORMAT));
   }
 
 }
