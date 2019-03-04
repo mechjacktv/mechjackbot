@@ -45,7 +45,7 @@ public class ShoutOutChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_messageNotProperlyFormatted_resultIsUsageMessage() {
-    this.installModules();
+    this.registerModules();
     final TestChatCommand command = this.testFramework.getInstance(TestChatCommand.class);
     final ChatCommandRegistry chatCommandRegistry = this.testFramework.getInstance(ChatCommandRegistry.class);
     chatCommandRegistry.addCommand(command);
@@ -67,7 +67,7 @@ public class ShoutOutChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_noMessageFormatConfiguredWithTriggerableCommand_resultIsDefaultMessage() {
-    this.installModules();
+    this.registerModules();
     final TwitchLogin twitchLogin = TwitchLogin.of(this.testFramework.arbitraryData().getString());
     final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final ShoutOutChatCommand subjectUnderTest = this.givenASubjectToTest();
@@ -87,7 +87,7 @@ public class ShoutOutChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Test
   public final void handleMessageEvent_customMessageFormatConfiguredWithTriggerableCommand_resultIsCustomMessage() {
-    this.installModules();
+    this.registerModules();
     final String customMessageFormat = this.testFramework.arbitraryData().getString() + " $(user) %s";
     final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);

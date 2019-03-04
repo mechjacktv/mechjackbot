@@ -64,7 +64,8 @@ public class WouldYouRatherChatCommand extends BaseChatCommand {
         }
         this.questions.add(line);
       }
-      LOGGER.info(String.format("Loaded %d would you rather questions.", this.questions.size()));
+      LOGGER.debug(String.format("Loaded %d would you rather questions.",
+          this.questions.size()));
     } catch (final IOException e) {
       LOGGER.warn("Unable to load would you rather questions", e);
     }

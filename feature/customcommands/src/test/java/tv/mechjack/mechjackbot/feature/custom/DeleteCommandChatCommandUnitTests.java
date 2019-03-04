@@ -26,8 +26,8 @@ import tv.mechjack.protobuf.TestProtobufModule;
 public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTests {
 
   @Override
-  protected void installModules() {
-    super.installModules();
+  protected void registerModules() {
+    super.registerModules();
     this.testFramework.registerModule(new TestConfigurationModule());
     this.testFramework.registerModule(new TestCustomCommandModule());
     this.testFramework.registerModule(new TestKeyValueStoreModule());
@@ -54,9 +54,17 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
     return ConfigurationKey.of(KEY_TRIGGER, DeleteCommandChatCommand.class);
   }
 
+  @Override
+  protected DeleteCommandChatCommand givenASubjectToTest() {
+    return new DeleteCommandChatCommand(this.testFramework.getInstance(CommandConfigurationBuilder.class),
+        this.testFramework.getInstance(Configuration.class),
+        this.testFramework.getInstance(ChatCommandUtils.class),
+        this.testFramework.getInstance(CustomChatCommandService.class));
+  }
+
   @Test
   public final void handleMessageEvent_emptyMessageBody_resultIsSendsUsage() {
-    this.installModules();
+    this.registerModules();
     final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final DeleteCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
     messageEvent.setChatMessage(ChatMessage.of(subjectUnderTest.getTrigger().value));
@@ -69,17 +77,9 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
         commandUtils.createUsageMessage(subjectUnderTest, messageEvent)));
   }
 
-  @Override
-  protected DeleteCommandChatCommand givenASubjectToTest() {
-    return new DeleteCommandChatCommand(this.testFramework.getInstance(CommandConfigurationBuilder.class),
-        this.testFramework.getInstance(Configuration.class),
-        this.testFramework.getInstance(ChatCommandUtils.class),
-        this.testFramework.getInstance(CustomChatCommandService.class));
-  }
-
   @Test
   public final void handleMessageEvent_notExistingCustomCommandWithDefaultMessage_resultIsSendsDefaultNotCustomCommandMessage() {
-    this.installModules();
+    this.registerModules();
     final String trigger = this.testFramework.arbitraryData().getString();
     final TestChatMessageEvent messageEvent = this.testFramework.getInstance(TestChatMessageEvent.class);
     final DeleteCommandChatCommand subjectUnderTest = this.givenASubjectToTest();
@@ -95,7 +95,7 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
 
   @Test
   public final void handleMessageEvent_notExistingCustomCommandWithCustomMessage_resultIsSendsCustomNotCustomCommandMessage() {
-    this.installModules();
+    this.registerModules();
     final String customMessageFormat = this.testFramework.arbitraryData().getString() + "%s";
     final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(DeleteCommandChatCommand.KEY_NOT_CUSTOM_COMMAND_MESSAGE_FORMAT, customMessageFormat);
@@ -114,7 +114,7 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
 
   @Test
   public final void handleMessageEvent_existingCustomCommandWithDefaultMessage_resultIsDefaultMessage() {
-    this.installModules();
+    this.registerModules();
     final String trigger = this.testFramework.arbitraryData().getString();
     final CustomChatCommandService service = this.testFramework.getInstance(CustomChatCommandService.class);
     service.createCustomChatCommand(ChatCommandTrigger.of(trigger),
@@ -138,7 +138,7 @@ public class DeleteCommandChatCommandUnitTests extends BaseChatCommandContractTe
 
   @Test
   public final void handleMessageEvent_existingCustomCommandWithCustomMessage_resultIsCustomMessage() {
-    this.installModules();
+    this.registerModules();
     final String customMessageFormat = this.testFramework.arbitraryData().getString() + " %s";
     final MapConfiguration configuration = this.testFramework.getInstance(MapConfiguration.class);
     configuration.set(this.getMessageFormatKey(), customMessageFormat);
