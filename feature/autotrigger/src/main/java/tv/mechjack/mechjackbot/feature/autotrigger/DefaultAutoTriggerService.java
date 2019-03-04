@@ -110,10 +110,10 @@ public class DefaultAutoTriggerService implements AutoTriggerService {
     final AutoTriggerListKey key = this.autoTriggerDataStore
         .createAutoTriggerListKey(listName);
     // TODO (2019-03-01 mechjack): Make defaults configurable
-    final TimeRequired actualTimeRequired = Objects.isNull(timeRequired) ? TimeRequired.of(10) : timeRequired;
-    final MessageCount actualMessageCount = Objects.isNull(messageCount) ? MessageCount.of(1) : messageCount;
-    final ChatterCount actualChatterCount = Objects.isNull(chatterCount) ? ChatterCount.of(1) : chatterCount;
-    final Order actualOrder = Objects.isNull(order) ? Order.SEQUENCE : order;
+    final TimeRequired actualTimeRequired = this.getTimeRequired(timeRequired);
+    final MessageCount actualMessageCount = this.getMessageCount(messageCount);
+    final ChatterCount actualChatterCount = this.getChatterCount(chatterCount);
+    final Order actualOrder = this.getOrder(order);
     final AutoTriggerList autoTriggerList = this.autoTriggerDataStore
         .createAutoTriggerList(listName, actualTimeRequired, actualMessageCount,
             actualChatterCount, actualOrder,
@@ -124,6 +124,22 @@ public class DefaultAutoTriggerService implements AutoTriggerService {
         new AutoTriggerMonitor(autoTriggerList, this.chatCommandRegistry,
             this.randomUtils, this.timeUtils));
     LOGGER.info("Created auto-trigger list, " + listName);
+  }
+
+  private TimeRequired getTimeRequired(final TimeRequired timeRequired) {
+    return Objects.isNull(timeRequired) ? TimeRequired.of(10) : timeRequired;
+  }
+
+  private MessageCount getMessageCount(final MessageCount messageCount) {
+    return Objects.isNull(messageCount) ? MessageCount.of(0) : messageCount;
+  }
+
+  private ChatterCount getChatterCount(final ChatterCount chatterCount) {
+    return Objects.isNull(chatterCount) ? ChatterCount.of(1) : chatterCount;
+  }
+
+  private Order getOrder(final Order order) {
+    return Objects.isNull(order) ? Order.SEQUENCE : order;
   }
 
   private List<CommandTrigger> convertToCommandTriggers(

@@ -2,7 +2,7 @@ package tv.mechjack.mechjackbot.feature.autotrigger;
 
 import tv.mechjack.platform.utils.typedobject.TypedString;
 
-public class ListName extends TypedString {
+public final class ListName extends TypedString {
 
   private ListName(final String value) {
     super(value);

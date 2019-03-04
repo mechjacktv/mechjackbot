@@ -2,7 +2,7 @@ package tv.mechjack.mechjackbot.feature.autotrigger;
 
 import tv.mechjack.platform.utils.typedobject.TypedInteger;
 
-public class TimeRequired extends TypedInteger {
+public final class TimeRequired extends TypedInteger {
 
   private TimeRequired(final Integer value) {
     super(value);

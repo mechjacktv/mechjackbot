@@ -2,7 +2,7 @@ package tv.mechjack.mechjackbot.feature.autotrigger;
 
 import tv.mechjack.platform.utils.typedobject.TypedInteger;
 
-public class MessageCount extends TypedInteger {
+public final class MessageCount extends TypedInteger {
 
   private MessageCount(final Integer value) {
     super(value);
