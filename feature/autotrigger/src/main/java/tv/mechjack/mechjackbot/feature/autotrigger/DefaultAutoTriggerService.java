@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import tv.mechjack.mechjackbot.api.ChatCommand;
 import tv.mechjack.mechjackbot.api.ChatCommandRegistry;
 import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
+import tv.mechjack.mechjackbot.api.ChatMessage;
 import tv.mechjack.mechjackbot.api.ChatMessageEvent;
 import tv.mechjack.mechjackbot.feature.autotrigger.ProtoMessage.AutoTriggerList;
 import tv.mechjack.mechjackbot.feature.autotrigger.ProtoMessage.AutoTriggerListKey;
@@ -311,8 +312,12 @@ public class DefaultAutoTriggerService implements AutoTriggerService {
             .getCommand(trigger);
 
         if (optionalCommand.isPresent()) {
+          final ChatMessage chatMessage = ChatMessage.of(trigger.value);
+          final AutoTriggerChatMessageEvent newMessageEvent = new AutoTriggerChatMessageEvent(chatMessageEvent,
+              chatMessage);
+
           this.triggered(index);
-          optionalCommand.get().handleMessageEvent(chatMessageEvent);
+          optionalCommand.get().handleMessageEvent(newMessageEvent);
         }
       }
     }

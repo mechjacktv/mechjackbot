@@ -241,9 +241,13 @@ public final class DefaultChatCommandUtils implements ChatCommandUtils {
     final ChatCommandTrigger chatCommandTrigger = chatCommand.getTrigger();
     final ChatMessage chatMessage = chatMessageEvent.getChatMessage();
 
-    return ChatMessage
-        .of(chatMessage.value.substring(chatCommandTrigger.value.length())
-            .trim());
+    if (chatMessage.value.startsWith(chatCommandTrigger.value)) {
+      return ChatMessage.of(
+          chatMessage.value.substring(chatCommandTrigger.value.length())
+              .trim());
+    } else {
+      return chatMessage;
+    }
   }
 
 }
