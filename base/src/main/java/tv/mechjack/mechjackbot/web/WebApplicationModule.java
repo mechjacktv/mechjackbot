@@ -14,13 +14,13 @@ import tv.mechjack.mechjackbot.api.ChatBotConfiguration;
 import tv.mechjack.mechjackbot.web.tempdata.Application;
 import tv.mechjack.mechjackbot.web.tempdata.WebappTypeAdapterRegistrar;
 import tv.mechjack.platform.gson.TypeAdapterRegistrar;
-import tv.mechjack.platform.web.ControllerHandler;
-import tv.mechjack.platform.web.ErrorPageHandler;
-import tv.mechjack.platform.web.ResourceBase;
-import tv.mechjack.platform.web.ResourceBaseFactory;
-import tv.mechjack.platform.web.WebApplication;
-import tv.mechjack.platform.web.WebServerException;
-import tv.mechjack.platform.web.services.Controller;
+import tv.mechjack.platform.webapp.ControllerHandler;
+import tv.mechjack.platform.webapp.ErrorPageHandler;
+import tv.mechjack.platform.webapp.ResourceBase;
+import tv.mechjack.platform.webapp.ResourceBaseFactory;
+import tv.mechjack.platform.webapp.WebApplication;
+import tv.mechjack.platform.webapp.WebServerException;
+import tv.mechjack.platform.webapp.services.Controller;
 
 public class WebApplicationModule extends AbstractModule {
 
@@ -39,6 +39,7 @@ public class WebApplicationModule extends AbstractModule {
 
     Multibinder.newSetBinder(this.binder(), Controller.class).addBinding()
         .to(ApplicationController.class).in(Scopes.SINGLETON);
+
     Multibinder.newSetBinder(this.binder(), Controller.class).addBinding()
         .to(TestController.class).in(Scopes.SINGLETON);
   }

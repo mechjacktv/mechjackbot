@@ -3,9 +3,10 @@ package tv.mechjack.mechjackbot.web;
 import javax.inject.Inject;
 
 import tv.mechjack.mechjackbot.web.tempdata.Application;
-import tv.mechjack.platform.web.services.Controller;
-import tv.mechjack.platform.web.services.HttpMethod;
-import tv.mechjack.platform.web.services.Service;
+import tv.mechjack.platform.webapp.services.Action;
+import tv.mechjack.platform.webapp.services.Action.Type;
+import tv.mechjack.platform.webapp.services.Controller;
+import tv.mechjack.platform.webapp.services.UriPattern;
 
 public final class ApplicationController implements Controller {
 
@@ -16,7 +17,12 @@ public final class ApplicationController implements Controller {
     this.application = application;
   }
 
-  @Service(method = HttpMethod.GET, path = "/api/v1/application")
+  @Override
+  public UriPattern getUriRootPattern() {
+    return UriPattern.of("/application");
+  }
+
+  @Action(type = Type.LIST)
   public final ApplicationRepresentation getApplication() {
     return new ApplicationRepresentation(this.application);
   }

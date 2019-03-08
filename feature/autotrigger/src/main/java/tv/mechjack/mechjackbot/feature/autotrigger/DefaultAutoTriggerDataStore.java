@@ -10,9 +10,9 @@ import tv.mechjack.mechjackbot.feature.autotrigger.ProtoMessage.AutoTriggerList;
 import tv.mechjack.mechjackbot.feature.autotrigger.ProtoMessage.AutoTriggerListKey;
 import tv.mechjack.mechjackbot.feature.autotrigger.ProtoMessage.CommandTrigger;
 import tv.mechjack.platform.keyvaluestore.KeyValueStoreFactory;
+import tv.mechjack.platform.protobuf.BaseMessageStore;
+import tv.mechjack.platform.protobuf.ProtobufUtils;
 import tv.mechjack.platform.utils.ExecutionUtils;
-import tv.mechjack.protobuf.BaseMessageStore;
-import tv.mechjack.protobuf.ProtobufUtils;
 
 public class DefaultAutoTriggerDataStore
     extends BaseMessageStore<AutoTriggerListKey, AutoTriggerList>

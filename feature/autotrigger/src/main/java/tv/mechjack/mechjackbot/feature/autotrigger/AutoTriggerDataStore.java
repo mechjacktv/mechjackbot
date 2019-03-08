@@ -6,7 +6,7 @@ import tv.mechjack.mechjackbot.api.ChatCommandTrigger;
 import tv.mechjack.mechjackbot.feature.autotrigger.ProtoMessage.AutoTriggerList;
 import tv.mechjack.mechjackbot.feature.autotrigger.ProtoMessage.AutoTriggerListKey;
 import tv.mechjack.mechjackbot.feature.autotrigger.ProtoMessage.CommandTrigger;
-import tv.mechjack.protobuf.MessageStore;
+import tv.mechjack.platform.protobuf.MessageStore;
 
 public interface AutoTriggerDataStore
     extends MessageStore<AutoTriggerListKey, AutoTriggerList> {

@@ -24,7 +24,7 @@ import tv.mechjack.mechjackbot.api.TestChatCommand;
 import tv.mechjack.mechjackbot.api.TestChatMessageEvent;
 import tv.mechjack.platform.configuration.ConfigurationKey;
 import tv.mechjack.platform.keyvaluestore.TestKeyValueStoreModule;
-import tv.mechjack.protobuf.TestProtobufModule;
+import tv.mechjack.platform.protobuf.TestProtobufModule;
 import tv.mechjack.twitchclient.TwitchLogin;
 
 public class AutoTriggerListenerChatCommandUnitTests extends

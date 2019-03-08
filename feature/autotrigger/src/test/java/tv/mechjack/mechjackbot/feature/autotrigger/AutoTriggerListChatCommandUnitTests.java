@@ -16,7 +16,7 @@ import tv.mechjack.mechjackbot.api.CommandConfigurationBuilder;
 import tv.mechjack.mechjackbot.api.TestChatMessageEvent;
 import tv.mechjack.platform.configuration.ConfigurationKey;
 import tv.mechjack.platform.keyvaluestore.TestKeyValueStoreModule;
-import tv.mechjack.protobuf.TestProtobufModule;
+import tv.mechjack.platform.protobuf.TestProtobufModule;
 import tv.mechjack.testframework.ArbitraryData;
 
 public class AutoTriggerListChatCommandUnitTests extends
