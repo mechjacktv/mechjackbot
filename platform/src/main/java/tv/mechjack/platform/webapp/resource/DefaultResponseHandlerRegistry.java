@@ -18,10 +18,8 @@ public final class DefaultResponseHandlerRegistry
   @Inject
   public DefaultResponseHandlerRegistry(
       final Set<ResponseHandler> responseHandlers,
-      final ByteArrayResponseHandler byteArrayResponseHandler,
       final NullResponseHandler nullResponseHandler,
-      final ObjectResponseHandler objectResponseHandler,
-      final PrimitiveResponseHandler primitiveResponseHandler) {
+      final ObjectResponseHandler objectResponseHandler) {
     this.responseHandlers = responseHandlers;
     this.nullResponseHandler = nullResponseHandler;
     this.objectResponseHandler = objectResponseHandler;
