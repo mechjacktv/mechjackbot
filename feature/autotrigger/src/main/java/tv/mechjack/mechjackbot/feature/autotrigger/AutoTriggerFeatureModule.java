@@ -13,10 +13,10 @@ public class AutoTriggerFeatureModule extends FeatureModule {
     this.bind(AutoTriggerService.class).to(DefaultAutoTriggerService.class)
         .in(Scopes.SINGLETON);
 
-    this.bindCommand(AutoTriggerDeleteChatCommand.class);
-    this.bindCommand(AutoTriggerListChatCommand.class);
-    this.bindCommand(AutoTriggerListenerChatCommand.class);
-    this.bindCommand(AutoTriggerSetChatCommand.class);
+    this.bindChatCommand(AutoTriggerDeleteChatCommand.class);
+    this.bindChatCommand(AutoTriggerListChatCommand.class);
+    this.bindChatCommand(AutoTriggerListenerChatCommand.class);
+    this.bindChatCommand(AutoTriggerSetChatCommand.class);
   }
 
 }

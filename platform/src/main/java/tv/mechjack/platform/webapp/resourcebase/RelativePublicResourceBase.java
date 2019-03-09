@@ -4,7 +4,7 @@ import java.io.File;
 
 import tv.mechjack.platform.webapp.ResourceBase;
 
-public class RelativePublicResourceBase implements ResourceBase {
+public final class RelativePublicResourceBase implements ResourceBase {
 
   private final File resourceBase = new File("public/");
 

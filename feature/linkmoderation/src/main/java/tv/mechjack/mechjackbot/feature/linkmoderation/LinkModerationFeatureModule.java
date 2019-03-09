@@ -12,8 +12,8 @@ public class LinkModerationFeatureModule extends FeatureModule {
         .to(DefaultLinkModeratorService.class)
         .in(Scopes.SINGLETON);
 
-    this.bindCommand(LinkModeratorChatCommand.class);
-    this.bindCommand(PermitChatCommand.class);
+    this.bindChatCommand(LinkModeratorChatCommand.class);
+    this.bindChatCommand(PermitChatCommand.class);
   }
 
 }

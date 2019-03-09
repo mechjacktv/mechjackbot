@@ -9,8 +9,8 @@ public final class ShoutOutFeatureModule extends FeatureModule {
   @Override
   protected final void configure() {
     this.bind(ShoutOutDataStore.class).to(DefaultShoutOutDataStore.class).in(Scopes.SINGLETON);
-    this.bindCommand(ShoutOutChatCommand.class);
-    this.bindCommand(ShoutOutListenerChatCommand.class);
+    this.bindChatCommand(ShoutOutChatCommand.class);
+    this.bindChatCommand(ShoutOutListenerChatCommand.class);
   }
 
 }

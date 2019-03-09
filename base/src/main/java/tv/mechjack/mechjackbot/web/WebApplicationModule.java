@@ -20,7 +20,7 @@ import tv.mechjack.platform.webapp.ResourceBase;
 import tv.mechjack.platform.webapp.ResourceBaseFactory;
 import tv.mechjack.platform.webapp.WebApplication;
 import tv.mechjack.platform.webapp.WebServerException;
-import tv.mechjack.platform.webapp.services.Controller;
+import tv.mechjack.platform.webapp.api.resource.Controller;
 
 public class WebApplicationModule extends AbstractModule {
 
@@ -29,6 +29,7 @@ public class WebApplicationModule extends AbstractModule {
 
   @Override
   protected void configure() {
+
     this.bind(Application.class).in(Scopes.SINGLETON);
 
     Multibinder.newSetBinder(this.binder(), TypeAdapterRegistrar.class)
@@ -79,9 +80,6 @@ public class WebApplicationModule extends AbstractModule {
           DefaultJsonErrorServlet.class);
       controllerHandler.registerController("/api/v1/wait",
           WaitServlet.class);
-
-      // controllerHandler.registerController("/api/v1/application",
-      // ApplicationNotControllerServlet.class);
     }
 
     @Override

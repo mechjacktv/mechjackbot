@@ -27,7 +27,7 @@ import tv.mechjack.platform.configuration.ConfigurationKey;
 import tv.mechjack.platform.webapp.WebAppModule;
 import tv.mechjack.platform.webapp.WebApplication;
 import tv.mechjack.platform.webapp.WebServer;
-import tv.mechjack.platform.webapp.services.dispatch.DispatchFilter;
+import tv.mechjack.platform.webapp.resource.ResourceDispatchFilter;
 
 public class JettyModule extends WebAppModule {
 
@@ -48,7 +48,7 @@ public class JettyModule extends WebAppModule {
 
   @Provides
   public final WebServer createJettyServer(final Configuration configuration,
-      final DispatchFilter dispatchFilter,
+      final ResourceDispatchFilter resourceDispatchFilter,
       final Set<WebApplication> webApplications, final Injector rootInjector) {
     final Server server = new Server();
     final ServerConnector connector = new ServerConnector(server);
@@ -62,25 +62,23 @@ public class JettyModule extends WebAppModule {
         configuration.get(KEY_HTTP_TIMEOUT, DEFAULT_HTTP_TIMEOUT)));
     server.addConnector(connector);
     server.setRequestLog((req, res) -> {
-      LOGGER.info("Context Path: " + req.getContextPath());
-      LOGGER.info("Path Info: " + req.getPathInfo());
-      LOGGER.info("Servlet Path: " + req.getServletPath());
-      LOGGER.info(String.format("Request: %s %s", req, res));
+      LOGGER.debug(String.format("Request: %s %s", req, res));
     });
     server.setHandler(handlers);
     for (final WebApplication webApplication : webApplications) {
-      handlers.addHandler(this.createHandler(dispatchFilter, webApplication,
+      handlers.addHandler(this.createHandler(resourceDispatchFilter, webApplication,
           rootInjector));
     }
     return new JettyWebServer(server);
   }
 
-  private Handler createHandler(final DispatchFilter dispatchFilter,
+  private Handler createHandler(final ResourceDispatchFilter resourceDispatchFilter,
       final WebApplication webApplication,
       final Injector rootInjector) {
     final ServletContextHandler handler = new ServletContextHandler(
         ServletContextHandler.SESSIONS);
-    final FilterHolder filterHolder = new FilterHolder(dispatchFilter);
+    final FilterHolder filterHolder = new FilterHolder(
+        resourceDispatchFilter);
 
     handler.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(
         DispatcherType.class));

@@ -3,26 +3,22 @@ package tv.mechjack.mechjackbot.web;
 import javax.inject.Inject;
 
 import tv.mechjack.mechjackbot.web.tempdata.Application;
-import tv.mechjack.platform.webapp.services.Action;
-import tv.mechjack.platform.webapp.services.Action.Type;
-import tv.mechjack.platform.webapp.services.Controller;
-import tv.mechjack.platform.webapp.services.UriPattern;
+import tv.mechjack.platform.webapp.api.HttpMethod;
+import tv.mechjack.platform.webapp.api.resource.BaseController;
+import tv.mechjack.platform.webapp.api.resource.RequestHandler;
+import tv.mechjack.platform.webapp.api.resource.UriPattern;
 
-public final class ApplicationController implements Controller {
+public final class ApplicationController extends BaseController {
 
   private final Application application;
 
   @Inject
   public ApplicationController(final Application application) {
+    super(UriPattern.of("/application"));
     this.application = application;
   }
 
-  @Override
-  public UriPattern getUriRootPattern() {
-    return UriPattern.of("/application");
-  }
-
-  @Action(type = Type.LIST)
+  @RequestHandler(method = HttpMethod.GET)
   public final ApplicationRepresentation getApplication() {
     return new ApplicationRepresentation(this.application);
   }

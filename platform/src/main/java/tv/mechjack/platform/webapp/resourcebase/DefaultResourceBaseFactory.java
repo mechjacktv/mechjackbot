@@ -4,16 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import tv.mechjack.platform.webapp.ResourceBase;
 import tv.mechjack.platform.webapp.ResourceBaseFactory;
 
-public class DefaultResourceBaseFactory implements ResourceBaseFactory {
-
-  private static final Logger LOGGER = LoggerFactory
-      .getLogger(DefaultResourceBaseFactory.class);
+public final class DefaultResourceBaseFactory implements ResourceBaseFactory {
 
   @Override
   public ResourceBase createResourceBase(final Class<?> moduleClass)
@@ -22,7 +16,6 @@ public class DefaultResourceBaseFactory implements ResourceBaseFactory {
         getCanonicalNameAsPath(moduleClass));
     final String moduleLocationPath = moduleLocation.getPath();
 
-    LOGGER.info(moduleLocationPath);
     if (moduleLocationPath.contains(".jar!")) {
       return new JarPublicResourceBase(moduleLocation);
     } else if (moduleLocationPath.contains("/build/classes/java/main"

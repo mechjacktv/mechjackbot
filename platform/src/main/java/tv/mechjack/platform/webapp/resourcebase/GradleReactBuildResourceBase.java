@@ -4,7 +4,7 @@ import java.io.File;
 
 import tv.mechjack.platform.webapp.ResourceBase;
 
-public class GradleReactBuildResourceBase implements ResourceBase {
+public final class GradleReactBuildResourceBase implements ResourceBase {
 
   public final File resourceBase;
 

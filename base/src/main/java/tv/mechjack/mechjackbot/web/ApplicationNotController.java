@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import tv.mechjack.mechjackbot.web.tempdata.Application;
 import tv.mechjack.mechjackbot.web.tempdata.ApplicationCredentials;
 
-public class ApplicationNotController extends BaseController {
+public class ApplicationNotController extends BaseNotController {
 
   private static final Logger LOGGER = LoggerFactory
       .getLogger(ApplicationNotController.class);

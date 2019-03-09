@@ -10,8 +10,8 @@ public class CustomFeatureModule extends FeatureModule {
   protected void configure() {
     this.bind(CustomCommandDataStore.class).to(DefaultCustomCommandDataStore.class).in(Scopes.SINGLETON);
     this.bind(CustomChatCommandService.class).to(DefaultCustomChatCommandService.class).asEagerSingleton();
-    this.bindCommand(SetCommandChatCommand.class);
-    this.bindCommand(DeleteCommandChatCommand.class);
+    this.bindChatCommand(SetCommandChatCommand.class);
+    this.bindChatCommand(DeleteCommandChatCommand.class);
   }
 
 }

@@ -6,7 +6,7 @@ public class WouldYouRatherFeatureModule extends FeatureModule {
 
   @Override
   protected void configure() {
-    this.bindCommand(WouldYouRatherChatCommand.class);
+    this.bindChatCommand(WouldYouRatherChatCommand.class);
   }
 
 }

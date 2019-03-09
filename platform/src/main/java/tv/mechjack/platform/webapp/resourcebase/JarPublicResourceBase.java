@@ -12,7 +12,7 @@ import java.util.zip.ZipInputStream;
 
 import tv.mechjack.platform.webapp.ResourceBase;
 
-public class JarPublicResourceBase implements ResourceBase {
+public final class JarPublicResourceBase implements ResourceBase {
 
   private final File resourceBase;
 
